@@ -50,9 +50,7 @@ export default BaseView.extend({
             "last_comment_date",
         ];
 
-        self.translatableColumns = [
-            "review_state",
-        ];
+        self.translatableColumns = ["review_state"];
     },
 
     events: {
@@ -63,7 +61,7 @@ export default BaseView.extend({
     setContextInfo: function () {
         const data = this.contextInfo;
         /* set breadcrumb title info */
-        const crumbs = data.breadcrumbs;
+        const crumbs = data && data.breadcrumbs;
         if (crumbs && crumbs.length) {
             const $crumbs = this.$(".fc-breadcrumbs a.crumb");
             _.each(crumbs, (crumb, idx) => {
@@ -77,7 +75,6 @@ export default BaseView.extend({
         // By default do not start sorted by any column
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
-
         const datatables_options = {
             order: [0, "asc"],
             columnDefs: [

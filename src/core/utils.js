@@ -367,7 +367,7 @@ var storage = {
     },
 };
 
-const ICON_CACHE = new Map();
+export const ICON_CACHE = new Map();
 
 /**
  * Return a <svg> element from a icon name.

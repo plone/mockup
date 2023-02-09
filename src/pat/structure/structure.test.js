@@ -1,85 +1,94 @@
-// TODO:
-// removed:
-// - menuGenerator
-// - collectionConstructor
-// - tableRowItemAction
+import $ from "jquery";
+import DataTables from "datatables.net";
+import sinon from "sinon";
+import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
+import Cookies from "js-cookie";
+import ButtonView from "../../core/ui/views/button";
+import mockup_utils from "../../core/utils";
 
-define([
-    "expect",
-    "jquery",
-    "underscore",
-    "pat-registry",
-    "mockup-ui-url/views/button",
-    "mockup-patterns-structure",
-    "mockup-patterns-structure-url/js/views/actionmenu",
-    "mockup-patterns-structure-url/js/views/app",
-    "mockup-patterns-structure-url/js/models/result",
-    "mockup-patterns-structure-url/js/views/table",
-    "mockup-patterns-structure-url/js/views/tablerow",
-    "mockup-patterns-structure-url/js/views/generic-popover",
-    "mockup-patterns-structure-url/js/collections/result",
-    "mockup-utils",
-    "sinon",
-    "js-cookie",
-], function (
-    expect,
-    $,
-    _,
-    registry,
-    ButtonView,
-    Structure,
-    ActionMenuView,
-    AppView,
-    Result,
-    TableView,
-    TableRowView,
-    PropertiesView,
-    ResultCollection,
-    utils,
-    sinon,
-    Cookies
-) {
-    "use strict";
+import Structure from "./structure";
+import ActionMenuView from "./js/views/actionmenu";
+import AppView from "./js/views/app";
+import TableView from "./js/views/table";
+import TableRowView from "./js/views/tablerow";
+import SelectionWellView from "./js/views/selectionwell";
+import GenericPopover from "./js/views/generic-popover";
+import RearrangeView from "./js/views/rearrange";
+import SelectionButtonView from "./js/views/selectionbutton";
+import PagingView from "./js/views/paging";
+import ColumnsView from "./js/views/columns";
+import TextFilterView from "./js/views/textfilter";
+import UploadView from "./js/views/upload";
+import Result from "./js/models/result";
+import SelectedCollection from "./js/collections/selected";
+import StatusTemplate from "./templates/status.xml";
 
-    window.mocha.setup("bdd");
-    $.fx.off = true;
+import ResultCollection from "./js/collections/result";
 
-    var structureUrlChangedPath = "";
-    var dummyWindow = {};
-    var stub_history = {
-        pushState: function (data, title, url) {
-            stub_history.pushed = {
-                data: data,
-                title: title,
-                url: url,
-            };
-        },
-    };
-    dummyWindow.history = stub_history;
+import logging from "@patternslib/patternslib/src/core/logging";
+logging.setLevel(20);
 
-    function getQueryVariable(url, variable) {
-        var query = url.split("?")[1];
-        if (query === undefined) {
-            return null;
-        }
-        var vars = query.split("&");
-        for (var i = 0; i < vars.length; i += 1) {
-            var pair = vars[i].split("=");
-            if (decodeURIComponent(pair[0]) === variable) {
-                return decodeURIComponent(pair[1]);
-            }
-        }
+$.fx.off = true;
+
+var structureUrlChangedPath = "";
+var dummyWindow = {};
+var stub_history = {
+    pushState: function (data, title, url) {
+        stub_history.pushed = {
+            data: data,
+            title: title,
+            url: url,
+        };
+    },
+};
+dummyWindow.history = stub_history;
+
+function getQueryVariable(url, variable) {
+    var query = url.split("?")[1];
+    if (query === undefined) {
         return null;
     }
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i += 1) {
+        var pair = vars[i].split("=");
+        if (decodeURIComponent(pair[0]) === variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return null;
+}
 
-    var extraDataJsonItem = null;
+var extraDataJsonItem = null;
 
-    /* ==========================
-   TEST: AppView constructor internal attribute/object correctness
-  ========================== */
-    describe("AppView internals correctness", function () {
-        it("AppView collection queryHelper attribute", function () {
-            /*
+/* ==========================
+    TEST: AppView constructor internal attribute/object correctness
+========================== */
+describe("AppView internals correctness", function () {
+    beforeEach(function () {
+        // new to instantinate DataTables here in order to make
+        // pat-datatables work in jest tests.
+        new DataTables(window, window.$);
+
+        this.server = sinon.fakeServer.create();
+        this.server.autoRespond = true;
+
+        this.server.respondWith("GET", /data.json/, function (xhr, id) {
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify({}),
+            );
+        });
+    });
+
+    afterEach(function() {
+        this.server.restore();
+        document.body.innerHTML = "";
+    });
+
+    it("AppView collection queryHelper attribute", function () {
+        /*
         Since the test and dummy data provided later directly provides
         that without actually consuming the query parameters that are
         generated by the QueryHelper instance internal to this pattern,
@@ -89,2575 +98,182 @@ define([
         again it should at least trigger some failure and ensure that
         the "fixed" version will continue to generate the correct
         query parameters..
-      */
+        */
 
-            var app = new AppView({
-                // dummy pattern, extracted/referenced by QueryHelper
-                pattern: {
-                    browsing: true,
-                    basePath: "/",
+        var app = new AppView({
+            // dummy pattern, extracted/referenced by QueryHelper
+            pattern: {
+                browsing: true,
+                basePath: "/",
+            },
+            // the pattern accepts this as `attributes` but backbone doesn't
+            // accept this as a valid parameter, it must be renamed to be
+            // reused.  The default ResultCollection implementation will
+            // then pass this back again as the `attributes` parameter to
+            // construct the internal QueryHelper instance that it owns.
+            queryHelperAttributes: ["foo", "bar"],
+
+            buttons: [{ title: "Cut", url: "/cut" }],
+            activeColumns: [],
+            availableColumns: [],
+            indexOptionsUrl: "",
+            setDefaultPageUrl: "",
+            collectionUrl: "http://localhost:9876/vocab",
+            collectionConstructor:
+                "mockup-patterns-structure-url/js/collections/result",
+        });
+
+        expect(app.collection.queryHelper.options.attributes).toEqual(["foo", "bar"]);
+
+        expect(JSON.parse(app.collection.queryParser())).toEqual({
+            criteria: [
+                {
+                    i: "path",
+                    o: "plone.app.querystring.operation.string.path",
+                    v: "/::1",
                 },
-                // the pattern accepts this as `attributes` but backbone doesn't
-                // accept this as a valid parameter, it must be renamed to be
-                // reused.  The default ResultCollection implementation will
-                // then pass this back again as the `attributes` parameter to
-                // construct the internal QueryHelper instance that it owns.
-                queryHelperAttributes: ["foo", "bar"],
-
-                buttons: [{ title: "Cut", url: "/cut" }],
-                activeColumns: [],
-                availableColumns: [],
-                indexOptionsUrl: "",
-                setDefaultPageUrl: "",
-                url: "http://localhost:9876/vocab",
-                collectionConstructor:
-                    "mockup-patterns-structure-url/js/collections/result",
-            });
-
-            expect(app.collection.queryHelper.options.attributes).to.eql(["foo", "bar"]);
-
-            expect(JSON.parse(app.collection.queryParser())).to.eql({
-                criteria: [
-                    {
-                        i: "path",
-                        o: "plone.app.querystring.operation.string.path",
-                        v: "/::1",
-                    },
-                ],
-                sort_on: "getObjPositionInParent",
-                sort_order: "ascending",
-            });
+            ],
+            sort_on: "getObjPositionInParent",
+            sort_order: "ascending",
         });
     });
+});
 
-    /* ==========================
-   TEST: Per Item Action Buttons
-  ========================== */
-    describe("Per Item Action Buttons", function () {
-        beforeEach(function () {
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
 
-            this.server.respondWith("POST", "/cut", function (xhr, id) {
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        status: "success",
-                        msg: "cut",
-                    })
-                );
-            });
+/* ==========================
+TEST: Structure
+========================== */
+describe("Structure", function () {
+    beforeEach(async function () {
+        // clear cookie setting
+        Cookies.remove("__cp");
+        Cookies.remove("_fc_pageSize");
+        Cookies.remove("_fc_activeColumns");
+        Cookies.remove("_fc_activeColumnsCustom");
 
-            this.clock = sinon.useFakeTimers();
+        new DataTables(window, window.$);
 
-            this.app = new AppView({
-                // XXX ActionButton need this lookup directly.
-                buttons: [{ title: "Cut", url: "/cut" }],
+        this.server = sinon.fakeServer.create();
+        this.server.autoRespond = true;
 
-                activeColumns: [],
-                availableColumns: [],
-                defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
-                indexOptionsUrl: "",
-                setDefaultPageUrl: "",
-                collectionConstructor:
-                    "mockup-patterns-structure-url/js/collections/result",
-            });
-            this.app.render();
-        });
-
-        afterEach(function () {
-            this.clock.restore();
-            this.server.restore();
-            $("body").removeAttr("class");
-            $("body").html("");
-            requirejs.undef("dummytestactions");
-            requirejs.undef("dummytestactionmenu");
-        });
-
-        it("basic action menu rendering", function () {
-            var model = new Result({
-                Title: "Dummy Object",
-                is_folderish: true,
-                review_state: "published",
-                getURL: "http://nohost/dummy_object",
-            });
-
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                header: "Menu Header",
-            });
-
-            var el = menu.render().el;
-
-            expect($("li.dropdown-header", el).text()).to.equal("Menu Header");
-            expect($("a.action", el).length).to.equal(7);
-            expect($($("li a", el)[0]).text().trim()).to.equal("Cut");
-            expect($("a.openItem", el).attr("href")).to.equal(
-                "http://nohost/dummy_object"
-            );
-
-            $("a.cutItem", el).click();
-            this.clock.tick(500);
-
-            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
-                'Cut "Dummy Object"'
-            );
-            expect(this.app.$(".fc-status").hasClass("alert-successss"));
-        });
-
-        it("custom action menu items", function () {
-            var model = new Result({
-                Title: "Dummy Object",
-                is_folderish: true,
-                review_state: "published",
-            });
-
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    cutItem: {
-                        library: "mockup-patterns-structure-url/js/actions",
-                        method: "cutClicked",
-                        url: "#",
-                        title: "Cut",
-                        category: "dropdown",
-                    },
-                },
-            });
-
-            var el = menu.render().el;
-            expect($("li a", el).length).to.equal(1);
-            expect($($("li a", el)[0]).text().trim()).to.equal("Cut");
-
-            $("a.cutItem", el).click();
-            this.clock.tick(500);
-            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
-                'Cut "Dummy Object"'
-            );
-            expect(this.app.$(".fc-status").hasClass("alert-success"));
-        });
-
-        it("custom action menu items and actions.", function () {
-            // Define a custom dummy "module"
-            define("dummytestactions", ["backbone"], function (Backbone) {
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                    foobarClicked: function (e) {
-                        var self = this;
-                        self.app.setStatus({ text: "Status: foobar clicked" });
-                    },
-                });
-                return Actions;
-            });
-            // use it to make it available synchronously.
-            require(["dummytestactions"], function () {});
-            this.clock.tick(500);
-
-            var model = new Result({
-                is_folderish: true,
-                review_state: "published",
-            });
-
-            // Make use if that dummy in here.
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    foobar: {
-                        library: "dummytestactions",
-                        method: "foobarClicked",
-                        url: "#",
-                        title: "Foo Bar",
-                        category: "dropdown",
-                    },
-                },
-            });
-
-            var el = menu.render().el;
-            expect($("li a", el).length).to.equal(1);
-            expect($($("li a", el)[0]).text().trim()).to.equal("Foo Bar");
-
-            $("a.foobar", el).click();
-            this.clock.tick(500);
-            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
-                "Status: foobar clicked"
-            );
-            expect(this.app.$(".fc-status").hasClass("alert-warning")); // default status type
-        });
-
-        it("custom action menu actions missing.", function () {
-            // Define a custom dummy "module"
-            define("dummytestactions", ["backbone"], function (Backbone) {
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                    barbazClicked: function (e) {
-                        var self = this;
-                        self.app.setStatus({ text: "Status: barbaz clicked" });
-                    },
-                });
-                return Actions;
-            });
-
-            // use it to make it available synchronously.
-            require(["dummytestactions"], function () {});
-            this.clock.tick(500);
-
-            var model = new Result({
-                is_folderish: true,
-                review_state: "published",
-            });
-
-            // Make use if that dummy in here.
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    foobar: {
-                        library: "dummytestactions",
-                        method: "foobarClicked",
-                        url: "#",
-                        title: "Foo Bar",
-                        category: "dropdown",
-                    },
-                    barbaz: {
-                        library: "dummytestactions",
-                        method: "barbazClicked",
-                        url: "#",
-                        title: "Bar Baz",
-                        category: "dropdown",
-                    },
-                },
-            });
-
-            // Broken/missing action
-            var el = menu.render().el;
-            $("a.foobar", el).click();
-            this.clock.tick(500);
-            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal("");
-        });
-
-        it("custom action menu via generator.", function () {
-            // Define a custom dummy "module"
-            define("dummytestactions", ["backbone"], function (Backbone) {
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                    barbazClicked: function (e) {
-                        var self = this;
-                        self.app.setStatus({
-                            text: "Status: barbaz clicked",
-                            type: "success",
-                        });
-                    },
-                });
-                return Actions;
-            });
-
-            define("dummytestactionmenu", ["backbone"], function (Backbone) {
-                var ActionMenu = function (menu) {
-                    return {
-                        barbaz: {
-                            library: "dummytestactions",
-                            method: "barbazClicked",
-                            url: "#",
-                            title: "Bar Baz",
-                            category: "dropdown",
-                        },
-                    };
-                };
-                return ActionMenu;
-            });
-            // use them both to make it available synchronously.
-            require(["dummytestactions"], function () {});
-            require(["dummytestactionmenu"], function () {});
-            this.clock.tick(500);
-
-            var model = new Result({
-                is_folderish: true,
-                review_state: "published",
-            });
-
-            // Make use if that dummy in here.
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuGenerator: "dummytestactionmenu",
-            });
-
-            // Broken/missing action
-            var el = menu.render().el;
-            $("a.barbaz", el).click();
-            this.clock.tick(500);
-            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
-                "Status: barbaz clicked"
-            );
-            expect(this.app.$(".fc-status").hasClass("alert-success"));
-        });
-
-        it("custom action menu items in dropdown only", function () {
-            var model = new Result({});
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    item1: {
-                        url: "#",
-                        title: "Item 1",
-                        category: "dropdown",
-                    },
-                    item2: {
-                        url: "#",
-                        title: "Item 2",
-                        category: "dropdown",
-                    },
-                },
-            });
-
-            var el = menu.render().el;
-            expect($("ul.dropdown-menu a.action", el).length).to.equal(2);
-            expect($("a.action", el).length).to.equal(2);
-        });
-
-        it("custom action menu items as buttons only /wout icons", function () {
-            var model = new Result({});
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    item1: {
-                        url: "#",
-                        title: "Item 1",
-                        category: "button",
-                    },
-                    item2: {
-                        url: "#",
-                        title: "Item 2",
-                        category: "button",
-                    },
-                },
-            });
-
-            var el = menu.render().el;
-            expect($("ul.dropdown-menu", el).length).to.equal(0);
-            expect($("a.action", el).length).to.equal(2);
-            expect($($("a.action", el)[0]).text().trim()).to.equal("Item 1");
-            expect($($("a.action", el)[0]).find("span").length).to.equal(0);
-        });
-
-        it("custom action menu items as buttons only /w icons", function () {
-            var model = new Result({});
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    item1: {
-                        url: "#",
-                        title: "Item 1",
-                        category: "button",
-                        iconCSS: "supericon",
-                    },
-                    item2: {
-                        url: "#",
-                        title: "Item 2",
-                        category: "button",
-                        iconCSS: "supericon",
-                    },
-                },
-            });
-
-            var el = menu.render().el;
-            expect($("ul.dropdown-menu", el).length).to.equal(0);
-            expect($("a.action", el).length).to.equal(2);
-            expect($($("a.action", el)[0]).text().trim()).to.equal("");
-            expect($($("a.action", el)[0]).find("span").length).to.equal(1);
-        });
-
-        it("custom action menu items as buttons and dropdown mixed", function () {
-            var model = new Result({});
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    item1: {
-                        url: "#",
-                        title: "Item 1",
-                        category: "button",
-                    },
-                    item2: {
-                        url: "#",
-                        title: "Item 2",
-                        category: "dropdown",
-                    },
-                },
-            });
-
-            var el = menu.render().el;
-            expect($("ul.dropdown-menu a.action", el).length).to.equal(1);
-            expect($("a.action", el).length).to.equal(2);
-        });
-
-        // MODAL ACTIONS
-
-        it("modal button true opens in modal", function () {
-            var model = new Result({});
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    button: {
-                        title: "Modal",
-                        category: "button",
-                        modal: true,
-                    },
-                },
-            });
-
-            var $el = $(menu.render().el).appendTo("body");
-            var $body = $("body");
-            expect($(".plone-modal-wrapper", $body).length).to.equal(0);
-            $("a.button", $el).trigger("click");
-            expect($(".plone-modal-wrapper", $body).length).to.equal(1);
-        });
-
-        it("modal dropdown true opens in modal", function () {
-            var model = new Result({});
-            var menu = new ActionMenuView({
-                app: this.app,
-                model: model,
-                menuOptions: {
-                    button: {
-                        title: "Modal",
-                        category: "dropdown",
-                        modal: true,
-                    },
-                },
-            });
-
-            var $el = $(menu.render().el).appendTo("body");
-            var $body = $("body");
-            expect($(".plone-modal-wrapper", $body).length).to.equal(0);
-            $("a.button", $el).trigger("click");
-            expect($(".plone-modal-wrapper", $body).length).to.equal(1);
-        });
-    });
-
-    /* ===================
-   TEST: Table Row Tests
-  ====================== */
-    describe("Table Row Tests", function () {
-        beforeEach(function () {
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-            this.clock = sinon.useFakeTimers();
-            this.app = new AppView({
-                indexOptionsUrl: "",
-                activeColumns: [],
-                availableColumns: [],
-                collectionConstructor:
-                    "mockup-patterns-structure-url/js/collections/result",
-                defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
-                typeToViewAction: {
-                    File: "/view",
-                    Image: "/view",
-                    Blob: "/view",
-                },
-            });
-            this.app.render();
-        });
-
-        afterEach(function () {
-            this.clock.restore();
-            this.server.restore();
-            $("body").removeAttr("class");
-            $("body").html("");
-        });
-
-        it("use special view action for special types", function () {
-            // Test if special view actions for types are used in action .openItem
-            // and title link.
-            var items = [
-                {
-                    model: {
-                        Title: "Dummy Image",
-                        id: "dummy_page",
-                        is_folderish: false,
-                        portal_type: "Image",
-                        getURL: "http://nohost/dummy_image",
-                    },
-                    expect: "/view",
-                },
-                {
-                    model: {
-                        Title: "Dummy File",
-                        id: "dummy_file",
-                        is_folderish: false,
-                        portal_type: "File",
-                        getURL: "http://nohost/dummy_file",
-                    },
-                    expect: "/view",
-                },
-                {
-                    model: {
-                        Title: "Dummy Blob",
-                        id: "dummy_blob",
-                        is_folderish: false,
-                        portal_type: "Blob",
-                        getURL: "http://nohost/dummy_blob",
-                    },
-                    expect: "/view",
-                },
-                {
-                    model: {
-                        Title: "Dummy Document",
-                        id: "dummy_document",
-                        is_folderish: false,
-                        portal_type: "Document",
-                        getURL: "http://nohost/dummy_document",
-                    },
-                    expect: "",
-                },
-            ];
-
-            for (var i = 0, len = items.length; i < len; i = i + 1) {
-                var item = items[i];
-                var model = new Result(item.model);
-                var menu = new ActionMenuView({
-                    app: this.app,
-                    model: model,
-                    header: "Menu Header",
-                });
-                var el = menu.render().el;
-                expect($("a.openItem", el).attr("href")).to.equal(
-                    item.model.getURL + item.expect
-                );
-
-                var row = new TableRowView({
-                    model: model,
-                    app: this.app,
-                });
-                el = row.render().el;
-                expect($(".title a", el).attr("href")).to.equal(
-                    item.model.getURL + item.expect
-                );
+        this.server.respondWith("GET", /data.json/, function (xhr, id) {
+            var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
+            var query = JSON.parse(getQueryVariable(xhr.url, "query"));
+            var path = query.criteria[0].v.split(":")[0];
+            if (path === "/") {
+                path = "";
             }
-        });
+            let start = 0;
+            let end = 15;
+            if (batch) {
+                start = (batch.page - 1) * batch.size;
+                end = start + batch.size;
+            }
+            const items = [];
 
-        it("should display an icon for contents with images", function () {
-            this.app.thumb_scale = "tile";
+            let date_1 = new Date();
+            date_1 = new Date(date_1.setDate(date_1.getDate() - 2)).toISOString();
+            let date_2 = new Date();
+            date_2 = new Date(date_2.setDate(date_2.getDate() + 2)).toISOString();
 
-            var model = new Result({
-                Title: "Dummy Document",
-                id: "dummy_document",
-                is_folderish: false,
-                portal_type: "Document",
-                getURL: "http://nohost/dummy_image",
-                getIcon: true,
-            });
-
-            var row = new TableRowView({
-                model: model,
-                app: this.app,
-            });
-            var el = row.render().el;
-
-            expect($(".title img", el).length).to.equal(1);
-            expect($(".title img", el).attr("class")).to.have.string("thumb-tile");
-        });
-
-        it("should display no icon for contents without images", function () {
-            this.app.iconSize = "largest_possible";
-
-            var model = new Result({
-                Title: "Dummy Document",
-                id: "dummy_document",
-                is_folderish: false,
-                portal_type: "Document",
-                getURL: "http://nohost/dummy_image",
-                getIcon: false,
-            });
-
-            var row = new TableRowView({
-                model: model,
-                app: this.app,
-            });
-            var el = row.render().el;
-
-            expect($(".title img", el).length).to.equal(0);
-            expect($(".title .icon-group-right", el).length).to.have.equal(0);
-        });
-
-        it('Should display empty columns for "None" dates', function () {
-            this.app.activeColumns = [
-                "ModificationDate",
-                "EffectiveDate",
-                "CreationDate",
-                "ExpirationDate",
-                "start",
-                "end",
-                "last_comment_date",
-            ];
-
-            this.app.availableColumns = {
-                ModificationDate: "ModificationDate",
-                EffectiveDate: "EffectiveDate",
-                CreationDate: "CreationDate",
-                ExpirationDate: "ExpirationDate",
-                start: "start",
-                end: "end",
-                last_comment_date: "last_comment_date",
-            };
-
-            var collection = new ResultCollection(
-                [
-                    {
-                        Title: "Date Columns Test Document",
-                        id: "date_columns_test_document",
-                        is_folderish: false,
-                        portal_type: "Document",
-                        getURL: "http://nohost/doc",
-                        // invalid dates
-                        ModificationDate: "None",
-                        EffectiveDate: "",
-                        CreationDate: "None",
-                        ExpirationDate: "",
-                        start: "None",
-                        end: "",
-                        // Excluding next intentionally, since no data should also display and empty column
-                        // 'last_comment_date'
-                    },
-                ],
-                { view: this.app }
-            );
-
-            var table = new TableView({ app: this.app });
-            table.collection = collection;
-            var el = table.render().el;
-
-            _.each(this.app.activeColumns, function (item) {
-                expect($("td." + item, el).html()).to.equal("");
-            });
-        });
-
-        it("should display an expired label for expired contend", function () {
-            var expired = new Date();
-            expired.setDate(expired.getDate() - 10);
-
-            var model = new Result({
-                Title: "Dummy Document",
-                id: "dummy_document",
-                is_folderish: false,
-                portal_type: "Document",
-                ExpirationDate: expired.toJSON(),
-            });
-
-            var row = new TableRowView({
-                model: model,
-                app: this.app,
-            });
-            var el = row.render().el;
-
-            expect($(".title .plone-item-expired", el).length).to.equal(1);
-            expect($(".title .plone-item-ineffective", el).length).to.equal(0);
-        });
-
-        it("should display an before publication date label for content which has an effective date in the future", function () {
-            var effective = new Date();
-            effective.setDate(effective.getDate() + 10);
-
-            var model = new Result({
-                Title: "Dummy Document",
-                id: "dummy_document",
-                is_folderish: false,
-                portal_type: "Document",
-                EffectiveDate: effective.toJSON(),
-            });
-
-            var row = new TableRowView({
-                model: model,
-                app: this.app,
-            });
-            var el = row.render().el;
-
-            expect($(".title .plone-item-expired", el).length).to.equal(0);
-            expect($(".title .plone-item-ineffective", el).length).to.equal(1);
-        });
-
-        it("should show Description below title, if available", function () {
-            // Ensure, Description is set.
-            this.app.activeColumns = ["Description"];
-            this.app.availableColumns = {
-                Description: "Description",
-            };
-
-            var model = new Result({
-                Title: "Dummy Document",
-                Description: "Oh, this is a description of this content!",
-                id: "dummy_document",
-                is_folderish: false,
-                portal_type: "Document",
-            });
-
-            var row = new TableRowView({
-                model: model,
-                app: this.app,
-            });
-            var el = row.render().el;
-
-            expect($(".title .Description", el).length).to.equal(1);
-            // Description should be shown below title, but not in a column.
-            expect($("td.Description", el).length).to.equal(0);
-        });
-
-        it("should not show Description, if not set", function () {
-            // Ensure, Description is not set.
-            this.app.activeColumns = [];
-            this.app.availableColumns = {};
-
-            var model = new Result({
-                Title: "Dummy Document",
-                Description: "Oh, this is a description of this content!",
-                id: "dummy_document",
-                is_folderish: false,
-                portal_type: "Document",
-            });
-
-            var row = new TableRowView({
-                model: model,
-                app: this.app,
-            });
-            var el = row.render().el;
-
-            expect($(".title .Description", el).length).to.equal(0);
-            expect($("td.Description", el).length).to.equal(0);
-        });
-    });
-
-    /* ==========================
-   TEST: Structure
-  ========================== */
-    describe("Structure", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("__cp");
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumns");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                uploadUrl: "/upload",
-                moveUrl: "/moveitem",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                setDefaultPageUrl: "/setDefaultPage",
-                defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
-                urlStructure: {
-                    base: "http://localhost:9876",
-                    appended: "/folder_contents",
-                },
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            $("body")
-                .off("structure-url-changed")
-                .on("structure-url-changed", function (e, path) {
-                    structureUrlChangedPath = path;
-                });
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var query = JSON.parse(getQueryVariable(xhr.url, "query"));
-                var path = query.criteria[0].v.split(":")[0];
-                if (path === "/") {
-                    path = "";
-                }
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [];
-
-                let date_1 = new Date();
-                date_1 = new Date(date_1.setDate(date_1.getDate() - 2)).toISOString();
-                let date_2 = new Date();
-                date_2 = new Date(date_2.setDate(date_2.getDate() + 2)).toISOString();
-
-                items.push({
-                    UID: "123sdfasdf" + path + "Folder",
-                    getURL: "http://localhost:9876" + path + "/folder",
-                    path: path + "/folder",
-                    portal_type: "Folder",
-                    Description: "folder",
-                    Title: "Folder",
-                    review_state: "published",
-                    is_folderish: true,
-                    Subject: [],
-                    id: "folder",
-                    ExpirationDate: date_1,
-                });
-                for (var i = start; i < end; i = i + 1) {
-                    items.push({
-                        UID: "123sdfasdf" + path + i,
-                        getURL: "http://localhost:9876" + path + "/item" + i,
-                        path: path + "/item" + i,
-                        portal_type: "Document",
-                        Description: "document",
-                        Title: "Document " + i,
-                        review_state: "published",
-                        is_folderish: false,
-                        Subject: [],
-                        id: "item" + i,
-                        ExpirationDate: date_2,
-                    });
-                }
-
-                if (extraDataJsonItem) {
-                    items.push(extraDataJsonItem);
-                }
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 100,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("POST", "/rearrange", function (xhr, id) {
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        status: "success",
-                        msg: "rearranged",
-                    })
-                );
-            });
-            this.server.respondWith("POST", "/paste", function (xhr, id) {
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        status: "success",
-                        msg: "pasted",
-                    })
-                );
-            });
-            this.server.respondWith("POST", "/moveitem", function (xhr, id) {
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        status: "success",
-                        msg: "moved " + xhr.requestBody,
-                    })
-                );
-            });
-            this.server.respondWith("POST", "/setDefaultPage", function (xhr, id) {
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        status: "success",
-                        msg: "defaulted",
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [
-                        {
-                            id: "document",
-                            title: "Document",
-                            url: "/adddocument",
-                        },
-                        {
-                            id: "folder",
-                            title: "Folder",
-                        },
-                    ],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-            sinon.stub(window, "history").value(stub_history);
-            sinon.stub(utils, "getWindow").callsFake(function () {
-                return dummyWindow;
-            });
-        });
-
-        afterEach(function () {
-            // XXX QueryHelper behaves like a singleton as it pins self
-            // reference to the singleton instance of Utils within the
-            // requirejs framework, so its variables such as currentPath are
-            // persisted.  Reset that here like so:
-            utils.QueryHelper({}).currentPath = "/";
-            extraDataJsonItem = null;
-            this.server.restore();
-            this.clock.restore();
-            sinon.restore();
-            $("body").html("");
-        });
-
-        it("initialize", function () {
-            registry.scan(this.$el);
-            // moveUrl provided, can get to this via order-support.
-            expect(this.$el.find("table").length).to.equal(1);
-        });
-
-        it("select item populates selection well", function () {
-            registry.scan(this.$el);
-            this.clock.tick(500);
-            var cb = this.$el.find(".itemRow td.selection input").eq(0);
-            cb[0].checked = true;
-            cb.trigger("change");
-            this.clock.tick(500);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("1");
-            var selectedItems = $(".popover-content .selected-item", this.$el);
-            expect($(selectedItems[0]).text()).to.contain("Folder");
-        });
-
-        it("test selection well label", function () {
-            extraDataJsonItem = {
-                UID: 'XSS" data-xss="bobby',
-                getURL: "http://localhost:9876/xss",
-                path: "/xss",
+            items.push({
+                UID: "123sdfasdf" + path + "Folder",
+                getURL: "http://localhost:9876" + path + "/folder",
+                path: path + "/folder",
                 portal_type: "Folder",
-                Description: "XSS test item",
-                Title: "<script>alert('XSS');window.foo=1;</script>",
+                Description: "folder",
+                Title: "Folder",
                 review_state: "published",
                 is_folderish: true,
                 Subject: [],
-                id: "xss",
-            };
-            registry.scan(this.$el);
-            this.clock.tick(500);
-            // it's overloaded, pattern doesn't actually enforce batch limits.
-            var cb = this.$el.find(".itemRow td.selection input").eq(16);
-            cb[0].checked = true;
-            cb.trigger("change");
-            this.clock.tick(500);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("1");
+                id: "folder",
+                ExpirationDate: date_1,
+            });
+            for (var i = start; i < end; i = i + 1) {
+                items.push({
+                    UID: "123sdfasdf" + path + i,
+                    getURL: "http://localhost:9876" + path + "/item" + i,
+                    path: path + "/item" + i,
+                    portal_type: "Document",
+                    Description: "document",
+                    Title: "Document " + i,
+                    review_state: "published",
+                    is_folderish: false,
+                    Subject: [],
+                    id: "item" + i,
+                    ExpirationDate: date_2,
+                });
+            }
 
-            // XSS happened.
-            expect(window.foo).not.equal(1);
-            expect(
-                $(".popover-content .selected-item a", this.$el).eq(0).data().xss
-            ).not.equal("bobby");
-            var selectedItems = $(".popover-content .selected-item", this.$el);
-            expect($(selectedItems[0]).text()).to.contain(
-                "<script>alert('XSS');window.foo=1;</script>"
+            if (extraDataJsonItem) {
+                items.push(extraDataJsonItem);
+            }
+
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify({
+                    total: 100,
+                    results: items,
+                })
             );
         });
-
-        it("remove item from selection well", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
-            $item1[0].checked = true;
-            $item1.trigger("change");
-            this.$el
-                .find(".items.popover-content a.remove")
-                .trigger("click")
-                .trigger("change");
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-        });
-
-        it("remove all from selection well", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
-            $item1[0].checked = true;
-            $item1.trigger("change");
-            this.clock.tick(1000);
-            var $item2 = this.$el.find(".itemRow td.selection input").eq(1);
-            $item2[0].checked = true;
-            $item2.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("2");
-            this.$el.find(".popover.selected-items a.remove-all").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-        });
-
-        it("paging", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // click next page
-            var page1Btn = this.$el.find(".pagination li.active a");
-            page1Btn.parent().next().find("a").trigger("click");
-            this.clock.tick(1000);
-            expect(page1Btn.html()).not.to.contain(
-                this.$el.find(".pagination li.active a").eq("0").html()
-            );
-            expect(this.$el.find(".pagination li.active a").eq("0").html()).to.contain(
-                "2"
+        this.server.respondWith("POST", "/rearrange", function (xhr, id) {
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify({
+                    status: "success",
+                    msg: "rearranged",
+                })
             );
         });
-
-        it("per page", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            this.$el.find(".serverhowmany15 a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find(".itemRow").length).to.equal(16);
-            this.$el.find(".serverhowmany30 a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find(".itemRow").length).to.equal(31);
-        });
-
-        it("test paging does not apply overflow hidden to parent", function () {
-            /*
-             * very odd here, overflow hidden is getting applied by something after
-             * the table of results is re-rendered with new data
-             */
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // click next page
-            var page1Btn = this.$el.find(".pagination li.active a");
-            page1Btn.parent().next().find("a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.css("overflow")).to.not.equal("hidden");
-        });
-
-        it.skip("test rearrange button", function () {
-            /* test not working in firefox */
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $popover = this.$el.find(".popover.rearrange");
-            this.$el.find("#btn-rearrange").trigger("click");
-            expect($popover.hasClass("active")).to.equal(true);
-            $popover.find("button").trigger("click");
-            this.clock.tick(1000);
-            expect($popover.hasClass("active")).to.equal(false);
-            expect(this.$el.find(".order-support .fc-status").html()).to.contain(
-                "rearrange"
-            );
-            expect(this.app.$(".fc-status").hasClass("alert-successss"));
-        });
-
-        it("test select all", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item = this.$el.find("table th .select-all");
-            $item[0].checked = true;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("16");
-            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
-                16
+        this.server.respondWith("POST", "/paste", function (xhr, id) {
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify({
+                    status: "success",
+                    msg: "pasted",
+                })
             );
         });
-
-        it("test unselect all", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item = this.$el.find("table th .select-all");
-            $item[0].checked = true;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("16");
-            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
-                16
-            );
-
-            $item[0].checked = false;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
-                0
+        this.server.respondWith("POST", "/moveitem", function (xhr, id) {
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify({
+                    status: "success",
+                    msg: "moved " + xhr.requestBody,
+                })
             );
         });
-
-        it("test expired shows", function () {
-            registry.scan(this.$el);
-            this.clock.tick(500);
-
-            var $content_row = this.$el.find("table tbody tr").eq(0);
-            expect($content_row.find("td").eq(1).text().trim()).to.contain("Expired");
-        });
-
-        it("test displayed content", function () {
-            registry.scan(this.$el);
-            this.clock.tick(500);
-
-            var $content_row = this.$el.find("table tbody tr").eq(0);
-            expect($content_row.find("td").length).to.equal(6);
-            expect($content_row.find("td").eq(1).text().trim()).to.contain("Folder");
-            expect($content_row.find("td").eq(2).text().trim()).to.equal("");
-            expect($content_row.find("td").eq(3).text().trim()).to.equal("");
-            expect($content_row.find("td").eq(4).text().trim()).to.equal("published");
-            expect($content_row.find("a.openItem").attr("href")).to.equal(
-                "http://localhost:9876/folder"
-            );
-
-            var $content_row1 = this.$el.find("table tbody tr").eq(1);
-            expect($content_row1.find("td").eq(1).text().trim()).to.equal("Document 0");
-            expect($content_row1.find("a.openItem").attr("href")).to.equal(
-                "http://localhost:9876/item0"
+        this.server.respondWith("POST", "/setDefaultPage", function (xhr, id) {
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify({
+                    status: "success",
+                    msg: "defaulted",
+                })
             );
         });
-
-        it("test select displayed columns", function () {
-            registry.scan(this.$el);
-            this.clock.tick(500);
-            var $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(6);
-            expect($row.find("th").eq(1).text().trim()).to.equal("Title");
-            expect($row.find("th").eq(2).text().trim()).to.equal("Last modified");
-            expect($row.find("th").eq(3).text().trim()).to.equal("Published");
-            expect($row.find("th").eq(4).text().trim()).to.equal("Review state");
-            expect($row.find("th").eq(5).text().trim()).to.equal("Actions");
-
-            expect(Cookies.get("_fc_activeColumns")).to.be(undefined);
-
-            this.$el.find("#btn-attribute-columns").trigger("click");
-            this.clock.tick(500);
-
-            var $checkbox = this.$el.find(
-                '.attribute-columns input[value="getObjSize"]'
-            );
-            $checkbox[0].checked = true;
-            $checkbox.trigger("change");
-            this.clock.tick(500);
-
-            var $popover = this.$el.find(".popover.attribute-columns");
-            expect($popover.find("button").text().trim()).to.equal("Save");
-            $popover.find("button").trigger("click");
-            this.clock.tick(500);
-
-            $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(7);
-            expect($row.find("th").eq(5).text().trim()).to.equal("Object Size");
-            expect($row.find("th").eq(6).text().trim()).to.equal("Actions");
-            expect($.parseJSON(Cookies.get("_fc_activeColumns")).value).to.eql([
-                "ModificationDate",
-                "EffectiveDate",
-                "review_state",
-                "getObjSize",
-            ]);
-
-            $checkbox[0].checked = false;
-            $checkbox.trigger("change");
-            $popover.find("button").trigger("click");
-            this.clock.tick(500);
-
-            $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(6);
-            expect($.parseJSON(Cookies.get("_fc_activeColumns")).value).to.eql([
-                "ModificationDate",
-                "EffectiveDate",
-                "review_state",
-            ]);
-        });
-
-        it("test main buttons count", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var buttons = this.$el.find("#btngroup-mainbuttons a");
-            expect(buttons.length).to.equal(8);
-        });
-
-        it("test itemRow default actionmenu folder", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // folder
-            var folder = this.$el.find(".itemRow").eq(0);
-            expect(folder.data().id).to.equal("folder");
-            expect($(".actionmenu a.action", folder).length).to.equal(7);
-            // no pasting (see next test
-            expect($(".actionmenu a.pasteItem", folder).length).to.equal(0);
-            // no set default page
-            expect($(".actionmenu a.set-default-page", folder).length).to.equal(0);
-            // can select all
-            expect($(".actionmenu a.selectAll", folder).text().trim()).to.equal(
-                "Select all contained items"
-            );
-        });
-
-        it("test itemRow default actionmenu item", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-
-            var item = this.$el.find(".itemRow").eq(10);
-            expect(item.data().id).to.equal("item9");
-            expect($(".actionmenu a.action", item).length).to.equal(7);
-            // cannot select all
-            expect($("a.selectAll", item).length).to.equal(0);
-            // can set default page
-            expect($("a.set-default-page", item).length).to.equal(1);
-            expect($("a.set-default-page", item).text().trim()).to.equal(
-                "Set as default page"
-            );
-            $("a.set-default-page", item).click();
-            this.clock.tick(1000);
-            expect(this.$el.find(".fc-status").html()).to.contain("defaulted");
-        });
-
-        it("test itemRow actionmenu paste click", function () {
-            // item pending to be pasted
-            Cookies.set("__cp", "dummy");
-            this.clock.tick(1000);
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // top item
-            var item0 = this.$el.find(".itemRow").eq(0);
-            expect(item0.data().id).to.equal("folder");
-            expect($(".actionmenu a.action", item0).length).to.equal(8);
-            expect($("a.pasteItem", item0).text().trim()).to.equal("Paste");
-            $("a.pasteItem", item0).click();
-            this.clock.tick(1000);
-            expect(this.$el.find(".fc-status").html()).to.contain(
-                'Pasted into "Folder"'
-            );
-        });
-
-        it("test itemRow actionmenu move-top click", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // top item
-            var item0 = this.$el.find(".itemRow").eq(0);
-            expect(item0.data().id).to.equal("folder");
-            var item10 = this.$el.find(".itemRow").eq(10);
-            expect(item10.data().id).to.equal("item9");
-
-            expect($(".actionmenu a.move-top", item10).text().trim()).to.equal(
-                "Move to top of folder"
-            );
-            $(".actionmenu a.move-top", item10).trigger("click");
-            this.clock.tick(1000);
-
-            expect(this.$el.find(".fc-status").html()).to.contain("moved");
-            expect(this.$el.find(".fc-status").html()).to.contain("delta=top");
-            expect(this.$el.find(".fc-status").html()).to.contain("id=item9");
-            // No items actually moved, this is to be implemented server-side.
-        });
-
-        it("test itemRow actionmenu selectAll click", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-
-            var folder = this.$el.find(".itemRow").eq(0);
-            $(".actionmenu a.selectAll", folder).trigger("click");
-            this.clock.tick(1000);
-            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
-                0
-            );
-            // all items in the folder be populated within the selection well.
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("101");
-        });
-
-        it("test navigate to item", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var pattern = this.$el.data("patternStructure");
-            var item = this.$el.find(".itemRow").eq(10);
-            expect(item.data().id).to.equal("item9");
-            expect($(".title a.manage", item).attr("href")).to.equal(
-                "http://localhost:9876/item9"
-            );
-            expect($(".actionmenu a.openItem", item).attr("href")).to.equal(
-                "http://localhost:9876/item9"
-            );
-            expect($(".actionmenu a.editItem", item).attr("href")).to.equal(
-                "http://localhost:9876/item9/edit"
-            );
-        });
-
-        it("test navigate to folder push states", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var pattern = this.$el.data("patternStructure");
-            var item = this.$el.find(".itemRow").eq(0);
-            expect(item.data().id).to.equal("folder");
-            $(".title a.manage", item).trigger("click");
-            this.clock.tick(1000);
-            expect(window.history.pushed.url).to.equal(
-                "http://localhost:9876/folder/folder_contents"
-            );
-            expect(structureUrlChangedPath).to.eql("/folder");
-
-            $(".fc-breadcrumbs a", this.$el).eq(0).trigger("click");
-            this.clock.tick(1000);
-            expect(window.history.pushed.url).to.equal(
-                "http://localhost:9876/folder_contents"
-            );
-            expect(structureUrlChangedPath).to.eql("");
-        });
-
-        it("test navigate to folder pop states", function () {
-            this.timeout(15000); // need more than standard 2000ms here... :(
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // Need to inject this to the mocked window location attribute the
-            // code will check against.  This url is set before the trigger.
-            dummyWindow.location = {
-                href: "http://localhost:9876/folder/folder/folder_contents",
-            };
-            // then trigger off the real window.
-            $(window).trigger("popstate");
-            this.clock.tick(1000);
-            expect(structureUrlChangedPath).to.eql("/folder/folder");
-        });
-    });
-
-    /* ==========================
-   TEST: Structure Customized
-  ========================== */
-    describe("Structure Customized", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                buttons: [
+        this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
+            var data = {
+                addButtons: [
                     {
-                        url: "foo",
-                        title: "Foo",
-                        id: "foo",
-                        icon: "",
+                        id: "document",
+                        title: "Document",
+                        url: "/adddocument",
+                    },
+                    {
+                        id: "folder",
+                        title: "Folder",
                     },
                 ],
             };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [];
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 0,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-
-            sinon.stub(utils, "getWindow").callsFake(function () {
-                return dummyWindow;
-            });
-        });
-
-        afterEach(function () {
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-            sinon.restore();
-            $("body").off("structure-url-changed");
-        });
-
-        it("initialize", function () {
-            registry.scan(this.$el);
-            // no order-support for this one due to lack of moveUrl
-            expect(this.$el.find(".order-support > table").length).to.equal(0);
-        });
-
-        it("per page", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            this.$el.find(".serverhowmany15 a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find(".itemRow").length).to.equal(0);
-            this.$el.find(".serverhowmany30 a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find(".itemRow").length).to.equal(0);
-        });
-
-        it("test select all", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item = this.$el.find("table th .select-all");
-            $item[0].checked = true;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-        });
-
-        it("test unselect all", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item = this.$el.find("table th .select-all");
-            $item[0].checked = true;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-            $item[0].checked = false;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-        });
-
-        it("test select displayed columns", function () {
-            registry.scan(this.$el);
-            // manually setting a borrowed cookie from the previous test.
-            Cookies.set(
-                "_fc_activeColumns",
-                '{"value":["ModificationDate","EffectiveDate","review_state",' +
-                    '"getObjSize"]}'
-            );
-            this.clock.tick(500);
-            var $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(6);
-            expect($row.find("th").eq(5).text().trim()).to.equal("Actions");
-
-            expect(Cookies.get("_fc_activeColumnsCustom")).to.be(undefined);
-
-            this.$el.find("#btn-attribute-columns").trigger("click");
-            this.clock.tick(500);
-
-            var $checkbox = this.$el.find(
-                '.attribute-columns input[value="portal_type"]'
-            );
-            $checkbox[0].checked = true;
-            $checkbox.trigger("change");
-            this.clock.tick(500);
-
-            var $popover = this.$el.find(".popover.attribute-columns");
-            expect($popover.find("button").text().trim()).to.equal("Save");
-            $popover.find("button").trigger("click");
-            this.clock.tick(500);
-
-            $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(7);
-            expect($row.find("th").eq(5).text().trim()).to.equal("Type");
-            expect($row.find("th").eq(6).text().trim()).to.equal("Actions");
-            expect($.parseJSON(Cookies.get("_fc_activeColumnsCustom")).value).to.eql([
-                "ModificationDate",
-                "EffectiveDate",
-                "review_state",
-                "portal_type",
-            ]);
-            // standard cookie unchanged.
-            expect($.parseJSON(Cookies.get("_fc_activeColumns")).value).to.eql([
-                "ModificationDate",
-                "EffectiveDate",
-                "review_state",
-                "getObjSize",
-            ]);
-
-            $checkbox[0].checked = false;
-            $checkbox.trigger("change");
-            $popover.find("button").trigger("click");
-            this.clock.tick(500);
-
-            $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(6);
-            expect($.parseJSON(Cookies.get("_fc_activeColumnsCustom")).value).to.eql([
-                "ModificationDate",
-                "EffectiveDate",
-                "review_state",
-            ]);
-        });
-
-        it("test main buttons count", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var buttons = this.$el.find("#btngroup-mainbuttons a");
-            expect(buttons.length).to.equal(1);
-        });
-    });
-
-    /* ==========================
-   TEST: Structure no buttons
-  ========================== */
-    describe("Structure no buttons", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                activeColumns: ["getObjSize"],
-                availableColumns: {
-                    id: "ID",
-                    CreationDate: "Created",
-                    getObjSize: "Object Size",
-                },
-                buttons: [],
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [];
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 0,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-        });
-
-        afterEach(function () {
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-        });
-
-        it("test main buttons count", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var buttons = this.$el.find("#btngroup-mainbuttons a");
-            expect(buttons.length).to.equal(0);
-        });
-
-        it("test select displayed columns", function () {
-            registry.scan(this.$el);
-            this.clock.tick(500);
-            var $row = this.$el.find("table thead tr").eq(0);
-            expect($row.find("th").length).to.equal(4);
-            expect($row.find("th").eq(1).text().trim()).to.equal("Title");
-            expect($row.find("th").eq(2).text().trim()).to.equal("Object Size");
-            expect($row.find("th").eq(3).text().trim()).to.equal("Actions");
-        });
-    });
-
-    /* ==========================
-   TEST: Structure barebone columns
-  ========================== */
-    describe("Structure barebone columns", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                activeColumns: [],
-                availableColumns: {
-                    getURL: "URL",
-                },
-                buttons: [],
-                attributes: ["Title", "getURL"],
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [];
-                items.push({
-                    /*
-          getURL: 'http://localhost:9876/folder',
-          Title: 'Folder',
-          id: 'folder'
-          */
-                    // 'portal_type', 'review_state', 'getURL'
-
-                    getURL: "http://localhost:9876/folder",
-                    Title: "Folder",
-                    // Other required fields.
-                    id: "folder",
-                    UID: "folder",
-                });
-                for (var i = start; i < end; i = i + 1) {
-                    items.push({
-                        /*
-            getURL: 'http://localhost:9876/item' + i,
-            Title: 'Document ' + i,
-            */
-
-                        getURL: "http://localhost:9876/item" + i,
-                        Title: "Document " + i,
-                        // Other required fields.
-                        id: "item" + i,
-                        UID: "item" + i,
-                    });
-                }
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 100,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-        });
-
-        afterEach(function () {
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-        });
-
-        it("per page", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            this.$el.find(".serverhowmany15 a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find(".itemRow").length).to.equal(16);
-            this.$el.find(".serverhowmany30 a").trigger("click");
-            this.clock.tick(1000);
-            expect(this.$el.find(".itemRow").length).to.equal(31);
-        });
-
-        it("test itemRow actionmenu move-top none", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // top item
-            var item = this.$el.find(".itemRow").eq(1);
-            expect(item.data().id).to.equal("item0");
-            // Since no moveUrl, no move-top or move-bottom.
-            expect(item.find(".actionmenu .move-top a").length).to.equal(0);
-            expect(item.find(".actionmenu .move-bottom a").length).to.equal(0);
-        });
-    });
-
-    /* ==========================
-   TEST: Structure no action buttons
-  ========================== */
-    describe("Structure no action buttons", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                activeColumns: [],
-                availableColumns: {
-                    getURL: "URL",
-                },
-                buttons: [],
-                menuOptions: [],
-                attributes: ["Title", "getURL"],
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [];
-                items.push({
-                    getURL: "http://localhost:9876/folder",
-                    Title: "Folder",
-                    id: "folder",
-                    UID: "folder",
-                });
-                for (var i = start; i < end; i = i + 1) {
-                    items.push({
-                        getURL: "http://localhost:9876/item" + i,
-                        Title: "Document " + i,
-                        id: "item" + 1,
-                        UID: "item" + 1,
-                    });
-                }
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 100,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-        });
-
-        afterEach(function () {
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-        });
-
-        it("test itemRow actionmenu no options.", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // top item
-            var item = this.$el.find(".itemRow").eq(1);
-            expect(item.data().id).to.equal("item1");
-            // Since no moveUrl, no move-top or move-bottom.
-            expect(item.find(".actionmenu * a").length).to.equal(0);
-        });
-    });
-
-    /* ==========================
-   TEST: Structure alternative action buttons
-  ========================== */
-    describe("Structure alternative action buttons and links", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                activeColumns: [],
-                availableColumns: {
-                    getURL: "URL",
-                },
-                buttons: [],
-                menuOptions: {
-                    action1: {
-                        library: "dummytestaction",
-                        method: "option1",
-                        url: "#",
-                        title: "Option 1",
-                        category: "dropdown",
-                    },
-                    action2: {
-                        library: "dummytestaction",
-                        method: "option2",
-                        url: "#",
-                        title: "Option 2",
-                        category: "dropdown",
-                    },
-                },
-                tableRowItemAction: {
-                    other: ["dummytestaction", "handleOther"],
-                },
-                attributes: ["Title", "getURL"],
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            $("body")
-                .off("structure-url-changed")
-                .on("structure-url-changed", function (e, path) {
-                    structureUrlChangedPath = path;
-                });
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [
-                    {
-                        getURL: "http://localhost:9876/folder",
-                        Title: "Folder",
-                        is_folderish: true,
-                        path: "/folder",
-                        id: "folder",
-                    },
-                    {
-                        getURL: "http://localhost:9876/item",
-                        Title: "Item",
-                        is_folderish: false,
-                        path: "/item",
-                        id: "item",
-                    },
-                ];
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 1,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-
-            sinon.stub(utils, "getWindow").callsFake(function () {
-                return dummyWindow;
-            });
-        });
-
-        afterEach(function () {
-            requirejs.undef("dummytestaction");
-            sinon.restore();
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-            $("body").off("structure-url-changed");
-        });
-
-        it("test itemRow actionmenu custom options.", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var item = this.$el.find(".itemRow").eq(0);
-            // Check for complete new options
-            expect($(".actionmenu * a", item).length).to.equal(2);
-            expect($(".actionmenu a.action1", item).text().trim()).to.equal("Option 1");
-            expect($(".actionmenu a.action2", item).text().trim()).to.equal("Option 2");
-
-            define("dummytestaction", ["backbone"], function (Backbone) {
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                    option1: function (e) {
-                        e.preventDefault();
-                        var self = this;
-                        self.app.setStatus({
-                            text: "Status: option1 selected",
-                            type: "success",
-                        });
-                    },
-                    option2: function (e) {
-                        e.preventDefault();
-                        var self = this;
-                        self.app.setStatus({
-                            text: "Status: option2 selected",
-                            type: "info",
-                        });
-                    },
-                });
-                return Actions;
-            });
-            // preload the defined module to allow it be used synchronously.
-            require(["dummytestaction"], function () {});
-            this.clock.tick(1000);
-
-            $(".actionmenu a.action1", item).trigger("click");
-            this.clock.tick(1000);
-            // status will be set as defined.
-            expect($(".fc-status .fc-status-text").text()).to.contain(
-                "Status: option1 selected"
-            );
-            expect($(".fc-status").hasClass("alert-success"));
-
-            $(".actionmenu a.action2", item).trigger("click");
-            this.clock.tick(1000);
-            // status will be set as defined.
-            expect($(".fc-status").text()).to.contain("Status: option2 selected");
-            expect($(".fc-status").hasClass("alert-info"));
-        });
-
-        it("item link triggered", function () {
-            define("dummytestaction", ["backbone"], function (Backbone) {
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                    handleOther: function (e) {
-                        e.preventDefault();
-                        var self = this;
-                        self.app.setStatus({
-                            text: "Status: not a folder",
-                            type: "error",
-                        });
-                    },
-                });
-                return Actions;
-            });
-            // preload the defined module to allow it be used synchronously.
-            require(["dummytestaction"], function () {});
-
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var item = this.$el.find(".itemRow").eq(1);
-            $(".title a.manage", item).trigger("click");
-            this.clock.tick(1000);
-            // status will be set as defined.
-            expect($(".fc-status .fc-status-text").text()).to.contain(
-                "Status: not a folder"
-            );
-            expect($(".fc-status").hasClass("alert-error"));
-        });
-    });
-
-    /* ==========================
-   TEST: Structure traverse subpath
-  ========================== */
-    describe("Structure traverse links", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            this.structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                activeColumns: [],
-                availableColumns: {
-                    getURL: "URL",
-                },
-                buttons: [],
-                attributes: ["Title", "getURL"],
-                urlStructure: {
-                    base: "http://localhost:9876/traverse_view",
-                    appended: "",
-                },
-                pushStateUrl: "http://localhost:9876/traverse_view{path}",
-                traverseView: true,
-            };
-
-            $("body")
-                .off("structure-url-changed")
-                .on("structure-url-changed", function (e, path) {
-                    structureUrlChangedPath = path;
-                });
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [
-                    {
-                        getURL: "http://localhost:9876/folder",
-                        Title: "Folder",
-                        is_folderish: true,
-                        path: "/folder",
-                        id: "folder",
-                    },
-                    {
-                        getURL: "http://localhost:9876/item",
-                        Title: "Item",
-                        is_folderish: false,
-                        path: "/item",
-                        id: "item",
-                    },
-                ];
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 1,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-            sinon.stub(window, "history").value(stub_history);
-            sinon.stub(utils, "getWindow").callsFake(function () {
-                return dummyWindow;
-            });
-        });
-
-        afterEach(function () {
-            requirejs.undef("dummytestaction");
-            this.server.restore();
-            this.clock.restore();
-            sinon.restore();
-            $("body").html("");
-            $("body").off("structure-url-changed");
-        });
-
-        it("test navigate to folder push states - urlStructure", function () {
-            delete this.structure.pushStateUrl;
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(this.structure))
-                .appendTo("body");
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var pattern = this.$el.data("patternStructure");
-            var item = this.$el.find(".itemRow").eq(0);
-            expect(item.data().id).to.equal("folder");
-            $(".title a.manage", item).trigger("click");
-            this.clock.tick(1000);
-            expect(window.history.pushed.url).to.equal(
-                "http://localhost:9876/traverse_view/folder"
-            );
-            expect(structureUrlChangedPath).to.eql("");
-
-            $(".fc-breadcrumbs a", this.$el).eq(0).trigger("click");
-            this.clock.tick(1000);
-            expect(window.history.pushed.url).to.equal(
-                "http://localhost:9876/traverse_view"
-            );
-        });
-
-        it("test navigate to folder pop states - urlStructure", function () {
-            delete this.structure.pushStateUrl;
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(this.structure))
-                .appendTo("body");
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // Need to inject this to the mocked window location attribute the
-            // code will check against.  This url is set before the trigger.
-            dummyWindow.location = {
-                href: "http://localhost:9876/traverse_view/folder/folder",
-            };
-            // then trigger off the real window.
-            $(window).trigger("popstate");
-            this.clock.tick(1000);
-            expect(structureUrlChangedPath).to.eql("/folder/folder");
-        });
-
-        it("test navigate to folder push states - pushStateUrl", function () {
-            delete this.structure.urlStructure;
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(this.structure))
-                .appendTo("body");
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var pattern = this.$el.data("patternStructure");
-            var item = this.$el.find(".itemRow").eq(0);
-            expect(item.data().id).to.equal("folder");
-            $(".title a.manage", item).trigger("click");
-            this.clock.tick(1000);
-            expect(window.history.pushed.url).to.equal(
-                "http://localhost:9876/traverse_view/folder"
-            );
-            expect(structureUrlChangedPath).to.eql("");
-
-            $(".fc-breadcrumbs a", this.$el).eq(0).trigger("click");
-            this.clock.tick(1000);
-            expect(window.history.pushed.url).to.equal(
-                "http://localhost:9876/traverse_view"
-            );
-        });
-
-        it("test navigate to folder pop states - pushStateUrl", function () {
-            delete this.structure.urlStructure;
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(this.structure))
-                .appendTo("body");
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            // Need to inject this to the mocked window location attribute the
-            // code will check against.  This url is set before the trigger.
-            dummyWindow.location = {
-                href: "http://localhost:9876/traverse_view/folder/folder",
-            };
-            // then trigger off the real window.
-            $(window).trigger("popstate");
-            this.clock.tick(1000);
-            expect(structureUrlChangedPath).to.eql("/folder/folder");
-        });
-    });
-
-    /* ==========================
-   TEST: Structure action menu generator
-  ========================== */
-    describe("Structure alternative action buttons and links", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                activeColumnsCookie: "activeColumnsCustom",
-                activeColumns: [],
-                availableColumns: {
-                    getURL: "URL",
-                },
-                buttons: [],
-                menuGenerator: "dummyactionmenu",
-                tableRowItemAction: {
-                    other: ["dummytestaction", "handleOther"],
-                },
-                attributes: ["Title", "getURL"],
-                traverseView: true,
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            $("body")
-                .off("structure-url-changed")
-                .on("structure-url-changed", function (e, path) {
-                    structureUrlChangedPath = path;
-                });
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [
-                    {
-                        getURL: "http://localhost:9876/folder",
-                        Title: "Folder",
-                        is_folderish: true,
-                        path: "/folder",
-                        id: "folder",
-                    },
-                    {
-                        getURL: "http://localhost:9876/item",
-                        Title: "Item",
-                        is_folderish: false,
-                        path: "/item",
-                        id: "item",
-                    },
-                ];
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 2,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-        });
-
-        afterEach(function () {
-            requirejs.undef("dummytestaction");
-            requirejs.undef("dummyactionmenu");
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-            $("body").off("structure-url-changed");
-        });
-
-        it("test itemRow actionmenu generated options from model.", function () {
-            define("dummytestaction", ["backbone"], function (Backbone) {
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                    folderClicker: function (e) {
-                        e.preventDefault();
-                        var self = this;
-                        self.app.setStatus({ text: "Status: folder clicked" });
-                    },
-                    itemClicker: function (e) {
-                        e.preventDefault();
-                        var self = this;
-                        self.app.setStatus({ text: "Status: item clicked" });
-                    },
-                });
-                return Actions;
-            });
-
-            define("dummyactionmenu", [], function () {
-                var ActionMenu = function (menu) {
-                    if (menu.model.attributes.id === "item") {
-                        return {
-                            itemClicker: {
-                                library: "dummytestaction",
-                                method: "itemClicker",
-                                url: "#",
-                                title: "Item Clicker",
-                            },
-                        };
-                    } else {
-                        return {
-                            folderClicker: {
-                                library: "dummytestaction",
-                                method: "folderClicker",
-                                url: "#",
-                                title: "Folder Clicker",
-                            },
-                        };
-                    }
-                };
-                return ActionMenu;
-            });
-
-            // preload the defined module to allow it be used synchronously.
-            require(["dummytestaction"], function () {});
-            require(["dummyactionmenu"], function () {});
-
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-
-            var folder = this.$el.find(".itemRow").eq(0);
-
-            // Check for complete new options
-            expect($(".actionmenu * a", folder).length).to.equal(1);
-            expect($(".actionmenu a.folderClicker", folder).text().trim()).to.equal(
-                "Folder Clicker"
-            );
-            $(".actionmenu a.folderClicker", folder).trigger("click");
-            this.clock.tick(1000);
-            // status will be set as defined.
-            expect($(".fc-status .fc-status-text").text()).to.contain(
-                "Status: folder clicked"
-            );
-
-            var item = this.$el.find(".itemRow").eq(1);
-            // Check for complete new options
-            expect($(".actionmenu * a", item).length).to.equal(1);
-            expect($(".actionmenu a.itemClicker", item).text().trim()).to.equal(
-                "Item Clicker"
-            );
-            $(".actionmenu a.itemClicker", item).trigger("click");
-            this.clock.tick(1000);
-            // status will be set as defined.
-            expect($(".fc-status .fc-status-text").text()).to.contain(
-                "Status: item clicked"
-            );
-        });
-
-        it("test itemRow actionmenu malform generation.", function () {
-            // Potential failure case where user defined ActionMenu function
-            // fails to return a result, causing undefined behavior.
-            define("dummytestaction", ["backbone"], function (Backbone) {
-                // Not testing clicking here so barebone definition here.
-                var Actions = Backbone.Model.extend({
-                    initialize: function (options) {
-                        this.options = options;
-                        this.app = options.app;
-                    },
-                });
-                return Actions;
-            });
-
-            define("dummyactionmenu", [], function () {
-                var ActionMenu = function (menu) {
-                    // return undefined
-                };
-                return ActionMenu;
-            });
-
-            // preload the defined module to allow it be used synchronously.
-            require(["dummytestaction"], function () {});
-            require(["dummyactionmenu"], function () {});
-
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-
-            // ensure that the items have been properly generated.
-            expect(this.$el.find(".itemRow").length).to.equal(2);
-        });
-    });
-
-    /* ==========================
-   TEST: Structure custom URLs
-  ========================== */
-    describe("Structure custom data URLs", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("__cp");
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumns");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            this.$el = $(
-                "" +
-                    '<div class="pat-structure" ' +
-                    'data-pat-structure="vocabularyUrl:/data.json;' +
-                    "uploadUrl:/upload;" +
-                    "moveUrl:/moveitem;" +
-                    "indexOptionsUrl:./test-querystringcriteria.json;" +
-                    "contextInfoUrl:{path}/contextInfo;" +
-                    "setDefaultPageUrl:/setDefaultPage;" +
-                    ' ">' +
-                    "</div>"
-            ).appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [];
-                items.push({
+            if (xhr.url.indexOf("folder") !== -1) {
+                data.object = {
                     UID: "123sdfasdfFolder",
                     getURL: "http://localhost:9876/folder",
                     path: "/folder",
@@ -2668,262 +284,453 @@ define([
                     is_folderish: true,
                     Subject: [],
                     id: "folder",
-                });
-                for (var i = start; i < end; i = i + 1) {
-                    items.push({
-                        UID: "123sdfasdf" + i,
-                        getURL: "http://localhost:9876/item" + i,
-                        path: "/item" + i,
-                        portal_type: "Document " + i,
-                        Description: "document",
-                        Title: "Document " + i,
-                        review_state: "published",
-                        is_folderish: false,
-                        Subject: [],
-                        id: "item" + i,
-                    });
-                }
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 100,
-                        results: items,
-                    })
-                );
-            });
-
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [
-                        {
-                            id: "document",
-                            title: "Document",
-                            url: "/adddocument",
-                        },
-                        {
-                            id: "folder",
-                            title: "Folder",
-                        },
-                    ],
                 };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-
-            sinon.stub(utils, "getWindow").callsFake(function () {
-                return dummyWindow;
-            });
-        });
-
-        afterEach(function () {
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-            sinon.restore();
-        });
-
-        it("test displayed content", function () {
-            registry.scan(this.$el);
-            this.clock.tick(500);
-
-            var $content_row = this.$el.find("table tbody tr").eq(0);
-            expect($content_row.find("td").length).to.equal(6);
-            expect($content_row.find("td").eq(1).text().trim()).to.equal("Folder");
-            expect($content_row.find("td").eq(2).text().trim()).to.equal("");
-            expect($content_row.find("td").eq(3).text().trim()).to.equal("");
-            expect($content_row.find("td").eq(4).text().trim()).to.equal("published");
-            expect($content_row.find(".actionmenu a.openItem").attr("href")).to.equal(
-                "http://localhost:9876/folder"
-            );
-
-            var $content_row1 = this.$el.find("table tbody tr").eq(1);
-            expect($content_row1.find("td").eq(1).text().trim()).to.equal("Document 0");
-            expect($content_row1.find(".actionmenu a.openItem").attr("href")).to.equal(
-                "http://localhost:9876/item0"
+            }
+            xhr.respond(
+                200,
+                { "Content-Type": "application/json" },
+                JSON.stringify(data)
             );
         });
+
+        sinon.stub(window, "history").value(stub_history);
+        sinon.stub(mockup_utils, "getWindow").callsFake(function () {
+            return dummyWindow;
+        });
+
+        var structure = {
+            vocabularyUrl: "/data.json",
+            uploadUrl: "/upload",
+            moveUrl: "/moveitem",
+            indexOptionsUrl: "./test-querystringcriteria.json",
+            contextInfoUrl: "{path}/contextInfo",
+            setDefaultPageUrl: "/setDefaultPage",
+            defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
+            urlStructure: {
+                base: "http://localhost:9876",
+                appended: "/folder_contents",
+            },
+        };
+
+        this.$el = $('<div class="pat-structure"></div>')
+            .attr("data-pat-structure", JSON.stringify(structure))
+            .appendTo("body");
+        this.el = this.$el[0];
+
+        $("body")
+            .off("structure-url-changed")
+            .on("structure-url-changed", function (e, path) {
+                structureUrlChangedPath = path;
+            });
     });
 
-    /* ==========================
-   TEST: Structure data insufficient fields
-  ========================== */
-    describe("Structure data insufficient fields", function () {
-        beforeEach(function () {
-            // clear cookie setting
-            $.removeCookie("_fc_perPage");
-            $.removeCookie("_fc_activeColumnsCustom");
-
-            var structure = {
-                vocabularyUrl: "/data.json",
-                uploadUrl: "/upload",
-                moveUrl: "/moveitem",
-                indexOptionsUrl: "./test-querystringcriteria.json",
-                contextInfoUrl: "{path}/contextInfo",
-                setDefaultPageUrl: "/setDefaultPage",
-                urlStructure: {
-                    base: "http://localhost:9876",
-                    appended: "/folder_contents",
-                },
-            };
-
-            this.$el = $('<div class="pat-structure"></div>')
-                .attr("data-pat-structure", JSON.stringify(structure))
-                .appendTo("body");
-
-            this.server = sinon.fakeServer.create();
-            this.server.autoRespond = true;
-
-            this.server.respondWith("GET", /data.json/, function (xhr, id) {
-                var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
-                var start = 0;
-                var end = 15;
-                if (batch) {
-                    start = (batch.page - 1) * batch.size;
-                    end = start + batch.size;
-                }
-                var items = [
-                    {
-                        getURL: "http://localhost:9876/folder",
-                        Title: "Folder",
-                        is_folderish: true,
-                        path: "/folder",
-                        UID: "folder",
-                        id: "folder",
-                    },
-                    {
-                        getURL: "http://localhost:9876/item",
-                        Title: "Item",
-                        is_folderish: false,
-                        path: "/item",
-                        // omitting id but provide UID instead for this test
-                        UID: "item",
-                    },
-                ];
-
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        total: 1,
-                        results: items,
-                    })
-                );
-            });
-            this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
-                var data = {
-                    addButtons: [],
-                };
-                if (xhr.url.indexOf("folder") !== -1) {
-                    data.object = {
-                        UID: "123sdfasdfFolder",
-                        getURL: "http://localhost:9876/folder",
-                        path: "/folder",
-                        portal_type: "Folder",
-                        Description: "folder",
-                        Title: "Folder",
-                        review_state: "published",
-                        is_folderish: true,
-                        Subject: [],
-                        id: "folder",
-                    };
-                }
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify(data)
-                );
-            });
-
-            this.clock = sinon.useFakeTimers();
-        });
-
-        afterEach(function () {
-            this.server.restore();
-            this.clock.restore();
-            $("body").html("");
-        });
-
-        it("test unselect all", function () {
-            registry.scan(this.$el);
-            this.clock.tick(1000);
-            var $item = this.$el.find("table th .select-all");
-            $item[0].checked = true;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("2");
-            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
-                2
-            );
-
-            // XXX passing this test for now with bad data - uncheck cannot
-            // remove items without an id (but with UID specified), so this
-            // item cannot be unselected.
-            $item[0].checked = false;
-            $item.trigger("change");
-            this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain("1");
-            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
-                1
-            );
-        });
+    afterEach(function () {
+        // XXX QueryHelper behaves like a singleton as it pins self
+        // reference to the singleton instance of Utils within the
+        // requirejs framework, so its variables such as currentPath are
+        // persisted.  Reset that here like so:
+        // utils.QueryHelper({}).currentPath = "/";
+        extraDataJsonItem = null;
+        this.server.restore();
+        sinon.restore();
+        document.body.innerHTML = "";
+        structureUrlChangedPath = "";
     });
 
-    /* ==========================
-   TEST: PropertiesView concatenate duplicated values
-  ========================== */
-    describe("PropertiesView concatenate duplicated values", function () {
-        beforeEach(function () {
-            this.app = {
-                buttonClickEvent: function (triggerView, data) {
-                    this.data = data;
-                },
-                selectedCollection: $(),
-            };
-            var triggerView = new ButtonView({
-                id: "foobar",
-            });
-            triggerView.$el.appendTo("body");
-            var options = {
-                app: this.app,
-                triggerView: triggerView,
-                form: {
-                    template:
-                        '<select multiple name="foo"><option selected value="1">1</option>' +
-                        '<option selected value="2">2</option><option value="3">3</option></select>',
-                },
-            };
-            this.popover = new PropertiesView(options);
-        });
+    it("initialize", async function () {
+        registry.scan(this.el);
+        await utils.timeout(200);
 
-        afterEach(function () {
-            $("body").html("");
-        });
+        // moveUrl provided, can get to this via order-support.
+        expect(this.$el.find("table").length).toEqual(1);
+    });
 
-        it("test applyButtonClicked", function () {
-            this.popover.toggle();
-            this.popover.applyButtonClicked();
-            expect(this.app.data.foo).to.equal("1,2");
-        });
+    it("select item populates selection well", async function () {
+        registry.scan(this.el);
+        await utils.timeout(200);
+
+        var cb = this.$el.find(".itemRow td.selection input").eq(0);
+        cb[0].checked = true;
+        cb.trigger("change");
+        await utils.timeout(100);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("1");
+        var selectedItems = $(".popover-content .selected-item", this.$el);
+        expect($(selectedItems[0]).text()).toContain("Folder");
+    });
+
+    it("test selection well label", async function () {
+        extraDataJsonItem = {
+            UID: 'XSS" data-xss="bobby',
+            getURL: "http://localhost:9876/xss",
+            path: "/xss",
+            portal_type: "Folder",
+            Description: "XSS test item",
+            Title: "<script>alert('XSS');window.foo=1;</script>",
+            review_state: "published",
+            is_folderish: true,
+            Subject: [],
+            id: "xss",
+        };
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        // it's overloaded, pattern doesn't actually enforce batch limits.
+        var cb = this.$el.find(".itemRow td.selection input").eq(16);
+        cb[0].checked = true;
+        cb.trigger("change");
+        await utils.timeout(100);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("1");
+
+        // XSS happened.
+        expect(window.foo).not.toEqual(1);
+        expect(
+            $(".popover-content .selected-item a", this.$el).eq(0).data().xss
+        ).not.toEqual("bobby");
+        var selectedItems = $(".popover-content .selected-item", this.$el);
+        expect($(selectedItems[0]).text()).toContain(
+            "<script>alert('XSS');window.foo=1;</script>"
+        );
+    });
+
+    it("remove item from selection well", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100)
+        var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
+        $item1[0].checked = true;
+        $item1.trigger("change");
+        this.$el
+            .find(".items.popover-content a.remove")
+            .trigger("click")
+            .trigger("change");
+        expect(this.$el.find("#btn-selected-items").html()).toContain("0");
+    });
+
+    it("remove all from selection well", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
+        $item1[0].checked = true;
+        $item1.trigger("change");
+        await utils.timeout(100);
+        var $item2 = this.$el.find(".itemRow td.selection input").eq(1);
+        $item2[0].checked = true;
+        $item2.trigger("change");
+        await utils.timeout(100);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("2");
+        this.$el.find(".popover.selected-items a.remove-all").trigger("click");
+        await utils.timeout(100);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("0");
+    });
+
+    it("paging", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        // click next page
+        var page1Btn = this.$el.find(".pagination li.active a");
+        page1Btn.parent().next().find("a").trigger("click");
+        await utils.timeout(100);
+        expect(page1Btn.html()).not.toContain(
+            this.$el.find(".pagination li.active a").eq("0").html()
+        );
+        expect(this.$el.find(".pagination li.active a").eq("0").html()).toContain(
+            "2"
+        );
+    });
+
+    it("per page", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        this.$el.find(".serverhowmany15 a").trigger("click");
+        await utils.timeout(100);
+        expect(this.$el.find(".itemRow").length).toEqual(16);
+        this.$el.find(".serverhowmany30 a").trigger("click");
+        await utils.timeout(100);
+        expect(this.$el.find(".itemRow").length).toEqual(31);
+    });
+
+    it("test paging does not apply overflow hidden to parent", async function () {
+        /*
+            * very odd here, overflow hidden is getting applied by something after
+            * the table of results is re-rendered with new data
+            */
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        // click next page
+        var page1Btn = this.$el.find(".pagination li.active a");
+        page1Btn.parent().next().find("a").trigger("click");
+        await utils.timeout(100);
+        expect(this.$el.css("overflow")).not.toEqual("hidden");
+    });
+
+    it.skip("test rearrange button", async function () {
+        /* test not working in firefox */
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        var $popover = this.$el.find(".popover.rearrange");
+        this.$el.find("#btn-rearrange").trigger("click");
+        await utils.timeout(100)
+        expect($popover.hasClass("active")).toEqual(true);
+        $popover.find("button").trigger("click");
+        await utils.timeout(100)
+        expect($popover.hasClass("active")).toEqual(false);
+        expect(this.$el.find(".order-support .fc-status").html()).toContain(
+            "rearrange"
+        );
+        expect(this.app.$(".fc-status").hasClass("alert-success"));
+    });
+
+    it("test select all", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        var $item = this.$el.find("table th .select-all");
+        $item[0].checked = true;
+        $item.trigger("change");
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("16");
+        expect($("table tbody .selection input:checked", this.$el).length).toEqual(16);
+    });
+
+    it("test unselect all", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+
+        var $item = this.$el.find("table th .select-all");
+        $item[0].checked = true;
+        $item.trigger("change");
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("16");
+        expect($("table tbody .selection input:checked", this.$el).length).toEqual(16);
+
+        $item[0].checked = false;
+        $item.trigger("change");
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-selected-items").html()).toContain("0");
+        expect($("table tbody .selection input:checked", this.$el).length).toEqual(0);
+    });
+
+    it("test expired shows", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+
+        var $content_row = this.$el.find("table tbody tr").eq(0);
+        expect($content_row.find("td").eq(1).text().trim()).toContain("Expired");
+    });
+
+    it("test displayed content", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+
+        var $content_row = this.$el.find("table tbody tr").eq(0);
+        expect($content_row.find("td").length).toEqual(6);
+        expect($content_row.find("td").eq(1).text().trim()).toContain("Folder");
+        expect($content_row.find("td").eq(2).text().trim()).toEqual("");
+        expect($content_row.find("td").eq(3).text().trim()).toEqual("");
+        expect($content_row.find("td").eq(4).text().trim()).toEqual("published");
+        expect($content_row.find("a.openItem").attr("href")).toEqual(
+            "http://localhost:9876/folder"
+        );
+
+        var $content_row1 = this.$el.find("table tbody tr").eq(1);
+        expect($content_row1.find("td").eq(1).text().trim()).toEqual("Document 0");
+        expect($content_row1.find("a.openItem").attr("href")).toEqual(
+            "http://localhost:9876/item0"
+        );
+    });
+
+    it.skip("test select displayed columns", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        var $row = this.$el.find("table thead tr").eq(0);
+        expect($row.find("th").length).toEqual(6);
+        expect($row.find("th").eq(1).text().trim()).toEqual("Title");
+        expect($row.find("th").eq(2).text().trim()).toEqual("Last modified");
+        expect($row.find("th").eq(3).text().trim()).toEqual("Published");
+        expect($row.find("th").eq(4).text().trim()).toEqual("Review state");
+        expect($row.find("th").eq(5).text().trim()).toEqual("Actions");
+
+        expect(Cookies.get("_fc_activeColumns")).toBe(undefined);
+
+        this.$el.find("#btn-attribute-columns").trigger("click");
+        await utils.timeout(100);
+
+        var $checkbox = this.$el.find(
+            '.attribute-columns input[value="getObjSize"]'
+        );
+        $checkbox[0].checked = true;
+        $checkbox.trigger("change");
+        await utils.timeout(100);
+
+        var $popover = this.$el.find(".popover.attribute-columns");
+        expect($popover.find("button").text().trim()).toEqual("Save");
+        $popover.find("button").trigger("click");
+        await utils.timeout(100);
+
+        $row = this.$el.find("table thead tr").eq(0);
+        expect($row.find("th").length).toEqual(7);
+        expect($row.find("th").eq(5).text().trim()).toEqual("Object Size");
+        expect($row.find("th").eq(6).text().trim()).toEqual("Actions");
+        expect(JSON.parse(Cookies.get("_fc_activeColumns")).value).toEqual([
+            "ModificationDate",
+            "EffectiveDate",
+            "review_state",
+            "getObjSize",
+        ]);
+
+        $checkbox[0].checked = false;
+        $checkbox.trigger("change");
+        $popover.find("button").trigger("click");
+        await utils.timeout(100);
+
+        $row = this.$el.find("table thead tr").eq(0);
+        expect($row.find("th").length).toEqual(6);
+        expect(JSON.parse(Cookies.get("_fc_activeColumns")).value).toEqual([
+            "ModificationDate",
+            "EffectiveDate",
+            "review_state",
+        ]);
+    });
+
+    it("test main buttons count", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        var buttons = this.$el.find("#btngroup-mainbuttons a");
+        expect(buttons.length).toEqual(8);
+    });
+
+    it("test itemRow default actionmenu folder", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        // folder
+        var folder = this.$el.find(".itemRow").eq(0);
+        expect(folder.data().id).toEqual("folder");
+        expect($(".actionmenu a.action", folder).length).toEqual(7);
+        // no pasting (see next test
+        expect($(".actionmenu a.pasteItem", folder).length).toEqual(0);
+        // no set default page
+        expect($(".actionmenu a.set-default-page", folder).length).toEqual(0);
+        // can select all
+        expect($(".actionmenu a.selectAll", folder).text().trim()).toEqual(
+            "Select all contained items"
+        );
+    });
+
+    it.skip("test itemRow default actionmenu item", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+
+        var item = this.$el.find(".itemRow").eq(10);
+        expect(item.data().id).toEqual("item9");
+        expect($(".actionmenu a.action", item).length).toEqual(7);
+        // cannot select all
+        expect($("a.selectAll", item).length).toEqual(0);
+        // can set default page
+        expect($("a.set-default-page", item).length).toEqual(1);
+        expect($("a.set-default-page", item).text().trim()).toEqual(
+            "Set as default page"
+        );
+        $("a.set-default-page", item).trigger("click");
+        await utils.timeout(100);
+        expect(this.$el.find(".fc-status").html()).toContain("defaulted");
+    });
+
+    it.skip("test itemRow actionmenu paste click", async function () {
+        // item pending to be pasted
+        Cookies.set("__cp", "dummy");
+        await utils.timeout(100);
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        // top item
+        var item0 = this.$el.find(".itemRow").eq(0);
+        expect(item0.data().id).toEqual("folder");
+        expect($(".actionmenu a.action", item0).length).toEqual(8);
+        expect($("a.pasteItem", item0).text().trim()).toEqual("Paste");
+        $("a.pasteItem", item0).trigger("click");
+        await utils.timeout(100);
+        expect(this.$el.find(".fc-status").html()).toContain(
+            'Pasted into "Folder"'
+        );
+    });
+
+    it("test itemRow actionmenu move-top click", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        // top item
+        var item0 = this.$el.find(".itemRow").eq(0);
+        expect(item0.data().id).toEqual("folder");
+        var item10 = this.$el.find(".itemRow").eq(10);
+        expect(item10.data().id).toEqual("item9");
+
+        expect($(".actionmenu a.move-top", item10).text().trim()).toEqual(
+            "Move to top of folder"
+        );
+        $(".actionmenu a.move-top", item10).trigger("click");
+        await utils.timeout(100);
+
+        expect(this.$el.find(".fc-status").html()).toContain("moved");
+        expect(this.$el.find(".fc-status").html()).toContain("delta=top");
+        expect(this.$el.find(".fc-status").html()).toContain("id=item9");
+        // No items actually moved, this is to be implemented server-side.
+    });
+
+    it.skip("test itemRow actionmenu selectAll click", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+
+        var folder = this.$el.find(".itemRow").eq(0);
+        $(".actionmenu a.selectAll", folder).trigger("click");
+        await utils.timeout(200);
+        expect($("table tbody .selection input:checked", this.$el).length).toEqual(0);
+        // all items in the folder be populated within the selection well.
+        expect(this.$el.find("#btn-selected-items").html()).toContain("101");
+    });
+
+    it("test navigate to item", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        var pattern = this.$el.data("patternStructure");
+        var item = this.$el.find(".itemRow").eq(10);
+        expect(item.data().id).toEqual("item9");
+        expect($(".title a.manage", item).attr("href")).toEqual(
+            "http://localhost:9876/item9"
+        );
+        expect($(".actionmenu a.openItem", item).attr("href")).toEqual(
+            "http://localhost:9876/item9"
+        );
+        expect($(".actionmenu a.editItem", item).attr("href")).toEqual(
+            "http://localhost:9876/item9/edit"
+        );
+    });
+
+    it.skip("test navigate to folder push states", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        var item = this.$el.find(".itemRow").eq(0);
+        expect(item.data().id).toEqual("folder");
+        $(".title a.manage", item).trigger("click");
+        await utils.timeout(100);
+        expect(window.history.pushed.url).toEqual(
+            "http://localhost:9876/folder/folder_contents"
+        );
+        expect(structureUrlChangedPath).toEqual("/folder");
+
+        $(".fc-breadcrumbs a", this.$el).eq(0).trigger("click");
+        await utils.timeout(100);
+        expect(window.history.pushed.url).toEqual(
+            "http://localhost:9876/folder_contents"
+        );
+        expect(structureUrlChangedPath).toEqual("");
+    });
+
+    it("test navigate to folder pop states", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+        // Need to inject this to the mocked window location attribute the
+        // code will check against.  This url is set before the trigger.
+        dummyWindow.location = {
+            href: "http://localhost:9876/folder/folder/folder_contents",
+        };
+        // then trigger off the real window.
+        $(window).trigger("popstate");
+        await utils.timeout(100);
+        expect(structureUrlChangedPath).toEqual("/folder/folder");
     });
 });

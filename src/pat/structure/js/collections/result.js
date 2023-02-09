@@ -1,4 +1,3 @@
-import $ from "jquery";
 import Backbone from "backbone";
 import Result from "../models/result";
 import utils from "../../../../core/utils";
@@ -13,11 +12,10 @@ export default Backbone.PageableCollection.extend({
         this.view = options.view;
         this.url = options.url;
 
-        this.queryHelper = utils.QueryHelper(
-            $.extend(true, {}, this.view.options, {
-                attributes: this.view.options.queryHelperAttributes,
-            })
-        );
+        this.queryHelper = utils.QueryHelper({
+            attributes: this.view.options.queryHelperAttributes,
+            ...this.view.options
+        });
 
         this.queryParser = function (options) {
             if (options === undefined) {
@@ -29,11 +27,10 @@ export default Backbone.PageableCollection.extend({
 
             return JSON.stringify({
                 criteria: this.queryHelper.getCriterias(
-                    term,
-                    $.extend({}, options, {
+                    term, {
                         additionalCriterias: this.view.additionalCriterias,
-                    })
-                ),
+                        ...options,
+                    }),
                 sort_on: sortOn,
                 sort_order: sortOrder,
             });
