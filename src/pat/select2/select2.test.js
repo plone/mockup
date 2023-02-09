@@ -86,15 +86,17 @@ describe("Select2", function () {
     });
 
     it("ajax vocabulary url configuration", async function () {
-        var $el = $(
-            '<input class="pat-select2"' +
-                '       data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
-                "       />"
-        );
+        document.body.innerHTML = `
+            <input class="pat-select2"
+                   data-pat-select2="vocabularyUrl: select2-users-vocabulary"
+                   />
+        `;
 
-        registry.scan($el);
+        registry.scan(document.body);
         await utils.timeout(1);
-        var select2 = $el.data("pattern-select2");
+
+        const el = document.querySelector("input.pat-select2");
+        const select2 = el["pattern-select2"];
         expect(select2.options.ajax.url).toEqual("select2-users-vocabulary");
     });
 
