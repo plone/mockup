@@ -4,7 +4,7 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 import "select2";
 
-const SELECT2_TIMEOUT = 500;
+const SELECT2_TIMEOUT = 1;
 
 describe("Select2", function () {
     let ajax_defaults_transport = null;
@@ -86,15 +86,17 @@ describe("Select2", function () {
     });
 
     it("ajax vocabulary url configuration", async function () {
-        var $el = $(
-            '<input class="pat-select2"' +
-                '       data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
-                "       />"
-        );
+        document.body.innerHTML = `
+            <input class="pat-select2"
+                   data-pat-select2="vocabularyUrl: select2-users-vocabulary"
+                   />
+        `;
 
-        registry.scan($el);
+        registry.scan(document.body);
         await utils.timeout(1);
-        var select2 = $el.data("pattern-select2");
+
+        const el = document.querySelector("input.pat-select2");
+        const select2 = el["pattern-select2"];
         expect(select2.options.ajax.url).toEqual("select2-users-vocabulary");
     });
 
@@ -104,7 +106,9 @@ describe("Select2", function () {
                  class="pat-select2"
                  data-pat-select2="placeholder:Search for a Value;
                                    vocabularyUrl: /select2-ajax.json;
-                                   width:20em" />
+                                   width:20em;
+                                   ajaxTimeout: 1;
+                                   " />
         `;
         registry.scan(document.body);
         await utils.timeout(1);
@@ -127,7 +131,9 @@ describe("Select2", function () {
                  class="pat-select2"
                  data-pat-select2="placeholder:Search for a Value;
                                    vocabularyUrl: /select2-ajax.json;
-                                   width:20em" />
+                                   width:20em;
+                                   ajaxTimeout: 1;
+                                   " />
         `;
         registry.scan(document.body);
         await utils.timeout(1);
@@ -149,7 +155,9 @@ describe("Select2", function () {
           <input type="hidden" class="pat-select2"
                  data-pat-select2="placeholder:Search for a Value;
                                    vocabularyUrl: /select2-ajax.json;
-                                   width:20em" />
+                                   width:20em;
+                                   ajaxTimeout: 1;
+                                   " />
         `;
         registry.scan(document.body);
         await utils.timeout(1);
@@ -172,7 +180,9 @@ describe("Select2", function () {
                  class="pat-select2"
                  data-pat-select2="placeholder:Search for a Value;
                                    vocabularyUrl: /select2-ajax.json;
-                                   width:20em" />
+                                   width:20em;
+                                   ajaxTimeout: 1;
+                                   " />
         `;
         registry.scan(document.body);
         await utils.timeout(1);
@@ -253,7 +263,9 @@ describe("Select2", function () {
                  class="pat-select2"
                  data-pat-select2="tags: Red,Yellow,Blue;
                                    allowNewItems: false;
-                                   width:20em" />
+                                   width:20em;
+                                   ajaxTimeout: 1;
+                                   " />
         `;
         registry.scan(document.body);
         await utils.timeout(1);
@@ -276,7 +288,9 @@ describe("Select2", function () {
           <input type="hidden" class="pat-select2"
                  data-pat-select2="vocabularyUrl: /select2-ajax.json;
                                    allowNewItems: false;
-                                   width:20em" />
+                                   width:20em;
+                                   ajaxTimeout: 1;
+                                   " />
         `;
         registry.scan(document.body);
         await utils.timeout(1);
