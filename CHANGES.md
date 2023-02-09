@@ -54,6 +54,58 @@
 
 * Upgrade dependencies. ([8590f2b](https://github.com/plone/mockup/commit/8590f2b737eebbb69976a0394bdfb7dd57480de7))
 
+## [5.0.0](https://github.com/plone/mockup/compare/5.0.0-beta.11...5.0.0) (2023-02-09)
+
+
+### Features
+
+
+* **pat-livesearch:** Make the timeout to hide the livesearch after focus was lost configurable. ([d939dd8](https://github.com/plone/mockup/commit/d939dd8c2a5e51bbb7fdde9502a8ba89e53f9968))
+
+* **pat-relateditems:** Add ajaxTimeout option to configure the time to wait before ajax requests are done. ([44cdcc4](https://github.com/plone/mockup/commit/44cdcc410bfad66915eee8022823fd48af3b4afe))
+
+* **pat-select2:** Add ajaxTimeout option to configure the time to wait before ajax requests are done. ([cd1d491](https://github.com/plone/mockup/commit/cd1d491a3430490128bb5f27e333c01dc83da65d))
+
+
+### Bug Fixes
+
+
+* **pat-relateditems:** Adapt to recent changes in pat-select2. ([1058ba8](https://github.com/plone/mockup/commit/1058ba8327820bc52b9e7d985c5422d697d1e62a))
+
+* **pat-select2:** Do not load the english language translation files. English is the default language and no englich translation file exists. ([a4f6ad7](https://github.com/plone/mockup/commit/a4f6ad73f1c3f49f18a7184fd159d9b022dac3fe))
+
+* **pat-select2:** Fix replacing the select with an input in multiple selection selects. ([9a27fd3](https://github.com/plone/mockup/commit/9a27fd39569e5ca0732826e1e1554be3557eea7f))
+
+
+### Maintenance
+
+
+* **pat structure:** fixing structure tests ([2b233c0](https://github.com/plone/mockup/commit/2b233c0ec89a7f9faee850eb3fdd3ccd383b96a9))
+
+* **pat tinymce:** Uncomment and fix more tests ([6001867](https://github.com/plone/mockup/commit/6001867f933bc45192705d5dacda5550f1b22491))
+
+* **pat-autotoc:** Remove test for jQuery plugin registration. That mode isn't supported anymore. ([391353e](https://github.com/plone/mockup/commit/391353e7d1d5fb416d17946323a58465364f6fad))
+
+* **pat-livesearch:** Fix tests. ([69471b1](https://github.com/plone/mockup/commit/69471b128016b615ac44bcbe5bb5287b49c0506c))
+
+* **pat-relateditems:** Fix tests. ([d917e4c](https://github.com/plone/mockup/commit/d917e4cb626f660ddf37cdf9f3b102f31e15897f))
+
+* **pat-relateditems:** Modernize code. ([d8f2daa](https://github.com/plone/mockup/commit/d8f2daa9f45b6805dd9f35e791437e04bce47267))
+
+* **pat-select2:** Fix tests. ([1ed3d6d](https://github.com/plone/mockup/commit/1ed3d6db8f9c8ab94de19f7c279f12b590da94c5))
+
+* **pat-select2:** Fix tests. ([a8cf916](https://github.com/plone/mockup/commit/a8cf916904ae3b9746cab5d1cd1bd005a2b9ddbb))
+
+* **pat-select2:** Modernize code. ([5588e96](https://github.com/plone/mockup/commit/5588e96ef1100e3a3522a719f7765eb53646de4a))
+
+* **pat-sortable:** Fix tests. ([39efedd](https://github.com/plone/mockup/commit/39efedd5ccdb96cb23d955616673aa4ba649a71c))
+
+* update iconmap.json ([41ba5e2](https://github.com/plone/mockup/commit/41ba5e22e296ec2402c1bc0fbdedc569d22f979f))
+
+* Upgrade DataTables to 13. ([54f4d29](https://github.com/plone/mockup/commit/54f4d299ad4d80a77c3a50cfd651b31fced5e61b))
+
+* Upgrade dependencies. ([8590f2b](https://github.com/plone/mockup/commit/8590f2b737eebbb69976a0394bdfb7dd57480de7))
+
 ## [5.0.0-beta.11](https://github.com/plone/mockup/compare/5.0.0-beta.10...5.0.0-beta.11) (2023-01-13)
 
 
