@@ -312,7 +312,7 @@ describe("Select2", function () {
         document.body.innerHTML = `
           <div>
             <select multiple class="pat-select2" id="test-select2" name="test-name"
-                    data-pat-select2="{&quot;orderable&quot;: true, &quot;separator&quot;: &quot;;&quot;}">
+                    data-pat-select2="{&quot;orderable&quot;: true, &quot;multiple&quot;: true, &quot;separator&quot;: &quot;;&quot;}">
               <option value="1" selected>One</value>
               <option value="2">Two</value>
               <option value="3" selected>Three</value>
