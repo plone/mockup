@@ -16,6 +16,20 @@ Select2 deals just fine with select[multiple] fields. The replacement
 part should be evaluated for validity and eventually removed for a future
 Mockup release.
 
+## [5.0.1](https://github.com/plone/mockup/compare/5.0.0...5.0.1) (2023-02-10)
+
+
+### Bug Fixes
+
+
+* **pat-select2:** Do not replace multi select fields for pat-querystring. ([f096319](https://github.com/plone/mockup/commit/f096319ecb6c341558f0202e442772cb90cd11b2))A select[multiple] field without the multiple pattern option set is no longer
+replaced with a input[type=hidden].
+This fixes a problem in pat-querystring where switching from one
+criteria to another duplicated the Select2 fields.
+Select2 deals just fine with select[multiple] fields. The replacement
+part should be evaluated for validity and eventually removed for a future
+Mockup release.
+
 ## [5.0.0](https://github.com/plone/mockup/compare/5.0.0-beta.11...5.0.0) (2023-02-09)
 
 
