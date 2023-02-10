@@ -95,11 +95,11 @@ export default Base.extend({
                 draggable: "li",
                 dragClass: "select2-choice-dragging",
                 chosenClass: "dragging",
-                onStart: () => this.$select2_el.select2("onSortStart"),
-                onEnd: () => this.$select2_el.select2("onSortEnd"),
+                onStart: () => this.$el.select2("onSortStart"),
+                onEnd: () => this.$el.select2("onSortEnd"),
             });
         };
-        this.$select2_el.on("change", _initializeOrdering.bind(this));
+        this.$el.on("change", _initializeOrdering.bind(this));
         _initializeOrdering();
     },
 
@@ -139,44 +139,41 @@ export default Base.extend({
             }
         }
 
-        this.$select2_el = $(this.$select2_el); // Make select2 available on
-        this.$select2_el.select2(this.options);
-        this.$select2_el.on("select2-selected", (e) =>
-            callback(this.options.onSelected, e)
-        );
-        this.$select2_el.on("select2-selecting", (e) =>
-            callback(this.options.onSelecting, e)
-        );
-        this.$select2_el.on("select2-deselecting", (e) =>
+        this.$el.select2(this.options);
+        this.$el.on("select2-selected", (e) => callback(this.options.onSelected, e));
+        this.$el.on("select2-selecting", (e) => callback(this.options.onSelecting, e));
+        this.$el.on("select2-deselecting", (e) =>
             callback(this.options.onDeselecting, e)
         );
-        this.$select2_el.on("select2-deselected", (e) =>
-            callback(this.options.onDeselected, e)
-        );
-        this.$select2 = this.$select2_el.parent().find(".select2-container");
-        this.$select2_el.parent().off("close.plone-modal.patterns");
+        this.$el.on("select2-deselected", (e) => callback(this.options.onDeselected, e));
+        this.$select2 = this.$el.parent().find(".select2-container");
+        this.$el.parent().off("close.plone-modal.patterns");
         if (this.options.orderable) {
             this.$select2.addClass("select2-orderable");
         }
     },
 
     opened() {
-        const isOpen =
-            $(".select2-dropdown-open", this.$select2_el.parent()).length === 1;
+        const isOpen = $(".select2-dropdown-open", this.$el.parent()).length === 1;
         return isOpen;
     },
 
     async init() {
-        this.$select2_el = this.$el;
         const i18n = new I18n();
         this.options.language = i18n.currentLanguage;
         this.options.allowNewItems = this.options.allowNewItems
             ? JSON.parse(this.options.allowNewItems)
             : true;
 
-        if (this.el.hasAttribute("multiple")) {
-            this.options.multiple = true;
-        }
+        // TODO: Select2 respects the select fields multiple attribute.
+        //       Currently, only when multiple is set in the pattern options
+        //       the replacement to a hidden input field is done.
+        //       A collection's querystring widget has the multiple attribute
+        //       but must not be replaced with a hidden inout, otherwise robot
+        //       tests fail.
+        //if (this.el.hasAttribute("multiple")) {
+        //    this.options.multiple = true;
+        //}
 
         if (this.options.ajax || this.options.vocabularyUrl) {
             if (this.options.vocabularyUrl) {
@@ -240,8 +237,11 @@ export default Base.extend({
                 this.options.ajax
             );
         } else if (this.options.multiple && this.$el.is("select")) {
-            // Multiselects need to be converted to input[type=hidden]
-            // for Select2
+            // Multiselects are converted to input[type=hidden] for Select2
+            // TODO: This should actually not be necessary.
+            //       This is kept for backwards compatibility but should be
+            //       re-checked and removed if possible.
+            this.$el.attr("multiple", true);
             const vals = this.$el.val() || [];
             const options = [...this.el.querySelectorAll("option")].map((it) => {
                 return { text: it.innerHTML, id: it.value };
@@ -255,7 +255,9 @@ export default Base.extend({
             el.id = this.el.id;
             this.el.after(el);
             this.el.remove();
-            this.$select2_el = $(el);
+            this.el = el;
+            this.$el = $(el);
+
             this.options.data = options;
         }
         this.initializeValues();

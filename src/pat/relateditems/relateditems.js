@@ -513,7 +513,6 @@ export default Base.extend({
         this.selectionTemplate = (await import("./templates/selection.xml")).default; // prettier-ignore
         this.toolbarTemplate = (await import("./templates/toolbar.xml")).default; // prettier-ignore
 
-        this.$select2_el = this.$el;
         this.browsing = this.options.mode !== "search";
 
         // Remove trailing slash
