@@ -454,7 +454,7 @@ export default Base.extend({
             actionOptions: { reloadWindowOnClose: false },
             backdropOptions: {
                 zIndex: "1340",
-                closeOnClick: false
+                closeOnClick: false,
             },
         });
         self.modal.on("shown", (e) => {
@@ -887,7 +887,7 @@ export default Base.extend({
             }
 
             linkType = self.dom.getAttrib(self.imgElm, "data-linktype");
-            if (linkType && (linkType in self.linkTypes)) {
+            if (linkType && linkType in self.linkTypes) {
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
                 // set scale selection in link modal:

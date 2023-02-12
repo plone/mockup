@@ -146,11 +146,11 @@ export default class TinyMCE {
         let valid_plugins = [];
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
-            if (plugin == 'plonelink' || plugin == 'ploneimage'){
+            if (plugin == "plonelink" || plugin == "ploneimage") {
                 valid_plugins.push(plugin);
                 continue;
             }
-            try{
+            try {
                 await import("tinymce/plugins/" + plugin);
                 valid_plugins.push(plugin);
             } catch (e) {
@@ -234,9 +234,7 @@ export default class TinyMCE {
         if (self.options.inline === true) {
             // create a div, which will be made content-editable by TinyMCE and
             // copy contents from textarea to it. Then hide textarea.
-            self.$el.after(
-                '<div id="' + self.tinyId + '">' + self.$el.val() + "</div>"
-            );
+            self.$el.after('<div id="' + self.tinyId + '">' + self.$el.val() + "</div>");
             self.$el.hide();
         }
 
@@ -284,7 +282,7 @@ export default class TinyMCE {
         self.tiny = tinymce.get(self.tinyId);
 
         /* tiny really should be doing this by default
-            * but this fixes overlays not saving data */
+         * but this fixes overlays not saving data */
         var $form = self.$el.parents("form");
         $form.on("submit", function () {
             if (self.options.inline === true) {
