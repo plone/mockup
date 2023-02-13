@@ -4,9 +4,10 @@ import sinon from "sinon";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 import Cookies from "js-cookie";
+import logging from "@patternslib/patternslib/src/core/logging";
 import mockup_utils from "../../core/utils";
 import AppView from "./js/views/app";
-import logging from "@patternslib/patternslib/src/core/logging";
+import "./structure";
 
 logging.setLevel(20);
 
@@ -53,6 +54,7 @@ describe("AppView internals correctness", function () {
 
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
+        this.server.autoRespondAfter = 0;
 
         this.server.respondWith("GET", /data.json/, function (xhr) {
             xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({}));
@@ -130,8 +132,9 @@ describe("Structure", function () {
 
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
+        this.server.autoRespondAfter = 0;
 
-        this.server.respondWith("GET", /data.json/, function(xhr) {
+        this.server.respondWith("GET", /data.json/, function (xhr) {
             var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
             var query = JSON.parse(getQueryVariable(xhr.url, "query"));
             var path = query.criteria[0].v.split(":")[0];
@@ -193,7 +196,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/rearrange", function(xhr) {
+        this.server.respondWith("POST", "/rearrange", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -203,7 +206,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/paste", function(xhr) {
+        this.server.respondWith("POST", "/paste", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -213,7 +216,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/moveitem", function(xhr) {
+        this.server.respondWith("POST", "/moveitem", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -223,7 +226,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/setDefaultPage", function(xhr) {
+        this.server.respondWith("POST", "/setDefaultPage", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -233,7 +236,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("GET", /contextInfo/, function(xhr) {
+        this.server.respondWith("GET", /contextInfo/, function (xhr) {
             var data = {
                 addButtons: [
                     {

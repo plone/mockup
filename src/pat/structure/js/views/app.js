@@ -271,11 +271,9 @@ export default BaseView.extend({
             return true;
         }
         if (this.sort_on && this.sort_on !== "getObjPositionInParent") {
-            // jshint ignore:line
             return true;
         }
         if (this.sort_order !== "ascending") {
-            // jshint ignore:line
             return true;
         }
         return false;

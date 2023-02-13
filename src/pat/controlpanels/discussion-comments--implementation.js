@@ -87,39 +87,34 @@ export default class Contentrules {
         /**********************************************************************
          * Transmit a single comment.
          **********************************************************************/
-        $('input[name="form.button.TransmitComment"]').on("click", function (e) {
+        $('input[name="form.button.TransmitComment"]').on("click", (e) => {
             e.preventDefault();
-            var trigger = this;
-            var form = $(this).parents("form");
-            var data = $(form).serialize();
-            var form_url = $(form).attr("action");
-            var comment_id = $(this).parents(".comment").attr("id");
+            const trigger = e.currentTarget;
+            const $trigger = $(trigger);
+            const form = $trigger.parents("form");
+            const $form = $(form);
+            const data = $form.serialize();
+            const form_url = $form.attr("action");
+            const comment_id = $trigger.parents(".comment").attr("id");
             $.ajax({
                 type: "GET",
                 url: form_url,
                 data: data,
                 context: trigger,
-                // eslint-disable-next-line no-unused-vars
-                success: function (msg) {
+                success: () => {
                     let url = location.href;
-                    $(this)
-                        .parents(".comment")
-                        .load(
-                            // loading child nodes is not enough,
-                            // class attributes are needed for visualization of workflow_state
-                            url + " #" + comment_id + ".comment",
-                            function () {
-                                $(this).find(".comment").unwrap();
-                                // XXX: where is this init_comment_eventhandler supposed to come from?
-                                init_comment_eventhandler();
-                                $(".pat-plone-modal").patPloneModal();
-                            }
-                        );
+                    $trigger.parents(".comment").load(
+                        // loading child nodes is not enough,
+                        // class attributes are needed for visualization of workflow_state
+                        `${url} #${comment_id}.comment`,
+                        () => {
+                            $trigger.find(".comment").unwrap();
+                            this.init_comment_eventhandler();
+                            $(".pat-plone-modal").patPloneModal();
+                        }
+                    );
                 },
-                // eslint-disable-next-line no-unused-vars
-                error: function (msg) {
-                    return true;
-                },
+                error: () => true,
             });
             return false;
         });
@@ -150,9 +145,7 @@ export default class Contentrules {
                 url: form_url,
                 data: data,
                 context: $(trigger).parents(".comment"),
-                // eslint-disable-next-line no-unused-vars
-                success: function (data) {
-                    // jshint ignore:line
+                success: function () {
                     var comment = $(this);
                     var clss = comment.attr("class");
                     // remove replies
@@ -180,9 +173,7 @@ export default class Contentrules {
                         $(this).remove();
                     });
                 },
-                // eslint-disable-next-line no-unused-vars
-                error: function (req, error) {
-                    // jshint ignore:line
+                error: function () {
                     return true;
                 },
             });
@@ -214,9 +205,7 @@ export default class Contentrules {
          * If the user hits the 'reply' button of an existing comment, create a
          * reply form right beneath this comment.
          **********************************************************************/
-        // eslint-disable-next-line no-unused-vars
-        $(".reply-to-comment-button").on("click", function (e) {
-            // jshint ignore:line
+        $(".reply-to-comment-button").on("click", function () {
             var comment_div = $(this).parents().filter(".comment");
             self.createReplyForm(comment_div);
             self.clearForm(comment_div);

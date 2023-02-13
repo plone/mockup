@@ -1,7 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
-import { translate_plone as _tp } from "../../../../core/i18n-wrapper";  // eslint-disable-line
+import { translate_plone as _tp } from "../../../../core/i18n-wrapper"; // eslint-disable-line
 import utils from "../../../../core/utils";
 import Backbone from "backbone";
 
@@ -147,11 +147,10 @@ export default Backbone.View.extend({
         if (
             keyEvent &&
             keyEvent.shiftKey &&
-            this.app["last_selected"] && // jshint ignore:line
+            this.app["last_selected"] &&
             this.app["last_selected"].parentNode !== null
         ) {
-            // jshint ignore:line
-            let $el = $(this.app["last_selected"]); // jshint ignore:line
+            let $el = $(this.app["last_selected"]);
             const lastCheckedIndex = $el.index();
             const thisIndex = this.$el.index();
             for (const item of this.app.tableView.$('input[type="checkbox"]')) {
@@ -179,6 +178,6 @@ export default Backbone.View.extend({
                 }
             }
         }
-        this.app["last_selected"] = this.el; // jshint ignore:line
+        this.app["last_selected"] = this.el;
     },
 });

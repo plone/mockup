@@ -329,7 +329,7 @@ var featureSupport = {
         return "draggable" in document.createElement("span");
     },
     fileApi: function () {
-        return typeof FileReader != "undefined"; // jshint ignore:line
+        return typeof FileReader != "undefined";
     },
     history: function () {
         return !!(window.history && window.history.pushState);
@@ -338,7 +338,7 @@ var featureSupport = {
 
 var bool = function (val) {
     if (typeof val === "string") {
-        val = $.trim(val).toLowerCase();
+        val = val.trim(val).toLowerCase();
     }
     return ["false", false, "0", 0, "", undefined, null].indexOf(val) === -1;
 };

@@ -13,8 +13,9 @@ export default class Contentrules {
             "#configure-conditions .rule-element input, #configure-actions .rule-element input"
         )
             .off("click")
-            .on("click", function () {
-                var name = $(this).attr("name");
+            .on("click", (e) => {
+                const $target = $(e.currentTarget);
+                var name = $target.attr("name");
                 if (
                     name == "form.button.EditCondition" ||
                     name == "form.button.EditAction"
@@ -22,15 +23,14 @@ export default class Contentrules {
                     return true;
                 }
                 $("#spinner").show();
-                var form = $(this).parents("form").first();
+                var form = $target.parents("form").first();
                 var fieldset = form.parents("fieldset").first();
                 var data = form.serialize() + "&" + name + "=1";
                 var url = form.attr("action");
-                $.post(url, data, function (html) {
+                $.post(url, data, (html) => {
                     var newfieldset = $(html).find("#" + fieldset.attr("id"));
                     fieldset.replaceWith(newfieldset);
-                    // XXX: where does initforms is supposed to come from?
-                    initforms();
+                    this.init();
                     $("#spinner").hide();
                 });
                 return false;
@@ -38,8 +38,10 @@ export default class Contentrules {
 
         $('input[name="form.button.AddCondition"],input[name="form.button.AddAction"]')
             .off("click")
-            .on("click", function (e) {
-                var form = $(this).parent().parent();
+            .on("click", (e) => {
+                const target = e.currentTarget;
+                const $target = $(target);
+                var form = $target.parent().parent();
                 var data = form.serialize();
                 for (var i = 0; i < self.SKIP_OVERLAY_ACTIONS.length; i++) {
                     if (data.indexOf(self.SKIP_OVERLAY_ACTIONS[i]) !== -1) {
@@ -52,13 +54,13 @@ export default class Contentrules {
                     "display",
                     "none"
                 );
-                conditionAnchor.insertAfter(this);
+                conditionAnchor.insertAfter(target);
                 new Modal(conditionAnchor, {
                     actionOptions: {
                         isForm: true,
                         redirectOnResponse: true,
-                        redirectToUrl: function () {
-                            /* reload on submit */
+                        redirectToUrl: () => {
+                            // reload on submit
                             return window.location.href;
                         },
                     },

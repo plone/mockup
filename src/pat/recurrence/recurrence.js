@@ -367,8 +367,7 @@ function parseIcal(icaldata) {
 
     lines = icaldata.split("\n");
     lines.reverse();
-    while (true) {
-        // eslint-disable-line
+    while (line !== "") {
         if (lines.length > 0) {
             nextline = lines.pop();
             if (nextline.charAt(0) === " " || nextline.charAt(0) === "\t") {
@@ -392,9 +391,6 @@ function parseIcal(icaldata) {
         }
 
         line = nextline;
-        if (line === "") {
-            break;
-        }
     }
     return result;
 }

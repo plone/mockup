@@ -168,15 +168,15 @@ export default BaseView.extend({
         });
         this.queryString.$el.on("initialized", () => {
             this.queryString.$sortOn.on("change", () => {
-                this.app["sort_on"] = this.queryString.$sortOn.val(); // jshint ignore:line
+                this.app["sort_on"] = this.queryString.$sortOn.val();
                 this.app.collection.currentPage = 1;
                 this.app.collection.fetch();
             });
             this.queryString.$sortOrder.change(() => {
                 if (this.queryString.$sortOrder[0].checked) {
-                    this.app["sort_order"] = "reverse"; // jshint ignore:line
+                    this.app["sort_order"] = "reverse";
                 } else {
-                    this.app["sort_order"] = "ascending"; // jshint ignore:line
+                    this.app["sort_order"] = "ascending";
                 }
                 this.app.collection.currentPage = 1;
                 this.app.collection.fetch();
