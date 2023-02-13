@@ -244,6 +244,7 @@ export default ContainerView.extend({
         this.$el.attr("aria-hidden", "true");
         $("body").removeClass(this.getBodyClassName());
     },
+    // eslint-disable-next-line no-unused-vars
     toggle: function (button, e) {
         if (this.opened) {
             this.hide();

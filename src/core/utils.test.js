@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { Logger } from "sass";
 import utils from "./utils";
 
 describe("utils", function () {

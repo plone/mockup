@@ -24,6 +24,7 @@ export default Base.extend({
 
         $(self.options.changingFields, self.$el).on(
             self.options.changingEvents,
+            // eslint-disable-next-line no-unused-vars
             (evt) => {
                 self._changed = true;
             }
@@ -43,6 +44,7 @@ export default Base.extend({
             });
         }
 
+        // eslint-disable-next-line no-unused-vars
         self.$el.on("submit", (e) => {
             self._suppressed = true;
         });

@@ -1,5 +1,4 @@
 import $ from "jquery";
-import Modal from "../modal/modal";
 
 export default class Contentrules {
     constructor(el) {
@@ -107,7 +106,7 @@ export default class Contentrules {
          * submitting the form. Otherwise the z3c.form will raise errors on
          * the required attributes.
          **********************************************************************/
-        $("form#DiscussionSettingsEditForm").bind("submit", function () {
+        $("form#DiscussionSettingsEditForm").on("submit", function () {
             $(this).find("input,select").removeAttr("disabled");
         });
 
