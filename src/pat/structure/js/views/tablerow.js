@@ -1,7 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
-import { translate_plone as _tp } from "../../../../core/i18n-wrapper";
+import { translate_plone as _tp } from "../../../../core/i18n-wrapper";  // eslint-disable-line
 import utils from "../../../../core/utils";
 import Backbone from "backbone";
 

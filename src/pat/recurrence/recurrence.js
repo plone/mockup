@@ -251,11 +251,6 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         icaldata.RDATE.sort();
         let tmp_dates = [];
         let tmp_human = [];
-        // make sure our additional RDATE dates have the same start time
-        // XXX: not used, remove if superfluous
-        //const rdate_time = start_date
-        //    ? `T${start_date.getHours()}:${start_date.getMinutes()}:00`
-        //    : "T00:00:00";
 
         for (let rdate of icaldata.RDATE) {
             if (rdate !== "") {

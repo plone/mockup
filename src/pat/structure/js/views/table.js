@@ -10,10 +10,7 @@ import Sortable from "../../../sortable/sortable";
 import "../../../datatables/datatables";
 import "bootstrap/js/src/alert";
 import utils from "../../../../core/utils";
-import logging from "@patternslib/patternslib/src/core/logging";
 import patternslib_utils from "@patternslib/patternslib/src/core/utils";
-
-const log = logging.getLogger("pat-structure/table");
 
 export default BaseView.extend({
     tagName: "div",
@@ -116,7 +113,7 @@ export default BaseView.extend({
                 this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
                     if (
-                        result.attributes.hasOwnProperty(col) &&
+                        Object.prototype.hasOwnProperty.call(result.attributes, col) &&
                         (result.attributes[col] === "None" || !result.attributes[col])
                     ) {
                         result.attributes[col] = "";
