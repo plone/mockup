@@ -38,12 +38,13 @@ function format(date, fmt, conf) {
         };
 
     var result = fmt.replace(Re, function ($0) {
-        return flags.hasOwnProperty($0) ? flags[$0] : $0.slice(1, $0.length - 1);
+        return Object.prototype.hasOwnProperty.call(flags, $0) ? flags[$0] : $0.slice(1, $0.length - 1);
     });
 
     return result;
 }
 
+// eslint-disable-next-line no-unused-vars
 function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
     var value = form.find("select[name=rirtemplate]").val();
     var rtemplate = conf.rtemplate[value];
@@ -251,9 +252,10 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         let tmp_dates = [];
         let tmp_human = [];
         // make sure our additional RDATE dates have the same start time
-        const rdate_time = start_date
-            ? `T${start_date.getHours()}:${start_date.getMinutes()}:00`
-            : "T00:00:00";
+        // XXX: not used, remove if superfluous
+        //const rdate_time = start_date
+        //    ? `T${start_date.getHours()}:${start_date.getMinutes()}:00`
+        //    : "T00:00:00";
 
         for (let rdate of icaldata.RDATE) {
             if (rdate !== "") {
@@ -339,7 +341,7 @@ function cleanDates(dates) {
     var date;
 
     for (date in splitDates) {
-        if (splitDates.hasOwnProperty(date)) {
+        if (Object.prototype.hasOwnProperty.call(splitDates, date)) {
             if (splitDates[date].indexOf("Z") !== -1) {
                 result.push(splitDates[date].substring(0, 15));
             } else {
@@ -362,6 +364,7 @@ function parseIcal(icaldata) {
 
     lines = icaldata.split("\n");
     lines.reverse();
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         if (lines.length > 0) {
             nextline = lines.pop();
@@ -461,7 +464,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
         }
 
         // Find the best rule:
-        if (conf.rtemplate.hasOwnProperty(freq.toLowerCase())) {
+        if (Object.prototype.hasOwnProperty.call(conf.rtemplate, freq.toLowerCase())) {
             rtemplate = conf.rtemplate[freq.toLowerCase()];
         } else {
             for (freq of conf.rtemplate) {
@@ -800,6 +803,7 @@ const RecurrenceInput = function (conf, textarea) {
             contentType: conf.ajaxContentType,
             cache: false,
             data: data,
+            // eslint-disable-next-line no-unused-vars
             success: function (resp, status, jqXHR) {
                 var result;
 

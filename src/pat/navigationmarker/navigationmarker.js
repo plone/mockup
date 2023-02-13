@@ -6,7 +6,6 @@ export default Base.extend({
     trigger: ".pat-navigationmarker",
     parser: "mockup",
     init: function () {
-        var self = this;
         const portal_url = document.body.dataset.portalUrl;
         var href =
             document.querySelector('head link[rel="canonical"]').href ||

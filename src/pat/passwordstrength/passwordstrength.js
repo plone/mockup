@@ -85,6 +85,7 @@ export default Base.extend({
 
         pwfield.parentNode.insertBefore(pwmeterContainer, pwfield.nextSibling);
         // set up key strokes to change the meter
+        // eslint-disable-next-line no-unused-vars
         pwfield.onkeyup = function (e) {
             setLevel();
         };

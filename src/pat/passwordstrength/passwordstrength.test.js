@@ -1,3 +1,4 @@
+import $ from "jquery";
 import "./passwordstrength";
 import registry from "@patternslib/patternslib/src/core/registry";
 
