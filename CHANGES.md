@@ -2,6 +2,14 @@
 
 
 
+## [5.0.2](https://github.com/plone/mockup/compare/5.0.1...5.0.2) (2023-02-13)
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** Correct starttime of RDATE in recurrence. ([e70414f](https://github.com/plone/mockup/commit/e70414f0a0d0f73608e785fb27c6969e7e16fbe7))
+
 ## [5.0.1](https://github.com/plone/mockup/compare/5.0.0...5.0.1) (2023-02-10)
 
 
