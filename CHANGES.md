@@ -30,6 +30,34 @@
 
 * Enable eslint and testing in GHA and the Makefile. ([014d872](https://github.com/plone/mockup/commit/014d87245f3487355532732acf4dc918c0ff4fbb))
 
+## [5.0.3](https://github.com/plone/mockup/compare/5.0.2...5.0.3) (2023-02-13)
+
+
+### Bug Fixes
+
+
+* **pat-relateditems:** Fix upload view. ([817d0e1](https://github.com/plone/mockup/commit/817d0e118d252b2409e0a065529a21cdc8ce80aa))
+
+
+### Maintenance
+
+
+* **Cleanup:** Autoformat with prettier. ([389b884](https://github.com/plone/mockup/commit/389b884cab5c9ce3a42f46a7e1fdb0741427e181))
+
+* **Cleanup:** Fix eslint warnings. ([ff2def9](https://github.com/plone/mockup/commit/ff2def9b4ab0548b68f90633785772359d67dbf2))
+
+* **Cleanup:** Fix more eslint warnings. ([e885446](https://github.com/plone/mockup/commit/e8854464552a07b8dd85608e458a0371282665cd))
+
+* **Cleanup:** Fix remaining eslint warnings. ([38b9a85](https://github.com/plone/mockup/commit/38b9a851296c94540cc681af4458c240ec2b6a1b))
+
+* **Cleanup:** Remove unused tests. ([f7a9bd3](https://github.com/plone/mockup/commit/f7a9bd35014063af9b09ff867c981393026895d0))
+
+* **Cleanup:** Replace deprecated jquery API usage. ([3238565](https://github.com/plone/mockup/commit/323856592fbe58127ddbd156d2633b1aad8492a9))
+
+* **Docs:** Update development information in the README. ([7a4a16f](https://github.com/plone/mockup/commit/7a4a16f7d0ea11b26f377a846b676f7d384908b2))
+
+* Enable eslint and testing in GHA and the Makefile. ([014d872](https://github.com/plone/mockup/commit/014d87245f3487355532732acf4dc918c0ff4fbb))
+
 ## [5.0.2](https://github.com/plone/mockup/compare/5.0.1...5.0.2) (2023-02-13)
 
 
