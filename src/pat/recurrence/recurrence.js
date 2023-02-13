@@ -258,7 +258,9 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         for (let rdate of icaldata.RDATE) {
             if (rdate !== "") {
                 // RDATE values are "YYYY-MM-DD"
-                rdate += rdate.length === 10 ? rdate_time : "";
+                // by adding "T000000" the recurrence sequence generator of
+                // plone.event.recurrence adds the current start time correctly
+                rdate += (rdate.length === 10) ? "T000000" : "";
                 rdate += tz ? "Z" : "";
                 tmp_dates.push(rdate);
 

@@ -374,52 +374,6 @@ export default Base.extend({
             );
         }
 
-        async function initUploadView(disabled) {
-            let Upload = await import("../upload/upload");
-            Upload = Upload.default;
-
-            const upload_button = this.$toolbar[0].querySelector(".upload button");
-            upload_button.disabled = disabled;
-
-            const upload_el = this.$toolbar[0].querySelector(".upload .pat-upload");
-
-            const upload_config = {
-                success: (e, response) => {
-                    const uid = response.UID;
-                    if (uid) {
-                        const query = new utils.QueryHelper({
-                            vocabularyUrl: this.options.vocabularyUrl,
-                            attributes: this.options.attributes,
-                        });
-                        query.search(
-                            "UID",
-                            "plone.app.querystring.operation.selection.is",
-                            uid,
-                            (e) => {
-                                const data = this.$el.select2("data");
-                                data.push.apply(data, e.results);
-                                this.$el.select2("data", data, true);
-                                this.emit("selected");
-                                this.popover.hide();
-                            },
-                            false
-                        );
-                    }
-                },
-                uloadMultiple: true,
-                allowPathSelection: false,
-                relativePath: "fileUpload",
-                baseUrl: this.options.rootUrl,
-            };
-            const upload = new Upload($(upload_el), upload_config);
-
-            upload_button.addEventListener("show.bs.dropdown", () => {
-                if (this.currentPath !== upload.currentPath) {
-                    upload.setPath(this.currentPath);
-                }
-            });
-        }
-
         // upload
         if (
             this.options.upload &&
@@ -437,14 +391,60 @@ export default Base.extend({
                     },
                     type: "GET",
                     success: (result) => {
-                        initUploadView(!result.allowUpload);
+                        this.initUploadView(!result.allowUpload);
                     },
                 });
             } else {
                 // just initialize upload view without checking, if uploads are allowed.
-                initUploadView();
+                this.initUploadView();
             }
         }
+    },
+
+    async initUploadView(disabled) {
+        let Upload = await import("../upload/upload");
+        Upload = Upload.default;
+
+        const upload_button = this.$toolbar[0].querySelector(".upload button");
+        upload_button.disabled = disabled;
+
+        const upload_el = this.$toolbar[0].querySelector(".upload .pat-upload");
+
+        const upload_config = {
+            success: (e, response) => {
+                const uid = response.UID;
+                if (uid) {
+                    const query = new utils.QueryHelper({
+                        vocabularyUrl: this.options.vocabularyUrl,
+                        attributes: this.options.attributes,
+                    });
+                    query.search(
+                        "UID",
+                        "plone.app.querystring.operation.selection.is",
+                        uid,
+                        (e) => {
+                            const data = this.$el.select2("data");
+                            data.push.apply(data, e.results);
+                            this.$el.select2("data", data, true);
+                            this.emit("selected");
+                            this.popover.hide();
+                        },
+                        false
+                    );
+                }
+            },
+            uloadMultiple: true,
+            allowPathSelection: false,
+            relativePath: "fileUpload",
+            baseUrl: this.options.rootUrl,
+        };
+        const upload = new Upload($(upload_el), upload_config);
+
+        upload_button.addEventListener("show.bs.dropdown", () => {
+            if (this.currentPath !== upload.currentPath) {
+                upload.setPath(this.currentPath);
+            }
+        });
     },
 
     browseTo(path) {
