@@ -3,7 +3,7 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
 describe("Textarea MimeType Selector", function () {
-    var initBody = async function(inline) {
+    var initBody = async function (inline) {
         document.body.innerHTML += `
             <textarea name="text">hello world</textarea>
             <select
@@ -34,7 +34,7 @@ describe("Textarea MimeType Selector", function () {
     };
 
     afterEach(function () {
-        document.body.innerHTML = '';
+        document.body.innerHTML = "";
     });
 
     it("Switching changes widget", async function () {
@@ -51,19 +51,19 @@ describe("Textarea MimeType Selector", function () {
         expect(textarea.value).toEqual("hello world");
 
         // Now, select text/html
-        el.value = "text/html"
-        el.dispatchEvent(new Event('input'));
+        el.value = "text/html";
+        el.dispatchEvent(new Event("input"));
         await utils.timeout(2);
 
         // Textarea should be hidden
         expect(window.getComputedStyle(textarea).display).toEqual("none");
         // And TinyMCE should be shown
-        tinymce = document.querySelector(".tox-tinymce");
+        const tinymce = document.querySelector(".tox-tinymce");
         expect(window.getComputedStyle(tinymce).display).toEqual("block");
 
         // Switching back to text/plain should destroy TinyMCE
         el.value = "text/plain";
-        el.dispatchEvent(new Event('input'));
+        el.dispatchEvent(new Event("input"));
         await utils.timeout(2);
 
         expect(window.getComputedStyle(textarea).display).toEqual("inline-block");
@@ -82,7 +82,9 @@ describe("Textarea MimeType Selector", function () {
         // Initially, text/plain is selected and textarea should be visible.
         expect(window.getComputedStyle(textarea).display).toEqual("inline-block");
         // But TinyMCE shouldn't be there
-        expect(document.querySelectorAll(".mce-content-body[contenteditable='true']").length).toEqual(0);
+        expect(
+            document.querySelectorAll(".mce-content-body[contenteditable='true']").length
+        ).toEqual(0);
         // Value should be at it's initial state
         expect(textarea.value).toEqual("hello world");
 
@@ -90,30 +92,32 @@ describe("Textarea MimeType Selector", function () {
         textarea.value = "hello mellow";
 
         // Now, select text/html
-        el.value = "text/html"
-        el.dispatchEvent(new Event('input'));
+        el.value = "text/html";
+        el.dispatchEvent(new Event("input"));
         await utils.timeout(5);
 
         // Textarea should be hidden
         expect(window.getComputedStyle(textarea).display).toEqual("none");
         // And TinyMCE should be shown
-        tinymce = document.querySelector(".mce-content-body");
+        let tinymce = document.querySelector(".mce-content-body");
         expect(window.getComputedStyle(tinymce).display).toEqual("block");
 
         // Switching back to text/plain should destroy TinyMCE
         el.value = "text/plain";
-        el.dispatchEvent(new Event('input'));
+        el.dispatchEvent(new Event("input"));
         await utils.timeout(2);
 
         expect(window.getComputedStyle(textarea).display).toEqual("inline-block");
-        expect(document.querySelectorAll(".mce-content-body[contenteditable='true']").length).toEqual(0);
+        expect(
+            document.querySelectorAll(".mce-content-body[contenteditable='true']").length
+        ).toEqual(0);
 
         // Unfortunately, TinyMCE changes the value just by loading TinyMCE.
         expect(textarea.value).toEqual("<p>hello mellow</p>");
 
         // switching back to TinyMCE loads it again
-        el.value = "text/html"
-        el.dispatchEvent(new Event('input'));
+        el.value = "text/html";
+        el.dispatchEvent(new Event("input"));
         await utils.timeout(2);
 
         expect(window.getComputedStyle(textarea).display).toEqual("none");

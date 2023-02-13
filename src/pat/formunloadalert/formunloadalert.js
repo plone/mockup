@@ -22,12 +22,9 @@ export default Base.extend({
             return;
         }
 
-        $(self.options.changingFields, self.$el).on(
-            self.options.changingEvents,
-            (evt) => {
-                self._changed = true;
-            }
-        );
+        $(self.options.changingFields, self.$el).on(self.options.changingEvents, () => {
+            self._changed = true;
+        });
 
         var $modal = self.$el.parents(".plone-modal");
         if ($modal.length !== 0) {
@@ -43,7 +40,7 @@ export default Base.extend({
             });
         }
 
-        self.$el.on("submit", (e) => {
+        self.$el.on("submit", () => {
             self._suppressed = true;
         });
     },

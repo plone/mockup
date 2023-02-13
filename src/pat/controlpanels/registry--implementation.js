@@ -13,13 +13,14 @@ export default class ConfigRegistry {
                 actionOptions: {
                     displayInModal: false,
                     reloadWindowOnClose: false,
+                    // eslint-disable-next-line no-unused-vars
                     onSuccess: function (modal) {
                         $("#searchrow form#registry-filter").trigger("submit");
                     },
                 },
             };
             $el.addClass("pat-modal");
-            let modal_obj = new Modal($el, options);
+            new Modal($el, options);
         });
     }
 
@@ -33,22 +34,18 @@ export default class ConfigRegistry {
                 .click();
         });
         /* ajax retrieval of paging */
-        $("#recordsContainer").on(
-            "click",
-            ".pagination a, .listingBar a",
-            function (e) {
-                e.preventDefault();
-                var $el = $(this);
-                utils.loading.show();
-                $("#recordsTable").load(
-                    $el.attr("href") + " #recordsTable > *",
-                    function () {
-                        self.loadModals();
-                        utils.loading.hide();
-                    }
-                );
-            }
-        );
+        $("#recordsContainer").on("click", ".pagination a, .listingBar a", function (e) {
+            e.preventDefault();
+            var $el = $(this);
+            utils.loading.show();
+            $("#recordsTable").load(
+                $el.attr("href") + " #recordsTable > *",
+                function () {
+                    self.loadModals();
+                    utils.loading.hide();
+                }
+            );
+        });
 
         /* ajax form submission */
         $("#recordsContainer").on("submit", "#searchrow form", function (e) {
@@ -56,8 +53,10 @@ export default class ConfigRegistry {
             var $el = $(this);
             utils.loading.show();
             $("#recordsTable").load(
-                $("body").attr("data-base-url")
-                + "?" + $el.serialize() + " #recordsTable > *",
+                $("body").attr("data-base-url") +
+                    "?" +
+                    $el.serialize() +
+                    " #recordsTable > *",
                 function () {
                     self.loadModals();
                     utils.loading.hide();

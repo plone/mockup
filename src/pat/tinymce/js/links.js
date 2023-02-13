@@ -454,7 +454,7 @@ export default Base.extend({
             actionOptions: { reloadWindowOnClose: false },
             backdropOptions: {
                 zIndex: "1340",
-                closeOnClick: false
+                closeOnClick: false,
             },
         });
         self.modal.on("shown", (e) => {
@@ -475,8 +475,7 @@ export default Base.extend({
         }
 
         if (this.anchorElm) {
-            var nodes = this.anchorElm.childNodes,
-                i;
+            var nodes = this.anchorElm.childNodes;
 
             if (nodes.length === 0) {
                 return false;
@@ -728,6 +727,7 @@ export default Base.extend({
         }
     },
 
+    // eslint-disable-next-line no-unused-vars
     modalShown: function (e) {
         var self = this;
         self.initElements();
@@ -771,6 +771,7 @@ export default Base.extend({
                 var patUpload = self.$upload.data().patternUpload;
                 if (patUpload.dropzone.files.length > 0) {
                     patUpload.processUpload();
+                    // eslint-disable-next-line no-unused-vars
                     self.$upload.on("uploadAllCompleted", function (evt, data) {
                         var counter = 0;
                         var checkUpload = function () {
@@ -887,7 +888,7 @@ export default Base.extend({
             }
 
             linkType = self.dom.getAttrib(self.imgElm, "data-linktype");
-            if (linkType && (linkType in self.linkTypes)) {
+            if (linkType && linkType in self.linkTypes) {
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
                 // set scale selection in link modal:

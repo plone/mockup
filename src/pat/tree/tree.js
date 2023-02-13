@@ -50,7 +50,7 @@ export default Base.extend({
                 delete options.dataUrl;
                 self.tree = self.$el.tree(options);
                 self.options.onLoad(self);
-            }).fail(function (response) {
+            }).fail(function (response) {  // eslint-disable-line no-unused-vars
                 console.log("failed to load json data");
             });
         } else {

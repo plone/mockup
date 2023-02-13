@@ -34,7 +34,6 @@ export default ButtonGroup.extend({
     },
 
     renderItems: function () {
-        var self = this;
         var $container;
 
         if (this.itemContainer !== null) {

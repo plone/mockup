@@ -68,7 +68,7 @@ export default Base.extend({
         }
 
         // TODO: find a way to make this work in firefox (and IE)
-        $(document).bind("paste", function (e) {
+        $(document).on("paste", function (e) {
             var oe = e.originalEvent;
             var items = oe.clipboardData.items;
             if (items) {
@@ -413,7 +413,6 @@ export default Base.extend({
     handleTusUpload: function (file) {
         /* this needs fixing... */
         var self = this,
-            $preview = $(file.previewElement),
             chunkSize = 1024 * 1024 * 5; // 5mb chunk size
 
         file.status = Dropzone.UPLOADING;

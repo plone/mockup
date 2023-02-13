@@ -11,6 +11,7 @@ export default class Contentrules {
         /**********************************************************************
          * Delete a single comment.
          **********************************************************************/
+        // eslint-disable-next-line no-unused-vars
         $("button[name='form.button.moderation.DeleteComment']").click(function (e) {
             e.preventDefault();
             var row = $(this).closest("tr");
@@ -20,6 +21,7 @@ export default class Contentrules {
             $.ajax({
                 type: "GET",
                 url: target,
+                // eslint-disable-next-line no-unused-vars
                 success: function (msg) {
                     // fade out row
                     row.fadeOut(250).fadeIn(250, function () {
@@ -31,6 +33,7 @@ export default class Contentrules {
                         location.reload();
                     }
                 },
+                // eslint-disable-next-line no-unused-vars
                 error: function (msg) {
                     alert("Error sending AJAX request:" + target);
                 },
@@ -41,7 +44,6 @@ export default class Contentrules {
          **********************************************************************/
         $('button[name="form.button.moderation.TransmitComment"]').click(function (e) {
             e.preventDefault();
-            let button = $(this);
             var row = $(this).closest("tr");
             var path = $(row).find("[name='selected_obj_paths:list']").attr("value");
             var workflow_action = $(this).attr("data-transition");
@@ -58,6 +60,7 @@ export default class Contentrules {
             $.ajax({
                 type: "GET",
                 url: target,
+                // eslint-disable-next-line no-unused-vars
                 success: function (msg) {
                     if (moderate) {
                         let url = location.href;
@@ -72,6 +75,7 @@ export default class Contentrules {
                         location.reload();
                     }
                 },
+                // eslint-disable-next-line no-unused-vars
                 error: function (msg) {
                     alert(
                         "Error transmitting comment. (Error sending AJAX request:" +
@@ -103,6 +107,7 @@ export default class Contentrules {
                         "Please select at least one comment."
                 );
             } else {
+                // eslint-disable-next-line no-unused-vars
                 $.post(target, params, function (data) {
                     // reset the bulkaction select
                     selectField.find("option[value='-1']").attr("selected", "selected");
@@ -172,6 +177,7 @@ export default class Contentrules {
                     // show full text
                     parent.html(data);
                 },
+                // eslint-disable-next-line no-unused-vars
                 error: function (msg) {
                     alert("Error getting full comment text:" + target);
                 },
@@ -190,6 +196,7 @@ export default class Contentrules {
                     // format date
                     registry.scan(lasthistoryentry);
                 },
+                // eslint-disable-next-line no-unused-vars
                 error: function (msg) {
                     console.error("Error getting history.");
                 },

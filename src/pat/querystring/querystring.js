@@ -807,7 +807,6 @@ export default Base.extend({
 
         self.$sortOn.append($('<option value="">' + _t("No sorting") + "</option>")); // default no sorting
         for (var key in self.options["sortable_indexes"]) {
-            // jshint ignore:line
             self.$sortOn.append(
                 $("<option/>").attr("value", key).html(self.options.indexes[key].title)
             );

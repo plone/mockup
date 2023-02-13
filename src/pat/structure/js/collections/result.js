@@ -14,7 +14,7 @@ export default Backbone.PageableCollection.extend({
 
         this.queryHelper = utils.QueryHelper({
             attributes: this.view.options.queryHelperAttributes,
-            ...this.view.options
+            ...this.view.options,
         });
 
         this.queryParser = function (options) {
@@ -26,11 +26,10 @@ export default Backbone.PageableCollection.extend({
             const sortOrder = this.view.sort_order;
 
             return JSON.stringify({
-                criteria: this.queryHelper.getCriterias(
-                    term, {
-                        additionalCriterias: this.view.additionalCriterias,
-                        ...options,
-                    }),
+                criteria: this.queryHelper.getCriterias(term, {
+                    additionalCriterias: this.view.additionalCriterias,
+                    ...options,
+                }),
                 sort_on: sortOn,
                 sort_order: sortOrder,
             });
@@ -68,12 +67,12 @@ export default Backbone.PageableCollection.extend({
         },
     },
 
-    parseState: function (response, queryParams, state, options) {
+    parseState: function (response, queryParams, state, options) {  // eslint-disable-line
         this.state.totalRecords = response.total;
         this.state.totalPages = Math.ceil(response.total / state.pageSize);
     },
 
-    parseRecords: function (response, options) {
+    parseRecords: function (response, options) {  // eslint-disable-line
         const results = response.results;
         // Manually set sort order here since backbone will otherwise do arbitrary sorting
         results.forEach((item, idx) => {

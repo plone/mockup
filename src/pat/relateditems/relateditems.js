@@ -282,8 +282,8 @@ export default Base.extend({
         this.$toolbar.html(html);
 
         // unbind mouseup event from select2 to override the behavior:
-        $(".pat-relateditems-dropdown").unbind("mouseup");
-        $(".pat-relateditems-dropdown").bind("mouseup", (e) => {
+        $(".pat-relateditems-dropdown").off("mouseup");
+        $(".pat-relateditems-dropdown").on("mouseup", (e) => {
             e.stopPropagation();
         });
 

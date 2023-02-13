@@ -4,29 +4,11 @@ import sinon from "sinon";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 import Cookies from "js-cookie";
-import ButtonView from "../../core/ui/views/button";
-import mockup_utils from "../../core/utils";
-
-import Structure from "./structure";
-import ActionMenuView from "./js/views/actionmenu";
-import AppView from "./js/views/app";
-import TableView from "./js/views/table";
-import TableRowView from "./js/views/tablerow";
-import SelectionWellView from "./js/views/selectionwell";
-import GenericPopover from "./js/views/generic-popover";
-import RearrangeView from "./js/views/rearrange";
-import SelectionButtonView from "./js/views/selectionbutton";
-import PagingView from "./js/views/paging";
-import ColumnsView from "./js/views/columns";
-import TextFilterView from "./js/views/textfilter";
-import UploadView from "./js/views/upload";
-import Result from "./js/models/result";
-import SelectedCollection from "./js/collections/selected";
-import StatusTemplate from "./templates/status.xml";
-
-import ResultCollection from "./js/collections/result";
-
 import logging from "@patternslib/patternslib/src/core/logging";
+import mockup_utils from "../../core/utils";
+import AppView from "./js/views/app";
+import "./structure";
+
 logging.setLevel(20);
 
 $.fx.off = true;
@@ -72,17 +54,14 @@ describe("AppView internals correctness", function () {
 
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
+        this.server.autoRespondAfter = 0;
 
-        this.server.respondWith("GET", /data.json/, function (xhr, id) {
-            xhr.respond(
-                200,
-                { "Content-Type": "application/json" },
-                JSON.stringify({}),
-            );
+        this.server.respondWith("GET", /data.json/, function (xhr) {
+            xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({}));
         });
     });
 
-    afterEach(function() {
+    afterEach(function () {
         this.server.restore();
         document.body.innerHTML = "";
     });
@@ -119,8 +98,7 @@ describe("AppView internals correctness", function () {
             indexOptionsUrl: "",
             setDefaultPageUrl: "",
             collectionUrl: "http://localhost:9876/vocab",
-            collectionConstructor:
-                "mockup-patterns-structure-url/js/collections/result",
+            collectionConstructor: "mockup-patterns-structure-url/js/collections/result",
         });
 
         expect(app.collection.queryHelper.options.attributes).toEqual(["foo", "bar"]);
@@ -139,7 +117,6 @@ describe("AppView internals correctness", function () {
     });
 });
 
-
 /* ==========================
 TEST: Structure
 ========================== */
@@ -155,8 +132,9 @@ describe("Structure", function () {
 
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
+        this.server.autoRespondAfter = 0;
 
-        this.server.respondWith("GET", /data.json/, function (xhr, id) {
+        this.server.respondWith("GET", /data.json/, function (xhr) {
             var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
             var query = JSON.parse(getQueryVariable(xhr.url, "query"));
             var path = query.criteria[0].v.split(":")[0];
@@ -218,7 +196,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/rearrange", function (xhr, id) {
+        this.server.respondWith("POST", "/rearrange", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -228,7 +206,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/paste", function (xhr, id) {
+        this.server.respondWith("POST", "/paste", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -238,7 +216,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/moveitem", function (xhr, id) {
+        this.server.respondWith("POST", "/moveitem", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -248,7 +226,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/setDefaultPage", function (xhr, id) {
+        this.server.respondWith("POST", "/setDefaultPage", function (xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -258,7 +236,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
+        this.server.respondWith("GET", /contextInfo/, function (xhr) {
             var data = {
                 addButtons: [
                     {
@@ -393,7 +371,7 @@ describe("Structure", function () {
 
     it("remove item from selection well", async function () {
         registry.scan(this.$el);
-        await utils.timeout(100)
+        await utils.timeout(100);
         var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
         $item1[0].checked = true;
         $item1.trigger("change");
@@ -431,9 +409,7 @@ describe("Structure", function () {
         expect(page1Btn.html()).not.toContain(
             this.$el.find(".pagination li.active a").eq("0").html()
         );
-        expect(this.$el.find(".pagination li.active a").eq("0").html()).toContain(
-            "2"
-        );
+        expect(this.$el.find(".pagination li.active a").eq("0").html()).toContain("2");
     });
 
     it("per page", async function () {
@@ -449,9 +425,9 @@ describe("Structure", function () {
 
     it("test paging does not apply overflow hidden to parent", async function () {
         /*
-            * very odd here, overflow hidden is getting applied by something after
-            * the table of results is re-rendered with new data
-            */
+         * very odd here, overflow hidden is getting applied by something after
+         * the table of results is re-rendered with new data
+         */
         registry.scan(this.$el);
         await utils.timeout(100);
         // click next page
@@ -467,14 +443,12 @@ describe("Structure", function () {
         await utils.timeout(100);
         var $popover = this.$el.find(".popover.rearrange");
         this.$el.find("#btn-rearrange").trigger("click");
-        await utils.timeout(100)
+        await utils.timeout(100);
         expect($popover.hasClass("active")).toEqual(true);
         $popover.find("button").trigger("click");
-        await utils.timeout(100)
+        await utils.timeout(100);
         expect($popover.hasClass("active")).toEqual(false);
-        expect(this.$el.find(".order-support .fc-status").html()).toContain(
-            "rearrange"
-        );
+        expect(this.$el.find(".order-support .fc-status").html()).toContain("rearrange");
         expect(this.app.$(".fc-status").hasClass("alert-success"));
     });
 
@@ -552,9 +526,7 @@ describe("Structure", function () {
         this.$el.find("#btn-attribute-columns").trigger("click");
         await utils.timeout(100);
 
-        var $checkbox = this.$el.find(
-            '.attribute-columns input[value="getObjSize"]'
-        );
+        var $checkbox = this.$el.find('.attribute-columns input[value="getObjSize"]');
         $checkbox[0].checked = true;
         $checkbox.trigger("change");
         await utils.timeout(100);
@@ -645,9 +617,7 @@ describe("Structure", function () {
         expect($("a.pasteItem", item0).text().trim()).toEqual("Paste");
         $("a.pasteItem", item0).trigger("click");
         await utils.timeout(100);
-        expect(this.$el.find(".fc-status").html()).toContain(
-            'Pasted into "Folder"'
-        );
+        expect(this.$el.find(".fc-status").html()).toContain('Pasted into "Folder"');
     });
 
     it("test itemRow actionmenu move-top click", async function () {
@@ -686,7 +656,6 @@ describe("Structure", function () {
     it("test navigate to item", async function () {
         registry.scan(this.$el);
         await utils.timeout(200);
-        var pattern = this.$el.data("patternStructure");
         var item = this.$el.find(".itemRow").eq(10);
         expect(item.data().id).toEqual("item9");
         expect($(".title a.manage", item).attr("href")).toEqual(

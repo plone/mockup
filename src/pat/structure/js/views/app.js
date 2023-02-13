@@ -192,7 +192,7 @@ export default BaseView.extend({
             (this.options.pushStateUrl || this.options.urlStructure) &&
             utils.featureSupport.history()
         ) {
-            $(window).bind("popstate", () => {
+            $(window).on("popstate", () => {
                 /* normalize this url first... */
                 const win = utils.getWindow();
                 let url = win.location.href;
@@ -227,7 +227,7 @@ export default BaseView.extend({
                 this.collection.getPage(this.collection.state.firstPage);
             });
             /* detect key events */
-            $(document).bind("keyup keydown", (e) => {
+            $(document).on("keyup keydown", (e) => {
                 this.keyEvent = e;
             });
         }
@@ -271,11 +271,9 @@ export default BaseView.extend({
             return true;
         }
         if (this.sort_on && this.sort_on !== "getObjPositionInParent") {
-            // jshint ignore:line
             return true;
         }
         if (this.sort_order !== "ascending") {
-            // jshint ignore:line
             return true;
         }
         return false;

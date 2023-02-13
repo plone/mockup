@@ -1,5 +1,4 @@
 import "./search";
-import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
@@ -142,7 +141,11 @@ describe("Search", function () {
         await utils.timeout(1);
 
         expect(document.querySelectorAll(".pat-search").length).toEqual(1);
-        expect(document.querySelectorAll(".pat-search input[name='SearchableText']").length).toEqual(1);
-        expect(document.querySelector("#search-results .alert").textContent).toEqual("Nothing found.");
+        expect(
+            document.querySelectorAll(".pat-search input[name='SearchableText']").length
+        ).toEqual(1);
+        expect(document.querySelector("#search-results .alert").textContent).toEqual(
+            "Nothing found."
+        );
     });
 });
