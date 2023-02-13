@@ -198,14 +198,18 @@ describe("TinyMCE", function () {
             linkAttribute: "UID",
             appendToUrl: "/@@view",
         });
-        expect(tiny.instance.stripGeneratedUrl("resolveuid/foobar/@@view")).toEqual("foobar");
+        expect(tiny.instance.stripGeneratedUrl("resolveuid/foobar/@@view")).toEqual(
+            "foobar"
+        );
     });
 
     it("test get scale from url", async function () {
         var tiny = await createTinymce({
             prependToScalePart: "/somescale/",
         });
-        expect(tiny.instance.getScaleFromUrl("foobar/somescale/foobar")).toEqual("foobar");
+        expect(tiny.instance.getScaleFromUrl("foobar/somescale/foobar")).toEqual(
+            "foobar"
+        );
     });
 
     it("test get scale return null if invalid", async function () {

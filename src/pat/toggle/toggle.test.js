@@ -294,9 +294,7 @@ describe("Toggle", function () {
         const spy_log_error = jest.spyOn(log, "error");
         registry.scan($el);
         expect(spy_log_error).toHaveBeenCalledTimes(1);
-        expect(spy_log_error).toHaveBeenCalledWith(
-            'No target found for "#notarget".'
-        );
+        expect(spy_log_error).toHaveBeenCalledWith('No target found for "#notarget".');
         spy_log_error.mockRestore();
     });
 });

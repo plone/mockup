@@ -748,5 +748,4 @@ describe("Related Items", function () {
 
         expect($(".pat-relateditems-container .upload-container").length).toEqual(1);
     });
-
 });

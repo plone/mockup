@@ -232,7 +232,11 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
                         human +=
                             " " +
                             format(
-                                new Date(date_parts[0], date_parts[1]-1, date_parts[2]),
+                                new Date(
+                                    date_parts[0],
+                                    date_parts[1] - 1,
+                                    date_parts[2]
+                                ),
                                 conf.localization.longDateFormat,
                                 conf
                             );
@@ -247,14 +251,16 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         let tmp_dates = [];
         let tmp_human = [];
         // make sure our additional RDATE dates have the same start time
-        const rdate_time = start_date ? `T${start_date.getHours()}:${start_date.getMinutes()}:00` : "T00:00:00";
+        const rdate_time = start_date
+            ? `T${start_date.getHours()}:${start_date.getMinutes()}:00`
+            : "T00:00:00";
 
         for (let rdate of icaldata.RDATE) {
             if (rdate !== "") {
                 // RDATE values are "YYYY-MM-DD"
                 // by adding "T000000" the recurrence sequence generator of
                 // plone.event.recurrence adds the current start time correctly
-                rdate += (rdate.length === 10) ? "T000000" : "";
+                rdate += rdate.length === 10 ? "T000000" : "";
                 rdate += tz ? "Z" : "";
                 tmp_dates.push(rdate);
 
@@ -393,7 +399,6 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
     var selectors, field, radiobutton;
     var freq, interval, byday, bymonth, bymonthday, count, until;
     var day, month, year, weekday;
-
 
     if (icaldata.RRULE === undefined) {
         unsupportedFeatures.push(conf.localization.noRule);
@@ -645,7 +650,7 @@ const RecurrenceInput = function (conf, textarea) {
 
     // initalize parsed icaldata
     if (textarea.value) {
-        textarea["ical"] = parseIcal(textarea.value)
+        textarea["ical"] = parseIcal(textarea.value);
     } else {
         textarea["ical"] = {
             RRULE: "",
@@ -738,7 +743,7 @@ const RecurrenceInput = function (conf, textarea) {
                 $(`<div class="d-flex justify-content-between occurrence rdate">
                 <span class="rdate">
                     ${format(
-                        new Date(date_parts[0], date_parts[1]-1, date_parts[2]),
+                        new Date(date_parts[0], date_parts[1] - 1, date_parts[2]),
                         conf.localization.longDateFormat,
                         conf
                     )},
@@ -971,14 +976,11 @@ const RecurrenceInput = function (conf, textarea) {
             );
 
             // Now when we have a start date, we can also do an ajax call to calculate occurrences:
-            var rfc5545 = textarea.value || widgetSaveToRfc5545(form, textarea["ical"], conf, false).result;
+            var rfc5545 =
+                textarea.value ||
+                widgetSaveToRfc5545(form, textarea["ical"], conf, false).result;
 
-            loadOccurrences(
-                startdate,
-                rfc5545,
-                0,
-                false
-            );
+            loadOccurrences(startdate, rfc5545, 0, false);
 
             // Show the add and refresh buttons:
             form.find("div.rioccurrencesactions").show();
@@ -992,18 +994,19 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function recurrenceOn(form) {
-        var RFC5545 = widgetSaveToRfc5545(form, textarea["ical"], conf, false, findStartDate());
+        var RFC5545 = widgetSaveToRfc5545(
+            form,
+            textarea["ical"],
+            conf,
+            false,
+            findStartDate()
+        );
         var label = self.display.find("label[class=ridisplay]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
         $textarea.val(RFC5545.result).trigger("change");
         var startdate = findStartDate();
         if (startdate !== null) {
-            loadOccurrences(
-                startdate,
-                RFC5545.result,
-                0,
-                true
-            );
+            loadOccurrences(startdate, RFC5545.result, 0, true);
         }
         self.display.find('a[name="riedit"]').text(conf.localization.edit_rules);
         self.display.find('a[name="ridelete"]').show();
@@ -1141,7 +1144,8 @@ const RecurrenceInput = function (conf, textarea) {
         if (checkFields(form)) {
             loadOccurrences(
                 startDate,
-                widgetSaveToRfc5545(self.$modalForm, textarea["ical"], conf, false).result,
+                widgetSaveToRfc5545(self.$modalForm, textarea["ical"], conf, false)
+                    .result,
                 0,
                 false
             );
@@ -1166,7 +1170,8 @@ const RecurrenceInput = function (conf, textarea) {
 
         // Update the selected dates section
         self.$modalForm
-            .find(`
+            .find(
+                `
                 input:radio,
                 input:checkbox,
                 .riweeklyweekday > input,

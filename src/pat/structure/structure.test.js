@@ -74,15 +74,11 @@ describe("AppView internals correctness", function () {
         this.server.autoRespond = true;
 
         this.server.respondWith("GET", /data.json/, function (xhr, id) {
-            xhr.respond(
-                200,
-                { "Content-Type": "application/json" },
-                JSON.stringify({}),
-            );
+            xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({}));
         });
     });
 
-    afterEach(function() {
+    afterEach(function () {
         this.server.restore();
         document.body.innerHTML = "";
     });
@@ -119,8 +115,7 @@ describe("AppView internals correctness", function () {
             indexOptionsUrl: "",
             setDefaultPageUrl: "",
             collectionUrl: "http://localhost:9876/vocab",
-            collectionConstructor:
-                "mockup-patterns-structure-url/js/collections/result",
+            collectionConstructor: "mockup-patterns-structure-url/js/collections/result",
         });
 
         expect(app.collection.queryHelper.options.attributes).toEqual(["foo", "bar"]);
@@ -138,7 +133,6 @@ describe("AppView internals correctness", function () {
         });
     });
 });
-
 
 /* ==========================
 TEST: Structure
@@ -393,7 +387,7 @@ describe("Structure", function () {
 
     it("remove item from selection well", async function () {
         registry.scan(this.$el);
-        await utils.timeout(100)
+        await utils.timeout(100);
         var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
         $item1[0].checked = true;
         $item1.trigger("change");
@@ -431,9 +425,7 @@ describe("Structure", function () {
         expect(page1Btn.html()).not.toContain(
             this.$el.find(".pagination li.active a").eq("0").html()
         );
-        expect(this.$el.find(".pagination li.active a").eq("0").html()).toContain(
-            "2"
-        );
+        expect(this.$el.find(".pagination li.active a").eq("0").html()).toContain("2");
     });
 
     it("per page", async function () {
@@ -449,9 +441,9 @@ describe("Structure", function () {
 
     it("test paging does not apply overflow hidden to parent", async function () {
         /*
-            * very odd here, overflow hidden is getting applied by something after
-            * the table of results is re-rendered with new data
-            */
+         * very odd here, overflow hidden is getting applied by something after
+         * the table of results is re-rendered with new data
+         */
         registry.scan(this.$el);
         await utils.timeout(100);
         // click next page
@@ -467,14 +459,12 @@ describe("Structure", function () {
         await utils.timeout(100);
         var $popover = this.$el.find(".popover.rearrange");
         this.$el.find("#btn-rearrange").trigger("click");
-        await utils.timeout(100)
+        await utils.timeout(100);
         expect($popover.hasClass("active")).toEqual(true);
         $popover.find("button").trigger("click");
-        await utils.timeout(100)
+        await utils.timeout(100);
         expect($popover.hasClass("active")).toEqual(false);
-        expect(this.$el.find(".order-support .fc-status").html()).toContain(
-            "rearrange"
-        );
+        expect(this.$el.find(".order-support .fc-status").html()).toContain("rearrange");
         expect(this.app.$(".fc-status").hasClass("alert-success"));
     });
 
@@ -552,9 +542,7 @@ describe("Structure", function () {
         this.$el.find("#btn-attribute-columns").trigger("click");
         await utils.timeout(100);
 
-        var $checkbox = this.$el.find(
-            '.attribute-columns input[value="getObjSize"]'
-        );
+        var $checkbox = this.$el.find('.attribute-columns input[value="getObjSize"]');
         $checkbox[0].checked = true;
         $checkbox.trigger("change");
         await utils.timeout(100);
@@ -645,9 +633,7 @@ describe("Structure", function () {
         expect($("a.pasteItem", item0).text().trim()).toEqual("Paste");
         $("a.pasteItem", item0).trigger("click");
         await utils.timeout(100);
-        expect(this.$el.find(".fc-status").html()).toContain(
-            'Pasted into "Folder"'
-        );
+        expect(this.$el.find(".fc-status").html()).toContain('Pasted into "Folder"');
     });
 
     it("test itemRow actionmenu move-top click", async function () {

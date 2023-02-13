@@ -142,7 +142,11 @@ describe("Search", function () {
         await utils.timeout(1);
 
         expect(document.querySelectorAll(".pat-search").length).toEqual(1);
-        expect(document.querySelectorAll(".pat-search input[name='SearchableText']").length).toEqual(1);
-        expect(document.querySelector("#search-results .alert").textContent).toEqual("Nothing found.");
+        expect(
+            document.querySelectorAll(".pat-search input[name='SearchableText']").length
+        ).toEqual(1);
+        expect(document.querySelector("#search-results .alert").textContent).toEqual(
+            "Nothing found."
+        );
     });
 });
