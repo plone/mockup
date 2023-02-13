@@ -58,7 +58,7 @@ describe("Textarea MimeType Selector", function () {
         // Textarea should be hidden
         expect(window.getComputedStyle(textarea).display).toEqual("none");
         // And TinyMCE should be shown
-        tinymce = document.querySelector(".tox-tinymce");
+        const tinymce = document.querySelector(".tox-tinymce");
         expect(window.getComputedStyle(tinymce).display).toEqual("block");
 
         // Switching back to text/plain should destroy TinyMCE
@@ -99,7 +99,7 @@ describe("Textarea MimeType Selector", function () {
         // Textarea should be hidden
         expect(window.getComputedStyle(textarea).display).toEqual("none");
         // And TinyMCE should be shown
-        tinymce = document.querySelector(".mce-content-body");
+        let tinymce = document.querySelector(".mce-content-body");
         expect(window.getComputedStyle(tinymce).display).toEqual("block");
 
         // Switching back to text/plain should destroy TinyMCE

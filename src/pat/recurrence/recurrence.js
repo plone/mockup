@@ -38,7 +38,9 @@ function format(date, fmt, conf) {
         };
 
     var result = fmt.replace(Re, function ($0) {
-        return Object.prototype.hasOwnProperty.call(flags, $0) ? flags[$0] : $0.slice(1, $0.length - 1);
+        return Object.prototype.hasOwnProperty.call(flags, $0)
+            ? flags[$0]
+            : $0.slice(1, $0.length - 1);
     });
 
     return result;
@@ -251,6 +253,7 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         icaldata.RDATE.sort();
         let tmp_dates = [];
         let tmp_human = [];
+
         // make sure our additional RDATE dates have the same start time
         // XXX: not used, remove if superfluous
         //const rdate_time = start_date
@@ -364,8 +367,8 @@ function parseIcal(icaldata) {
 
     lines = icaldata.split("\n");
     lines.reverse();
-    // eslint-disable-next-line no-constant-condition
     while (true) {
+        // eslint-disable-line
         if (lines.length > 0) {
             nextline = lines.pop();
             if (nextline.charAt(0) === " " || nextline.charAt(0) === "\t") {
@@ -803,8 +806,7 @@ const RecurrenceInput = function (conf, textarea) {
             contentType: conf.ajaxContentType,
             cache: false,
             data: data,
-            // eslint-disable-next-line no-unused-vars
-            success: function (resp, status, jqXHR) {
+            success: function (resp) {
                 var result;
 
                 resp.readOnly = readonly;
@@ -998,13 +1000,7 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function recurrenceOn(form) {
-        var RFC5545 = widgetSaveToRfc5545(
-            form,
-            textarea["ical"],
-            conf,
-            false,
-            findStartDate()
-        );
+        var RFC5545 = widgetSaveToRfc5545(form, textarea["ical"], conf, false);
         var label = self.display.find("label[class=ridisplay]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
         $textarea.val(RFC5545.result).trigger("change");

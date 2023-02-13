@@ -413,7 +413,6 @@ export default Base.extend({
     handleTusUpload: function (file) {
         /* this needs fixing... */
         var self = this,
-            $preview = $(file.previewElement),
             chunkSize = 1024 * 1024 * 5; // 5mb chunk size
 
         file.status = Dropzone.UPLOADING;

@@ -67,12 +67,12 @@ export default Backbone.PageableCollection.extend({
         },
     },
 
-    parseState: function (response, queryParams, state, options) {
+    parseState: function (response, queryParams, state, options) {  // eslint-disable-line
         this.state.totalRecords = response.total;
         this.state.totalPages = Math.ceil(response.total / state.pageSize);
     },
 
-    parseRecords: function (response, options) {
+    parseRecords: function (response, options) {  // eslint-disable-line
         const results = response.results;
         // Manually set sort order here since backbone will otherwise do arbitrary sorting
         results.forEach((item, idx) => {

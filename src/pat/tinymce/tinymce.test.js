@@ -2,7 +2,6 @@ import tinymce from "tinymce/tinymce";
 import TinyMCE from "./tinymce";
 import $ from "jquery";
 import sinon from "sinon";
-import dom from "@patternslib/patternslib/src/core/dom";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
@@ -26,6 +25,7 @@ describe("TinyMCE", function () {
         this.server.autoRespond = true;
         //this.server.respondImmediately = true;
 
+        // eslint-disable-next-line no-unused-vars
         this.server.respondWith("POST", /upload/, function (xhr, id) {
             xhr.respond(
                 200,
@@ -40,6 +40,8 @@ describe("TinyMCE", function () {
                 })
             );
         });
+
+        // eslint-disable-next-line no-unused-vars
         this.server.respondWith(/relateditems-test\.json/, function (xhr, id) {
             var query = xhr.url.split("?")[1];
             var vars = query.split("&");
@@ -69,6 +71,8 @@ describe("TinyMCE", function () {
                 })
             );
         });
+
+        // eslint-disable-next-line no-unused-vars
         this.server.respondWith("GET", /data.json/, function (xhr, id) {
             var items = [
                 {
@@ -654,7 +658,7 @@ describe("TinyMCE", function () {
         // check, if changes are submitted on form submit
         var changed_txt = "changed contents";
         $editable.html(changed_txt);
-        var $form = $container.find("form");
+
         // Avoid error when running tests: "Some of your tests did a full page reload!"
         $container.submit(function (e) {
             e.preventDefault();
