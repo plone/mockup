@@ -13,13 +13,14 @@ export default class ConfigRegistry {
                 actionOptions: {
                     displayInModal: false,
                     reloadWindowOnClose: false,
+                    // eslint-disable-next-line no-unused-vars
                     onSuccess: function (modal) {
                         $("#searchrow form#registry-filter").trigger("submit");
                     },
                 },
             };
             $el.addClass("pat-modal");
-            let modal_obj = new Modal($el, options);
+            new Modal($el, options);
         });
     }
 

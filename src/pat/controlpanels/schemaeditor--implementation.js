@@ -49,6 +49,7 @@ export default class SchemaEditor {
                 {
                     _authenticator: $('input[name="_authenticator"]', this.el).val(),
                 },
+                // eslint-disable-next-line no-unused-vars
                 function (data) {
                     trigger.closest(".fieldPreview").detach();
                 },
@@ -166,9 +167,11 @@ $.fn.plone_schemaeditor_html5_sortable = function (
                     '<div id="drop-marker" style="position: absolute; width: 100%;"></div>'
                 ).insertBefore(this);
             };
+            // eslint-disable-next-line no-unused-vars
             this.ondragenter = function (e) {
                 return false;
             };
+            // eslint-disable-next-line no-unused-vars
             this.ondragleave = function (e) {
                 return false;
             };
@@ -226,6 +229,7 @@ $.fn.plone_schemaeditor_html5_sortable = function (
                 var position = node.parent().children("[data-drag_id]").index(node);
                 reorder_callback.apply(node, [position, target_fieldset_id]);
             };
+            // eslint-disable-next-line no-unused-vars
             this.ondragend = function (e) {
                 $("#drop-marker").remove();
             };
@@ -258,8 +262,6 @@ $.fn.plone_schemaeditor_html5_sortable = function (
                 var target_fieldset_id = $(this).attr("data-fieldset_drag_id");
                 if (orig_fieldset_id != target_fieldset_id) {
                     var target_fieldset = $("#fieldset-" + target_fieldset_id),
-                        tab_height = $(this).height(),
-                        tab_width = $(this).width(),
                         tab_position = $(this).position();
                     node.animate(
                         {

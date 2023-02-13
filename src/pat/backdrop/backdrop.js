@@ -26,6 +26,7 @@ export default Base.extend({
             }
         }
         if (self.options.closeOnEsc === true) {
+            // eslint-disable-next-line no-unused-vars
             $(document).on("keydown", function (e, data) {
                 if (self.$el.is("." + self.options.classActiveName)) {
                     if (e.keyCode === 27) {

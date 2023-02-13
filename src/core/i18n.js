@@ -42,7 +42,9 @@ const i18n = function () {
         ) {
             self.storage = window.localStorage;
         }
-    } catch (e) {}
+    } catch (e) {
+        console.log("Failed to set local storage");
+    }
 
     self.configure = function (config) {
         for (var key in config) {
@@ -116,7 +118,7 @@ const i18n = function () {
             if (keywords) {
                 var regexp, keyword;
                 for (keyword in keywords) {
-                    if (keywords.hasOwnProperty(keyword)) {
+                    if (Object.prototype.hasOwnProperty.call(keywords, keyword)) {
                         regexp = new RegExp("\\$\\{" + keyword + "\\}", "g");
                         msgstr = msgstr.replace(regexp, keywords[keyword]);
                     }

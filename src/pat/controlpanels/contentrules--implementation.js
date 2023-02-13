@@ -1,5 +1,4 @@
 import $ from "jquery";
-import Modal from "../modal/modal";
 
 export default class Contentrules {
     constructor(el) {
@@ -48,8 +47,8 @@ export default class Contentrules {
 
         // TODO find out why is it binding multiple times
         $(".btn-rule-action")
-            .unbind("click")
-            .bind("click", function (e) {
+            .off("click")
+            .on("click", function (e) {
                 e.preventDefault();
 
                 var $this = $(this),
@@ -129,8 +128,8 @@ export default class Contentrules {
             });
 
         $(".filter-option input")
-            .unbind("change")
-            .bind("change", function () {
+            .off("change")
+            .on("change", function () {
                 // Go through the checkboxes and map up what is the filtering criterea
                 var $table = $("#rules_table_form table");
                 var state_filters = $(".state-filters input:checked");

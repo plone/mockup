@@ -1,5 +1,4 @@
 import $ from "jquery";
-import Modal from "../modal/modal";
 
 export default class Contentrules {
     constructor(el) {
@@ -100,6 +99,7 @@ export default class Contentrules {
                 url: form_url,
                 data: data,
                 context: trigger,
+                // eslint-disable-next-line no-unused-vars
                 success: function (msg) {
                     let url = location.href;
                     $(this)
@@ -110,11 +110,13 @@ export default class Contentrules {
                             url + " #" + comment_id + ".comment",
                             function () {
                                 $(this).find(".comment").unwrap();
+                                // XXX: where is this init_comment_eventhandler supposed to come from?
                                 init_comment_eventhandler();
                                 $(".pat-plone-modal").patPloneModal();
                             }
                         );
                 },
+                // eslint-disable-next-line no-unused-vars
                 error: function (msg) {
                     return true;
                 },
@@ -148,6 +150,7 @@ export default class Contentrules {
                 url: form_url,
                 data: data,
                 context: $(trigger).parents(".comment"),
+                // eslint-disable-next-line no-unused-vars
                 success: function (data) {
                     // jshint ignore:line
                     var comment = $(this);
@@ -177,6 +180,7 @@ export default class Contentrules {
                         $(this).remove();
                     });
                 },
+                // eslint-disable-next-line no-unused-vars
                 error: function (req, error) {
                     // jshint ignore:line
                     return true;
@@ -210,7 +214,8 @@ export default class Contentrules {
          * If the user hits the 'reply' button of an existing comment, create a
          * reply form right beneath this comment.
          **********************************************************************/
-        $(".reply-to-comment-button").bind("click", function (e) {
+        // eslint-disable-next-line no-unused-vars
+        $(".reply-to-comment-button").on("click", function (e) {
             // jshint ignore:line
             var comment_div = $(this).parents().filter(".comment");
             self.createReplyForm(comment_div);
@@ -221,7 +226,7 @@ export default class Contentrules {
          * If the user hits the 'clear' button of an open reply-to-comment form,
          * remove the form and show the 'reply' button again.
          **********************************************************************/
-        $("#commenting #form-buttons-cancel").bind("click", function (e) {
+        $("#commenting #form-buttons-cancel").on("click", function (e) {
             e.preventDefault();
             var reply_to_comment_button = $(this)
                 .parents()

@@ -106,6 +106,7 @@ describe("Modal", function () {
         const $el = $("#body1");
 
         $("a.pat-plone-modal", $el)
+            // eslint-disable-next-line no-unused-vars
             .on("show.plone-modal.patterns", function (e) {
                 var modal = $(this).data("pattern-plone-modal");
                 $(".modal-header", modal.$modal).prepend($("<h3>New Title</h3>"));
@@ -117,6 +118,7 @@ describe("Modal", function () {
 
     it("3 - load modal content via ajax", () => {
         $("#body2 a.pat-plone-modal")
+            // eslint-disable-next-line no-unused-vars
             .on("show.plone-modal.patterns", function (e) {
                 expect(document.querySelectorAll(".modal-body").length).toEqual(1);
             })
@@ -125,6 +127,7 @@ describe("Modal", function () {
 
     it("4 - redirects to base urls", function () {
         $("#body2 a.pat-plone-modal")
+            // eslint-disable-next-line no-unused-vars
             .on("show.plone-modal.patterns", function (e) {
                 var modal = $(this).data("pattern-plone-modal");
                 expect(
@@ -157,6 +160,7 @@ describe("Modal", function () {
 
     it("5 - handles forms and form submits", function () {
         $("#body3 a.pat-plone-modal")
+            // eslint-disable-next-line no-unused-vars
             .on("show.plone-modal.patterns", async function (e) {
                 await utils.timeout(1);
                 var $input = $(".pattern-modal-buttons").find("input");
@@ -174,6 +178,7 @@ describe("Modal", function () {
 
     it("6 - handles form submits with enter key", function () {
         $('<a href="modal-form.html" class="pat-plone-modal" >Foo</a>')
+            // eslint-disable-next-line no-unused-vars
             .on("show.plone-modal.patterns", async function (e) {
                 await utils.timeout(1);
                 var event = $.Event("keydown");
@@ -193,6 +198,7 @@ describe("Modal", function () {
         //
         it("7.1 - position: center middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -221,6 +227,7 @@ describe("Modal", function () {
         });
         it("7.2 - position: left middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -247,6 +254,7 @@ describe("Modal", function () {
         });
         it("7.3 - position: right middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -274,6 +282,7 @@ describe("Modal", function () {
         });
         it("7.4 - position: center top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("center", "top", 0, 340, 280, 400, 300);
@@ -292,6 +301,7 @@ describe("Modal", function () {
         });
         it("7.5 - position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -319,6 +329,7 @@ describe("Modal", function () {
         });
         it("7.6 - position: left top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("left", "top", 0, 340, 280, 400, 300);
@@ -335,6 +346,7 @@ describe("Modal", function () {
         });
         it("7.7 - position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -360,6 +372,7 @@ describe("Modal", function () {
         });
         it("7.8 - position: right top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("right", "top", 0, 340, 280, 400, 300);
@@ -377,6 +390,7 @@ describe("Modal", function () {
         });
         it("7.9 - position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -407,6 +421,7 @@ describe("Modal", function () {
         //
         it("7.10 - position: center middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -435,6 +450,7 @@ describe("Modal", function () {
         });
         it("7.11 - position: left middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -461,6 +477,7 @@ describe("Modal", function () {
         });
         it("7.12 - position: right middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -488,6 +505,7 @@ describe("Modal", function () {
         });
         it("7.13 - position: center top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("center", "top", 5, 340, 280, 400, 300);
@@ -506,6 +524,7 @@ describe("Modal", function () {
         });
         it("7.14 - position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -533,6 +552,7 @@ describe("Modal", function () {
         });
         it("7.15 - position: left top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("left", "top", 5, 340, 280, 400, 300);
@@ -549,6 +569,7 @@ describe("Modal", function () {
         });
         it("7.16 - position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -574,6 +595,7 @@ describe("Modal", function () {
         });
         it("7.17 - position: right top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("right", "top", 5, 340, 280, 400, 300);
@@ -591,6 +613,7 @@ describe("Modal", function () {
         });
         it("7.18 - position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -621,6 +644,7 @@ describe("Modal", function () {
         //
         it("7.19 - position: center middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -645,6 +669,7 @@ describe("Modal", function () {
         });
         it("7.20 - position: left middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -669,6 +694,7 @@ describe("Modal", function () {
         });
         it("7.21 - position: right middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -694,6 +720,7 @@ describe("Modal", function () {
         });
         it("7.22 - position: center top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("center", "top", 0, 450, 350, 400, 300);
@@ -710,6 +737,7 @@ describe("Modal", function () {
         });
         it("7.23 - position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -735,6 +763,7 @@ describe("Modal", function () {
         });
         it("7.24 - position: left top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("left", "top", 0, 450, 350, 400, 300);
@@ -751,6 +780,7 @@ describe("Modal", function () {
         });
         it("7.25 - position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -776,6 +806,7 @@ describe("Modal", function () {
         });
         it("7.26 - position: right top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("right", "top", 0, 450, 350, 400, 300);
@@ -793,6 +824,7 @@ describe("Modal", function () {
         });
         it("7.27 - position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
+                // eslint-disable-next-line no-unused-vars
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(

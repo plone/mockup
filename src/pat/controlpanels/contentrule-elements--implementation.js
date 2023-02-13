@@ -7,20 +7,13 @@ export default class Contentrules {
         this.SKIP_OVERLAY_ACTIONS = ["plone.actions.Delete"];
     }
 
-    /* global require */
-
-    // require([
-    //   'jquery',
-    //   'mockup-patterns-modal'
-    // ], function($, Modal) {
-    //   'use strict';
     init() {
         let self = this;
         $(
             "#configure-conditions .rule-element input, #configure-actions .rule-element input"
         )
-            .unbind("click")
-            .click(function () {
+            .off("click")
+            .on("click", function () {
                 var name = $(this).attr("name");
                 if (
                     name == "form.button.EditCondition" ||
@@ -36,6 +29,7 @@ export default class Contentrules {
                 $.post(url, data, function (html) {
                     var newfieldset = $(html).find("#" + fieldset.attr("id"));
                     fieldset.replaceWith(newfieldset);
+                    // XXX: where does initforms is supposed to come from?
                     initforms();
                     $("#spinner").hide();
                 });
@@ -43,8 +37,8 @@ export default class Contentrules {
             });
 
         $('input[name="form.button.AddCondition"],input[name="form.button.AddAction"]')
-            .unbind("click")
-            .click(function (e) {
+            .off("click")
+            .on("click", function (e) {
                 var form = $(this).parent().parent();
                 var data = form.serialize();
                 for (var i = 0; i < self.SKIP_OVERLAY_ACTIONS.length; i++) {

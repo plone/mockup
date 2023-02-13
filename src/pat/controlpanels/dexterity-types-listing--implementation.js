@@ -19,7 +19,7 @@ export default class DexterityTypesListing {
                 var $el = $(
                     "<" + 'a href="' + type_link.attr("href") + '/@@clone"><' + "/a>"
                 ).appendTo("body");
-                var modal = new Modal($el, {
+                new Modal($el, {
                     actionOptions: {
                         displayInModal: false,
                     },
