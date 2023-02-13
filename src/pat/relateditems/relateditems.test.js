@@ -736,4 +736,17 @@ describe("Related Items", function () {
 
         // done.
     });
+
+    it("enable upload", async function () {
+        await initializePattern({
+            upload: true,
+        });
+        expect($("button.upload", $container).length).toEqual(1);
+
+        $("button.upload", $container).trigger("click");
+        await utils.timeout(1);
+
+        expect($(".pat-relateditems-container .upload-container").length).toEqual(1);
+    });
+
 });
