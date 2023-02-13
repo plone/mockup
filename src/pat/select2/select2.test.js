@@ -230,7 +230,6 @@ describe("Select2", function () {
         expect($.trim($results.eq(1).text())).toEqual("Red");
 
         var firstElem = $results.eq(0);
-        var secondElem = $results.eq(1);
         // css class is set and proxy is created when starting to drag
         expect($("li.dragging").length).toEqual(0);
         expect(firstElem.hasClass("select2-choice-dragging")).toEqual(false);

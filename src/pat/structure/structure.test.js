@@ -4,29 +4,10 @@ import sinon from "sinon";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 import Cookies from "js-cookie";
-import ButtonView from "../../core/ui/views/button";
 import mockup_utils from "../../core/utils";
-
-import Structure from "./structure";
-import ActionMenuView from "./js/views/actionmenu";
 import AppView from "./js/views/app";
-import TableView from "./js/views/table";
-import TableRowView from "./js/views/tablerow";
-import SelectionWellView from "./js/views/selectionwell";
-import GenericPopover from "./js/views/generic-popover";
-import RearrangeView from "./js/views/rearrange";
-import SelectionButtonView from "./js/views/selectionbutton";
-import PagingView from "./js/views/paging";
-import ColumnsView from "./js/views/columns";
-import TextFilterView from "./js/views/textfilter";
-import UploadView from "./js/views/upload";
-import Result from "./js/models/result";
-import SelectedCollection from "./js/collections/selected";
-import StatusTemplate from "./templates/status.xml";
-
-import ResultCollection from "./js/collections/result";
-
 import logging from "@patternslib/patternslib/src/core/logging";
+
 logging.setLevel(20);
 
 $.fx.off = true;
@@ -73,7 +54,7 @@ describe("AppView internals correctness", function () {
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
 
-        this.server.respondWith("GET", /data.json/, function (xhr, id) {
+        this.server.respondWith("GET", /data.json/, function (xhr) {
             xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({}));
         });
     });
@@ -150,7 +131,7 @@ describe("Structure", function () {
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
 
-        this.server.respondWith("GET", /data.json/, function (xhr, id) {
+        this.server.respondWith("GET", /data.json/, function(xhr) {
             var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
             var query = JSON.parse(getQueryVariable(xhr.url, "query"));
             var path = query.criteria[0].v.split(":")[0];
@@ -212,7 +193,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/rearrange", function (xhr, id) {
+        this.server.respondWith("POST", "/rearrange", function(xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -222,7 +203,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/paste", function (xhr, id) {
+        this.server.respondWith("POST", "/paste", function(xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -232,7 +213,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/moveitem", function (xhr, id) {
+        this.server.respondWith("POST", "/moveitem", function(xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -242,7 +223,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/setDefaultPage", function (xhr, id) {
+        this.server.respondWith("POST", "/setDefaultPage", function(xhr) {
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
@@ -252,7 +233,7 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
+        this.server.respondWith("GET", /contextInfo/, function(xhr) {
             var data = {
                 addButtons: [
                     {
@@ -672,7 +653,6 @@ describe("Structure", function () {
     it("test navigate to item", async function () {
         registry.scan(this.$el);
         await utils.timeout(200);
-        var pattern = this.$el.data("patternStructure");
         var item = this.$el.find(".itemRow").eq(10);
         expect(item.data().id).toEqual("item9");
         expect($(".title a.manage", item).attr("href")).toEqual(

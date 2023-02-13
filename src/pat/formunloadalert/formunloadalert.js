@@ -24,7 +24,7 @@ export default Base.extend({
 
         $(self.options.changingFields, self.$el).on(
             self.options.changingEvents,
-            (evt) => {
+            () => {
                 self._changed = true;
             }
         );
@@ -43,7 +43,7 @@ export default Base.extend({
             });
         }
 
-        self.$el.on("submit", (e) => {
+        self.$el.on("submit", () => {
             self._suppressed = true;
         });
     },

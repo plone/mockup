@@ -85,7 +85,7 @@ export default Base.extend({
 
         pwfield.parentNode.insertBefore(pwmeterContainer, pwfield.nextSibling);
         // set up key strokes to change the meter
-        pwfield.onkeyup = function (e) {
+        pwfield.onkeyup = function () {
             setLevel();
         };
         // init zxcvbn
