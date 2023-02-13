@@ -1,7 +1,6 @@
 # Changelog
 
 
-
 ## [5.0.3](https://github.com/plone/mockup/compare/5.0.2...5.0.3) (2023-02-13)
 
 
@@ -30,33 +29,6 @@
 
 * Enable eslint and testing in GHA and the Makefile. ([014d872](https://github.com/plone/mockup/commit/014d87245f3487355532732acf4dc918c0ff4fbb))
 
-## [5.0.3](https://github.com/plone/mockup/compare/5.0.2...5.0.3) (2023-02-13)
-
-
-### Bug Fixes
-
-
-* **pat-relateditems:** Fix upload view. ([817d0e1](https://github.com/plone/mockup/commit/817d0e118d252b2409e0a065529a21cdc8ce80aa))
-
-
-### Maintenance
-
-
-* **Cleanup:** Autoformat with prettier. ([389b884](https://github.com/plone/mockup/commit/389b884cab5c9ce3a42f46a7e1fdb0741427e181))
-
-* **Cleanup:** Fix eslint warnings. ([ff2def9](https://github.com/plone/mockup/commit/ff2def9b4ab0548b68f90633785772359d67dbf2))
-
-* **Cleanup:** Fix more eslint warnings. ([e885446](https://github.com/plone/mockup/commit/e8854464552a07b8dd85608e458a0371282665cd))
-
-* **Cleanup:** Fix remaining eslint warnings. ([38b9a85](https://github.com/plone/mockup/commit/38b9a851296c94540cc681af4458c240ec2b6a1b))
-
-* **Cleanup:** Remove unused tests. ([f7a9bd3](https://github.com/plone/mockup/commit/f7a9bd35014063af9b09ff867c981393026895d0))
-
-* **Cleanup:** Replace deprecated jquery API usage. ([3238565](https://github.com/plone/mockup/commit/323856592fbe58127ddbd156d2633b1aad8492a9))
-
-* **Docs:** Update development information in the README. ([7a4a16f](https://github.com/plone/mockup/commit/7a4a16f7d0ea11b26f377a846b676f7d384908b2))
-
-* Enable eslint and testing in GHA and the Makefile. ([014d872](https://github.com/plone/mockup/commit/014d87245f3487355532732acf4dc918c0ff4fbb))
 
 ## [5.0.2](https://github.com/plone/mockup/compare/5.0.1...5.0.2) (2023-02-13)
 
@@ -66,19 +38,6 @@
 
 * **pat recurrence:** Correct starttime of RDATE in recurrence. ([e70414f](https://github.com/plone/mockup/commit/e70414f0a0d0f73608e785fb27c6969e7e16fbe7))
 
-## [5.0.1](https://github.com/plone/mockup/compare/5.0.0...5.0.1) (2023-02-10)
-
-
-### Bug Fixes
-
-
-* **pat-select2:** Do not replace multi select fields for pat-querystring. ([f096319](https://github.com/plone/mockup/commit/f096319ecb6c341558f0202e442772cb90cd11b2))A select[multiple] field without the multiple pattern option set is no longer
-replaced with a input[type=hidden].
-This fixes a problem in pat-querystring where switching from one
-criteria to another duplicated the Select2 fields.
-Select2 deals just fine with select[multiple] fields. The replacement
-part should be evaluated for validity and eventually removed for a future
-Mockup release.
 
 ## [5.0.1](https://github.com/plone/mockup/compare/5.0.0...5.0.1) (2023-02-10)
 
@@ -93,6 +52,7 @@ criteria to another duplicated the Select2 fields.
 Select2 deals just fine with select[multiple] fields. The replacement
 part should be evaluated for validity and eventually removed for a future
 Mockup release.
+
 
 ## [5.0.0](https://github.com/plone/mockup/compare/5.0.0-beta.11...5.0.0) (2023-02-09)
 
@@ -146,57 +106,6 @@ Mockup release.
 
 * Upgrade dependencies. ([8590f2b](https://github.com/plone/mockup/commit/8590f2b737eebbb69976a0394bdfb7dd57480de7))
 
-## [5.0.0](https://github.com/plone/mockup/compare/5.0.0-beta.11...5.0.0) (2023-02-09)
-
-
-### Features
-
-
-* **pat-livesearch:** Make the timeout to hide the livesearch after focus was lost configurable. ([d939dd8](https://github.com/plone/mockup/commit/d939dd8c2a5e51bbb7fdde9502a8ba89e53f9968))
-
-* **pat-relateditems:** Add ajaxTimeout option to configure the time to wait before ajax requests are done. ([44cdcc4](https://github.com/plone/mockup/commit/44cdcc410bfad66915eee8022823fd48af3b4afe))
-
-* **pat-select2:** Add ajaxTimeout option to configure the time to wait before ajax requests are done. ([cd1d491](https://github.com/plone/mockup/commit/cd1d491a3430490128bb5f27e333c01dc83da65d))
-
-
-### Bug Fixes
-
-
-* **pat-relateditems:** Adapt to recent changes in pat-select2. ([1058ba8](https://github.com/plone/mockup/commit/1058ba8327820bc52b9e7d985c5422d697d1e62a))
-
-* **pat-select2:** Do not load the english language translation files. English is the default language and no englich translation file exists. ([a4f6ad7](https://github.com/plone/mockup/commit/a4f6ad73f1c3f49f18a7184fd159d9b022dac3fe))
-
-* **pat-select2:** Fix replacing the select with an input in multiple selection selects. ([9a27fd3](https://github.com/plone/mockup/commit/9a27fd39569e5ca0732826e1e1554be3557eea7f))
-
-
-### Maintenance
-
-
-* **pat structure:** fixing structure tests ([2b233c0](https://github.com/plone/mockup/commit/2b233c0ec89a7f9faee850eb3fdd3ccd383b96a9))
-
-* **pat tinymce:** Uncomment and fix more tests ([6001867](https://github.com/plone/mockup/commit/6001867f933bc45192705d5dacda5550f1b22491))
-
-* **pat-autotoc:** Remove test for jQuery plugin registration. That mode isn't supported anymore. ([391353e](https://github.com/plone/mockup/commit/391353e7d1d5fb416d17946323a58465364f6fad))
-
-* **pat-livesearch:** Fix tests. ([69471b1](https://github.com/plone/mockup/commit/69471b128016b615ac44bcbe5bb5287b49c0506c))
-
-* **pat-relateditems:** Fix tests. ([d917e4c](https://github.com/plone/mockup/commit/d917e4cb626f660ddf37cdf9f3b102f31e15897f))
-
-* **pat-relateditems:** Modernize code. ([d8f2daa](https://github.com/plone/mockup/commit/d8f2daa9f45b6805dd9f35e791437e04bce47267))
-
-* **pat-select2:** Fix tests. ([1ed3d6d](https://github.com/plone/mockup/commit/1ed3d6db8f9c8ab94de19f7c279f12b590da94c5))
-
-* **pat-select2:** Fix tests. ([a8cf916](https://github.com/plone/mockup/commit/a8cf916904ae3b9746cab5d1cd1bd005a2b9ddbb))
-
-* **pat-select2:** Modernize code. ([5588e96](https://github.com/plone/mockup/commit/5588e96ef1100e3a3522a719f7765eb53646de4a))
-
-* **pat-sortable:** Fix tests. ([39efedd](https://github.com/plone/mockup/commit/39efedd5ccdb96cb23d955616673aa4ba649a71c))
-
-* update iconmap.json ([41ba5e2](https://github.com/plone/mockup/commit/41ba5e22e296ec2402c1bc0fbdedc569d22f979f))
-
-* Upgrade DataTables to 13. ([54f4d29](https://github.com/plone/mockup/commit/54f4d299ad4d80a77c3a50cfd651b31fced5e61b))
-
-* Upgrade dependencies. ([8590f2b](https://github.com/plone/mockup/commit/8590f2b737eebbb69976a0394bdfb7dd57480de7))
 
 ## [5.0.0-beta.11](https://github.com/plone/mockup/compare/5.0.0-beta.10...5.0.0-beta.11) (2023-01-13)
 
@@ -206,6 +115,7 @@ Mockup release.
 
 * **pat recurrence:** fix wrong month in BYENDDATE and RDATE when adding and occurrence ([76099ff](https://github.com/plone/mockup/commit/76099ffdee588d32e09d27147cdb5b400e7d544c))
 
+
 ## [5.0.0-beta.10](https://github.com/plone/mockup/compare/5.0.0-beta.9...5.0.0-beta.10) (2023-01-11)
 
 
@@ -214,6 +124,7 @@ Mockup release.
 
 * **pat recurrence:** initial editing and correct time for additional RDATE values ([195ad31](https://github.com/plone/mockup/commit/195ad318492a77796193f5aa89abe35f4df4cbce))
 
+
 ## [5.0.0-beta.9](https://github.com/plone/mockup/compare/5.0.0-beta.8...5.0.0-beta.9) (2023-01-11)
 
 
@@ -221,6 +132,7 @@ Mockup release.
 
 
 * update [@patternslib](https://github.com/patternslib) packages ([1439c02](https://github.com/plone/mockup/commit/1439c02b99bc4809ffcbe2d0640d428b1623603e))
+
 
 ## [5.0.0-beta.8](https://github.com/plone/mockup/compare/5.0.0-beta.7...5.0.0-beta.8) (2023-01-11)
 
@@ -236,6 +148,7 @@ Mockup release.
 
 * **pat textareamimetypeselector:** Fix tests. ([99e646a](https://github.com/plone/mockup/commit/99e646a5548d622c265b42ac5ed44f64f21cb2e3))
 
+
 ## [5.0.0-beta.7](https://github.com/plone/mockup/compare/5.0.0-beta.6...5.0.0-beta.7) (2022-12-12)
 
 
@@ -250,6 +163,7 @@ Mockup release.
 
 * **pat tinymce:** Cleanup old code no longer needed. closes gh-1198 ([6e2803f](https://github.com/plone/mockup/commit/6e2803f66f15316a036f9e39604ad7883ebb3653))
 
+
 ## [5.0.0-beta.6](https://github.com/plone/mockup/compare/5.0.0-beta.5...5.0.0-beta.6) (2022-12-12)
 
 
@@ -257,6 +171,7 @@ Mockup release.
 
 
 * Also include webpack.config.js in the build which is extended in plone.staticresources. ([ac4e717](https://github.com/plone/mockup/commit/ac4e7177939bf1e7027d8516e0d07438bca65c5c))
+
 
 ## [5.0.0-beta.5](https://github.com/plone/mockup/compare/5.0.0-beta.4...5.0.0-beta.5) (2022-12-12)
 
@@ -305,6 +220,7 @@ The config files are not included in the npm package distributions anymore.
 
 * **pat-validation:** Update customization of error-template which is now a method of the Validation class. ([70c8c6b](https://github.com/plone/mockup/commit/70c8c6b4c291526035966d28d015ea4e4fb55d66))
 
+
 ## [5.0.0-beta.4](https://github.com/plone/mockup/compare/5.0.0-beta.3...5.0.0-beta.4) (2022-11-30)
 
 
@@ -329,6 +245,7 @@ The config files are not included in the npm package distributions anymore.
 
 * **build:** Update dependencies. ([2547019](https://github.com/plone/mockup/commit/2547019e61e24d76be7b6accc314dca09a489e5e))
 
+
 ## [5.0.0-beta.3](https://github.com/plone/mockup/compare/5.0.0-beta.2...5.0.0-beta.3) (2022-11-23)
 
 
@@ -339,6 +256,7 @@ The config files are not included in the npm package distributions anymore.
 
 * Upgrade dependencies ([d530364](https://github.com/plone/mockup/commit/d53036498cf4ff6e228a25f932df55584df9f6b5))
 
+
 ## [5.0.0-beta.2](https://github.com/plone/mockup/compare/5.0.0-beta.1...5.0.0-beta.2) (2022-11-18)
 
 
@@ -346,6 +264,7 @@ The config files are not included in the npm package distributions anymore.
 
 
 * Upgrade dependencies. ([06ea46c](https://github.com/plone/mockup/commit/06ea46c23d6f28cc8d9e3fa6449f041b0d5db46c))
+
 
 ## [5.0.0-beta.1](https://github.com/plone/mockup/compare/5.0.0-beta.0...5.0.0-beta.1) (2022-11-18)
 
@@ -367,7 +286,9 @@ The config files are not included in the npm package distributions anymore.
 
 * **Bundle:** Upgrade dependencies. ([32f2d86](https://github.com/plone/mockup/commit/32f2d86b762d17ba5330f62c0d593418e2dd50d7))
 
+
 ## [5.0.0-beta.0](https://github.com/plone/mockup/compare/5.0.0-alpha.27...5.0.0-beta.0) (2022-11-18)
+
 
 ## [5.0.0-alpha.27](https://github.com/plone/mockup/compare/5.0.0-alpha.26...5.0.0-alpha.27) (2022-11-17)
 
@@ -385,6 +306,7 @@ The config files are not included in the npm package distributions anymore.
 
 * Upgrade dependencies ([cad4b9a](https://github.com/plone/mockup/commit/cad4b9af6d665de7e08e8974874b0bc1ce30aef1))
 
+
 ## [5.0.0-alpha.26](https://github.com/plone/mockup/compare/5.0.0-alpha.25...5.0.0-alpha.26) (2022-11-14)
 
 
@@ -392,6 +314,7 @@ The config files are not included in the npm package distributions anymore.
 
 
 * **Build:** Fix webpack cacheGroup optimization configuration. ([df853db](https://github.com/plone/mockup/commit/df853dbee2c6cf3eab9fa3e9a8e8f18dcbe24363))
+
 
 ## [5.0.0-alpha.25](https://github.com/plone/mockup/compare/5.0.0-alpha.24...5.0.0-alpha.25) (2022-11-07)
 
@@ -441,6 +364,7 @@ The config files are not included in the npm package distributions anymore.
 
 * Upgrade Patternslib to 9.7.0-alpha.5. ([4866f30](https://github.com/plone/mockup/commit/4866f309e4ac13f2e13ae5279ca41605d98fa867))
 
+
 ## [5.0.0-alpha.24](https://github.com/plone/mockup/compare/5.0.0-alpha.23...5.0.0-alpha.24) (2022-10-03)
 
 
@@ -463,6 +387,7 @@ The config files are not included in the npm package distributions anymore.
 
 * **Build:** Update Bootstrap 5.2.2 ([54c731f](https://github.com/plone/mockup/commit/54c731f0806934dcd3fc724a182c92e5a3255844))
 
+
 ## [5.0.0-alpha.23](https://github.com/plone/mockup/compare/5.0.0-alpha.22...5.0.0-alpha.23) (2022-10-03)
 
 
@@ -480,6 +405,7 @@ The config files are not included in the npm package distributions anymore.
 * **Build:** Unlink all eventually linked @Patternslib dependencies before building bundles. ([4501e3c](https://github.com/plone/mockup/commit/4501e3cef8b2577069f4ec7791cd63272701cabf))
 
 * **Build:** Upgrade dependencies. ([b2e3184](https://github.com/plone/mockup/commit/b2e3184e9e14820cae63e17b2f9fbbf751d47b79))
+
 
 ## [5.0.0-alpha.22](https://github.com/plone/mockup/compare/5.0.0-alpha.21...5.0.0-alpha.22) (2022-09-21)
 
@@ -503,6 +429,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * **Build:** upgrade Bootstrap to 5.2.1 ([73afbcc](https://github.com/plone/mockup/commit/73afbcc05dbf084ff392d3dcc7b3086bf27e5357))
 
+
 ## [5.0.0-alpha.21](https://github.com/plone/mockup/compare/5.0.0-alpha.20...5.0.0-alpha.21) (2022-08-11)
 
 
@@ -519,6 +446,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * Upgrade dependencies. ([1025636](https://github.com/plone/mockup/commit/10256367741e8d2e46256c09eeace8d62957f271))
 
+
 ## [5.0.0-alpha.20](https://github.com/plone/mockup/compare/5.0.0-alpha.19...5.0.0-alpha.20) (2022-08-11)
 
 
@@ -530,6 +458,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 * **pat modal:** make it respect backdropOptions.zIndex if it is set ([50c1696](https://github.com/plone/mockup/commit/50c1696ef67a078f1fb20f18f707d18d6d9d1ce8))
 
 * **pat tinymce:** fix zIndex for link modals in tinymce to be higher than 1300 ([2618a38](https://github.com/plone/mockup/commit/2618a38814a75a288a0f1f5bef5e8ee8b7345a68))
+
 
 ## [5.0.0-alpha.19](https://github.com/plone/mockup/compare/5.0.0-alpha.18...5.0.0-alpha.19) (2022-08-03)
 
@@ -551,6 +480,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * **pat search:** Use core utils loader. ([a67f76e](https://github.com/plone/mockup/commit/a67f76eedc51eb16d54b5b7e415f75fe7178f330))
 
+
 ## [5.0.0-alpha.18](https://github.com/plone/mockup/compare/5.0.0-alpha.17...5.0.0-alpha.18) (2022-07-21)
 
 
@@ -559,6 +489,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * **Build:** Update Boostrap to 5.2.0 and Boostrap Icons to 1.9.1 ([92b33cc](https://github.com/plone/mockup/commit/92b33cc270c433af6d05961c75eb17d2b5316c37))
 
+
 ## [5.0.0-alpha.17](https://github.com/plone/mockup/compare/5.0.0-alpha.16...5.0.0-alpha.17) (2022-07-18)
 
 
@@ -566,6 +497,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 
 * **pat relateditems:** Make templates customizeable again via patternoptions ([984a9a6](https://github.com/plone/mockup/commit/984a9a6fde0720c0220fb153d35834e999035a51))
+
 
 ## [5.0.0-alpha.16](https://github.com/plone/mockup/compare/5.0.0-alpha.15...5.0.0-alpha.16) (2022-07-12)
 
@@ -587,7 +519,9 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * **pat tinymce:** Fix `linkType` mismatch in link/image modal ([12252a5](https://github.com/plone/mockup/commit/12252a535b5ac14a8a30890c6d0c2ede0ac6b749))
 
+
 ## [5.0.0-alpha.15](https://github.com/plone/mockup/compare/5.0.0-alpha.14...5.0.0-alpha.15) (2022-07-11)
+
 
 ## [5.0.0-alpha.14](https://github.com/plone/mockup/compare/5.0.0-alpha.13...5.0.0-alpha.14) (2022-07-08)
 
@@ -606,6 +540,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 * **pat manageportlets:** Load jquery-form asynchronously. ([29145cf](https://github.com/plone/mockup/commit/29145cfc1aba30c58ccbf36c6dfadb44f2f480cd))
 
 * **pat modal:** Fix eslint errors. ([e5506ee](https://github.com/plone/mockup/commit/e5506eeffaf636136b3d0a8ebc8157543617dde4))
+
 
 ## [5.0.0-alpha.13](https://github.com/plone/mockup/compare/5.0.0-alpha.12...5.0.0-alpha.13) (2022-07-08)
 
@@ -634,6 +569,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 * Remove bootstrap bundle. ([4cd878e](https://github.com/plone/mockup/commit/4cd878ed86db4a11225474eb6c50813d9e08a8fe))
 
 * Remove jquery bundle. ([7596a14](https://github.com/plone/mockup/commit/7596a14bfa1d7cbaf1ffeb37d6019f3b1ffe2cdd))
+
 
 ## [5.0.0-alpha.12](https://github.com/plone/mockup/compare/5.0.0-alpha.11...5.0.0-alpha.12) (2022-07-06)
 
@@ -675,6 +611,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * Extend webpack config from @patternslib/dev. ([811673a](https://github.com/plone/mockup/commit/811673a0db4e0133ea19adee2bd6b84cc04ddbda))
 
+
 ## [5.0.0-alpha.11](https://github.com/plone/mockup/compare/5.0.0-alpha.10...5.0.0-alpha.11) (2022-06-29)
 
 
@@ -682,6 +619,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 
 * **pat structure:** fix tablerow items without `exclude_from_nav` attribute. ([1de6ce5](https://github.com/plone/mockup/commit/1de6ce573ac1a8e8beba34dda1dd03a22cede58b))
+
 
 ## [5.0.0-alpha.10](https://github.com/plone/mockup/compare/5.0.0-alpha.9...5.0.0-alpha.10) (2022-06-20)
 
@@ -691,6 +629,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 * **pat structure:** simplify badge styling and add new "exclude_from_nav" badge ([a0d3573](https://github.com/plone/mockup/commit/a0d35731d661292f0aec653c4e14542dfc6c2d83))
 
+
 ## [5.0.0-alpha.9](https://github.com/plone/mockup/compare/5.0.0-alpha.8...5.0.0-alpha.9) (2022-06-08)
 
 
@@ -698,6 +637,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 
 * **pat structure:** bootstrap popover fix ([6611570](https://github.com/plone/mockup/commit/661157061958ffbb58aa1c5d2295e14a7540a42e))
+
 
 ## [5.0.0-alpha.8](https://github.com/plone/mockup/compare/5.0.0-alpha.7...5.0.0-alpha.8) (2022-06-02)
 
@@ -722,6 +662,7 @@ Co-authored-by: Maurits van Rees <maurits@vanrees.org>
 
 
 * **Bundle:** new underscore release ([eeafed0](https://github.com/plone/mockup/commit/eeafed0db3eab6aee0b26593c17bd5f730050db2))
+
 
 ## [5.0.0-alpha.7](https://github.com/plone/mockup/compare/5.0.0-alpha.6...5.0.0-alpha.7) (2022-06-01)
 
@@ -770,6 +711,7 @@ These methods were used only in two places and can be substituted with create_fr
 
 * Upgrade dependencies. ([b886321](https://github.com/plone/mockup/commit/b8863219fbefdcba75f583494f7c03972b3aa540))
 
+
 ## [5.0.0-alpha.6](https://github.com/plone/mockup/compare/5.0.0-alpha.5...5.0.0-alpha.6) (2022-05-23)
 
 
@@ -793,6 +735,7 @@ pattern unavailable in add-on bundles unless this dependency is
 explicitly added.
 However, this should be fixed in a more sane way. But that's out of
 scope for now.
+
 
 ## [5.0.0-alpha.5](https://github.com/plone/mockup/compare/5.0.0-alpha.4...5.0.0-alpha.5) (2022-05-23)
 
@@ -834,6 +777,7 @@ scope for now.
 
 * **pat structure:** Importing backbone.paginator in collections.result is enough. Document why we add Underscore and Backbone to the global namespace. ([068301f](https://github.com/plone/mockup/commit/068301f406729d8c4e60840665e9845dceda5b99))
 
+
 ## [5.0.0-alpha.4](https://github.com/plone/mockup/compare/5.0.0-alpha.3...5.0.0-alpha.4) (2022-05-19)
 
 
@@ -845,6 +789,7 @@ scope for now.
 
 * **Bundle:** Upgrade to Patternslib 8.0.2. ([76c8421](https://github.com/plone/mockup/commit/76c842177edf88a558e4369984ecfecc8bdd6bae))
 
+
 ## [5.0.0-alpha.3](https://github.com/plone/mockup/compare/5.0.0-alpha.2...5.0.0-alpha.3) (2022-05-19)
 
 
@@ -852,6 +797,7 @@ scope for now.
 
 
 * **Bundle:** Upgrade to Bootstrap 5.2.0-beta1. ([0de73b2](https://github.com/plone/mockup/commit/0de73b2f2881406a3a63c6d58bcc796535f04101))
+
 
 ## [5.0.0-alpha.2](https://github.com/plone/mockup/compare/5.0.0-alpha.1...5.0.0-alpha.2) (2022-05-18)
 
@@ -876,6 +822,7 @@ scope for now.
 
 
 * **Bundle:** Upgrade dependencies. ([e87d935](https://github.com/plone/mockup/commit/e87d935d4897f27d4c9a0cb869f3fbd2ce7c630e))
+
 
 ## [5.0.0-alpha.1](https://github.com/plone/mockup/compare/5.0.0-alpha.0...5.0.0-alpha.1) (2022-05-18)
 
@@ -943,6 +890,7 @@ This can be provided by an external bundle.
 
 
 * **pat querystring:** Cleanup - direct import of Select2 is not necessary. ([13d0e0d](https://github.com/plone/mockup/commit/13d0e0d9535c958eaf662308477b985d1a6c9225))
+
 
 ## [5.0.0-alpha.0](https://github.com/plone/mockup/compare/3.2.2...5.0.0-alpha.0) (2022-05-17)
 
