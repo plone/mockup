@@ -30,14 +30,6 @@ stamp-yarn install:
 	touch stamp-yarn
 
 
-# TODO: REMOVE once we're passing lint and tests or @patternslib/dev does not
-#       lint/test for prereleases.
-eslint: stamp-yarn
-	@# Just do nothing.
-check: stamp-yarn
-	@# Just do nothing.
-
-
 .PHONY:
 watch-plone:
 	$(YARN) run watch:webpack:plone
