@@ -14,7 +14,7 @@ export default Backbone.PageableCollection.extend({
 
         this.queryHelper = utils.QueryHelper({
             attributes: this.view.options.queryHelperAttributes,
-            ...this.view.options
+            ...this.view.options,
         });
 
         this.queryParser = function (options) {
@@ -26,11 +26,10 @@ export default Backbone.PageableCollection.extend({
             const sortOrder = this.view.sort_order;
 
             return JSON.stringify({
-                criteria: this.queryHelper.getCriterias(
-                    term, {
-                        additionalCriterias: this.view.additionalCriterias,
-                        ...options,
-                    }),
+                criteria: this.queryHelper.getCriterias(term, {
+                    additionalCriterias: this.view.additionalCriterias,
+                    ...options,
+                }),
                 sort_on: sortOn,
                 sort_order: sortOrder,
             });

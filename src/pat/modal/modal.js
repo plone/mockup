@@ -472,18 +472,21 @@ export default Base.extend({
             self.emit("before-events-setup");
 
             // Wire up events
-            self.$modal[0].querySelectorAll(
-                `.modal-header > .modal-close,
+            self.$modal[0]
+                .querySelectorAll(
+                    `.modal-header > .modal-close,
                  .modal-footer > .pattern-modal-buttons > .modal-close,
                  .modal-footer [name="form.buttons.Cancel" i]`
-            ).forEach((el) => {
-                $(el).off("click").on("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    $(e.target).trigger("destroy.plone-modal.patterns");
+                )
+                .forEach((el) => {
+                    $(el)
+                        .off("click")
+                        .on("click", (e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            $(e.target).trigger("destroy.plone-modal.patterns");
+                        });
                 });
-            });
-
 
             // form
             if (options.form) {

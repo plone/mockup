@@ -23,7 +23,9 @@ export default Base.extend({
         // there might be more than one textareas with the same name
         // set up all of them with the same pattern options.
         // the pattern itself must take care of an unique identifier!
-        const textareas = document.querySelectorAll(`textarea[name="${this.options.textareaName}"]`);
+        const textareas = document.querySelectorAll(
+            `textarea[name="${this.options.textareaName}"]`
+        );
 
         // First, destroy current
         this.current_widgets.forEach((wdgt) => {
@@ -38,7 +40,8 @@ export default Base.extend({
             textareas.forEach(async (area) => {
                 this.current_widgets.push(
                     await new registry.patterns[pattern_config.pattern](
-                        area, pattern_config.patternOptions || {}
+                        area,
+                        pattern_config.patternOptions || {}
                     )
                 );
             });
