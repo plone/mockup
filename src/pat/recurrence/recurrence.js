@@ -260,7 +260,7 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
                 // RDATE values are "YYYY-MM-DD"
                 // by adding "T000000" the recurrence sequence generator of
                 // plone.event.recurrence adds the current start time correctly
-                rdate += (rdate.length === 10) ? "T000000" : "";
+                rdate += rdate.length === 10 ? "T000000" : "";
                 rdate += tz ? "Z" : "";
                 tmp_dates.push(rdate);
 
