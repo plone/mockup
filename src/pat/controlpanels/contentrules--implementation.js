@@ -149,7 +149,7 @@ export default class Contentrules {
                 self.updatezebra($table);
             });
 
-        $("#rules_disable_globally").change(function () {
+        $("#rules_disable_globally").on("change", function () {
             var form = $("#fieldset-global form");
             var disabled = "";
             if ($("#rules_disable_globally")[0].checked) {

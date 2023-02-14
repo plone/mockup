@@ -123,7 +123,7 @@ export default Base.extend({
 
         self.$dropzone = $(".upload-area", self.$el);
 
-        $("div.browse-select button.browse", self.$el).click(function (e) {
+        $("div.browse-select button.browse", self.$el).on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
             if (
@@ -214,7 +214,7 @@ export default Base.extend({
             self.$progress.attr("aria-valuenow", pct).css("width", pct + "%");
         });
 
-        $(".upload-all", self.$el).click(function (e) {
+        $(".upload-all", self.$el).on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
             self.processUpload({

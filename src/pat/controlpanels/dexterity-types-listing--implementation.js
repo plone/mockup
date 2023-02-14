@@ -10,7 +10,7 @@ export default class DexterityTypesListing {
         import("./schemaeditor--implementation"); // register plone_schemaeditor_normalize_string method.
 
         // Button Clone
-        $("#crud-edit-form-buttons-clone", this.el).click(function (e) {
+        $("#crud-edit-form-buttons-clone", this.el).on("click", function (e) {
             var selected = $("input[id$=-widgets-select-0]:checked", this.el);
             if (selected.length === 1) {
                 e.preventDefault();
@@ -24,12 +24,12 @@ export default class DexterityTypesListing {
                         displayInModal: false,
                     },
                 });
-                $el.click();
+                $el.trigger("click");
             }
         });
 
         // Button delete
-        $("#crud-edit-form-buttons-delete", this.el).click(function (e) {
+        $("#crud-edit-form-buttons-delete", this.el).on("click", function (e) {
             var items = 0,
                 msg;
             $("td.count", this.el)

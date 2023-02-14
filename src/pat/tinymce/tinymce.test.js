@@ -159,7 +159,7 @@ describe("TinyMCE", function () {
         tinymce.tiny.initialized = true;
 
         tinymce.tiny.setContent("<p>foobar</p>");
-        $container.submit(function (e) {
+        $container.on("submit", function (e) {
             e.preventDefault();
         });
         $container.trigger("submit");
@@ -325,7 +325,7 @@ describe("TinyMCE", function () {
     //     this.clock.tick(1000);
     //     var pattern = $el.data().patternTinymce;
     //     pattern.addImageClicked();
-    //     $("#" + $("#tinylink-uploadImage").data().navref).click();
+    //     $("#" + $("#tinylink-uploadImage").data().navref).trigger("click");
     //     expect($("#tinylink-uploadImage").parent().hasClass("active")).to.equal(true);
     //     var blob;
     //     try {
@@ -342,7 +342,7 @@ describe("TinyMCE", function () {
     //     }
     //     blob.name = "blah.png";
     //     pattern.imageModal.$upload.data().patternUpload.dropzone.addFile(blob);
-    //     $(".upload-all", pattern.imageModal.$upload).click();
+    //     $(".upload-all", pattern.imageModal.$upload).trigger("click");
     //     this.clock.tick(1000);
 
     //     expect($("#tinylink-image").parent().hasClass("active")).to.equal(true);
@@ -389,7 +389,7 @@ describe("TinyMCE", function () {
     //         path: "/foobar",
     //     });
     //     pattern.imageModal.$caption.val("hello.");
-    //     pattern.imageModal.$button.click();
+    //     pattern.imageModal.$button.trigger("click");
     //     var content = pattern.tiny.getContent();
 
     //     expect(content).to.contain("<figure><img");
@@ -405,7 +405,7 @@ describe("TinyMCE", function () {
     //         path: "/foobar",
     //     });
     //     pattern.imageModal.$caption.val("");
-    //     pattern.imageModal.$button.click();
+    //     pattern.imageModal.$button.trigger("click");
     //     content = pattern.tiny.getContent();
 
     //     expect(content).to.not.contain("<figure>");
@@ -422,7 +422,7 @@ describe("TinyMCE", function () {
     //         path: "/foobar",
     //     });
     //     pattern.imageModal.$captionFromDescription.prop("checked", true);
-    //     pattern.imageModal.$button.click();
+    //     pattern.imageModal.$button.trigger("click");
     //     content = pattern.tiny.getContent();
 
     //     expect(content).to.not.contain("<figure>");
@@ -660,7 +660,7 @@ describe("TinyMCE", function () {
         $editable.html(changed_txt);
 
         // Avoid error when running tests: "Some of your tests did a full page reload!"
-        $container.submit(function (e) {
+        $container.on("submit", function (e) {
             e.preventDefault();
         });
         $container.trigger("submit");

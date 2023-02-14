@@ -46,7 +46,7 @@ export default Base.extend({
             parent case, bind the link so we can reload modal */
             $(".portlets-link-to-parent")
                 .off("click")
-                .click(function (e) {
+                .on("click", function (e) {
                     that.loading.show();
                     var $el = $(this);
                     e.preventDefault();
@@ -148,14 +148,14 @@ export default Base.extend({
     },
     setupPortletEdit: function () {
         var that = this;
-        $(".managedPortlet .portletHeader > a", that.$el).click(function (e) {
+        $(".managedPortlet .portletHeader > a", that.$el).on("click", function (e) {
             e.preventDefault();
             that.showEditPortlet($(this).attr("href"));
         });
     },
     setupAddDropdown: function () {
         var that = this;
-        $(".add-portlet", that.$el).change(function (e) {
+        $(".add-portlet", that.$el).on("change", function (e) {
             e.preventDefault();
             var $select = $(this);
             var $form = $select.parents("form");
@@ -184,11 +184,11 @@ export default Base.extend({
             },
         });
         // Block/unblock inherited portlets (parent, group and content type portlets)
-        $(".portlets-settings select", that.$el).change(function () {
+        $(".portlets-settings select", that.$el).on("change", function () {
             log.info("select change");
             clearTimeout(that.submitTimeout);
             that.submitTimeout = window.setTimeout(function () {
-                $(".portlets-settings", that.$el).submit();
+                $(".portlets-settings", that.$el).trigger("submit");
             }, 100);
         });
     },

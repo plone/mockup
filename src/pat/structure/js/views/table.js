@@ -232,7 +232,7 @@ export default BaseView.extend({
 
     selectAll: function (e) {
         if ($(e.target).is(":checked")) {
-            $('input[type="checkbox"]', this.$("tbody")).prop("checked", true).change();
+            $('input[type="checkbox"]', this.$("tbody")).prop("checked", true).trigger("change");
         } else {
             /* delaying the re-rendering is much faster in this case */
             this.selectedCollection.remove(this.collection.models, {

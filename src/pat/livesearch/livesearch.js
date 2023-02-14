@@ -173,7 +173,7 @@ export default Base.extend({
                         _t("Previous") +
                         "</a>"
                 );
-                $prev.click(function (e) {
+                $prev.on("click", function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
                     self.doSearch(self.page - 1);
@@ -186,7 +186,7 @@ export default Base.extend({
                         _t("Next") +
                         "</a>"
                 );
-                $next.click(function (e) {
+                $next.on("click", function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
                     self.doSearch(self.page + 1);
@@ -314,7 +314,7 @@ export default Base.extend({
                     self.render();
                 }
             });
-        $("#sorting-options a").click(function (e) {
+        $("#sorting-options a").on("click", function (e) {
             e.preventDefault();
             self.onceFocused = false;
         });

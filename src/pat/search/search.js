@@ -70,7 +70,7 @@ export default Base.extend({
         updateSortingState($("a[data-sort=" + default_sort + "]"));
 
         /* sorting */
-        $("a", $sortingContainer).click(function (e) {
+        $("a", $sortingContainer).on("click", function (e) {
             e.preventDefault();
             updateSortingState($(this));
             var sort = $(this).attr("data-sort");
@@ -90,14 +90,14 @@ export default Base.extend({
         });
 
         /* form submission */
-        $(".searchPage").submit(function (e) {
+        $(".searchPage").on("submit", function (e) {
             e.preventDefault();
             setBatchStart("0");
             search();
         });
 
         /* filters */
-        $filterBtn.click(function (e) {
+        $filterBtn.on("click", function (e) {
             e.preventDefault();
             $filter.toggleClass("activated");
             if ($filter.hasClass("activated")) {
@@ -107,7 +107,7 @@ export default Base.extend({
             }
         });
 
-        $ctSelectAll.change(function () {
+        $ctSelectAll.on("change", function () {
             if ($ctSelectAll[0].checked) {
                 $("input", $selectAllContainer).each(function () {
                     this.checked = true;
@@ -119,7 +119,7 @@ export default Base.extend({
             }
         });
 
-        $("input", $filter).change(function () {
+        $("input", $filter).on("change", function () {
             setBatchStart("0");
             searchDelayed();
         });

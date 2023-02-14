@@ -135,6 +135,6 @@ describe("AutoTOC", function () {
     //       expect(documentOffset).toEqual(headingOffset);
     //       done();
     //     })
-    //     .click();
+    //     .trigger("click");
     // });
 });

@@ -243,7 +243,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.3 - position: right middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -270,7 +270,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.4 - position: center top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -288,7 +288,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("30px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.5 - position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -315,7 +315,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("30px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.6 - position: left top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -331,7 +331,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.7 - position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -356,7 +356,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.8 - position: right top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -373,7 +373,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.9 - position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -399,7 +399,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
 
         //
@@ -431,7 +431,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("25px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.11 - position: left middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -457,7 +457,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("5px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.12 - position: right middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -484,7 +484,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.13 - position: center top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -502,7 +502,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("25px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.14 - position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -529,7 +529,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("25px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.15 - position: left top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -545,7 +545,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("5px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.16 - position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -570,7 +570,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("5px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.17 - position: right top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -587,7 +587,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.18 - position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -613,7 +613,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
 
         //
@@ -641,7 +641,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.20 - position: left middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -665,7 +665,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.21 - position: right middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -690,7 +690,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.22 - position: center top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -706,7 +706,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.23 - position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -731,7 +731,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.24 - position: left top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -747,7 +747,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.25 - position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -772,7 +772,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("0px");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.26 - position: right top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -789,7 +789,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
         it("7.27 - position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
             $("#body2 a.pat-plone-modal")
@@ -815,7 +815,7 @@ describe("Modal", function () {
                     expect(pos.left).toEqual("auto");
                     done();
                 })
-                .click();
+                .trigger("click");
         });
     });
 });
