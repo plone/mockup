@@ -30,7 +30,7 @@ var LinkType = Base.extend({
     },
 
     value: function () {
-        return $.trim(this.getEl().val());
+        return this.getEl().val().trim();
     },
 
     toUrl: function () {
@@ -562,7 +562,7 @@ export default Base.extend({
             }
         });
 
-        $(".autotoc-nav a", self.modal.$modal).click(function () {
+        $(".autotoc-nav a", self.modal.$modal).on("click", function () {
             var $fieldset = $("fieldset.linkType", self.modal.$modal).eq(
                 $(this).index()
             );
@@ -574,7 +574,7 @@ export default Base.extend({
             });
         });
 
-        self.$captionFromDescription.change(function () {
+        self.$captionFromDescription.on("change", function () {
             if (this.checked) {
                 self.$caption.prop("disabled", true);
             } else {
@@ -806,7 +806,7 @@ export default Base.extend({
             }
             self.hide();
         });
-        $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function (e) {
+        $('.modal-footer input[name="cancel"]', self.modal.$modal).on("click", function (e) {
             e.preventDefault();
             self.hide();
         });

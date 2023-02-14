@@ -270,7 +270,7 @@ Criteria.prototype = {
             }
             select += "</select>" + "</div>";
 
-            return $(select).change(function () {
+            return $(select).on("change", function () {
                 self.trigger("depth-changed");
             });
         };
@@ -280,7 +280,7 @@ Criteria.prototype = {
                 .addClass(self.options.classValueName + "-" + widget)
                 .val(value)
                 .appendTo($wrapper)
-                .change(function () {
+                .on("change", function () {
                     self.trigger("value-changed");
                 });
         } else if (widget === "DateWidget") {
@@ -328,7 +328,7 @@ Criteria.prototype = {
                 .addClass(self.options.classValueName + "-" + widget)
                 .val(value)
                 .appendTo($wrapper)
-                .change(function () {
+                .on("change", function () {
                     self.trigger("value-changed");
                 });
         } else if (widget === "AdvancedPathWidget") {
@@ -347,7 +347,7 @@ Criteria.prototype = {
                     .addClass(self.options.classValueName + "-" + widget)
                     .appendTo($wrapper)
                     .val(value)
-                    .change(function () {
+                    .on("change", function () {
                         self.trigger("value-changed");
                     });
             } else {
@@ -383,7 +383,7 @@ Criteria.prototype = {
                     .addClass(self.options.classValueName + "-" + widget)
                     .val(value)
                     .appendTo($wrapper)
-                    .change(function () {
+                    .on("change", function () {
                         self.trigger("value-changed");
                     });
             } else {
@@ -396,7 +396,7 @@ Criteria.prototype = {
                     .appendTo($wrapper)
                     .val(pathAndDepth[0])
                     .patternRelateditems(self.patternRelateditemsOptions)
-                    .change(function () {
+                    .on("change", function () {
                         self.trigger("value-changed");
                     });
                 $wrapper.addClass("break-line");
@@ -407,7 +407,7 @@ Criteria.prototype = {
                 .prop("multiple", true)
                 .addClass(self.options.classValueName + "-" + widget)
                 .appendTo($wrapper)
-                .change(function () {
+                .on("change", function () {
                     self.trigger("value-changed");
                 });
             if (self.indexes[index]) {
@@ -800,7 +800,7 @@ export default Base.extend({
         self.$sortOn = $("<select/>")
             .attr("name", "sort_on")
             .appendTo(self.$sortWrapper)
-            .change(function () {
+            .on("change", function () {
                 self.refreshPreviewEvent.call(self);
                 $('[id$="sort_on"]', existingSortOn).val($(this).val());
             });
@@ -815,7 +815,7 @@ export default Base.extend({
 
         self.$sortOrder = $('<input type="checkbox" />')
             .attr("name", "sort_reversed:boolean")
-            .change(function () {
+            .on("change", function () {
                 self.refreshPreviewEvent.call(self);
                 if ($(this).prop("checked")) {
                     $('input[type="checkbox"]', existingSortOrder).prop("checked", true);

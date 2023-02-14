@@ -116,7 +116,7 @@ describe("Select2", function () {
         var $results = $("li.select2-result-selectable");
         expect($results.length).toEqual(0);
 
-        $(".select2-input").click();
+        $(".select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         $results = $("li.select2-result-selectable");
@@ -139,7 +139,7 @@ describe("Select2", function () {
         await utils.timeout(1);
 
         var $input = $(".select2-input");
-        $input.click().val("AAA");
+        $input.trigger("click").val("AAA");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -163,7 +163,7 @@ describe("Select2", function () {
         await utils.timeout(1);
 
         var $input = $(".select2-input");
-        $input.click().val('<img src="logo.png" />Evil logo');
+        $input.trigger("click").val('<img src="logo.png" />Evil logo');
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -188,7 +188,7 @@ describe("Select2", function () {
         await utils.timeout(1);
 
         var $input = $(".select2-input");
-        $input.click().val("this < that & those");
+        $input.trigger("click").val("this < that & those");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -270,7 +270,7 @@ describe("Select2", function () {
         await utils.timeout(1);
 
         var $input = $(".select2-input");
-        $input.click().val("AAA");
+        $input.trigger("click").val("AAA");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -295,7 +295,7 @@ describe("Select2", function () {
         await utils.timeout(1);
 
         var $input = $(".select2-input");
-        $input.click().val("AAA");
+        $input.trigger("click").val("AAA");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);

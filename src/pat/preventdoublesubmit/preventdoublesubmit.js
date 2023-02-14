@@ -19,7 +19,7 @@ export default Base.extend({
             return;
         }
 
-        $(":submit", self.$el).click(function () {
+        $(":submit", self.$el).on("click", function () {
             // mark the button as clicked
             $(":submit").removeAttr("clicked");
             $(this).attr("clicked", "clicked");

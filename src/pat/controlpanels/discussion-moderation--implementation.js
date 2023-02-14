@@ -12,7 +12,7 @@ export default class Contentrules {
          * Delete a single comment.
          **********************************************************************/
         // eslint-disable-next-line no-unused-vars
-        $("button[name='form.button.moderation.DeleteComment']").click(function (e) {
+        $("button[name='form.button.moderation.DeleteComment']").on("click", function (e) {
             e.preventDefault();
             var row = $(this).closest("tr");
             var path = row.find("[name='selected_obj_paths:list']").attr("value");
@@ -42,7 +42,7 @@ export default class Contentrules {
         /**********************************************************************
          * Transmit a single comment.
          **********************************************************************/
-        $('button[name="form.button.moderation.TransmitComment"]').click(function (e) {
+        $('button[name="form.button.moderation.TransmitComment"]').on("click", function (e) {
             e.preventDefault();
             var row = $(this).closest("tr");
             var path = $(row).find("[name='selected_obj_paths:list']").attr("value");
@@ -89,7 +89,7 @@ export default class Contentrules {
         /**********************************************************************
          * Bulk actions for comments (delete, publish)
          **********************************************************************/
-        $("button[name='form.button.BulkAction']").click(function (e) {
+        $("button[name='form.button.BulkAction']").on("click", function (e) {
             e.preventDefault();
             var form = $(this).closest("form");
             var target = $(form).attr("action");
@@ -126,7 +126,7 @@ export default class Contentrules {
         /**********************************************************************
          * Check or uncheck all checkboxes from the batch moderation page.
          **********************************************************************/
-        $("input[name='check_all']").click(function () {
+        $("input[name='check_all']").on("click", function () {
             if ($(this).val() === "0") {
                 $(this).parents("table").find("input:checkbox").prop("checked", true);
                 $(this).val("1");
@@ -140,7 +140,7 @@ export default class Contentrules {
          * select comments with review_state
          **********************************************************************/
 
-        $("input[name='review_state']").click(function () {
+        $("input[name='review_state']").on("click", function () {
             let review_state = $(this).val();
             let url = location.href;
             if (location.search) {
@@ -165,7 +165,7 @@ export default class Contentrules {
         /**********************************************************************
          * Show full text of a comment in the batch moderation page.
          **********************************************************************/
-        $(".show-full-comment-text").click(function (e) {
+        $(".show-full-comment-text").on("click", function (e) {
             e.preventDefault();
             var target = $(this).attr("href");
             var parent = $(this).parent();

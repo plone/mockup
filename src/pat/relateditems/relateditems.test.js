@@ -355,18 +355,18 @@ describe("Related Items", function () {
         ).toHaveLength(5);
 
         // Select first folder
-        $('a.pat-relateditems-result-select[data-path="/folder1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder1"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID6");
 
         // Still, this folder should be shown in the result list - only not selectable.
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
         expect(
             $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(5);
 
         // Browse into second folder which contains images
-        $('.pat-relateditems-result-browse[data-path="/folder2"]').click();
+        $('.pat-relateditems-result-browse[data-path="/folder2"]').trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         // 1 "One level up" and 2 images
@@ -376,11 +376,11 @@ describe("Related Items", function () {
         expect($(".pat-relateditems-result")[0].textContent).toContain("One level up");
 
         // Select first image
-        $('a.pat-relateditems-result-select[data-path="/folder2/image17"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2/image17"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID17");
 
         // Browse one level up
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         await utils.timeout(SELECT2_TIMEOUT);
@@ -396,7 +396,7 @@ describe("Related Items", function () {
 
         // Input a search term and enter search mode
         $input = $(".select2-search-field input.select2-input");
-        $input.click().val("folder2");
+        $input.trigger("click").val("folder2");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -407,7 +407,7 @@ describe("Related Items", function () {
         ).toHaveLength(2);
 
         // We can even browse into folders in search mode
-        $('.pat-relateditems-result-browse[data-path="/folder2"]').click();
+        $('.pat-relateditems-result-browse[data-path="/folder2"]').trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         // Being in folder 2, we see again one item...
@@ -417,7 +417,7 @@ describe("Related Items", function () {
         expect($(".pat-relateditems-result")[0].textContent).toContain("One level up");
 
         // Selecting the image will add it to the selected items.
-        $('a.pat-relateditems-result-select[data-path="/folder2/image18"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2/image18"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID17,UID18");
     });
 
@@ -430,7 +430,7 @@ describe("Related Items", function () {
         var $input;
 
         // open up result list by clicking on "browse"
-        $(".mode.browse", $container).click();
+        $(".mode.browse", $container).trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         // result list must have expected length
@@ -442,13 +442,13 @@ describe("Related Items", function () {
         // PT 2
 
         // select one element
-        $('a.pat-relateditems-result-select[data-path="/image1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/image1"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID8");
 
         // PT 3
 
         // click again on browse, should open up result list again, this time without 'UID1'
-        $(".mode.browse", $container).click();
+        $(".mode.browse", $container).trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         // result list must have expected length
@@ -457,16 +457,16 @@ describe("Related Items", function () {
         ).toHaveLength(2);
 
         // add another one
-        $('a.pat-relateditems-result-select[data-path="/image2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/image2"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID8,UID9");
 
         // remove first one
-        $($("a.select2-search-choice-close")[0]).click();
+        $($("a.select2-search-choice-close")[0]).trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID9");
 
         // search for...
         $input = $(".select2-search-field input.select2-input");
-        $input.click().val("Ima");
+        $input.trigger("click").val("Ima");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -475,7 +475,7 @@ describe("Related Items", function () {
         ).toHaveLength(2);
 
         // add first from result
-        $('a.pat-relateditems-result-select[data-path="/image3"]').click();
+        $('a.pat-relateditems-result-select[data-path="/image3"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID9,UID10");
     });
 
@@ -488,7 +488,7 @@ describe("Related Items", function () {
         var $input;
 
         // open up result list by clicking on "browse"
-        $(".mode.search", $container).click();
+        $(".mode.search", $container).trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         // result list must have expected length
@@ -499,13 +499,13 @@ describe("Related Items", function () {
         //  // PT 2
 
         //  // select one element
-        $('a.pat-relateditems-result-select[data-path="/document1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/document1"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID1");
 
         //  // PT 3
 
         //  // click again on browse, should open up result list again, this time without 'UID1'
-        $(".mode.search", $container).click();
+        $(".mode.search", $container).trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         //  // result list must have expected length
@@ -514,16 +514,16 @@ describe("Related Items", function () {
         ).toHaveLength(10);
 
         //  // add another one
-        $('a.pat-relateditems-result-select[data-path="/document2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/document2"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID1,UID2");
 
         //  // remove first one
-        $($("a.select2-search-choice-close")[0]).click();
+        $($("a.select2-search-choice-close")[0]).trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID2");
 
         //  // search for...
         $input = $(".select2-search-field input.select2-input");
-        $input.click().val("document15");
+        $input.trigger("click").val("document15");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
         await utils.timeout(SELECT2_TIMEOUT);
@@ -532,7 +532,7 @@ describe("Related Items", function () {
         ).toHaveLength(1);
 
         //  // add first from result
-        $('a.pat-relateditems-result-select[data-path="/folder2/document15"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2/document15"]').trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID2,UID15");
     });
 
@@ -550,11 +550,11 @@ describe("Related Items", function () {
         });
 
         // open up result list by clicking on "browse"
-        $("button.favorites", $container).click();
+        $("button.favorites", $container).trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         // click "folder1"
-        $($(".favorites li a")[1]).click();
+        $($(".favorites li a")[1]).trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
 
         expect(
@@ -579,13 +579,13 @@ describe("Related Items", function () {
 
         // Select some items
         // folder 1
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder1"]').trigger("click");
         // folder 2
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2"]').trigger("click");
 
         // check, if items are selected
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID7");
@@ -611,7 +611,7 @@ describe("Related Items", function () {
         );
 
         // Klicking on last used item should add it to the selection.
-        $($(".pat-relateditems-recentlyused-select")[0]).click();
+        $($(".pat-relateditems-recentlyused-select")[0]).trigger("click");
         expect($("input.pat-relateditems").val()).toEqual("UID7");
 
         // done.
@@ -630,13 +630,13 @@ describe("Related Items", function () {
 
         // Select some items
         // folder 1
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder1"]').trigger("click");
         // folder 2
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2"]').trigger("click");
 
         // check, if items are selected
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID7");
@@ -666,21 +666,21 @@ describe("Related Items", function () {
 
         // Select some items
         // folder 1
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder1"]').trigger("click");
         // folder 2
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2"]').trigger("click");
         // image 1
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/image1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/image1"]').trigger("click");
         // image 2
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/image2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/image2"]').trigger("click");
 
         // check, if items are selected
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID7,UID8,UID9");
@@ -723,13 +723,13 @@ describe("Related Items", function () {
 
         // Select some items
         // folder 1
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder1"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder1"]').trigger("click");
         // folder 2
-        $(".select2-search-field input.select2-input").click();
+        $(".select2-search-field input.select2-input").trigger("click");
         await utils.timeout(SELECT2_TIMEOUT);
-        $('a.pat-relateditems-result-select[data-path="/folder2"]').click();
+        $('a.pat-relateditems-result-select[data-path="/folder2"]').trigger("click");
 
         var items = JSON.parse(localStorage[key]);
         expect(items.length).toEqual(2);
