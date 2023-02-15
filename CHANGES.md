@@ -2,6 +2,14 @@
 
 
 
+## [5.0.5](https://github.com/plone/mockup/compare/5.0.4...5.0.5) (2023-02-15)
+
+
+### Bug Fixes
+
+
+* **pata-datatables:** Need to downgrade due to incompability. ([f5c156c](https://github.com/plone/mockup/commit/f5c156c7ba94bec402f9f5978444c8122a771fe7))
+
 ## [5.0.4](https://github.com/plone/mockup/compare/5.0.3...5.0.4) (2023-02-15)
 
 
