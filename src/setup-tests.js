@@ -1,5 +1,6 @@
 // Extra test setup.
 
+// provide jquery
 import jquery from "jquery";
 global.$ = global.jQuery = jquery;
 
@@ -19,3 +20,6 @@ import dom from "@patternslib/patternslib/src/core/dom";
 dom.is_visible = (el) => {
     return !el.hidden && el.style.display !== "none";
 };
+
+// Attach datatables to jQuery, as in tests it is not done by just importing.
+window.dt = require("datatables.net")();
