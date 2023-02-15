@@ -1,6 +1,34 @@
 # Changelog
 
 
+
+## [5.0.4](https://github.com/plone/mockup/compare/5.0.3...5.0.4) (2023-02-15)
+
+
+### Bug Fixes
+
+
+* **pat-datatables:** Downgrade datatables to 1.12 to fix import errors. ([585ea8a](https://github.com/plone/mockup/commit/585ea8a972cba364f52c5fcf7d3927e01b9d87a4))Co-authored-by: toalba <tb@kleinundpartner.at>
+Co-authored-by: Robert Niederreiter <rnix@squarewave.at>
+
+* **pat-datatables:** Fix tests. ([9923015](https://github.com/plone/mockup/commit/9923015d6a366ae19b1895301dce1c00845cb587))Fix pat-structure test by requiring datatables from the test-setup
+beforehand loading the test files. This is a necessary step for
+datatables which wouldn't otherwise be attached to jQuery in tests.
+Also freshly wrap the element with jQuery in the Patterns init method
+after datatables was imported. A non-jQuery setup does not work at the
+moment.
+
+
+### Maintenance
+
+
+* **cleanup:** Replace deprecated API calls. ([14c36bc](https://github.com/plone/mockup/commit/14c36bc8ec5b17f60defe9c2aafc1a7e4270c91a))
+
+* **pat-datatables:** Actually, include all the datatables libraries. ([67ad865](https://github.com/plone/mockup/commit/67ad865bbd659b5c2b5626ce120bcc3c278aac66))We're depending on them anyways, so let's import all.
+It's just a few kb of Bootstrap initialization code.
+
+* Remove regenerator-runtime. This is not needed anymore. ([537219e](https://github.com/plone/mockup/commit/537219ec04bb0562d215409de8b08ee55935193a))
+
 ## [5.0.3](https://github.com/plone/mockup/compare/5.0.2...5.0.3) (2023-02-13)
 
 
