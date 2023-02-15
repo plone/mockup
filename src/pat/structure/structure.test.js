@@ -1,5 +1,4 @@
 import $ from "jquery";
-import DataTables from "datatables.net";
 import sinon from "sinon";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
@@ -48,10 +47,6 @@ var extraDataJsonItem = null;
 ========================== */
 describe("AppView internals correctness", function () {
     beforeEach(function () {
-        // new to instantinate DataTables here in order to make
-        // pat-datatables work in jest tests.
-        new DataTables(window, window.$);
-
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
         this.server.autoRespondAfter = 0;
@@ -127,8 +122,6 @@ describe("Structure", function () {
         Cookies.remove("_fc_pageSize");
         Cookies.remove("_fc_activeColumns");
         Cookies.remove("_fc_activeColumnsCustom");
-
-        new DataTables(window, window.$);
 
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
