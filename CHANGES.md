@@ -2,6 +2,16 @@
 
 
 
+## [5.1.0-alpha.0](https://github.com/plone/mockup/compare/5.0.5...5.1.0-alpha.0) (2023-03-04)
+
+
+### Maintenance
+
+
+* update dependencies ([f469155](https://github.com/plone/mockup/commit/f469155bc02855208aab8765774094cf76d56924))@patternslib/patternslib=9.8.1-alpha-0
+bootstrap=5.3.0-alpha1
+bootstrap-icons=1.10.3
+
 ## [5.0.5](https://github.com/plone/mockup/compare/5.0.4...5.0.5) (2023-02-15)
 
 
