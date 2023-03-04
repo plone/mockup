@@ -1,9 +1,35 @@
 .select2-container {
     margin-bottom: 1em;
+    background: #fff!important;
+    color: #000!important;
+    border-radius: 4px;
+
+    .select2-choice {
+        background: var(--bs-secondary-bg)!important;
+        background-image: none!important;
+        background-color: var(--bs-secondary-bg)!important;
+        border-color: var(--bs-secondary)!important;
+        color: var(--bs-dark-text)!important;
+        box-shadow: none!important;
+
+        .select2-arrow b {
+            background-color: var(--bs-secondary-bg)!important;
+        }
+    }
+
+    .select2-search {
+        background-color: var(--bs-secondary-bg)!important;
+        color: var(--bs-secondary-text)!important;
+    }
 }
 
 .select2-container-multi {
+    background: #fff!important;
+    color: #000!important;
+
     .select2-choices {
+        border-color: var(--bs-secondary)!important;
+
         .select2-choice-dragging {
             border-color: #ff0000;
         }
@@ -22,6 +48,50 @@
                 cursor: move;
             }
         }
+    }
+}
+
+// Overwrite default styles for dark mode theming
+.select2-drop {
+    background: var(--bs-secondary-bg)!important;
+    color: var(--bs-secondary-text)!important;
+}
+
+.select2-results {
+    max-height: 950px;
+    background: var(--bs-secondary-bg);
+    color: var(--bs-secondary-text);
+
+    .select2-result {
+        background-color: transparent;
+        border-left: 0.3em solid transparent;
+        border-right: 0.3em solid transparent;
+
+        &:nth-child(odd) {
+            background-color: var(--bs-secondary-bg-subtle)!important;
+        }
+
+        &.select2-highlighted {
+            border-left: 0.3em solid #007bb3;
+            border-right: 0.3em solid #007bb3;
+        }
+
+        &-label {
+            padding: 0;
+            color: var(--bs-link-color);
+        }
+    }
+
+    .select2-no-results {
+        background: transparent!important;
+    }
+
+    > * {
+        background: transparent!important;
+    }
+
+    .select2-selected {
+        display: list-item;
     }
 }
 

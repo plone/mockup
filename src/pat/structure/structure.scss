@@ -96,7 +96,7 @@
                 }
 
                 .btn {
-                    color: var(--bs-primary);
+                    color: var(--bs-link-color);
                     padding: 0.25rem 0.2rem;
                 }
             }
@@ -194,6 +194,8 @@
     }
 
     .popover {
+        overflow: hidden;
+
         &:not(.active) {
             display: none;
         }
@@ -203,7 +205,7 @@
 
         .popover-title {
             padding: 8px 14px;
-            background-color: var(--bs-light);
+            background-color: var(--bs-secondary-bg);
 
             .remove-all {
                 display: inline-block;
@@ -260,12 +262,12 @@
             }
 
             a {
-                color: var(--bs-gray-dark);
+                color: var(--bs-emphasis-color-subtle);
             }
         }
 
         &.folder .title a {
-            color: var(--bs-primary);
+            color: var(--bs-link-color);
         }
 
         &.default-page .title > div > *:first-child:before {
