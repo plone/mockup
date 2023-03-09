@@ -68,7 +68,7 @@ export default Backbone.Model.extend({
         const url = new URL(this.app.buttons.get(buttonName).options.url);
         const resp = await fetch(url, {
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Content-Type": "application/x-www-form-urlencoded",
             },
             method: "POST",
             body: new URLSearchParams({
@@ -127,7 +127,7 @@ export default Backbone.Model.extend({
             const url = new URL(this.app.getAjaxUrl(this.app.setDefaultPageUrl));
             const resp = await fetch(url, {
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    "Content-Type": "application/x-www-form-urlencoded",
                 },
                 method: "POST",
                 body: new URLSearchParams({
