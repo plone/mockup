@@ -2,6 +2,16 @@
 
 
 
+## [5.0.6](https://github.com/plone/mockup/compare/5.0.5...5.0.6) (2023-03-21)
+
+
+### Maintenance
+
+
+* **bundle:** Add `pat-checklist` ([b62dfb0](https://github.com/plone/mockup/commit/b62dfb031bc7437d47dbf03f3056238b8b93d7cd))
+
+* override  for release-it ([14f84e0](https://github.com/plone/mockup/commit/14f84e0b3db6df732a3e4c6296879744136de0bf))
+
 ## [5.0.5](https://github.com/plone/mockup/compare/5.0.4...5.0.5) (2023-02-15)
 
 
