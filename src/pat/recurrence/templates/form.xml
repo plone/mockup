@@ -45,14 +45,14 @@
                 <label class="col-4 col-form-label" for="<%= name %>weeklyinterval"><%= localization.weeklyWeekdays %></label>
                 <div class="col-8">
                     <div class="row">
-                    <% orderedWeekdays.forEach(function(weekday, idx) { %>
+                    <% orderedWeekdays.forEach(function(idx) { %>
                         <div class="riweeklyweekday col-auto">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox"
-                                    name="riweeklyweekdays<%=weekday %>"
-                                    id="<%= name %>weeklyWeekdays<%=weekday %>"
-                                    value="<%=weekday %>" />
-                                <label class="form-check-label" for="<%= name %>weeklyWeekdays<%= weekday %>"><%= localization.shortWeekdays[weekday] %></label>
+                                    name="riweeklyweekdays<%=idx %>"
+                                    id="<%= name %>weeklyWeekdays<%=idx %>"
+                                    value="<%=idx %>" />
+                                <label class="form-check-label" for="<%= name %>weeklyWeekdays<%= idx %>"><%= localization.shortWeekdays[idx] %></label>
                             </div>
                         </div>
                     <% }) %>
@@ -122,8 +122,8 @@
                         </div>
                         <div class="col-auto">
                             <select class="form-select form-select-sm w-auto float-start me-2" name="rimonthlyweekdayofmonth">
-                                <% orderedWeekdays.forEach(function(val, idx) { %>
-                                    <option value="<%= val %>"><%= localization.weekdays[idx] %></option>
+                                <% orderedWeekdays.forEach(function(idx) { %>
+                                    <option value="<%= idx %>"><%= localization.weekdays[idx] %></option>
                                 <% }) %>
                             </select>
                             <%= localization.monthlyWeekdayOfMonth3 %>
