@@ -2,6 +2,8 @@
 
 
 
+## [5.0.8](https://github.com/plone/mockup/compare/5.0.7...5.0.8) (2023-03-29)
+
 ## [5.0.7](https://github.com/plone/mockup/compare/5.0.6...5.0.7) (2023-03-29)
 
 
