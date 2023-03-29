@@ -937,7 +937,7 @@ const RecurrenceInput = function (conf, textarea) {
                     conf,
                     false
                 ).result;
-            console.log(rfc5545);
+
             loadOccurrences(startdate, rfc5545, 0, false);
 
             // Show the add and refresh buttons:
@@ -958,7 +958,7 @@ const RecurrenceInput = function (conf, textarea) {
             conf,
             false
         );
-        var label = self.display.find("label[class=ridisplay]");
+        var label = self.display.find("label[class=ridisplay-label]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
         textarea["ical"] = parseIcal(RFC5545.result);
         textarea.innerHTML = RFC5545.result;
@@ -972,7 +972,7 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function recurrenceOff() {
-        var label = self.display.find("label[class=ridisplay]");
+        var label = self.display.find("label[class=ridisplay-label]");
         label.text(conf.localization.displayUnactivate);
         // reset ical object
         textarea["ical"] = {
@@ -1195,7 +1195,7 @@ const RecurrenceInput = function (conf, textarea) {
     if (textarea.innerHTML) {
         var result = widgetLoadFromRfc5545(form, conf, textarea["ical"], false);
         if (result === -1) {
-            var label = self.display.find("label[class=ridisplay]");
+            var label = self.display.find("label[class=ridisplay-label]");
             label.text(conf.localization.noRule);
         } else {
             recurrenceOn(form);
