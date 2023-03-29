@@ -2,6 +2,20 @@
 
 
 
+## [5.0.7](https://github.com/plone/mockup/compare/5.0.6...5.0.7) (2023-03-29)
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** Various UI issues in recurrence modal. ([e71ae95](https://github.com/plone/mockup/commit/e71ae952dc2cb63041f08d595b477fabe1cf5c2f))
+
+
+### Maintenance
+
+
+* Upgrade dependencies. ([7e51ac5](https://github.com/plone/mockup/commit/7e51ac56692f4b8c1b356f8dbb2f618f33b59f57))
+
 ## [5.0.6](https://github.com/plone/mockup/compare/5.0.5...5.0.6) (2023-03-21)
 
 
