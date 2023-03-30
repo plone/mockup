@@ -47,210 +47,164 @@ function format(date, fmt, conf) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
+function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
     var value = form.find("select[name=rirtemplate]").val();
     var rtemplate = conf.rtemplate[value];
     var result = "RRULE:" + rtemplate.rrule;
     var human = conf.localization.rtemplate[value];
-    var field, input, weekdays, i18nweekdays, i, j, index;
-    var day, month, year, interval, yearlyType, occurrences, date;
+    var interval, month, year, occurrences, day;
+    var weekdays, i18nweekdays, input, monthlyType, index;
+    var yearlyType, rangeType;
 
-    for (i = 0; i < rtemplate.fields.length; i++) {
-        field = form.find("#" + rtemplate.fields[i]);
+    for (const field_id of rtemplate.fields) {
+        const field = form.find(`#${field_id}`);
 
         switch (field.attr("id")) {
             case "ridailyinterval":
                 interval = field.find("input[name=ridailyinterval]").val();
                 if (interval !== "1") {
-                    result += ";INTERVAL=" + interval;
+                    result += `;INTERVAL=${interval}`;
                 }
-                human = interval + " " + conf.localization.dailyInterval2;
+                human = `${interval} ${conf.localization.dailyInterval2}`;
                 break;
 
             case "riweeklyinterval":
                 interval = field.find("input[name=riweeklyinterval]").val();
                 if (interval !== "1") {
-                    result += ";INTERVAL=" + interval;
+                    result += `;INTERVAL=${interval}`;
                 }
-                human = interval + " " + conf.localization.weeklyInterval2;
+                human = `${interval} ${conf.localization.weeklyInterval2}`;
                 break;
 
             case "riweeklyweekdays":
-                weekdays = "";
-                i18nweekdays = "";
-                for (j = 0; j < conf.weekdays.length; j++) {
+                weekdays = [];
+                i18nweekdays = [];
+                for (let j = 0; j < conf.weekdays.length; j++) {
                     input = field.find(`input[name=riweeklyweekdays${j}]`);
                     if (input.is(":checked")) {
-                        if (weekdays) {
-                            weekdays += ",";
-                            i18nweekdays += ", ";
-                        }
-                        weekdays += conf.weekdays[j];
-                        i18nweekdays += conf.localization.weekdays[j];
+                        weekdays.push(conf.weekdays[j]);
+                        i18nweekdays.push(conf.localization.weekdays[j]);
                     }
                 }
-                if (weekdays) {
-                    result += ";BYDAY=" + weekdays;
-                    human +=
-                        " " + conf.localization.weeklyWeekdaysHuman + " " + i18nweekdays;
+                if (weekdays.length > 0) {
+                    result += `;BYDAY=${weekdays.join(",")}`;
+                    human += ` ${
+                        conf.localization.weeklyWeekdaysHuman
+                    } ${i18nweekdays.join(",")}`;
                 }
                 break;
 
             case "rimonthlyinterval":
                 interval = field.find("input[name=rimonthlyinterval]").val();
                 if (interval !== "1") {
-                    result += ";INTERVAL=" + interval;
+                    result += `;INTERVAL=${interval}`;
                 }
-                human = interval + " " + conf.localization.monthlyInterval2;
+                human = `${interval} ${conf.localization.monthlyInterval2}`;
                 break;
 
             case "rimonthlyoptions":
-                var monthlyType = $("input[name=rimonthlytype]:checked", form).val();
-                switch (monthlyType) {
-                    case "DAYOFMONTH":
-                        day = $("select[name=rimonthlydayofmonthday]", form).val();
-                        result += ";BYMONTHDAY=" + day;
-                        human +=
-                            ", " +
-                            conf.localization.monthlyDayOfMonth1Human +
-                            " " +
-                            day +
-                            " " +
-                            conf.localization.monthlyDayOfMonth2;
-                        break;
-                    case "WEEKDAYOFMONTH":
-                        index = $(
-                            "select[name=rimonthlyweekdayofmonthindex]",
-                            form
-                        ).val();
-                        day = $("select[name=rimonthlyweekdayofmonth]", form).val();
-                        if (
-                            $.inArray(day, ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]) >
-                            -1
-                        ) {
-                            result += ";BYDAY=" + index + day;
-                            human +=
-                                ", " +
-                                conf.localization.monthlyWeekdayOfMonth1Human +
-                                " ";
-                            human +=
-                                " " +
-                                conf.localization.orderIndexes[
-                                    $.inArray(index, conf.orderIndexes)
-                                ];
-                            human += " " + conf.localization.monthlyWeekdayOfMonth2;
-                            human +=
-                                " " +
-                                conf.localization.weekdays[
-                                    $.inArray(day, conf.weekdays)
-                                ];
-                            human += " " + conf.localization.monthlyDayOfMonth2;
-                        }
-                        break;
+                monthlyType = $("input[name=rimonthlytype]:checked", form).val();
+                if (monthlyType === "DAYOFMONTH") {
+                    day = $("select[name=rimonthlydayofmonthday]", form).val();
+                    result += `;BYMONTHDAY=${day}`;
+                    human += `, ${conf.localization.monthlyDayOfMonth1Human} ${day} ${conf.localization.monthlyDayOfMonth2}`;
+                } else if (monthlyType === "WEEKDAYOFMONTH") {
+                    index = $("select[name=rimonthlyweekdayofmonthindex]", form).val();
+                    day =
+                        conf.weekdays[
+                            $("select[name=rimonthlyweekdayofmonth]", form).val()
+                        ];
+                    if (["MO", "TU", "WE", "TH", "FR", "SA", "SU"].includes(day)) {
+                        result += `;BYDAY=${index}${day}`;
+                        human += `, ${conf.localization.monthlyWeekdayOfMonth1Human} `;
+                        human += `${
+                            conf.localization.orderIndexes[
+                                conf.orderIndexes.indexOf(index)
+                            ]
+                        } ${conf.localization.monthlyWeekdayOfMonth2} `;
+                        human += `${
+                            conf.localization.weekdays[conf.weekdays.indexOf(day)]
+                        } ${conf.localization.monthlyDayOfMonth2}`;
+                    }
                 }
                 break;
 
             case "riyearlyinterval":
                 interval = field.find("input[name=riyearlyinterval]").val();
                 if (interval !== "1") {
-                    result += ";INTERVAL=" + interval;
+                    result += `;INTERVAL=${interval}`;
                 }
-                human = interval + " " + conf.localization.yearlyInterval2;
+                human = `${interval} ${conf.localization.yearlyInterval2}`;
                 break;
 
             case "riyearlyoptions":
                 yearlyType = $("input[name=riyearlyType]:checked", form).val();
-                switch (yearlyType) {
-                    case "DAYOFMONTH":
-                        month = $("select[name=riyearlydayofmonthmonth]", form).val();
-                        day = $("select[name=riyearlydayofmonthday]", form).val();
-                        result += ";BYMONTH=" + month;
-                        result += ";BYMONTHDAY=" + day;
+                month = "";
+
+                if (yearlyType === "DAYOFMONTH") {
+                    month = $("select[name=riyearlydayofmonthmonth]", form).val();
+                    day = $("select[name=riyearlydayofmonthday]", form).val();
+                    result += `;BYMONTH=${month};BYMONTHDAY=${day}`;
+                    human += `, ${conf.localization.yearlyDayOfMonth1Human} ${
+                        conf.localization.months[month - 1]
+                    } ${day}`;
+                } else if (yearlyType === "WEEKDAYOFMONTH") {
+                    index = $("select[name=riyearlyweekdayofmonthindex]", form).val();
+                    day = $("select[name=riyearlyweekdayofmonthday]", form).val();
+                    month = $("select[name=riyearlyweekdayofmonthmonth]", form).val();
+                    result += `;BYMONTH=${month}`;
+                    if (["MO", "TU", "WE", "TH", "FR", "SA", "SU"].includes(day)) {
+                        result += `;BYDAY=${index}${day}`;
+                        human += ", " + conf.localization.yearlyWeekdayOfMonth1Human;
                         human +=
-                            ", " +
-                            conf.localization.yearlyDayOfMonth1Human +
                             " " +
-                            conf.localization.months[month - 1] +
+                            conf.localization.orderIndexes[
+                                $.inArray(index, conf.orderIndexes)
+                            ];
+                        human += " " + conf.localization.yearlyWeekdayOfMonth2;
+                        human +=
                             " " +
-                            day;
-                        break;
-                    case "WEEKDAYOFMONTH":
-                        index = $(
-                            "select[name=riyearlyweekdayofmonthindex]",
-                            form
-                        ).val();
-                        day = $("select[name=riyearlyweekdayofmonthday]", form).val();
-                        month = $(
-                            "select[name=riyearlyweekdayofmonthmonth]",
-                            form
-                        ).val();
-                        result += ";BYMONTH=" + month;
-                        if (
-                            $.inArray(day, ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]) >
-                            -1
-                        ) {
-                            result += ";BYDAY=" + index + day;
-                            human += ", " + conf.localization.yearlyWeekdayOfMonth1Human;
-                            human +=
-                                " " +
-                                conf.localization.orderIndexes[
-                                    $.inArray(index, conf.orderIndexes)
-                                ];
-                            human += " " + conf.localization.yearlyWeekdayOfMonth2;
-                            human +=
-                                " " +
-                                conf.localization.weekdays[
-                                    $.inArray(day, conf.weekdays)
-                                ];
-                            human += " " + conf.localization.yearlyWeekdayOfMonth3;
-                            human += " " + conf.localization.months[month - 1];
-                            human += " " + conf.localization.yearlyWeekdayOfMonth4;
-                        }
-                        break;
+                            conf.localization.weekdays[$.inArray(day, conf.weekdays)];
+                        human += " " + conf.localization.yearlyWeekdayOfMonth3;
+                        human += " " + conf.localization.months[month - 1];
+                        human += " " + conf.localization.yearlyWeekdayOfMonth4;
+                    }
                 }
                 break;
 
             case "rirangeoptions":
-                var rangeType = form.find("input[name=rirangetype]:checked").val();
-                switch (rangeType) {
-                    case "BYOCCURRENCES":
-                        occurrences = form
-                            .find("input[name=rirangebyoccurrencesvalue]")
-                            .val();
-                        result += ";COUNT=" + occurrences;
-                        human += ", " + conf.localization.rangeByOccurrences1Human;
-                        human += " " + occurrences;
-                        human += " " + conf.localization.rangeByOccurrences2;
-                        break;
-                    case "BYENDDATE":
-                        field = form.find("input[name=rirangebyenddatecalendar]");
-                        date = field.val();
-                        result += ";UNTIL=" + date.replaceAll("-", "") + "T000000";
-                        if (tz === true) {
-                            // Make it UTC:
-                            result += "Z";
-                        }
-                        human += ", " + conf.localization.rangeByEndDateHuman;
-                        var date_parts = date.split("-");
-                        human +=
-                            " " +
-                            format(
-                                new Date(
-                                    date_parts[0],
-                                    date_parts[1] - 1,
-                                    date_parts[2]
-                                ),
-                                conf.localization.longDateFormat,
-                                conf
-                            );
-                        break;
+                rangeType = form.find("input[name=rirangetype]:checked").val();
+                if (rangeType === "BYOCCURRENCES") {
+                    occurrences = form
+                        .find("input[name=rirangebyoccurrencesvalue]")
+                        .val();
+                    result += `;COUNT=${occurrences}`;
+                    human += `, ${conf.localization.rangeByOccurrences1Human} ${occurrences} ${conf.localization.rangeByOccurrences2}`;
+                } else if (rangeType === "BYENDDATE") {
+                    let date = form.find("input[name=rirangebyenddatecalendar]").val();
+                    if (date === "") {
+                        const today = new Date();
+                        date = `${today.getFullYear()}-${(today.getMonth() + 1)
+                            .toString()
+                            .padStart(2, "0")}-${today.getDate()}`;
+                    }
+                    result += `;UNTIL=${date.replaceAll("-", "")}T000000${
+                        tz === true ? "Z" : ""
+                    }`;
+                    human += `, ${conf.localization.rangeByEndDateHuman} `;
+                    var date_parts = date.split("-");
+                    human += format(
+                        new Date(date_parts[0], date_parts[1] - 1, date_parts[2]),
+                        conf.localization.longDateFormat,
+                        conf
+                    );
                 }
                 break;
         }
     }
 
-    if (icaldata.RDATE.length) {
-        icaldata.RDATE.sort();
+    if (RDATE.length) {
+        RDATE.sort();
         let tmp_dates = [];
         let tmp_human = [];
 
@@ -260,7 +214,7 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         //    ? `T${start_date.getHours()}:${start_date.getMinutes()}:00`
         //    : "T00:00:00";
 
-        for (let rdate of icaldata.RDATE) {
+        for (let rdate of RDATE) {
             if (rdate !== "") {
                 // RDATE values are "YYYY-MM-DD"
                 // by adding "T000000" the recurrence sequence generator of
@@ -288,11 +242,11 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
         }
     }
 
-    if (icaldata.EXDATE.length) {
-        icaldata.EXDATE.sort();
+    if (EXDATE.length) {
+        EXDATE.sort();
         let tmp_dates = [];
         let tmp_human = [];
-        for (let exdate of icaldata.EXDATE) {
+        for (let exdate of EXDATE) {
             if (exdate !== "") {
                 // EXDATE values are "YYYYMMDDTHHMMZ"
                 tmp_dates.push(exdate);
@@ -340,16 +294,12 @@ function cleanDates(dates) {
     // Get rid of timezones
     // TODO: We could parse dates and range here, maybe?
     var result = [];
-    var splitDates = dates.split(",");
-    var date;
 
-    for (date in splitDates) {
-        if (Object.prototype.hasOwnProperty.call(splitDates, date)) {
-            if (splitDates[date].indexOf("Z") !== -1) {
-                result.push(splitDates[date].substring(0, 15));
-            } else {
-                result.push(splitDates[date]);
-            }
+    for (const date of dates.split(",")) {
+        if (date.indexOf("Z") !== -1) {
+            result.push(date.substring(0, 15));
+        } else {
+            result.push(date);
         }
     }
     return result;
@@ -397,7 +347,7 @@ function parseIcal(icaldata) {
 
 function widgetLoadFromRfc5545(form, conf, icaldata, force) {
     var unsupportedFeatures = [];
-    var i, matches, rtemplate, d, input, index;
+    var matches, rtemplate, d, input, index;
     var selectors, field, radiobutton;
     var freq, interval, byday, bymonth, bymonthday, count, until;
     var day, month, year, weekday;
@@ -477,8 +427,8 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
         // set rirtemplate selector to computed value
         form.find("select[name='rirtemplate']").val(freq.toLowerCase());
 
-        for (i = 0; i < rtemplate.fields.length; i++) {
-            field = form.find("#" + rtemplate.fields[i]);
+        for (const field_id of rtemplate.fields) {
+            field = form.find(`#${field_id}`);
             switch (field.attr("id")) {
                 case "ridailyinterval":
                     field.find("input[name=ridailyinterval]").val(interval);
@@ -651,8 +601,8 @@ const RecurrenceInput = function (conf, textarea) {
     var $textarea = $(textarea);
 
     // initalize parsed icaldata
-    if (textarea.value) {
-        textarea["ical"] = parseIcal(textarea.value);
+    if (textarea.innerHTML) {
+        textarea["ical"] = parseIcal(textarea.innerHTML);
     } else {
         textarea["ical"] = {
             RRULE: "",
@@ -689,7 +639,7 @@ const RecurrenceInput = function (conf, textarea) {
         // Then show the ones that should be shown.
         var value = selector.val();
         if (value) {
-            for (let rtField of conf.rtemplate[value].fields) {
+            for (const rtField of conf.rtemplate[value].fields) {
                 self.$modalForm.find(`#${rtField}`).show();
             }
         }
@@ -738,7 +688,7 @@ const RecurrenceInput = function (conf, textarea) {
         errorarea.hide();
 
         // Add date only if it is not already in RDATE
-        if ($.inArray(datevalue, textarea["ical"].RDATE) === -1) {
+        if (!textarea["ical"].RDATE.includes(datevalue)) {
             textarea["ical"].RDATE.push(datevalue);
             var date_parts = datevalue.split("-");
             var $newdate =
@@ -780,10 +730,9 @@ const RecurrenceInput = function (conf, textarea) {
         occurrenceDiv = element.find(".rioccurrences");
         occurrenceDiv.hide();
 
-        var year, month, day;
-        year = startdate.getFullYear();
-        month = startdate.getMonth() + 1;
-        day = startdate.getDate();
+        const year = startdate.getFullYear();
+        const month = startdate.getMonth() + 1;
+        const day = startdate.getDate();
 
         var data = {
             year: year,
@@ -953,53 +902,67 @@ const RecurrenceInput = function (conf, textarea) {
     // Loading (populating) display and form widget with
     // passed RFC5545 string (data)
     function loadData(form) {
-        var selector, startdate, dayindex, day;
-
         widgetLoadFromRfc5545(form, conf, textarea["ical"], true);
 
-        startdate = findStartDate();
+        const startdate = findStartDate();
 
         if (startdate !== null) {
             // If the date is a real date, set the defaults in the form
-            form.find("select[name=rimonthlydayofmonthday]").val(startdate.getDate());
-            dayindex = conf.orderIndexes[Math.floor((startdate.getDate() - 1) / 7)];
-            day = conf.weekdays[startdate.getDay()];
-            form.find("select[name=rimonthlyweekdayofmonthindex]").val(dayindex);
-            form.find("select[name=rimonthlyweekdayofmonth]").val(day);
+            document.querySelector("select[name=rimonthlydayofmonthday]").value =
+                startdate.getDate();
+            const dayindex =
+                conf.orderIndexes[Math.floor((startdate.getDate() - 1) / 7)];
+            const day = conf.weekdays[startdate.getDay()];
+            document.querySelector("select[name=rimonthlyweekdayofmonthindex]").value =
+                dayindex;
+            document.querySelector("select[name=rimonthlyweekdayofmonth]").value = day;
 
-            form.find("select[name=riyearlydayofmonthmonth]").val(
-                startdate.getMonth() + 1
-            );
-            form.find("select[name=riyearlydayofmonthday]").val(startdate.getDate());
-            form.find("select[name=riyearlyweekdayofmonthindex]").val(dayindex);
-            form.find("select[name=riyearlyweekdayofmonthday]").val(day);
-            form.find("select[name=riyearlyweekdayofmonthmonth]").val(
-                startdate.getMonth() + 1
-            );
+            document.querySelector("select[name=riyearlydayofmonthmonth]").value =
+                startdate.getMonth() + 1;
+            document.querySelector("select[name=riyearlydayofmonthday]").value =
+                startdate.getDate();
+            document.querySelector("select[name=riyearlyweekdayofmonthindex]").value =
+                dayindex;
+            document.querySelector("select[name=riyearlyweekdayofmonthday]").value = day;
+            document.querySelector("select[name=riyearlyweekdayofmonthmonth]").value =
+                startdate.getMonth() + 1;
 
             // Now when we have a start date, we can also do an ajax call to calculate occurrences:
             var rfc5545 =
-                textarea.value ||
-                widgetSaveToRfc5545(form, textarea["ical"], conf, false).result;
+                textarea.innerHTML ||
+                widgetSaveToRfc5545(
+                    form,
+                    textarea["ical"].RDATE,
+                    textarea["ical"].EXDATE,
+                    conf,
+                    false
+                ).result;
 
             loadOccurrences(startdate, rfc5545, 0, false);
 
             // Show the add and refresh buttons:
-            form.find("div.rioccurrencesactions").show();
+            document.querySelector("div.rioccurrencesactions").style.display = "block";
         } else {
             // No EXDATE/RDATE support
-            form.find("div.rioccurrencesactions").hide();
+            document.querySelector("div.rioccurrencesactions").style.display = "none";
         }
 
-        selector = form.find("select[name=rirtemplate]");
-        displayFields(selector);
+        displayFields(form.find("select[name=rirtemplate]"));
     }
 
     function recurrenceOn(form) {
-        var RFC5545 = widgetSaveToRfc5545(form, textarea["ical"], conf, false);
-        var label = self.display.find("label[class=ridisplay]");
+        var RFC5545 = widgetSaveToRfc5545(
+            form,
+            textarea["ical"].RDATE,
+            textarea["ical"].EXDATE,
+            conf,
+            false
+        );
+        var label = self.display.find("label[class=ridisplay-label]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
-        $textarea.val(RFC5545.result).trigger("change");
+        textarea["ical"] = parseIcal(RFC5545.result);
+        textarea.innerHTML = RFC5545.result;
+        $textarea.trigger("change");
         var startdate = findStartDate();
         if (startdate !== null) {
             loadOccurrences(startdate, RFC5545.result, 0, true);
@@ -1009,9 +972,16 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function recurrenceOff() {
-        var label = self.display.find("label[class=ridisplay]");
+        var label = self.display.find("label[class=ridisplay-label]");
         label.text(conf.localization.displayUnactivate);
-        $textarea.val("").trigger("change"); // Clear the textarea.
+        // reset ical object
+        textarea["ical"] = {
+            RRULE: "",
+            RDATE: [],
+            EXDATE: [],
+        };
+        textarea.innerHTML = "";
+        $textarea.trigger("change"); // Clear the textarea.
         self.display.find(".rioccurrences").hide();
         self.display.find('a[name="riedit"]').text(conf.localization.add_rules);
         self.display.find('a[name="ridelete"]').hide();
@@ -1140,8 +1110,13 @@ const RecurrenceInput = function (conf, textarea) {
         if (checkFields(form)) {
             loadOccurrences(
                 startDate,
-                widgetSaveToRfc5545(self.$modalForm, textarea["ical"], conf, false)
-                    .result,
+                widgetSaveToRfc5545(
+                    self.$modalForm,
+                    textarea["ical"].RDATE,
+                    textarea["ical"].EXDATE,
+                    conf,
+                    false
+                ).result,
                 0,
                 false
             );
@@ -1176,7 +1151,9 @@ const RecurrenceInput = function (conf, textarea) {
                 input[name=rimonthlyinterval],
                 input[name=riyearlyinterval],
                 input[name=rirangebyoccurrencesvalue],
-                input[name=rirangebyenddatecalendar]`
+                input[name=rirangebyenddatecalendar],
+                #rimonthlyoptions select,
+                #riyearlyinterval select`
             )
             .on("change", function () {
                 // Update only if the occurances are shown
@@ -1215,10 +1192,10 @@ const RecurrenceInput = function (conf, textarea) {
         },
     });
 
-    if (textarea.value) {
+    if (textarea.innerHTML) {
         var result = widgetLoadFromRfc5545(form, conf, textarea["ical"], false);
         if (result === -1) {
-            var label = self.display.find("label[class=ridisplay]");
+            var label = self.display.find("label[class=ridisplay-label]");
             label.text(conf.localization.noRule);
         } else {
             recurrenceOn(form);
