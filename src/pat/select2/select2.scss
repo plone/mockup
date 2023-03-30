@@ -1,15 +1,14 @@
 .select2-container {
     margin-bottom: 1em;
-    background: #fff!important;
-    color: #000!important;
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
     border-radius: 4px;
 
-    .select2-choice {
-        background: var(--bs-secondary-bg-subtle)!important;
-        background-image: none!important;
-        background-color: var(--bs-secondary-bg-subtle)!important;
+    .select2-choice, .select2-choices {
+        background-image: none;
+        background-color: var(--bs-body-bg);
         border-color: var(--bs-secondary)!important;
-        color: var(--bs-dark-text)!important;
+        color: var(--bs-body-color);
         box-shadow: none!important;
 
         .select2-arrow {
@@ -57,18 +56,13 @@
 
 // Overwrite default styles for dark mode theming
 .select2-drop {
-    background: var(--bs-secondary-bg-subtle)!important;
-    color: var(--bs-secondary-text)!important;
-
-    .select2-search {
-        background-color: var(--bs-secondary-bg-subtle)!important;
-        color: var(--bs-secondary-text)!important;
-    }
+    background: var(--bs-body-bg);
+    color: var(--bs-secondary-text);
 }
 
 .select2-results {
     max-height: 950px;
-    background: var(--bs-secondary-bg-subtle);
+    background: var(--bs-body-bg);
     color: var(--bs-secondary-text);
 
     .select2-result {
@@ -78,7 +72,7 @@
         border-right: 0.3em solid transparent;
 
         &.select2-highlighted {
-            background: var(--bs-link-color)!important;
+            background-color: var(--bs-secondary-bg) !important;
         }
 
         &-label {
