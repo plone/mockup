@@ -2,6 +2,24 @@
 
 
 
+## [5.1.0-alpha.1](https://github.com/plone/mockup/compare/5.1.0-alpha.0...5.1.0-alpha.1) (2023-03-30)
+
+
+### Features
+
+
+* add `pat-checklist` ([a6d6ffc](https://github.com/plone/mockup/commit/a6d6ffc6567f888b9fb61cc7075bf3ed47c2db62))
+
+* **pat select2:** update styles to more closely resemble styles of classic.demo.plone.org ([6cb0822](https://github.com/plone/mockup/commit/6cb0822fc6d6e131f986d3ccbba28cbd4ef88356))
+
+* update bootstrap to 5.3.0-alpha2 ([7e9c832](https://github.com/plone/mockup/commit/7e9c8325f6401c8de1b9e5dbf69210c6ec2768e7))
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** Various UI issues in recurrence modal. ([0c74143](https://github.com/plone/mockup/commit/0c74143253d06305fb44bdb885f5460596fab209))
+
 ## [5.1.0-alpha.0](https://github.com/plone/mockup/compare/5.0.5...5.1.0-alpha.0) (2023-03-04)
 
 
