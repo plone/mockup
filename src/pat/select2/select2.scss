@@ -1,24 +1,27 @@
 .select2-container {
     margin-bottom: 1em;
-    background: #fff!important;
-    color: #000!important;
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
     border-radius: 4px;
 
-    .select2-choice {
-        background: var(--bs-secondary-bg)!important;
-        background-image: none!important;
-        background-color: var(--bs-secondary-bg)!important;
+    .select2-choice, .select2-choices {
+        background-image: none;
+        background-color: var(--bs-body-bg);
         border-color: var(--bs-secondary)!important;
-        color: var(--bs-dark-text)!important;
+        color: var(--bs-body-color);
         box-shadow: none!important;
 
-        .select2-arrow b {
-            background-color: var(--bs-secondary-bg)!important;
+        .select2-arrow {
+            border-left: none!important;
+
+            b {
+                background-color: var(--bs-secondary-bg-subtle)!important;
+            }
         }
     }
 
     .select2-search {
-        background-color: var(--bs-secondary-bg)!important;
+        background-color: var(--bs-secondary-bg-subtle)!important;
         color: var(--bs-secondary-text)!important;
     }
 }
@@ -53,33 +56,32 @@
 
 // Overwrite default styles for dark mode theming
 .select2-drop {
-    background: var(--bs-secondary-bg)!important;
-    color: var(--bs-secondary-text)!important;
+    background: var(--bs-body-bg);
+    color: var(--bs-secondary-text);
 }
 
 .select2-results {
     max-height: 950px;
-    background: var(--bs-secondary-bg);
+    background: var(--bs-body-bg);
     color: var(--bs-secondary-text);
 
     .select2-result {
+        padding: 2px 0;
         background-color: transparent;
         border-left: 0.3em solid transparent;
         border-right: 0.3em solid transparent;
 
-        &:nth-child(odd) {
-            background-color: var(--bs-secondary-bg-subtle)!important;
-        }
-
         &.select2-highlighted {
-            border-left: 0.3em solid #007bb3;
-            border-right: 0.3em solid #007bb3;
+            background-color: var(--bs-secondary-bg) !important;
         }
 
         &-label {
             padding: 0;
-            color: var(--bs-link-color);
         }
+    }
+
+    li.select2-result-with-children>.select2-result-label {
+        font-weight: bold;
     }
 
     .select2-no-results {
