@@ -13,7 +13,7 @@
         "@patternslib/patternslib": "^9.8.2",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "^5.3.0-alpha1",
+        "bootstrap": "^5.3.0-alpha2",
         "bootstrap-icons": "^1.10.3",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
