@@ -150,7 +150,10 @@ function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
                     } ${day}`;
                 } else if (yearlyType === "WEEKDAYOFMONTH") {
                     index = $("select[name=riyearlyweekdayofmonthindex]", form).val();
-                    day = $("select[name=riyearlyweekdayofmonthday]", form).val();
+                    day =
+                        conf.weekdays[
+                            $("select[name=riyearlyweekdayofmonthday]", form).val()
+                        ];
                     month = $("select[name=riyearlyweekdayofmonthmonth]", form).val();
                     result += `;BYMONTH=${month}`;
                     if (["MO", "TU", "WE", "TH", "FR", "SA", "SU"].includes(day)) {
@@ -489,7 +492,8 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         field
                             .find("select[name=rimonthlyweekdayofmonthindex]")
                             .val(index);
-                        field.find("select[name=rimonthlyweekdayofmonth]").val(weekday);
+                        const day_index = conf.weekdays.indexOf(weekday);
+                        field.find("select[name=rimonthlyweekdayofmonth]").val(day_index);
                     }
 
                     selectors = field.find("input[name=rimonthlytype]");
@@ -540,9 +544,11 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         field
                             .find("select[name=riyearlyweekdayofmonthindex]")
                             .val(index);
+
+                        const weekday_index = conf.weekdays.indexOf(weekday);
                         field
                             .find("select[name=riyearlyweekdayofmonthday]")
-                            .val(weekday);
+                            .val(weekday_index);
                         field
                             .find("select[name=riyearlyweekdayofmonthmonth]")
                             .val(bymonth);
@@ -1153,6 +1159,7 @@ const RecurrenceInput = function (conf, textarea) {
                 input[name=rirangebyoccurrencesvalue],
                 input[name=rirangebyenddatecalendar],
                 #rimonthlyoptions select,
+                #riyearlyoptions select,
                 #riyearlyinterval select`
             )
             .on("change", function () {
