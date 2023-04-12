@@ -664,8 +664,10 @@ export default Base.extend({
         var cssclasses = [
             "image-richtext",
             self.$align.val(),
-            "picture-variant-" + self.$scale.val(),
         ];
+        if(self.linkType !== "externalImage"){
+            cssclasses.push("picture-variant-" + self.$scale.val())
+        }
         if (captionFromDescription || caption) {
             cssclasses.push("captioned");
         }
@@ -681,11 +683,14 @@ export default Base.extend({
                 "alt": self.$alt.val(),
                 "class": cssclasses.join(" "),
                 "data-linkType": self.linkType,
-                "data-picturevariant": self.$scale.val(),
                 "data-scale": self.getScaleFromSrcset(self.$scale.val()),
             },
             self.linkTypes[self.linkType].attributes()
         );
+        if(self.linkType !== "externalImage"){
+            data["data-picturevariant"] = self.$scale.val();
+        }
+
         if (caption && !captionFromDescription) {
             data["data-captiontext"] = caption;
         }
