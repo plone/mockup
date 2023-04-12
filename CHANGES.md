@@ -2,6 +2,14 @@
 
 
 
+## [5.0.9](https://github.com/plone/mockup/compare/5.0.8...5.0.9) (2023-04-12)
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** Fixes for 'Repeat on' for Yearly and Monthly options ([df4d4e6](https://github.com/plone/mockup/commit/df4d4e6e7d265e741b508430d8c58c4a58f69402))
+
 ## [5.0.8](https://github.com/plone/mockup/compare/5.0.7...5.0.8) (2023-03-29)
 
 ## [5.0.7](https://github.com/plone/mockup/compare/5.0.6...5.0.7) (2023-03-29)
