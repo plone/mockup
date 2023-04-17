@@ -2,6 +2,30 @@
 
 
 
+## [5.1.0-alpha.2](https://github.com/plone/mockup/compare/5.1.0-alpha.1...5.1.0-alpha.2) (2023-04-17)
+
+
+### Features
+
+
+* Update Bootstrap Icons 1.10.4 ([9a2111a](https://github.com/plone/mockup/commit/9a2111a35e58e0949c2eecf930372a2d9dd25dbb))
+
+* Upgrade bootstrap to 5.3.0-alpha3 ([4d1f63e](https://github.com/plone/mockup/commit/4d1f63e568fa94a6381cd65ed4247f1102f7eef1))
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** Fixes for 'Repeat on' for Yearly and Monthly options ([d57d9c2](https://github.com/plone/mockup/commit/d57d9c2c196e1fb91b7a7c74932b1171cda8493b))
+
+* **pat tinymce:** Do not add picture-variants classes and attributes to external images. ([a6e6161](https://github.com/plone/mockup/commit/a6e6161816e188c703b150c2f26e81f2d5de41e9))Fixes: https://github.com/plone/mockup/issues/1302
+
+
+### Maintenance
+
+
+* Version resolution for nwsapi ([877dfca](https://github.com/plone/mockup/commit/877dfcab2f6dcf80de3ccfc2e0940f82d5ab2dcc))
+
 ## [5.1.0-alpha.1](https://github.com/plone/mockup/compare/5.1.0-alpha.0...5.1.0-alpha.1) (2023-03-30)
 
 
