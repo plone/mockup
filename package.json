@@ -6,7 +6,8 @@
     "main": "./src/patterns.js",
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern."
+        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
+        "nwsapi": "Since version 2.2.3 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
     },
     "dependencies": {
         "@patternslib/pat-code-editor": "^4.0.0",
@@ -58,6 +59,7 @@
         "datatables.net": "<1.13",
         "datatables.net-bs5": "<1.13",
         "jquery": "3.6.3",
+        "nwsapi": "2.2.2",
         "underscore": "1.13.6"
     },
     "scripts": {
