@@ -2,6 +2,14 @@
 
 
 
+## [5.0.10](https://github.com/plone/mockup/compare/5.0.9...5.0.10) (2023-04-17)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** Do not add picture-variants classes and attributes to external images. ([37b2d36](https://github.com/plone/mockup/commit/37b2d36abb58fa50facf56f4d1260ee5e0dc5e5d)), closes [#1302](https://github.com/plone/mockup/issues/1302)Fixes: #1302
+
 ## [5.0.9](https://github.com/plone/mockup/compare/5.0.8...5.0.9) (2023-04-12)
 
 
