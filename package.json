@@ -15,7 +15,7 @@
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "5.3.0-alpha3",
-        "bootstrap-icons": "^1.10.3",
+        "bootstrap-icons": "^1.10.4",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
         "datatables.net-bs5": "1.12.1",
