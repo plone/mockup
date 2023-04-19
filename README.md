@@ -99,3 +99,9 @@ parts +=
 - Aunque innecesario, solicitamos compilar todos los "patterns".
 - Dentro de plone.staticresources se crearán las versiones compiladas, de las que podemos hacer `git commit`
 - Podemos crear la nueva versión de plone.staticresources con el número de versión correspondiente. **Atención**: el número de versión debe llevar el marcador `once` para diferenciarlo de las versiones propias de Plone. Debe ser algo así: `1.2.22.once.1`, siendo 1.2.22 la versión original del paquete del que hemos partido el desarrollo
+=======
+# Plone Mockup
+
+- Aunque innecesario, solicitamos compilar todos los "patterns".
+- Dentro de plone.staticresources se crearán las versiones compiladas, de las que podemos hacer `git commit`
+- Podemos crear la nueva versión de plone.staticresources con el número de versión correspondiente. **Atención**: el número de versión debe llevar el marcador `once` para diferenciarlo de las versiones propias de Plone. Debe ser algo así: `1.2.22.once.1`, siendo 1.2.22 la versión original del paquete del que hemos partido el desarrollo
