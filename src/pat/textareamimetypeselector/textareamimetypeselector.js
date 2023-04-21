@@ -13,11 +13,13 @@ export default Base.extend({
             "text/html": { pattern: "tinymce", patternOptions: {} },
         },
     },
-    init() {
-        this.el.addEventListener("input", (e) => this.init_textareas(e.target.value));
-        this.init_textareas(this.el.value);
+
+    async init() {
+        this.el.addEventListener("input", async (e) => await this.init_textareas(e.target.value));
+        await this.init_textareas(this.el.value);
     },
-    init_textareas(mimetype) {
+
+    async init_textareas(mimetype) {
         const pattern_config = this.options.widgets[mimetype];
 
         // there might be more than one textareas with the same name
