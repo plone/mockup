@@ -27,4 +27,4 @@ Load remote or local content into a target.
 
 ### Example 2
 
-<a href="#" class="pat-contentloader" data-pat-contentloader="url:/something.html;">Load content</a>
+<a href="#" class="pat-contentloader" data-pat-contentloader="url:./index.html">Load content</a>
