@@ -68,9 +68,8 @@ export default Base.extend({
         // All links with an http href (without the link-plain class), not within this site,
         // and no img children should be wrapped in a link-external span
         const url = window.location.protocol + "//" + window.location.host;
-        const links = this.el.querySelectorAll(
-            `a[href]:not(.link-plain):not([href^="${url}"]):not([href^="#"])`
-        );
+        const selector = `a[href]:not(.link-plain, [href^="${url}"], [href^="#"])`;
+        const links = this.el.querySelectorAll(selector);
         //:not(:has(img))
         for (const link of links) {
             let link_url;
