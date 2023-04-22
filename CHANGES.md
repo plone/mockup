@@ -2,6 +2,24 @@
 
 
 
+## [5.1.0-alpha.3](https://github.com/plone/mockup/compare/5.1.0-alpha.2...5.1.0-alpha.3) (2023-04-22)
+
+
+### Bug Fixes
+
+
+* **pat textareamimetypeselector:** Async initialization of textareas. Fixes TinyMCE in modals not showing up (see mosaic) ([c6d359c](https://github.com/plone/mockup/commit/c6d359c3d0dcebbee8a99cae8ca78a3ebef14947))
+
+
+
+### Maintenance
+
+
+* **pat-contentloader:** Fix demo with loading an external page by loading itself. ([20f3b02](https://github.com/plone/mockup/commit/20f3b0273c40a2c50b4cd507b0da91101d8aadd8))
+
+
+* Upgrade dependencies. ([0421f2a](https://github.com/plone/mockup/commit/0421f2a5bafd5e6d9740f17fbd877ad28f23a1e6))
+
 ## [5.1.0-alpha.2](https://github.com/plone/mockup/compare/5.1.0-alpha.1...5.1.0-alpha.2) (2023-04-17)
 
 
