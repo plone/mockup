@@ -27,6 +27,31 @@ the code to the requirements of the test framework is Ok in this case.
 
 * Upgrade dependencies. ([9f0a0a7](https://github.com/plone/mockup/commit/9f0a0a756849f07bc3c0b0758992b26c4252890c))
 
+## [5.0.11](https://github.com/plone/mockup/compare/5.0.10...5.0.11) (2023-04-22)
+
+
+### Bug Fixes
+
+
+* **pat markspeciallinks:** Fix selector for tests. ([dcc31ec](https://github.com/plone/mockup/commit/dcc31ec90b56630b83001afb9d66c91472b4e34b))
+
+  Latest jest/jsdom requires a :not(a, b) syntax rather than :not(a):not(b).
+Since it has the exact same semantics and solves a problem quickly, adapting
+the code to the requirements of the test framework is Ok in this case.
+
+
+* **pat textareamimetypeselector:** Async initialization of textareas. Fixes TinyMCE in modals not showing up (see mosaic) ([5e70d1b](https://github.com/plone/mockup/commit/5e70d1bc724008edcc6343da82bea2962c1ef289))
+
+
+
+### Maintenance
+
+
+* **pat-contentloader:** Fix demo with loading an external page by loading itself. ([dc5a074](https://github.com/plone/mockup/commit/dc5a074e025a1c4b88e30d3accfe45c68c0b994d))
+
+
+* Upgrade dependencies. ([9f0a0a7](https://github.com/plone/mockup/commit/9f0a0a756849f07bc3c0b0758992b26c4252890c))
+
 ## [5.0.10](https://github.com/plone/mockup/compare/5.0.9...5.0.10) (2023-04-17)
 
 
