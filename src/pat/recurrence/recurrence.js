@@ -562,7 +562,8 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                     break;
 
                 case "rirangeoptions":
-                    var rangeType = "NOENDDATE";
+                    // default value per configuration
+                    var rangeType = conf.hasRepeatForeverButton ? "NOENDDATE" : "BYOCCURRENCES";
 
                     if (count) {
                         rangeType = "BYOCCURRENCES";
