@@ -1,15 +1,7 @@
 <li class="pat-relateditems-recentlyused dropdown-item">
   <a class="pat-relateditems-recentlyused-select" data-uid="<%- UID %>">
-    <span
-      class="pat-relateditems-recentlyused-title <%- portal_type ? 'contenttype-' + portal_type.toLowerCase() : '' %> <%- review_state ? 'state-' + review_state : '' %>"
-      title="<%- portal_type %>">
-      <%- Title %>
-    </span>
+    <span class="<%- itemclass %>" title="<%- portal_type %>"><%- Title %></span>
     <span class="pat-relateditems-recentlyused-path"><%- path %></span>
-    <% if (getURL && (getIcon || portal_type === "Image")) { %>
-      <span class="pat-relateditems-recentlyused-image">
-        <img src="<%- getURL %>/@@images/image/tile" />
-      </span>
-    <% } %>
+    <span class="pat-relateditems-recentlyused-image"><%= imgsrc %></span>
   </a>
 </li>
