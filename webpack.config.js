@@ -92,7 +92,7 @@ module.exports = () => {
 
     config.plugins.push(
         mf_config({
-            name: "patternslib",
+            name: package_json.name,
             filename: "remote.min.js",
             remote_entry: config.entry["bundle.min"],
             dependencies: {
