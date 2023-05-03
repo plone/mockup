@@ -714,10 +714,6 @@ export default Base.extend({
             };
         }
 
-        if (self.imgElm) {
-            self.dom.remove(self.imgElm);
-        }
-
         data.id = "__mcenew";
         var html_inner = self.dom.createHTML("img", data);
         var html_string;
