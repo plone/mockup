@@ -2,6 +2,27 @@
 
 
 
+## [5.0.12](https://github.com/plone/mockup/compare/5.0.11...5.0.12) (2023-05-17)
+
+
+### Bug Fixes
+
+
+* **pat reccurrence:** Fix default selected range option if there's no "repeat forever" button (which is default in the event behavior). ([818313d](https://github.com/plone/mockup/commit/818313da783b58a93d8d774260c752108cb99c23))
+
+
+* **pat tinymce:** Add urlconverter_callback and do not convert external links/images urls ([8e1c6be](https://github.com/plone/mockup/commit/8e1c6be8c60ab6ca889ed00cfacbdf076e01707a))
+
+
+* **pat tinymce:** Do not remove current paragraph when inserting image. ([e322044](https://github.com/plone/mockup/commit/e32204440c41cf3b0bf15d5ae206ee319712582a))
+
+
+
+### Maintenance
+
+
+* update dependencies ([1c28017](https://github.com/plone/mockup/commit/1c28017ebb2b4359accf7dd6f4fc7a26d5027131))
+
 ## [5.0.11](https://github.com/plone/mockup/compare/5.0.10...5.0.11) (2023-04-22)
 
 
