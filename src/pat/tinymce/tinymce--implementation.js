@@ -278,6 +278,20 @@ export default class TinyMCE {
             }
         }
 
+        // add "urlconverter_callback" to leave external URLs/Images as is
+        tinyOptions["urlconverter_callback"] = (url, node, on_save, name) => {
+            if (url.indexOf("http") === 0) {
+                // if url starts with "http" return it as is
+                return url;
+            }
+            // otherwise default tiny behavior
+            if (self.tiny.settings.relative_urls) {
+                return self.tiny.documentBaseURI.toRelative(url);
+            }
+            url = self.tiny.documentBaseURI.toAbsolute(url, self.tiny.settings.remove_script_host);
+            return url;
+        }
+
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
 
