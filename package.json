@@ -85,6 +85,7 @@
     },
     "files": [
         "/dist",
+        "/patches",
         "/src",
         "/webpack.config.js"
     ],
