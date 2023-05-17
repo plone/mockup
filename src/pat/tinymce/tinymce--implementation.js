@@ -279,7 +279,7 @@ export default class TinyMCE {
         }
 
         // add "urlconverter_callback" to leave external URLs/Images as is
-        tinyOptions["urlconverter_callback"] = (url, node, on_save, name) => {
+        tinyOptions["urlconverter_callback"] = (url) => {
             if (url.indexOf("http") === 0) {
                 // if url starts with "http" return it as is
                 return url;
