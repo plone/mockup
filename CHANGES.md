@@ -2,6 +2,33 @@
 
 
 
+## [5.1.0-alpha.4](https://github.com/plone/mockup/compare/5.1.0-alpha.3...5.1.0-alpha.4) (2023-05-17)
+
+
+### Bug Fixes
+
+
+* Get the remote bundle name from package.json. ([079c3c2](https://github.com/plone/mockup/commit/079c3c272af87fcdb87c796d5d0287598b3ad614))
+
+
+* Include the select2 patch in the npm package. ([6b8d0fb](https://github.com/plone/mockup/commit/6b8d0fbc6ab0a04c4ed6e772473905c24793fb74))
+
+
+* **pat reccurrence:** Fix default selected range option if there's no "repeat forever" button (which is default in the event behavior). ([06441b1](https://github.com/plone/mockup/commit/06441b1675d9b228fe1b50c2505a09ed228ad4d9))
+
+
+* **pat tinymce:** Add urlconverter_callback and do not convert external links/images urls ([aca7201](https://github.com/plone/mockup/commit/aca72015d68c87cb32ee2d606b270fe1216d8485))
+
+
+* **pat tinymce:** Do not remove current paragraph when inserting image. ([856b519](https://github.com/plone/mockup/commit/856b519c8f598aa93d629d1b786984c7b08e7db3))
+
+
+
+### Maintenance
+
+
+* update dependencies ([44c5a0b](https://github.com/plone/mockup/commit/44c5a0b1d6a5e9417f5cdd744df6e0c9fed27893))
+
 ## [5.1.0-alpha.3](https://github.com/plone/mockup/compare/5.1.0-alpha.2...5.1.0-alpha.3) (2023-04-22)
 
 
