@@ -22,6 +22,26 @@
 
   Also use @patternslib/dev 3.3.5 which fixes missing build files in the npm release.
 
+## [5.0.13](https://github.com/plone/mockup/compare/5.0.12...5.0.13) (2023-05-29)
+
+
+### Bug Fixes
+
+
+* Get the remote bundle name from package.json. ([0ea9a92](https://github.com/plone/mockup/commit/0ea9a92a665595845e06af17ac3415205ccfb95f))
+
+
+* Include the select2 patch in the npm package. ([74655eb](https://github.com/plone/mockup/commit/74655eb7e328a7968fa36dea8557981ebb6c5bd0))
+
+
+
+### Maintenance
+
+
+* Upgrade dependencies. ([e5635d1](https://github.com/plone/mockup/commit/e5635d1d0569c5633344e5f4074b85e2f8e2b098))
+
+  Also use @patternslib/dev 3.3.5 which fixes missing build files in the npm release.
+
 ## [5.0.12](https://github.com/plone/mockup/compare/5.0.11...5.0.12) (2023-05-17)
 
 
