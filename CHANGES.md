@@ -2,6 +2,16 @@
 
 
 
+## [5.1.0-alpha.5](https://github.com/plone/mockup/compare/5.1.0-alpha.4...5.1.0-alpha.5) (2023-05-30)
+
+
+### Maintenance
+
+
+* Upgrade dependencies. ([83189bf](https://github.com/plone/mockup/commit/83189bfb082a711ee1e7c07957b00fbf7436a1a2))
+
+  Also use @patternslib/dev 3.3.5 which fixes missing build files in the npm release.
+
 ## [5.1.0-alpha.4](https://github.com/plone/mockup/compare/5.1.0-alpha.3...5.1.0-alpha.4) (2023-05-17)
 
 
