@@ -14,8 +14,8 @@
         "@patternslib/patternslib": "^9.9.4",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "5.3.0-alpha3",
-        "bootstrap-icons": "1.10.4",
+        "bootstrap": "5.3.0",
+        "bootstrap-icons": "1.10.5",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
         "datatables.net-bs5": "1.12.1",
@@ -40,7 +40,7 @@
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.0",
         "tinymce": "^5.10.7",
-        "tinymce-i18n": "^22.12.4",
+        "tinymce-i18n": "^22.12.27",
         "underscore": "^1.13.6"
     },
     "devDependencies": {
