@@ -7,9 +7,5 @@
     </span>
     <span class="pat-relateditems-item-path"><%- path %></span>
   </div>
-  <% if (getURL && (getIcon || portal_type === "Image")) { %>
-    <div class="pat-relateditems-item-image">
-      <img src="<%- getURL %>/@@images/image/thumb" />
-    </div>
-  <% } %>
+  <%= imgsrc %>
 </div>

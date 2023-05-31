@@ -1,0 +1,10 @@
+<div class="favorites dropdown dropdown-menu-end ms-2">
+  <button type="button" class="favorites dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= icon_favorites %>
+    <%- favText %>
+    <span class="caret"/>
+  </button>
+  <ul class="dropdown-menu">
+    <%= favItems %>
+  </ul>
+</div>

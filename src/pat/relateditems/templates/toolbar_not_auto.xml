@@ -1,0 +1,4 @@
+<div class="btn-group mode-selector" role="group">
+  <button type="button" class="mode search btn <%- searchModeClass %>"><%- searchModeText %></button>
+  <button type="button" class="mode browse btn <%- browseModeClass %>"><%- browseModeText %></button>
+</div>

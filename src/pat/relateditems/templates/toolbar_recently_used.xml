@@ -1,0 +1,10 @@
+<div class="recentlyUsed dropdown ms-2">
+  <button type="button" class="recentlyUsed dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= icon_recently_used %>
+    <%- recentlyUsedText %>
+    <span class="caret"/>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <%= recentlyUsedItems %>
+  </ul>
+</div>

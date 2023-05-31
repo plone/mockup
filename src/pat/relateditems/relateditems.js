@@ -66,6 +66,10 @@ export default Base.extend({
         resultTemplateSelector: null,
         selectionTemplateSelector: null,
         toolbarTemplateSelector: null,
+        toolbarNotAutoTemplateSelector: null,
+        toolbarRecentlyUsedTemplateSelector: null,
+        toolbarFavoritesTemplateSelector: null,
+        toolbarUploadTemplateSelector: null,
 
         // needed
         multiple: true,
@@ -114,7 +118,7 @@ export default Base.extend({
             one_level_up: _t("Go one level up"),
         });
         options._item = item;
-        return _.template(template)(options);
+        return utils.template(template)(options);
     },
 
     setAjax() {
@@ -230,9 +234,9 @@ export default Base.extend({
 
     async renderToolbar() {
         const path = this.currentPath;
-        let html;
 
         const parts = path.split("/");
+        let html = "";
         let itemPath = "";
         let itemsHtml = "";
         for (const part of parts) {
@@ -255,29 +259,66 @@ export default Base.extend({
         let recentlyUsedHtml = "";
         if (this.options.recentlyUsed) {
             const recentlyUsed = this.recentlyUsed(true); // filter out only those items which can actually be selected
-            for (const item of recentlyUsed.reverse()) {
+            for (let item of recentlyUsed.reverse()) {
                 // reverse to get newest first.
+                if (item['imgsrc'] === undefined) {
+                    item['imgsrc'] = '';
+                }
+
+                if (item['getURL'] && (item['getIcon'] || item['portal_type'] === "Image")){
+                    item['imgsrc'] = '<img src="' + item['getURL'] + '/@@images/image/tile">'
+                }
+
+                var klass = [
+                    'pat-relateditems-recentlyused-title',
+                    item['portal_type'] ? ' contenttype-' + item['portal_type'].toLowerCase() : '',
+                    item['review_state'] ? ' state-' + item['review_state'] : ''
+                ]
+
+                item['itemclass'] =  klass.join(' ')
+
                 recentlyUsedHtml =
                     recentlyUsedHtml + this.applyTemplate("recentlyused", item);
             }
         }
 
-        html = this.applyTemplate("toolbar", {
+        if (this.options.mode !=='auto'){
+            html += this.applyTemplate('toolbarNotAuto', {
+                searchModeClass: (this.options.mode=='search') ? 'btn-primary':'btn-default',
+                searchModeText: _t('Search'),
+                browseModeClass: (this.options.mode=='browse') ? 'btn-primary':'btn-default',
+                browseModeText: _t('Browse'),
+            });
+        }
+
+        html += this.applyTemplate("toolbar", {
             items: itemsHtml,
-            favItems: favoritesHtml,
-            favText: _t("Favorites"),
             searchText: _t("Current path:"),
-            searchModeText: _t("Search"),
-            browseModeText: _t("Browse"),
-            recentlyUsedItems: recentlyUsedHtml,
-            recentlyUsedText: _t("Recently Used"),
             icon_root: await utils.resolveIcon("house-fill"),
-            icon_recently_used: await utils.resolveIcon("grid-fill"),
-            icon_favorites: await utils.resolveIcon("star-fill"),
-            icon_upload: await utils.resolveIcon("cloud-arrow-up"),
-            upload: this.options.upload,
-            upload_text: _t("Upload"),
         });
+
+        if (recentlyUsedHtml != "") {
+            html += this.applyTemplate('toolbarRecentlyUsed', {
+              recentlyUsedItems: recentlyUsedHtml,
+              recentlyUsedText: _t('Recently Used'),
+              icon_recently_used: await utils.resolveIcon("grid-fill"),
+            });
+        }
+
+        if (this.options.favorites.length > 0){
+            html += this.applyTemplate('toolbarFavorites', {
+              favItems: favoritesHtml,
+              favText: _t('Favorites'),
+              icon_favorites: await utils.resolveIcon("star-fill"),
+            });
+        }
+
+        if (this.options.upload){
+            html += this.applyTemplate('toolbarUpload', {
+                icon_upload: await utils.resolveIcon("cloud-arrow-up"),
+                upload_text: _t("Upload"),
+            });
+        }
 
         this.$toolbar.html(html);
 
@@ -512,6 +553,9 @@ export default Base.extend({
         this.resultTemplate = (await import("./templates/result.xml")).default; // prettier-ignore
         this.selectionTemplate = (await import("./templates/selection.xml")).default; // prettier-ignore
         this.toolbarTemplate = (await import("./templates/toolbar.xml")).default; // prettier-ignore
+        this.toolbarNotAutoTemplate = (await import("./templates/toolbar_not_auto.xml")).default; // prettier-ignore
+        this.toolbarRecentlyUsedTemplate = (await import("./templates/toolbar_recently_used.xml")).default; // prettier-ignore
+        this.toolbarFavoritesTemplate = (await import("./templates/toolbar_favorites.xml")).default; // prettier-ignore
 
         this.browsing = this.options.mode !== "search";
 
@@ -542,6 +586,13 @@ export default Base.extend({
                 },
                 item
             );
+            if (item['imgsrc'] === undefined) {
+                item['imgsrc'] = '';
+            }
+
+            if (item['getURL'] && (item['getIcon'] || item['portal_type'] === "Image")){
+                item['imgsrc'] = '<div class="pat-relateditems-item-image"><img src="' + item['getURL'] + '/@@images/image/thumb"></div>'
+            }
 
             // activate petterns on the result set.
             const $selection = $(this.applyTemplate("selection", item));
@@ -569,6 +620,8 @@ export default Base.extend({
             item = $.extend(
                 true,
                 {
+                    one_level_up: _t("Go one level up"),
+                    open_folder: _t("Open folder"),
                     Title: "",
                     getIcon: "",
                     getURL: "",
@@ -577,9 +630,16 @@ export default Base.extend({
                     iconLevelUp: icon_level_up,
                     iconLevelDown: icon_level_down,
                     path: "",
+                    result_path: "",
                     portal_type: "",
                     review_state: "",
                     selectable: false,
+                    div_class: 'pat-relateditems-result',
+                    span_title_class: '',
+                    not_one_level_up_open_a: '',
+                    not_one_level_up_close_a: '',
+                    browse_folder_a: '',
+                    append_if_image: '',
                 },
                 item
             );
@@ -588,6 +648,40 @@ export default Base.extend({
                 // do not allow already selected items to be selected again.
                 item.selectable = false;
             }
+
+            if (item['oneLevelUp']) {
+                item['div_class'] += ' one-level-up';
+                item['result_path'] = item['currentPath'];
+            } else {
+                let klass = [
+                    'pat-relateditems-result-select',
+                    item['selectable'] ? 'selectable' : ''
+                ]
+                item['not_one_level_up_open_a'] += '<a class="' + klass.join(' ') + '" data-path="' + item['path'] + '">';
+                item['not_one_level_up_close_a'] += '</a>';
+                item['result_path'] = item['path'];
+            }
+
+            let klass = [
+                'pat-relateditems-result-title',
+                item['portal_type'] ? 'contenttype-' + item['portal_type'].toLowerCase() : '',
+                item['review_state'] ? 'state-' + item['review_state'] : ''
+            ]
+            item['span_title_class'] =  klass.join(' ')
+
+            if (item['is_folderish']){
+                item['browse_folder_a'] = '<a class="pat-relateditems-result-browse" data-path="' +
+                                          item['path'] + '" title="'+ (item['oneLevelUp'] ? item['one_level_up'] : item['open_folder']) +
+                                          '">'+ (item['oneLevelUp'] ? item['iconLevelUp'] : item['iconLevelDown']) + '</a>';
+            }
+
+            if (item['getURL'] && (item['getIcon'] || item['portal_type'] === "Image")) {
+                item['append_if_image'] += item['not_one_level_up_open_a'];
+                item['append_if_image'] += '<div class="pat-relateditems-result-image"><img src="'+
+                                            item['getURL'] + '/@@images/image/thumb" /></div>';
+                item['append_if_image'] += item['not_one_level_up_close_a']
+            }
+
             const result = $(this.applyTemplate("result", item));
 
             $(".pat-relateditems-result-select", result).on("click", (event) => {
