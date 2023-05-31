@@ -10,6 +10,14 @@
 
 * Bootstrap 5.3 final ([e9c7824](https://github.com/plone/mockup/commit/e9c78241b7b42e935f66086f1e572b98c1336fd1))
 
+## [5.1.1](https://github.com/plone/mockup/compare/5.1.0-alpha.5...5.1.1) (2023-05-31)
+
+
+### Maintenance
+
+
+* Bootstrap 5.3 final ([e9c7824](https://github.com/plone/mockup/commit/e9c78241b7b42e935f66086f1e572b98c1336fd1))
+
 ## [5.1.0-alpha.5](https://github.com/plone/mockup/compare/5.1.0-alpha.4...5.1.0-alpha.5) (2023-05-30)
 
 
