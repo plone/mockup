@@ -1,6 +1,8 @@
 # Mockup
 Copia del repositorio Mockup de ONCE en el que están todos los patterns de JavaScript (tinymce, folder_contents, ...).
 
+**La rama MASTER es para Plone 6**. Para Plone 5, usa la rama ``plone5``
+
 ## Instrucciones para la descarga y sincronización con el repositorio original ``plone/mockup``
 Para mantener tu copia local sincronizada con el repositorio de `github` de **Plone**, y así actualizar el producto con los cambios que allí se produzcan, es necesario seguir estos pasos:
 
