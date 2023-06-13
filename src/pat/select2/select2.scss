@@ -1,0 +1,109 @@
+.select2-container {
+    margin-bottom: 1em;
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border-radius: 4px;
+
+    .select2-choice, .select2-choices {
+        background-image: none;
+        background-color: var(--bs-body-bg);
+        border-color: var(--bs-secondary)!important;
+        color: var(--bs-body-color);
+        box-shadow: none!important;
+
+        .select2-arrow {
+            border-left: none!important;
+
+            b {
+                background-color: var(--bs-secondary-bg-subtle)!important;
+            }
+        }
+    }
+
+    .select2-search {
+        background-color: var(--bs-secondary-bg-subtle)!important;
+        color: var(--bs-secondary-text)!important;
+    }
+}
+
+.select2-container-multi {
+    background: #fff!important;
+    color: #000!important;
+
+    .select2-choices {
+        border-color: var(--bs-secondary)!important;
+
+        .select2-choice-dragging {
+            border-color: #ff0000;
+        }
+        .select2-search-field {
+            input {
+                height: inherit;
+                padding: 2px 1px 1px 8px;
+            }
+        }
+    }
+
+    .select2-orderable {
+        .select2-search-choice {
+            &,
+            & span {
+                cursor: move;
+            }
+        }
+    }
+}
+
+// Overwrite default styles for dark mode theming
+.select2-drop {
+    background: var(--bs-body-bg);
+    color: var(--bs-secondary-text);
+}
+
+.select2-results {
+    max-height: 950px;
+    background: var(--bs-body-bg);
+    color: var(--bs-secondary-text);
+
+    .select2-result {
+        padding: 2px 0;
+        background-color: transparent;
+        border-left: 0.3em solid transparent;
+        border-right: 0.3em solid transparent;
+
+        &.select2-highlighted {
+            background-color: var(--bs-secondary-bg) !important;
+        }
+
+        &-label {
+            padding: 0;
+        }
+    }
+
+    li.select2-result-with-children>.select2-result-label {
+        font-weight: bold;
+    }
+
+    .select2-no-results {
+        background: transparent!important;
+    }
+
+    > * {
+        background: transparent!important;
+    }
+
+    .select2-selected {
+        display: list-item;
+    }
+}
+
+// Overwrite default style for links for Close button, as in Related Items
+#content-core {
+    .select2-search-choice-close {
+        border-bottom: 0;
+    }
+}
+
+.pat-select2 {
+    min-width: 50%;
+}

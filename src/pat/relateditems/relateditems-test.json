@@ -1,0 +1,35 @@
+{
+    "results": [
+        {
+            "UID": "50581e8bf6834cb59fcc5b438aec580a",
+            "Title": "Assets",
+            "portal_type": "LIF",
+            "path": "/de/Assets",
+            "getURL": "https://demo.plone.org/de/Assets",
+            "getIcon": null,
+            "is_folderish": true,
+            "review_state": "published"
+        },
+        {
+            "UID": "521fd1d3bbf84316918727acbea05c24",
+            "Title": "Willkommen bei Plone",
+            "portal_type": "Document",
+            "path": "/de/frontpage",
+            "getURL": "https://demo.plone.org/de/frontpage",
+            "getIcon": null,
+            "is_folderish": false,
+            "review_state": "published"
+        },
+        {
+            "UID": "79f01c49712d47c0977f8c35b949af7a",
+            "Title": "Demo",
+            "portal_type": "Folder",
+            "path": "/de/demo",
+            "getURL": "https://demo.plone.org/de/demo",
+            "getIcon": null,
+            "is_folderish": true,
+            "review_state": "published"
+        }
+    ],
+    "total": 3
+}

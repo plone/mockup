@@ -1,0 +1,50 @@
+<% if (mode!=='auto') { %>
+<div class="btn-group mode-selector" role="group">
+  <button type="button" class="mode search btn <% if (mode=='search') { %>btn-primary<% } else {%>btn-secondary<% } %>"><%- searchModeText %></button>
+  <button type="button" class="mode browse btn <% if (mode=='browse') { %>btn-primary<% } else {%>btn-secondary<% } %>"><%- browseModeText %></button>
+</div>
+<% } %>
+<div class="path-wrapper flex-grow-1">
+  <span class="pat-relateditems-path-label"><%- searchText %></span>
+  <a class="crumb" href="/"><%= icon_root %></a>
+  <%= items %>
+</div>
+
+<% if (recentlyUsedItems) { %>
+<div class="recentlyUsed dropdown ms-2">
+  <button type="button" class="recentlyUsed dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= icon_recently_used %>
+    <%- recentlyUsedText %>
+    <span class="caret"/>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <%= recentlyUsedItems %>
+  </ul>
+</div>
+<% } %>
+
+<% if (favorites.length > 0) { %>
+<div class="favorites dropdown dropdown-menu-end ms-2">
+  <button type="button" class="favorites dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= icon_favorites %>
+    <%- favText %>
+    <span class="caret"/>
+  </button>
+  <ul class="dropdown-menu">
+    <%= favItems %>
+  </ul>
+</div>
+<% } %>
+
+<% if (upload) { %>
+<div class="upload dropdown dropdown-menu-end ms-2">
+  <button type="button" class="upload dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= icon_upload %>
+    <%- upload_text %>
+    <span class="caret"/>
+  </button>
+  <ul class="dropdown-menu">
+    <div class="pat-upload"></div>
+  </ul>
+</div>
+<% } %>

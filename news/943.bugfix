@@ -1,2 +1,0 @@
-For the ``i18n-dump`` Grunt task, do not read files in directories except ``mockup`` and ``js``.
-[thet]

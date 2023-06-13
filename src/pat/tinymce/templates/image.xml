@@ -1,0 +1,96 @@
+<div>
+  <div class="linkModal">
+    <h1><%- insertHeading %></h1>
+    <% if(_.contains(linkTypes, 'uploadImage')){ %>
+    <p class="info"><%- insertImageHelp %></p>
+    <% } %>
+
+    <div class="linkTypes pat-autotoc autotabs"
+         data-pat-autotoc="section:fieldset;levels:legend;IDPrefix:tinymce-autotoc-">
+
+        <% if(_.contains(linkTypes, 'image')){ %>
+      <fieldset class="linkType image" data-linkType="image">
+        <legend id="tinylink-image"><%- internalImageText %></legend>
+        <div>
+          <div class="main mb-2">
+            <input type="text" name="image" class="form-control" />
+          </div>
+          <div class="scale mb-2">
+            <label><%- scaleText %></label>
+            <select name="scale" class="form-select">
+              <% _.each(Object.keys(pictureVariants), function(key) { %>
+                <option value="<%- key %>" <% if (key === options.defaultSrcset) { %>selected<% } %> >
+                  <%- pictureVariants[key].title %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+        <% } %>
+
+      <% if(_.contains(linkTypes, 'uploadImage')){ %>
+      <fieldset class="linkType uploadImage" data-linkType="uploadImage">
+        <legend id="tinylink-uploadImage"><%- uploadText %></legend>
+        <div class="uploadify-me"></div>
+      </fieldset>
+      <% } %>
+
+      <% if(_.contains(linkTypes, 'externalImage')){ %>
+      <fieldset class="linkType externalImage" data-linkType="externalImage">
+        <legend id="tinylink-externalImage"><%- externalImage %></legend>
+        <div>
+          <div class="main">
+            <label><%- externalImageText %></label>
+            <input type="text" name="externalImage" class="form-control" />
+          </div>
+        </div>
+      </fieldset>
+      <% } %>
+
+    </div><!-- / tabs -->
+
+    <div class="common-controls mt-3 border-top pt-3">
+      <div class="title mb-2">
+        <label><%- titleText %></label>
+        <input type="text" name="title" class="form-control" />
+      </div>
+      <div class="text mb-2">
+        <label><%- altText %></label>
+        <input type="text" name="alt" class="form-control" />
+      </div>
+      <% if(imageCaptioningEnabled){ %>
+      <div class="captionFromDescription form-check mb-2">
+        <input type="checkbox" name="captionFromDescription" class="form-check-input" />
+        <label for="captionFromDescription" class="form-check-label">
+          <%- captionFromDescriptionText %>
+        </label>
+      </div>
+      <div class="caption mb-2">
+        <label><%- captionText %></label>
+        <textarea name="caption" class="form-control"></textarea>
+      </div>
+      <% } %>
+      <div class="align mb-2">
+        <label><%- imageAlignText %></label>
+        <select name="align" class="form-select">
+          <% _.each(Object.keys(options.imageClasses), function(align){ %>
+              <option value="<%- align %>">
+              <%- options.imageClasses[align] %>
+              </option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="enable-zoom mb-2">
+        <input type="checkbox" name="enableImageZoom" class="form-check-input" />
+        <label for="enableImageZoom" class="form-check-label">
+          <%- enableImageZoom %>
+        </label>
+      </div>
+    </div>
+
+    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="<%- cancelBtn %>" />
+    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="<%- insertBtn %>" />
+
+  </div>
+</div>

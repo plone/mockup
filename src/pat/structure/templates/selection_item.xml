@@ -1,0 +1,6 @@
+<span class="selected-item">
+  <a href="#" data-uid="<%- UID %>" title="remove" class="remove">
+    <%= removeIcon %>
+  </a>
+  <%- Title %>
+</span>

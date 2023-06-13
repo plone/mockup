@@ -1,0 +1,23 @@
+name: test
+on:
+  push:
+    branches:
+    - master
+    - 5.0.x
+  pull_request:
+    branches:
+    - master
+    - 5.0.x
+jobs:
+  build:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'yarn'
+    - run: yarn install
+    - run: make eslint
+    - run: yarn test

@@ -1,0 +1,44 @@
+<div class="rioccurrences">
+    <% occurrences.forEach(function(occurrence) { %>
+        <div class="d-flex justify-content-between occurrence <%= occurrence.type %>">
+            <span>
+                <%= occurrence.formattedDate %>
+                <% if(occurrence.type === "start") { %>
+                    <span class="rlabel"><%= localization.recurrenceStart %></span>
+                <% } %>
+                <% if(occurrence.type === "rdate") { %>
+                    <span class="rlabel"><%= localization.additionalDate %></span>
+                <% } %>
+            </span>
+            <% if(!readOnly) { %>
+                <span class="action">
+                    <% if(occurrence.type === "rrule") { %>
+                        <a date="<%= occurrence.date %>" href="#"
+                           class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.exclude %>">
+                            <%= icons.exclude %>
+                        </a>
+                    <% } %>
+                    <% if(occurrence.type === "rdate") { %>
+                        <a date="<%= occurrence.date %>" href="#"
+                           class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.remove %>">
+                            <%= icons.remove %>
+                        </a>
+                    <% } %>
+                    <% if(occurrence.type === "exdate") { %>
+                        <a date="<%= occurrence.date %>" href="#"
+                           class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.include %>">
+                           <%= icons.include %>
+                        </a>
+                    <% } %>
+                </span>
+            <% } %>
+        </div>
+    <% }) %>
+    <div class="batching">
+        <% for(var index=0; index < batch.batches.length; index++) { %>
+            <span <% if(index === batch.currentBatch) { %>class="current"<% } %>>
+                <a href="#" start="<%= batch.batches[index][0] %>">[<%= batch.batches[index][0] %> - <%= batch.batches[index][1] %>]</a>
+            </span>
+        <% } %>
+    </div>
+</div>
