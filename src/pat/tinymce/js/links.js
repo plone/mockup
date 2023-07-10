@@ -1,16 +1,15 @@
-import $ from "jquery";
-import _ from "underscore";
 import Base from "@patternslib/patternslib/src/core/base";
 import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
+import $ from "jquery";
+import _ from "underscore";
 
 import tinymce from "tinymce/tinymce";
-import LinkTemplate from "../templates/link.xml";
-import ImageTemplate from "../templates/image.xml";
-import RelatedItems from "../../relateditems/relateditems";
 import "../../autotoc/autotoc";
 import "../../modal/modal";
 import PatternUpload from "../../upload/upload";
+import ImageTemplate from "../templates/image.xml";
+import LinkTemplate from "../templates/link.xml";
 
 var LinkType = Base.extend({
     name: "linktype",
@@ -85,22 +84,19 @@ var InternalLink = LinkType.extend({
             return;
         }
         LinkType.prototype.init.call(this);
-        this.getEl().addClass("pat-relateditems");
-        await this.createRelatedItems();
+        this.getEl().classList.add("pat-contentbrowser");
+        await this.createContentBrowser();
     },
 
     getEl: function () {
         return this.$el.find("input:not(.select2-input)");
     },
 
-    createRelatedItems: async function () {
-        if (!this.getEl().length) {
-            return;
-        }
-        var options = this.linkModal.options.relatedItems;
+    createContentBrowser: function () {
+        var options = this.linkModal.options.contentBrowser;
         options.upload = false; // ensure that related items upload is off.
-        this.relatedItems = new RelatedItems(this.getEl(), options);
-        await events.await_pattern_init(this.relatedItems)
+        // console.log(options);
+        this.contentBrowser = new ContentBrowser(this.getEl(), options);
     },
 
     updateRelatedItems: async function (val) {
