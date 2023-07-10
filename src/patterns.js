@@ -23,6 +23,7 @@ import "@patternslib/patternslib/src/pat/depends/depends";
 import "./pat/autotoc/autotoc";
 import "./pat/backdrop/backdrop";
 import "./pat/contentloader/contentloader";
+import "./pat/contentbrowser/contentbrowser";
 import "./pat/cookietrigger/cookietrigger";
 import "./pat/datatables/datatables";
 import "./pat/formautofocus/formautofocus";
