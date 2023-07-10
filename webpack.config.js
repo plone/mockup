@@ -112,11 +112,11 @@ module.exports = () => {
         },
     });
 
-    config.resolve.alias["svelte"] = path.resolve("node_modules", "svelte/src/runtime");
-
-    config.resolve["extensions"] = [".wasm", ".mjs", ".js", ".json", ".svelte"];
-    config.resolve["mainFields"] = ["svelte", "browser", "module", "main"];
-    config.resolve["conditionNames"] = ["svelte", "browser", "import"];
+    config.resolve.alias.svelte = path.resolve("node_modules", "svelte/src/runtime");
+    config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
+    config.resolve.mainFields = ["browser", "module", "main", "svelte"];
+    //config.resolve.conditionNames = ["svelte", "browser", "import"];
+    //config.resolve.conditionNames = ["svelte", "module", "browser"];
 
     config.plugins.push(
         mf_config({
