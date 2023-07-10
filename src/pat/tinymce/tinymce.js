@@ -12,11 +12,12 @@ export default Base.extend({
             maxFiles: 1,
             showTitle: false,
         },
-        relatedItems: {
+        contentBrowser: {
             // UID attribute is required here since we're working with related items
             attributes: [
                 "UID",
                 "Title",
+                "Description",
                 "portal_type",
                 "path",
                 "getURL",
@@ -27,7 +28,7 @@ export default Base.extend({
             batchSize: 20,
             basePath: "/",
             vocabularyUrl: null,
-            width: 500,
+            width: "95%",
             maximumSelectionSize: 1,
             placeholder: _t("Search for item on site..."),
         },

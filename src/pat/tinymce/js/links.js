@@ -6,7 +6,7 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
-import RelatedItems from "../../relateditems/relateditems";
+import ContentBrowser from "../../contentbrowser/contentbrowser";
 import "../../autotoc/autotoc";
 import "../../modal/modal";
 import PatternUpload from "../../upload/upload";
@@ -84,21 +84,19 @@ var InternalLink = LinkType.extend({
             return;
         }
         LinkType.prototype.init.call(this);
-        this.getEl().addClass("pat-relateditems");
-        this.createRelatedItems();
+        this.getEl().classList.add("pat-contentbrowser");
+        this.createContentBrowser();
     },
 
     getEl: function () {
         return this.$el.find("input:not(.select2-input)");
     },
 
-    createRelatedItems: function () {
-        if (!this.getEl().length) {
-            return;
-        }
-        var options = this.linkModal.options.relatedItems;
+    createContentBrowser: function () {
+        var options = this.linkModal.options.contentBrowser;
         options.upload = false; // ensure that related items upload is off.
-        this.relatedItems = new RelatedItems(this.getEl(), options);
+        // console.log(options);
+        this.contentBrowser = new ContentBrowser(this.getEl(), options);
     },
 
     updateRelatedItems: function (val) {
