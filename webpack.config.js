@@ -90,6 +90,34 @@ module.exports = () => {
 
     config.output.path = path.resolve(__dirname, "dist/");
 
+    config.module.rules.push({
+        test: /\.svelte$/,
+        // exclude: /node_modules/,
+        use: {
+            loader: "svelte-loader",
+            options: {
+                compilerOptions: {
+                    dev: process.env.NODE_ENV === "development",
+                },
+                emitCss: process.env.NODE_ENV !== "development",
+                hotReload: process.env.NODE_ENV === "development",
+            },
+        },
+    });
+
+    config.module.rules.push({
+        test: /node_modules\/svelte\/.*\.mjs$/,
+        resolve: {
+            fullySpecified: false,
+        },
+    });
+
+    config.resolve.alias["svelte"] = path.resolve("node_modules", "svelte/src/runtime");
+
+    config.resolve["extensions"] = [".wasm", ".mjs", ".js", ".json", ".svelte"];
+    config.resolve["mainFields"] = ["svelte", "browser", "module", "main"];
+    config.resolve["conditionNames"] = ["svelte", "browser", "import"];
+
     config.plugins.push(
         mf_config({
             name: package_json.name,
@@ -134,7 +162,7 @@ module.exports = () => {
         );
     }
 
-    //console.log(JSON.stringify(config, null, 4));
+    console.log(JSON.stringify(config, null, 4));
 
     return config;
 };
