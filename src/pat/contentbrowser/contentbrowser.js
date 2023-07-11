@@ -1,11 +1,13 @@
-import Base from "@patternslib/patternslib/src/core/base";
+import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
+import registry from "@patternslib/patternslib/src/core/registry";
 
 // This pattern
 import ContentBrowser from "./src/ContentBrowser.svelte";
 import SelectedItems from "./src/SelectedItems.svelte";
+import ItemTest from "./src/itemtest.svelte";
 
-const parser = new Parser("contentbrowser");
+export const parser = new Parser("contentbrowser");
 
 parser.addArgument(
     "vocabulary-url",
@@ -43,43 +45,47 @@ parser.addArgument("max-selectionsize", "9999");
 // parser.addArgument("selectable-types", [],[], true);
 //parser.addArgument("selectable-types", [],[], true);
 
+class Pattern extends BasePattern {
+    static name = "contentbrowser";
+    static trigger = ".pat-contentbrowser";
+    static parser = parser;
 
-export default Base.extend({
-    name: "contentbrowser",
-    trigger: ".pat-contentbrowser",
-    //parser: "mockup",
+    async init() {
+        console.log("init ContentBrowser patter with options: ", this.options);
+        debugger;
+        this.component_instance_sel_items = new ItemTest({ target: this.el, props: {} });
 
-    init: function () {
-        console.log("init ContentBrowser patter with options: ", this.options)
-        this.options = parser.parse(this.el, this.options);
+        //const contentBrowserEl = document.createElement("div");
+        //contentBrowserEl.classList.add("content-browser-wrapper");
+        //const bodyElement = document.querySelector("body");
+        //bodyElement.append(contentBrowserEl);
 
-        const contentBrowserEl = document.createElement("div");
-        contentBrowserEl.classList.add('content-browser-wrapper');
-        const bodyElement = document.querySelector("body");
-        bodyElement.append(contentBrowserEl);
+        //console.log("pat-contentbrowser options", this.options);
+        //this.component_instance_browser = new ContentBrowser({
+        //    target: contentBrowserEl,
+        //    props: {
+        //        maxDepth: this.options.max.depth,
+        //        basePath: this.options.basePath,
+        //        attributes: this.options.attributes,
+        //        vocabularyUrl: this.options.vocabularyUrl,
+        //    },
+        //});
 
-        console.log("pat-contentbrowser options", this.options);
-        this.component_instance_browser = new ContentBrowser({
-            target: contentBrowserEl,
-            props: {
-                maxDepth: this.options.max.depth,
-                basePath: this.options.basePath,
-                attributes: this.options.attributes,
-                vocabularyUrl: this.options.vocabularyUrl,
-            },
-        });
+        //const selectedItemsEl = document.createElement("div");
+        //selectedItemsEl.classList.add("selected-items");
+        //this.el.parentNode.insertBefore(selectedItemsEl, this.el);
 
-        const selectedItemsEl = document.createElement("div");
-        selectedItemsEl.classList.add('selected-items');
-        this.el.parentNode.insertBefore(selectedItemsEl, this.el);
+        //// this.el.setAttribute('style', 'display: none');
+        //this.component_instance_sel_items = new SelectedItems({
+        //    target: selectedItemsEl,
+        //    props: {
+        //        maxSelectionsize: this.options.max.selectionsize,
+        //        selectedItemsNode: this.el,
+        //    },
+        //});
+    }
+}
 
-        // this.el.setAttribute('style', 'display: none');
-        this.component_instance_sel_items = new SelectedItems({
-            target: selectedItemsEl,
-            props: {
-                maxSelectionsize: this.options.max.selectionsize,
-                selectedItemsNode: this.el,
-            },
-        });
-    },
-});
+registry.register(Pattern);
+export default Pattern;
+export { Pattern };
