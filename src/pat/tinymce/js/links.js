@@ -26,7 +26,7 @@ var LinkType = Base.extend({
     },
 
     getEl: function () {
-        return this.$el.find("input");
+        return this.el.querySelector("input");
     },
 
     value: function () {
@@ -80,7 +80,7 @@ var InternalLink = LinkType.extend({
     name: "internallinktype",
     trigger: ".pat-internallinktype-dummy",
     init: function () {
-        if (!this.getEl().length) {
+        if (!this.getEl()) {
             return;
         }
         LinkType.prototype.init.call(this);
@@ -89,13 +89,13 @@ var InternalLink = LinkType.extend({
     },
 
     getEl: function () {
-        return this.$el.find("input:not(.select2-input)");
+        return this.el.querySelector("input");
     },
 
     createContentBrowser: function () {
         var options = this.linkModal.options.contentBrowser;
-        options.upload = false; // ensure that related items upload is off.
-        // console.log(options);
+        // options.upload = false; // ensure that related items upload is off.
+        console.log(options);
         this.contentBrowser = new ContentBrowser(this.getEl(), options);
     },
 
