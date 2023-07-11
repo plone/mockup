@@ -5,6 +5,11 @@ import $ from "jquery";
 import _ from "underscore";
 
 import tinymce from "tinymce/tinymce";
+<<<<<<< HEAD
+=======
+import LinkTemplate from "../templates/link.xml";
+import ImageTemplate from "../templates/image.xml";
+>>>>>>> 7275886d0 (contentbrowser: rework for class based patterns, add svelte test component to check if svelte loader works at all.)
 import "../../autotoc/autotoc";
 import "../../modal/modal";
 import PatternUpload from "../../upload/upload";
@@ -92,10 +97,12 @@ var InternalLink = LinkType.extend({
         return this.el.querySelector("input");
     },
 
-    createContentBrowser: function () {
+    createContentBrowser: async function () {
         var options = this.linkModal.options.contentBrowser;
         // options.upload = false; // ensure that related items upload is off.
         console.log(options);
+        const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
+            .default;
         this.contentBrowser = new ContentBrowser(this.getEl(), options);
     },
 
@@ -685,6 +692,7 @@ export default Base.extend({
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
+<<<<<<< HEAD
         var cssclasses = [
             "image-richtext",
         ];
@@ -693,6 +701,11 @@ export default Base.extend({
         }
         if(self.linkType !== "externalImage"){
             cssclasses.push("picture-variant-" + self.$scale.val())
+=======
+        var cssclasses = ["image-richtext", self.$align.val()];
+        if (self.linkType !== "externalImage") {
+            cssclasses.push("picture-variant-" + self.$scale.val());
+>>>>>>> 7275886d0 (contentbrowser: rework for class based patterns, add svelte test component to check if svelte loader works at all.)
         }
         if (captionFromDescription || caption) {
             cssclasses.push("captioned");
@@ -831,10 +844,13 @@ export default Base.extend({
             }
             self.hide();
         });
-        $('.modal-footer input[name="cancel"]', self.modal.$modal).on("click", function (e) {
-            e.preventDefault();
-            self.hide();
-        });
+        $('.modal-footer input[name="cancel"]', self.modal.$modal).on(
+            "click",
+            function (e) {
+                e.preventDefault();
+                self.hide();
+            }
+        );
     },
 
     show: function () {
