@@ -13,7 +13,7 @@
     import { clickOutside } from "./clickOutside";
     import { fly } from "svelte/transition";
     import * as animateScroll from "svelte-scrollto";
-    import Keydown from "svelte-keydown";
+    // import Keydown from "svelte-keydown";
 
     animateScroll.setGlobalOptions({
         scrollX: true,
@@ -22,7 +22,7 @@
     });
 
     export let maxDepth;
-    export let basePath;
+    export let basePath = '';
     export let attributes;
     export let vocabularyUrl;
     export const contentItems = contentStore();
@@ -120,6 +120,7 @@
     $: {
         if ($config.vocabularyUrl) {
             contentItems.get($currentPath);
+            // contentItems.set([])
         }
     }
 
@@ -131,7 +132,8 @@
     onDestroy(config_unsubscribe);
 </script>
 
-<Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} />
+<!-- <Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} /> -->
+
 {#if $showContentBrowser}
     <div class="content-browser-position-wrapper">
         <nav
@@ -144,6 +146,9 @@
             <div class="toolBar">
                 <svg
                     class="homeAction bi bi-house"
+                    role="button"
+                    tabindex="0"
+                    on:keydown={() => changePath("/")}
                     on:click={() => changePath("/")}
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -163,6 +168,7 @@
                 <span class="path">{$currentPath}</span>
                 <button
                     class="btn btn-secondary btn-sm"
+                    tabindex="0"
                     on:click={() => cancelSelection()}>cancel</button
                 >
             </div>
@@ -186,6 +192,8 @@
                                         ? ' currentItem'
                                         : ''}"
                                     role="button"
+                                    tabindex="0"
+                                    on:keydown={() => changePath(item)}
                                     on:click={() => changePath(item)}
                                 >
                                     <div title={item.portal_type}>

@@ -55,7 +55,8 @@ export async function request({
     // });
 
     let headers = new Headers();
-    headers.set("Content-type", "application/json");
+    // headers.set("Content-type", "application/json");
+    headers.set("Accept", "application/json");
     const body = params ? JSON.stringify(params) : undefined;
 
     const response = await fetch(url, { method, body, headers });

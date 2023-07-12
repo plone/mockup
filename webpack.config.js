@@ -116,7 +116,7 @@ module.exports = () => {
     // config.resolve.alias.svelte = path.resolve("node_modules", "svelte/src/runtime");
     config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
     config.resolve.mainFields = ["browser", "module", "main", "svelte"];
-    //config.resolve.conditionNames = ["svelte", "browser", "import"];
+    // config.resolve.conditionNames = ["svelte", "browser", "import"];
     //config.resolve.conditionNames = ["svelte", "module", "browser"];
 
     config.plugins.push(
@@ -146,6 +146,7 @@ module.exports = () => {
     if (process.env.NODE_ENV === "development") {
         // Note: ``publicPath`` is set to "auto" in Patternslib,
         //        so for the devServer the public path set to "/".
+        config.devServer.allowedHosts = ['localhost', 'plone.lan'];
         config.devServer.port = "8000";
         config.devServer.static.directory = path.resolve(__dirname, "./docs/_site/");
     }

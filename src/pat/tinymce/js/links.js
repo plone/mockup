@@ -29,7 +29,7 @@ var LinkType = Base.extend({
     },
 
     value: function () {
-        return this.getEl().val().trim();
+        return this.getEl().value.trim();
     },
 
     toUrl: function () {
@@ -38,13 +38,11 @@ var LinkType = Base.extend({
 
     load: function (element) {
         let val = this.tiny.dom.getAttrib(element, "data-val");
-        this.getEl().attr("value", val);
+        this.set(val)
     },
 
     set: function (val) {
-        var $el = this.getEl();
-        $el.attr("value", val);
-        $el.val(val);
+        this.getEl().setAttribute('value', val)
     },
 
     attributes: function () {
@@ -92,59 +90,71 @@ var InternalLink = LinkType.extend({
     },
 
     createContentBrowser: async function () {
-        var options = this.linkModal.options.contentBrowser;
-        // options.upload = false; // ensure that related items upload is off.
-        console.log(options);
-        const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
-            .default;
-        this.contentBrowser = new ContentBrowser(this.getEl(), options);
+        var options =  {}
+        // take over some options from this.linkModal.options.contentBrowser ?;
+        options['max-selectionsize'] = 1;
+        const inputEl = this.getEl();
+        // const initialSelection = this.load(inputEl);
+        // options['selection'] = initialSelection;
+        const ContentBrowser = (await import("../../contentbrowser/contentbrowser")).default;
+
+        console.log(options)
+        this.contentBrowser = new ContentBrowser(inputEl, options);
     },
 
-    updateRelatedItems: function (val) {
-        if (!this.relatedItems) {
-            // prevent toolbar from being rendered twice
-            this.createRelatedItems();
-        }
-        this.relatedItems.selectItem(val);
-    },
+    // updateSelection: function(val) {
+    //     debugger;
+    //     this.component_instance_sel_items
+    // },
 
-    value: function () {
-        var val = this.getEl().select2("data");
-        if (val && typeof val === "object") {
-            val = val[0];
-        }
-        return val;
-    },
+    // updateRelatedItems: function (val) {
+    //     if (!this.relatedItems) {
+    //         // prevent toolbar from being rendered twice
+    //         this.createRelatedItems();
+    //     }
+    //     this.relatedItems.selectItem(val);
+    // },
 
-    toUrl: function () {
-        var value = this.value();
-        if (value) {
-            return this.tinypattern.generateUrl(value);
-        }
-        return null;
-    },
-    load: function (element) {
-        var val = this.tiny.dom.getAttrib(element, "data-val");
-        if (val) {
-            this.set(val);
-        }
-    },
+    // value: function () {
+    //     var val = this.getEl().value;
+    //     if (val && typeof val === "object") {
+    //         val = val[0];
+    //     }
+    //     return val;
+    // },
 
-    set: function (val) {
-        var $el = this.getEl();
-        $el.val(val).trigger("change");
-        this.updateRelatedItems(val);
-    },
+    // toUrl: function () {
+    //     var value = this.value();
+    //     if (value) {
+    //         return this.tinypattern.generateUrl(value);
+    //     }
+    //     return null;
+    // },
 
-    attributes: function () {
-        var val = this.value();
-        if (val) {
-            return {
-                "data-val": val.UID,
-            };
-        }
-        return {};
-    },
+    // load: function (element) {
+    //     var val = this.tiny.dom.getAttrib(element, "data-val");
+    //     if (val) {
+    //         // this.updateSelection(val);
+    //         this.set(val);
+    //     }
+    // },
+
+    // set: function (val) {
+    //     // var $el = this.getEl();
+    //     // $el.val(val).trigger("change");
+    //     this.updateRelatedItems(val);
+    // },
+
+    // attributes: function () {
+    //     debugger
+    //     var val = this.value();
+    //     if (val) {
+    //         return {
+    //             "data-val": val,
+    //         };
+    //     }
+    //     return {};
+    // },
 });
 
 var UploadLink = LinkType.extend({
@@ -540,6 +550,7 @@ export default Base.extend({
         self.$alt = $('input[name="alt"]', self.modal.$modal);
         self.$align = $('select[name="align"]', self.modal.$modal);
         self.$scale = $('select[name="scale"]', self.modal.$modal);
+        self.$selectedItems = $('input.pat-contentbrowser', self.modal.$modal);
         self.$enableImageZoom = $('input[name="enableImageZoom"]', self.modal.$modal);
         self.$captionFromDescription = $(
             'input[name="captionFromDescription"]',
@@ -652,6 +663,7 @@ export default Base.extend({
     },
 
     updateImage: function (src) {
+        console.log(`updateImage: ${src}`)
         var self = this;
         var title = self.$title.val();
         var captionFromDescription = self.$captionFromDescription.prop("checked");
@@ -763,7 +775,6 @@ export default Base.extend({
             e.preventDefault();
             e.stopPropagation();
             self.linkType = self.modal.$modal.find("fieldset.active").data("linktype");
-
             if (self.linkType === "uploadImage" || self.linkType === "upload") {
                 var patUpload = self.$upload.data().patternUpload;
                 if (patUpload.dropzone.files.length > 0) {
@@ -891,12 +902,20 @@ export default Base.extend({
             if (linkType && linkType in self.linkTypes) {
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
+
                 // set scale selection in link modal:
                 var pictureVariant = self.dom.getAttrib(
                     self.imgElm,
                     "data-picturevariant"
                 );
                 self.$scale.val(pictureVariant);
+
+                // var selectedImageUid = self.dom.getAttrib(
+                //     self.imgElm,
+                //     "data-val"
+                // );
+                // self.$selectedItems.val()
+
                 $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
             } else if (src) {
                 self.guessImageLink(src);
@@ -970,13 +989,13 @@ export default Base.extend({
         }
     },
 
-    setSelectElement: function ($el, val) {
-        $el.find("option:selected").prop("selected", false);
-        if (val) {
-            // update
-            $el.find('option[value="' + val + '"]').prop("selected", true);
-        }
-    },
+    // setSelectElement: function ($el, val) {
+    //     $el.find("option:selected").prop("selected", false);
+    //     if (val) {
+    //         // update
+    //         $el.find('option[value="' + val + '"]').prop("selected", true);
+    //     }
+    // },
 
     reinitialize: function () {
         /*

@@ -29,7 +29,7 @@ export default Base.extend({
             basePath: "/",
             vocabularyUrl: null,
             width: "95%",
-            maximumSelectionSize: 1,
+            // maxSelectionSize: 1,
             placeholder: _t("Search for item on site..."),
         },
         text: {

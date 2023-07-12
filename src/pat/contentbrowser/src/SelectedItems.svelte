@@ -6,6 +6,7 @@
 
     export let maxSelectionsize;
     export let selectedItemsNode;
+    // export let initialSelection = "";
 
     onMount(async () => {
         readSelectedItemsFromInput();
@@ -23,16 +24,27 @@
         }
     }
 
-    async function readSelectedItemsFromInput() {
-        const uidsFromNode = selectedItemsNode.value.split(";");
-        selectedUids.set(uidsFromNode);
-        selectedItems.set(await getSelectedItemsByUids(uidsFromNode))
+    async function getSelectedItemsByUids(uids) {
+        let selectedItemsFromUids;
+        if(!uids){
+            return []
+        }
+        console.log(`uids: ${uids}`)
+        selectedItemsFromUids = await request({method:"GET", uids:uids});
+        return await selectedItemsFromUids.results || [];
     }
 
-    async function getSelectedItemsByUids(uids) {
-        let selectedItemsFromUids = {results: []};
-        selectedItemsFromUids = await request({method:"GET", uids:uids});
-        return selectedItemsFromUids.results;
+    async function readSelectedItemsFromInput() {
+        const selectedItemsValue = selectedItemsNode.value;
+        if (!selectedItemsValue){return}
+
+        const uidsFromNode = selectedItemsValue.split(";");
+        selectedUids.set(uidsFromNode);
+        if(uidsFromNode){
+            selectedItems.set(await getSelectedItemsByUids(uidsFromNode))
+        }else{
+            selectedItems.set([])
+        }
     }
 
     function writeSelectedItemsUidsToInput() {
@@ -45,18 +57,18 @@
         if ($selectedItems.length) {
             writeSelectedItemsUidsToInput();
         }
+        console.log(`selectedItems: ${$selectedItems}`)
     }
 
 </script>
 
 
 <div class="content-browser-selected-items-wrapper">
-{$selectedUids}
     <button
         class="btn btn-primary"
         disabled="{$selectedItems.length >= maxSelectionsize}"
         on:click={() => ($showContentBrowser = true)}>add</button>
-
+    <!-- {maxSelectionsize} -->
     <ul class="content-browser-selected-items">
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
