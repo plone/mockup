@@ -58,7 +58,8 @@ var ExternalLink = LinkType.extend({
     trigger: ".pat-externallinktype-dummy",
     init: function () {
         LinkType.prototype.init.call(this);
-        this.getEl().on("change", function () {
+        // selectedItemsNode.addEventListener("change", readSelectedItemsFromInput);
+        this.getEl().addEventListener("change", function(){
             // check here if we should automatically add in http:// to url
             var val = $(this).val();
             if (new RegExp("https?://").test(val)) {
@@ -91,21 +92,18 @@ var InternalLink = LinkType.extend({
 
     createContentBrowser: async function () {
         var options =  {}
-        // take over some options from this.linkModal.options.contentBrowser ?;
         options['max-selectionsize'] = 1;
         const inputEl = this.getEl();
-        // const initialSelection = this.load(inputEl);
-        // options['selection'] = initialSelection;
         const ContentBrowser = (await import("../../contentbrowser/contentbrowser")).default;
-
-        console.log(options)
         this.contentBrowser = new ContentBrowser(inputEl, options);
     },
 
-    // updateSelection: function(val) {
-    //     debugger;
-    //     this.component_instance_sel_items
-    // },
+    updateSelection: function(val) {
+        debugger;
+        // update select value, if not a uid (external url),
+        // reset SelectedItems component list
+        // this.component_instance_sel_items
+    },
 
     // updateRelatedItems: function (val) {
     //     if (!this.relatedItems) {
@@ -123,26 +121,27 @@ var InternalLink = LinkType.extend({
     //     return val;
     // },
 
-    // toUrl: function () {
-    //     var value = this.value();
-    //     if (value) {
-    //         return this.tinypattern.generateUrl(value);
-    //     }
-    //     return null;
-    // },
+    toUrl: function () {
+        var value = this.value();
+        if (value) {
+            return this.tinypattern.generateUrl(value);
+        }
+        return null;
+    },
 
-    // load: function (element) {
-    //     var val = this.tiny.dom.getAttrib(element, "data-val");
-    //     if (val) {
-    //         // this.updateSelection(val);
-    //         this.set(val);
-    //     }
-    // },
+    load: function (element) {
+        var val = this.tiny.dom.getAttrib(element, "data-val");
+        if (val) {
+            this.set(val);
+            // update select value, if not a uid (external url),
+            // reset SelectedItems component list
+            this.updateSelection(val);
+        }
+    },
 
     // set: function (val) {
     //     // var $el = this.getEl();
     //     // $el.val(val).trigger("change");
-    //     this.updateRelatedItems(val);
     // },
 
     // attributes: function () {
@@ -801,6 +800,7 @@ export default Base.extend({
             try {
                 href = self.getLinkUrl();
             } catch (error) {
+                console.log(error)
                 return; // just cut out if no url
             }
             if (!href) {
@@ -964,6 +964,7 @@ export default Base.extend({
     },
 
     guessAnchorLink: function (href) {
+        console.log("href: " + href)
         if (
             this.options.prependToUrl &&
             href.indexOf(this.options.prependToUrl) !== -1
