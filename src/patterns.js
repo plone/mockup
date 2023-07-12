@@ -15,6 +15,7 @@ import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/toolt
 import "@patternslib/pat-code-editor/src/code-editor";
 import "@patternslib/patternslib/src/pat/inject/inject";
 import "@patternslib/patternslib/src/pat/depends/depends";
+import "@patternslib/patternslib/src/pat/close-panel/close-panel";
 
 //import "@patternslib/pat-content-browser/src/content-browser";
 //import "@patternslib/pat-tinymce/src/tinymce";

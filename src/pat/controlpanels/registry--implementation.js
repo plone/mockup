@@ -1,26 +1,16 @@
 import $ from "jquery";
 import utils from "../../core/utils";
-import Modal from "../modal/modal";
 
 export default class ConfigRegistry {
     constructor(el) {
         this.el = el;
     }
     loadModals() {
-        $(".recordsEditLink").each(function () {
-            var $el = $(this);
-            var options = {
-                actionOptions: {
-                    displayInModal: false,
-                    reloadWindowOnClose: false,
-                    // eslint-disable-next-line no-unused-vars
-                    onSuccess: function (modal) {
-                        $("#searchrow form#registry-filter").trigger("submit");
-                    },
-                },
-            };
-            $el.addClass("pat-modal");
-            new Modal($el, options);
+        const dialog = this.el.querySelector("#record_edit_modal");
+        $(dialog.parentNode).on("patterns-injected-scanned", () => {
+            // Clicking on an edit link would pat-inject the contents into the
+            // dialog and show it.
+            dialog.showModal();
         });
     }
 
