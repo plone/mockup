@@ -57,7 +57,8 @@
         "sinon": "^15.2.0",
         "svelte": "^4.0.5",
         "svelte-loader": "^3.1.9",
-        "svelte-scrollto": "^0.2.0"
+        "svelte-scrollto": "^0.2.0",
+        "svg-inline-loader": "^0.8.2"
     },
     "resolutions": {
         "@patternslib/patternslib": "9.9.14",
