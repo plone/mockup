@@ -52,7 +52,7 @@ export default function () {
         });
 
         let headers = new Headers();
-        headers.set("Content-type", "application/json");
+        headers.set("Accept", "application/json");
         const body = params ? JSON.stringify(params) : undefined;
 
         const response = await fetch(url, { method, body, headers });
@@ -79,7 +79,6 @@ export default function () {
         let partsToShow = parts.slice(parts.length - depth, parts.length);
         let partsToHide = parts.slice(0, parts.length - depth);
         const pathPrefix = partsToHide.join("/");
-
         while (partsToShow.length > 0) {
             let sub_path = partsToShow.join("/");
             if (!sub_path.startsWith("/")) sub_path = "/" + sub_path;
@@ -95,7 +94,12 @@ export default function () {
             const c = get(cache);
             if (Object.keys(c).indexOf(p) === -1) {
                 console.log("not in cache: ", p);
-                level = await store.request({method:"GET", path:cfg.basePath + p});
+                let queryPath = cfg.basePath;
+                if(queryPath ==='/') {
+                    queryPath = '';
+                }
+                queryPath = queryPath + p;
+                level = await store.request({method:"GET", path:queryPath});
                 cache.update((n) => {
                     n[p] = level;
                     return n;

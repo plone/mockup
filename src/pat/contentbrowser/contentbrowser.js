@@ -3,15 +3,14 @@ import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 
 // This pattern
-import ContentBrowser from "./src/ContentBrowser.svelte";
-import SelectedItems from "./src/SelectedItems.svelte";
-import ItemTest from "./src/itemtest.svelte";
 
 export const parser = new Parser("contentbrowser");
 
+const portalUrl = document.body.dataset["portalUrl"];
+
 parser.addArgument(
     "vocabulary-url",
-    "http://localhost:8080/Plone14/@@getVocabulary?name=plone.app.vocabularies.Catalog"
+    `${portalUrl}/@@getVocabulary?name=plone.app.vocabularies.Catalog`
 );
 parser.addArgument(
     "attributes",
@@ -40,10 +39,11 @@ parser.addArgument(
     true
 );
 parser.addArgument("max-depth", "200");
-parser.addArgument("base-path", "/Plone14");
+// parser.addArgument("base-path", `/`);
 parser.addArgument("max-selectionsize", "9999");
 // parser.addArgument("selectable-types", [],[], true);
 //parser.addArgument("selectable-types", [],[], true);
+// parser.addArgument("selection", []);
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";
@@ -51,38 +51,37 @@ class Pattern extends BasePattern {
     static parser = parser;
 
     async init() {
+        const ContentBrowser = (await import("./src/ContentBrowser.svelte")).default;
+        const SelectedItems = (await import("./src/SelectedItems.svelte")).default;
         console.log("init ContentBrowser patter with options: ", this.options);
-        debugger;
-        this.component_instance_sel_items = new ItemTest({ target: this.el, props: {} });
 
-        //const contentBrowserEl = document.createElement("div");
-        //contentBrowserEl.classList.add("content-browser-wrapper");
-        //const bodyElement = document.querySelector("body");
-        //bodyElement.append(contentBrowserEl);
+        const contentBrowserEl = document.createElement("div");
+        contentBrowserEl.classList.add("content-browser-wrapper");
+        const bodyElement = document.querySelector("body");
+        bodyElement.append(contentBrowserEl);
 
-        //console.log("pat-contentbrowser options", this.options);
-        //this.component_instance_browser = new ContentBrowser({
-        //    target: contentBrowserEl,
-        //    props: {
-        //        maxDepth: this.options.max.depth,
-        //        basePath: this.options.basePath,
-        //        attributes: this.options.attributes,
-        //        vocabularyUrl: this.options.vocabularyUrl,
-        //    },
-        //});
+        this.component_instance_browser = new ContentBrowser({
+           target: contentBrowserEl,
+           props: {
+               maxDepth: this.options.max.depth,
+               basePath: this.options.basePath,
+               attributes: this.options.attributes,
+               vocabularyUrl: this.options.vocabularyUrl,
+           },
+        });
 
-        //const selectedItemsEl = document.createElement("div");
-        //selectedItemsEl.classList.add("selected-items");
-        //this.el.parentNode.insertBefore(selectedItemsEl, this.el);
+        const selectedItemsEl = document.createElement("div");
+        selectedItemsEl.classList.add("selected-items");
+        this.el.parentNode.insertBefore(selectedItemsEl, this.el);
 
-        //// this.el.setAttribute('style', 'display: none');
-        //this.component_instance_sel_items = new SelectedItems({
-        //    target: selectedItemsEl,
-        //    props: {
-        //        maxSelectionsize: this.options.max.selectionsize,
-        //        selectedItemsNode: this.el,
-        //    },
-        //});
+        this.el.setAttribute('style', 'display: none');
+        this.component_instance_sel_items = new SelectedItems({
+           target: selectedItemsEl,
+           props: {
+               maxSelectionsize: this.options.max.selectionsize,
+               selectedItemsNode: this.el,
+           },
+        });
     }
 }
 
