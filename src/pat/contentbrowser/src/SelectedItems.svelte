@@ -29,7 +29,6 @@
         if(!uids){
             return []
         }
-        console.log(`uids: ${uids}`)
         selectedItemsFromUids = await request({method:"GET", uids:uids});
         return await selectedItemsFromUids.results || [];
     }
