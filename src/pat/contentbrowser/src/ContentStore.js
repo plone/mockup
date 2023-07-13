@@ -93,7 +93,7 @@ export default function () {
             let level = {};
             const c = get(cache);
             if (Object.keys(c).indexOf(p) === -1) {
-                console.log("not in cache: ", p);
+                // console.log("not in cache: ", p);
                 let queryPath = cfg.basePath;
                 if(queryPath ==='/') {
                     queryPath = '';
@@ -105,10 +105,10 @@ export default function () {
                     return n;
                 });
             } else {
-                console.log("in cache: ", p);
+                // console.log("in cache: ", p);
                 level = c[p];
             }
-            console.log(get(cache));
+            // console.log(get(cache));
             level.path = p;
             levels = [level, ...levels];
         }
