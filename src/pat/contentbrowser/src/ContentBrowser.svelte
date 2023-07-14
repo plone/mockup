@@ -69,6 +69,74 @@
         //contentItems.get($currentPath);
     });
 
+    async function upload() {
+            const options = {
+                uploadMultiple: false,
+                maxFiles: 1,
+                showTitle: false,
+            }
+            const PatternUpload = (await import("../../upload/upload")).default;
+            const uploadEl = document.querySelector('.uploadify-me');
+            uploadEl.classList.add("pat-upload");
+            this.upload_pattern_instance = new PatternUpload(uploadEl, options);
+            debugger
+            uploadEl.addEventListener("uploadAllCompleted", function () {
+                debugger
+                // function (evt, data) {
+                //     if (self.linkTypes.image) {
+                //         self.linkTypes.image.set(data.data.UID);
+                //         $(
+                //             "#" + $("#tinylink-image", self.modal.$modal).data("navref")
+                //         ).trigger("click");
+                //     } else {
+                //         self.linkTypes.internal.set(data.data.UID);
+                //         $(
+                //             "#" +
+                //                 $("#tinylink-internal", self.modal.$modal).data("navref")
+                //         ).trigger("click");
+                //     }
+                // }.bind(self)
+
+            });
+                // var patUpload = self.$upload.data().patternUpload;
+                // if (patUpload.dropzone.files.length > 0) {
+                //     patUpload.processUpload();
+                //     // eslint-disable-next-line no-unused-vars
+                //     self.$upload.on("uploadAllCompleted", function (evt, data) {
+                //         var counter = 0;
+                //         var checkUpload = function () {
+                //             if (counter < 5 && !self.linkTypes[self.linkType].value()) {
+                //                 counter += 1;
+                //                 setTimeout(checkUpload, 100);
+                //                 return;
+                //             } else {
+                //                 var href = self.getLinkUrl();
+                //                 self.updateImage(href);
+                //                 self.hide();
+                //             }
+                //         };
+                //         checkUpload();
+                //     });
+                // }
+            // self.$upload.on(
+            //     "uploadAllCompleted",
+            //     function (evt, data) {
+            //         if (self.linkTypes.image) {
+            //             self.linkTypes.image.set(data.data.UID);
+            //             $(
+            //                 "#" + $("#tinylink-image", self.modal.$modal).data("navref")
+            //             ).trigger("click");
+            //         } else {
+            //             self.linkTypes.internal.set(data.data.UID);
+            //             $(
+            //                 "#" +
+            //                     $("#tinylink-internal", self.modal.$modal).data("navref")
+            //             ).trigger("click");
+            //         }
+            //     }.bind(self)
+            // );
+    }
+
     function changePath(item) {
         if (item === "/") {
             currentPath.set(item);
@@ -168,10 +236,21 @@
                     <label for="filter">filter</label> <input type="text" name="filter" on:input={filterItems}>
                 </div>
                 <button
+                    type="button"
+                    class="toolbarAction"
+                    tabindex="0"
+                    on:keydown={upload}
+                    on:click={upload}
+                ><svg use:resolveIcon={{iconName: 'upload'}} /></button>
+                <button
                     class="btn btn-secondary btn-sm"
                     tabindex="0"
                     on:click={() => cancelSelection()}>cancel</button
                 >
+            </div>
+            <input type="text" name="upload" style="display:none" />
+            <div class="uploadify-me">
+
             </div>
             {#await $contentItems}
                 <p>...loading content items</p>
