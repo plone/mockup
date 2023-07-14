@@ -1,8 +1,10 @@
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
+const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
 
 module.exports = function (eleventyConfig) {
     eleventyConfig.setUseGitIgnore(false);
     eleventyConfig.addPlugin(syntaxHighlight);
+    eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
     eleventyConfig.addPassthroughCopy({ "favicon.ico": "favicon.ico" });
     eleventyConfig.addPassthroughCopy({ "docs/main.css": "dist/main.css" });
     eleventyConfig.addPassthroughCopy({ dist: "dist" });
