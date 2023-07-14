@@ -25,7 +25,7 @@ jobs:
     - name: Build docs
       run: |
         npx yarn
-        npm run build
+        npm run build:docs
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
