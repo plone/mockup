@@ -11,7 +11,13 @@ export const config_unsubscribe = config.subscribe((value) => {
 export default function () {
     const store = writable([]);
 
-    store.request = async ({method='GET', path=null, uids=null, params=null}) => {
+    store.request = async ({
+        method = "GET",
+        path = null,
+        uids = null,
+        params = null,
+        searchTerm = null,
+    }) => {
         let vocabQuery;
         if (path) {
             vocabQuery = {
@@ -36,6 +42,14 @@ export default function () {
                     },
                 ],
             };
+        }
+        if(searchTerm) {
+            vocabQuery.criteria.push({
+                i: "Title",
+                o: "plone.app.querystring.operation.string.contains",
+                v: `${searchTerm}`,
+
+            })
         }
 
         let url = `${cfg.vocabularyUrl}&query=${JSON.stringify(
@@ -70,10 +84,9 @@ export default function () {
         }
     };
 
-    store.get = async (path) => {
+    store.get = async (path, searchTerm) => {
         let parts = path.split("/") || [];
-        const depth =
-            parts.length >= cfg.maxDepth ? cfg.maxDepth : parts.length;
+        const depth = parts.length >= cfg.maxDepth ? cfg.maxDepth : parts.length;
         let paths = [];
 
         let partsToShow = parts.slice(parts.length - depth, parts.length);
@@ -89,23 +102,38 @@ export default function () {
         }
 
         let levels = [];
+        let pathCounter = 0;
         for (var p of paths) {
+            pathCounter++;
+            const isFirstPath = pathCounter == 1;
+            console.log(isFirstPath, p);
+            const skipCache = isFirstPath && searchTerm;
             let level = {};
             const c = get(cache);
-            if (Object.keys(c).indexOf(p) === -1) {
-                // console.log("not in cache: ", p);
+            console.log(searchTerm)
+            if (Object.keys(c).indexOf(p) === -1 || skipCache) {
+                console.log("not in cache: ", p);
+                let query = {
+                    method: "GET"
+                };
                 let queryPath = cfg.basePath;
-                if(queryPath ==='/') {
-                    queryPath = '';
+                if (queryPath === "/") {
+                    queryPath = "";
                 }
                 queryPath = queryPath + p;
-                level = await store.request({method:"GET", path:queryPath});
-                cache.update((n) => {
-                    n[p] = level;
-                    return n;
-                });
+                query["path"] = queryPath;
+                if(isFirstPath && searchTerm){
+                    query["searchTerm"] = searchTerm + "*";
+                }
+                level = await store.request(query);
+                if(!skipCache){
+                    cache.update((n) => {
+                        n[p] = level;
+                        return n;
+                    });
+                }
             } else {
-                // console.log("in cache: ", p);
+                console.log("in cache: ", p);
                 level = c[p];
             }
             // console.log(get(cache));
