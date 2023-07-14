@@ -1,9 +1,0 @@
-{
-  "addButtons": [{
-    "id": "document",
-    "title": "Document"
-  },{
-    "id": "folder",
-    "title": "Folder"
-  }]
-}

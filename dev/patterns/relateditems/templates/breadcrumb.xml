@@ -1,2 +1,0 @@
-<span class="separator">/<span>
-<a href="<%- path %>" class="crumb"><%- text %></a>
