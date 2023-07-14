@@ -43,7 +43,7 @@ parser.addArgument("max-depth", "200");
 parser.addArgument("max-selectionsize", "9999");
 // parser.addArgument("selectable-types", [],[], true);
 //parser.addArgument("selectable-types", [],[], true);
-// parser.addArgument("selection", []);
+parser.addArgument("selection", []);
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";
@@ -53,7 +53,8 @@ class Pattern extends BasePattern {
     async init() {
         const ContentBrowser = (await import("./src/ContentBrowser.svelte")).default;
         const SelectedItems = (await import("./src/SelectedItems.svelte")).default;
-        console.log("init ContentBrowser patter with options: ", this.options);
+        console.log("init ContentBrowser pattern with options: ", this.options);
+        console.log("init contentbrowser pattern selection: ", this.options.selection);
 
         const contentBrowserEl = document.createElement("div");
         contentBrowserEl.classList.add("content-browser-wrapper");
@@ -80,6 +81,7 @@ class Pattern extends BasePattern {
            props: {
                maxSelectionsize: this.options.max.selectionsize,
                selectedItemsNode: this.el,
+               selection: this.options.selection
            },
         });
     }

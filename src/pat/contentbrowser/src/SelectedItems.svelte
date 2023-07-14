@@ -5,12 +5,21 @@
     import { request } from "./api.js";
 
     export let maxSelectionsize;
-    export let selectedItemsNode;
-    // export let initialSelection = "";
+    export let selection = [];
+
+    let ref;
+    function event_dispatch(name, detail) {
+        const event  = new CustomEvent(name, {
+            detail: {
+                content: detail
+            },
+            bubbles: true
+        });
+        document.dispatchEvent(event);
+    }
 
     onMount(async () => {
-        readSelectedItemsFromInput();
-        selectedItemsNode.addEventListener("change", readSelectedItemsFromInput);
+        initializeSelectedItemsStore();
     });
 
     function unselectItem(i) {
@@ -19,50 +28,42 @@
             return n;
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID))
-        if (!$selectedItems.length) {
-            writeSelectedItemsUidsToInput();
-        }
     }
 
     async function getSelectedItemsByUids(uids) {
-        let selectedItemsFromUids;
         if(!uids){
             return []
         }
+        let selectedItemsFromUids;
         selectedItemsFromUids = await request({method:"GET", uids:uids});
-        return await selectedItemsFromUids.results || [];
+        return await selectedItemsFromUids.results;
     }
 
-    async function readSelectedItemsFromInput() {
-        const selectedItemsValue = selectedItemsNode.value;
-        if (!selectedItemsValue){return}
-
-        const uidsFromNode = selectedItemsValue.split(";");
-        selectedUids.set(uidsFromNode);
-        if(uidsFromNode){
-            selectedItems.set(await getSelectedItemsByUids(uidsFromNode))
-        }else{
-            selectedItems.set([])
-        }
+    async function initializeSelectedItemsStore() {
+        let selectedItemsFromUids = await getSelectedItemsByUids(selection);
+        $selectedItems = selectedItemsFromUids;
     }
 
-    function writeSelectedItemsUidsToInput() {
-        // const uids = $selectedItems.map((x) => x.UID);
-        selectedItemsNode.value = $selectedUids.join(";");
+    function selectedUidsFromSelectedItems(){
+        let items = [];
+        $selectedItems.forEach(item => {
+            items.push(item.UID);
+        });
+        return items;
     }
 
     $: {
         $selectedItems;
         if ($selectedItems.length) {
-            writeSelectedItemsUidsToInput();
+            console.log("dispatch event: updateselection");
+            event_dispatch('updateSelection', selectedUidsFromSelectedItems());
         }
-        console.log(`selectedItems: ${$selectedItems}`)
+        console.log($selectedItems);
     }
 
 </script>
 
-
-<div class="content-browser-selected-items-wrapper">
+<div class="content-browser-selected-items-wrapper" bind:this={ref}>
     <button
         class="btn btn-primary"
         disabled="{$selectedItems.length >= maxSelectionsize}"
