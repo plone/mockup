@@ -1,339 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Mockup docs</title>
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <link rel="stylesheet" href="/dist/main.css" />
-    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
-    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
-    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
-    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
-    <script type="module" src="/dist/fakeserver.js"></script>
-  </head>
-  <body>
-    <div id="main-wrapper">
-      <nav id="sidebar">
-        <ul class="menu">
-          <li class="">
-            <a class="" href="/">Home</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/datatables/">DataTables</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/modal/">Modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/querystring/">Querystring</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/relateditems/">Related items</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/select2/">Select2</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/sortable/">Sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure/">Structure</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toggle/">Toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tree/">Tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/upload/">Upload</a>
-          </li>
-          
-          <li>---</li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
-          </li>
-          
-        </ul>
-      </nav>
-
-      <main id="content">
-        <h1>Structure updater pattern.</h1>
+<h1>Structure updater pattern.</h1>
 <p>The Structure Updater pattern updates the information of the current context after a user navigated to a new folder.</p>
 <h2>Configuration</h2>
 <table>
@@ -381,74 +46,59 @@ Like with any CSS selector you can also specify mutliple selectors by seperating
 <p>If you provide another path you can point it to your own implementation.</p>
 <p>This can be easily done in Plone, where the RequireJS configuration are <code>plone.app.registry</code> entries.</p>
 <p>For example, in your project's <code>registry.xml</code> profile, add this:</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;registry i18n:domain=&quot;plone&quot; xmlns:i18n=&quot;http://xml.zope.org/namespaces/i18n&quot;&gt;
-
-  &lt;records
-      prefix=&quot;plone.resources/mockup-patterns-structureupdater&quot;
-      interface='Products.CMFPlone.interfaces.IResourceRegistry'&gt;
-    &lt;value key=&quot;js&quot;&gt;++plone++my.project.resources/mockup-patterns-structureupdater.js&lt;/value&gt;
-  &lt;/records&gt;
-
-&lt;/registry&gt;
-</code></pre>
+<p>
+<registry i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n"></registry></p>
+<p><records prefix="plone.resources/mockup-patterns-structureupdater" interface="Products.CMFPlone.interfaces.IResourceRegistry">
+<value key="js">++plone++my.project.resources/mockup-patterns-structureupdater.js</value>
+</records></p>
+<p></p>
 <p>In that example the custom implementation of the structure updater pattern lives in a <code>plone.resource</code> directory named <code>my.project.resources</code>.
 This is configured in the project's <code>configure.zcml</code>:</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;configure
-    xmlns=&quot;http://namespaces.zope.org/zope&quot;
-    xmlns:plone=&quot;http://namespaces.plone.org/plone&quot;&gt;
-  &lt;plone:static
-      directory=&quot;resources&quot;
-      name=&quot;my.project.resources&quot;
-      type=&quot;plone&quot;
-  /&gt;
-&lt;/configure&gt;
-</code></pre>
+<p>
+<configure xmlns="http://namespaces.zope.org/zope" xmlns:plone="http://namespaces.plone.org/plone">
+&lt;plone:static
+directory=&quot;resources&quot;
+name=&quot;my.project.resources&quot;
+type=&quot;plone&quot;
+/&gt;
+</configure></p>
 <p>The custom implementation <code>mockup-patterns-structureupdater.js</code> looks like so:</p>
-<pre><code>define([
-    'pat-base',
+<p>define([
+'pat-base',
 ], function(Base) {
-    'use strict';
-    var Pattern = Base.extend({
-      name: 'structureupdater2',
-      trigger: '.template-folder_contents',
-      parser: 'mockup',
-      init: function() {
-        $('body').on('context-info-loaded', function (e, data) {
-          // Do something
-          $('.breadcrumb').html(data.object &amp;&amp; '&lt;li&gt;' + data.object.Title + '&lt;/li&gt;');
-        }.bind(this));
-      }
-    });
-    return Pattern;
+'use strict';
+var Pattern = Base.extend({
+name: 'structureupdater2',
+trigger: '.template-folder_contents',
+parser: 'mockup',
+init: function() {
+$('body').on('context-info-loaded', function (e, data) {
+// Do something
+$('.breadcrumb').html(data.object &amp;&amp; '<li>' + data.object.Title + '</li>');
+}.bind(this));
+}
 });
-</code></pre>
+return Pattern;
+});</p>
 <p>You probably want to include the original behavior.
 If you have given the pattern another name than the original pattern, you can just let RequireJS depend on the original pattern and it will be registered and triggered as normal.
 We can include the original pattern via the <code>mockup-patterns-structure-url</code> path and incldue then the filename.
 The code looks then like so:</p>
-<pre><code>define([
-    'pat-base',
-    'mockup-patterns-structure-url/pattern-structureupdater',
+<p>define([
+'pat-base',
+'mockup-patterns-structure-url/pattern-structureupdater',
 ], function(Base) {
-    'use strict';
-    var Pattern = Base.extend({
-      name: 'structureupdater2',  // Give it another name than the original pattern
-      trigger: '.template-folder_contents',
-      parser: 'mockup',
-      init: function() {
-        $('body').on('context-info-loaded', function (e, data) {
-          // Do something
-          $('.breadcrumb').html(data.object &amp;&amp; '&lt;li&gt;' + data.object.Title + '&lt;/li&gt;');
-        }.bind(this));
-      }
-    });
-    return Pattern;
+'use strict';
+var Pattern = Base.extend({
+name: 'structureupdater2',  // Give it another name than the original pattern
+trigger: '.template-folder_contents',
+parser: 'mockup',
+init: function() {
+$('body').on('context-info-loaded', function (e, data) {
+// Do something
+$('.breadcrumb').html(data.object &amp;&amp; '<li>' + data.object.Title + '</li>');
+}.bind(this));
+}
 });
-</code></pre>
-
-      </main>
-    </div>
-  </body>
-</html>
+return Pattern;
+});</p>

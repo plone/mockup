@@ -1,339 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Mockup docs</title>
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <link rel="stylesheet" href="/dist/main.css" />
-    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
-    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
-    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
-    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
-    <script type="module" src="/dist/fakeserver.js"></script>
-  </head>
-  <body>
-    <div id="main-wrapper">
-      <nav id="sidebar">
-        <ul class="menu">
-          <li class="">
-            <a class="" href="/">Home</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/datatables/">DataTables</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/modal/">Modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/querystring/">Querystring</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/relateditems/">Related items</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/select2/">Select2</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/sortable/">Sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure/">Structure</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toggle/">Toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tree/">Tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/upload/">Upload</a>
-          </li>
-          
-          <li>---</li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
-          </li>
-          
-        </ul>
-      </nav>
-
-      <main id="content">
-        <h2>Description</h2>
+<h2>Description</h2>
 <p>The auto-submit pattern will automatically submit a form whenever the user changes a value of any input inside of it.
 It can be used to incrementally send form input data to a server, for instance to create a live search pattern where the search results update on every keypress.</p>
 <h2>Documentation</h2>
@@ -344,26 +9,23 @@ to only let changes to those particular inputs automatically submit the form.</p
 <p>This pattern plays nicely with <code>pat-subform</code>, which means that if an element changes inside a subform, only that subform will be submitted.</p>
 <h2>Examples</h2>
 <p>On only one element:</p>
-<pre><code>&lt;form&gt;
-  &lt;input class=&quot;pat-auto-submit&quot; type=&quot;text&quot; name=&quot;q&quot; placeholder=&quot;Search query&quot;/&gt;
-&lt;/form&gt;
-</code></pre>
+<p></p><form>
+<input class="pat-auto-submit" type="text" name="q" placeholder="Search query">
+</form><p></p>
 <p>On a fieldset:</p>
-<pre><code>&lt;form&gt;
-  &lt;fieldset class=&quot;pat-auto-submit&quot;&gt;
-   &lt;input type=&quot;text&quot; name=&quot;q&quot; placeholder=&quot;Search query&quot;/&gt;
-   &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;local&quot;/&gt; Only search in this section&lt;/label&gt;
- &lt;/fieldset&gt;
-&lt;/form&gt;
-</code></pre>
+<p></p><form>
+<fieldset class="pat-auto-submit">
+<input type="text" name="q" placeholder="Search query">
+<label><input type="checkbox" name="local"> Only search in this section</label>
+</fieldset>
+</form><p></p>
 <p>And on the whole form:</p>
-<pre><code>&lt;form class=&quot;pat-auto-submit&quot;&gt;
-  &lt;fieldset&gt;
-   &lt;input type=&quot;text&quot; name=&quot;q&quot; placeholder=&quot;Search query&quot;/&gt;
-   &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;local&quot;/&gt; Only search in this section&lt;/label&gt;
- &lt;/fieldset&gt;
-&lt;/form&gt;
-</code></pre>
+<p></p><form class="pat-auto-submit">
+<fieldset>
+<input type="text" name="q" placeholder="Search query">
+<label><input type="checkbox" name="local"> Only search in this section</label>
+</fieldset>
+</form><p></p>
 <h3>What constitutes a change?</h3>
 <p>While for a checkbox a change is clearly defined as uncheck/check, for
 input fields there are more options.</p>
@@ -372,33 +34,28 @@ keypress in an input field. Naturally, if two keypresses are more than
 400ms apart, two submits will be triggered.</p>
 <p>You can configure this behaviour with the delay option.</p>
 <p>no delay:</p>
-<pre><code>&lt;form&gt;
-  &lt;input name=&quot;q&quot; class=&quot;pat-auto-submit&quot; data-pat-auto-submit=&quot;delay: 0ms&quot;/&gt;
-&lt;/form&gt;
-</code></pre>
+<p></p><form>
+<input name="q" class="pat-auto-submit" data-pat-auto-submit="delay: 0ms">
+</form><p></p>
 <p>longer delay:</p>
-<pre><code>&lt;form&gt;
-  &lt;input name=&quot;q&quot; class=&quot;pat-auto-submit&quot; data-pat-auto-submit=&quot;delay: 1000ms&quot;/&gt;
-&lt;/form&gt;
-</code></pre>
+<p></p><form>
+<input name="q" class="pat-auto-submit" data-pat-auto-submit="delay: 1000ms">
+</form><p></p>
 <p>delay until element loses focus:</p>
-<pre><code>&lt;form&gt;
-  &lt;input name=&quot;q&quot; class=&quot;pat-auto-submit&quot; data-pat-auto-submit=&quot;delay: defocus&quot;/&gt;
-&lt;/form&gt;
-</code></pre>
+<p></p><form>
+<input name="q" class="pat-auto-submit" data-pat-auto-submit="delay: defocus">
+</form><p></p>
 <h3>Combining with injection</h3>
 <p>The auto-submit pattern is most useful when combined with injection. This makes it
 trivial to create a form that automatically loads content and displays
 it on the page. Here is a minimal search page:</p>
-<pre><code>&lt;form class=&quot;pat-inject pat-auto-submit&quot; action=&quot;/search&quot; data-pat-inject=&quot;target: #results&quot;&gt;
-  &lt;input type=&quot;text&quot; name=&quot;q&quot; placeholder=&quot;Search query&quot;/&gt;
-  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;local&quot;/&gt; Only search in this section&lt;/label&gt;
-&lt;/form&gt;
-
-&lt;section id=&quot;results&quot;&gt;
-  ... present search results here
-&lt;/section&gt;
-</code></pre>
+<p></p><form class="pat-inject pat-auto-submit" action="/mockup/search" data-pat-inject="target: #results">
+<input type="text" name="q" placeholder="Search query">
+<label><input type="checkbox" name="local"> Only search in this section</label>
+</form><p></p>
+<p></p><section id="results">
+... present search results here
+</section><p></p>
 <p>As soon as the user starts entering text in the search field or changes
 the local-search toggle search requests will send to the server and the
 results will be inserted into the existing page by replacing the content
@@ -424,8 +81,3 @@ of the <em>results</em> section.</p>
 </tr>
 </tbody>
 </table>
-
-      </main>
-    </div>
-  </body>
-</html>

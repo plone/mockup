@@ -1,379 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Mockup docs</title>
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <link rel="stylesheet" href="/dist/main.css" />
-    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
-    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
-    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
-    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
-    <script type="module" src="/dist/fakeserver.js"></script>
-  </head>
-  <body>
-    <div id="main-wrapper">
-      <nav id="sidebar">
-        <ul class="menu">
-          <li class="">
-            <a class="" href="/">Home</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/datatables/">DataTables</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/modal/">Modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/querystring/">Querystring</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/relateditems/">Related items</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/select2/">Select2</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/sortable/">Sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure/">Structure</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toggle/">Toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tree/">Tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/upload/">Upload</a>
-          </li>
-          
-          <li>---</li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
-          </li>
-          
-        </ul>
-      </nav>
-
-      <main id="content">
-        <h1>Modal</h1>
+<h1>Modal</h1>
 <p>This is the modal pattern.</p>
 <h2>Basic Modal</h2>
-<p><a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
-                    data-pat-plone-modal="width: 400">Modal basic</a></p>
+<p><a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal" data-pat-plone-modal="width: 400">Modal basic</a></p>
 <div id="modal1" style="display: none">
     <h1>Basic modal!</h1>
     <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
 </div>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><br>    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal1<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-large plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width: 400<span class="token punctuation">"</span></span><br>    <span class="token punctuation">></span></span>Modal basic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><br><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal1<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Basic modal!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Indeed. Whoa whoa whoa whoa. Wait.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Modal with Buttons</h2>
-<p><a href="#modal2" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
-                    data-pat-plone-modal="{'width': '400', 'buttons': ['.plone-btn']}">Modal with buttons</a></p>
+<p><a href="#modal2" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal" data-pat-plone-modal="{'width': '400', 'buttons': ['.plone-btn']}">Modal with buttons</a></p>
 <div id="modal2" style="display: none">
     <h1>Modal with buttons!</h1>
     <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
-    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="Cancel" />
-    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="Submit" />
+    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="Cancel">
+    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="Submit">
 </div>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><br>    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal2<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-large plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{'width': '400', 'buttons': ['.plone-btn']}<span class="token punctuation">"</span></span><br>    <span class="token punctuation">></span></span>Modal basic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><br><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal2<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Basic modal!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Indeed. Whoa whoa whoa whoa. Wait.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Modal scrolling</h2>
-<p><a href="#modal3" class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal"
-                data-pat-plone-modal="width: 500">Modal long scrolling</a></p>
+<p><a href="#modal3" class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal" data-pat-plone-modal="width: 500">Modal long scrolling</a></p>
 <div id="modal3" style="display: none">
 <h1>Basic with scrolling</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br><br><br><br><br><br><br><br><br><br><br><br>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
 </div>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><br>    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal3<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-lg plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width: 500<span class="token punctuation">"</span></span><br>    <span class="token punctuation">></span></span>Modal long scrolling<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><br><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal3<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Basic with scrolling<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><br>        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor<br>        incididunt ut labore et dolore magna aliqua<br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><br>        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor<br>        incididunt ut labore et dolore magna aliqua<br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><br>        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor<br>        incididunt ut labore et dolore magna aliqua<br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><br>        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor<br>        incididunt ut labore et dolore magna aliqua<br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><br>        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor<br>        incididunt ut labore et dolore magna aliqua<br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><br>        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor<br>        incididunt ut labore et dolore magna aliqua<br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Modal with TinyMCE</h2>
-<p><a href="#modaltinymce" class="btn btn-lg btn-primary pat-plone-modal"
-data-pat-plone-modal="height: 600px;
+<p><a href="#modaltinymce" class="btn btn-lg btn-primary pat-plone-modal" data-pat-plone-modal="height: 600px;
                 width: 80%">
 Modal with TinyMCE</a></p>
 <div id="modaltinymce" style="display:none">
@@ -381,18 +42,14 @@ Modal with TinyMCE</a></p>
 </div>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><br>    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modaltinymce<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-lg btn-primary pat-plone-modal<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>height: 600px;<br>                width: 80%<span class="token punctuation">"</span></span><br><span class="token punctuation">></span></span><br>    Modal with TinyMCE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><br><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modaltinymce<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span>none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tinymce<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Modal modalSize modal-fullscreen</h2>
-<p><a href="#modal4"
-   class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
-   data-pat-plone-modal="modalSizeClass: modal-fullscreen ; margin: 0;">Modal fullscreen!</a></p>
+<p><a href="#modal4" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal" data-pat-plone-modal="modalSizeClass: modal-fullscreen ; margin: 0;">Modal fullscreen!</a></p>
 <div id="modal4" style="display: none">
     <h1>Full screen modal!</h1>
     <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
 </div>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><br>    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal4<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-large plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modalSizeClass: modal-fullscreen; margin: 0;<span class="token punctuation">"</span></span><br>    <span class="token punctuation">></span></span>Modal fullscreen!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><br><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal4<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Basic screen modal!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Indeed. Whoa whoa whoa whoa. Wait.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Modal modalSize modal-lg</h2>
-<p><a href="#modal5"
-   class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
-   data-pat-plone-modal="modalSizeClass: modal-lg;">Modal large!</a></p>
+<p><a href="#modal5" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal" data-pat-plone-modal="modalSizeClass: modal-lg;">Modal large!</a></p>
 <div id="modal5" style="display: none">
     <h1>Full screen modal!</h1>
     <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
@@ -419,9 +76,4 @@ Modal with TinyMCE</a></p>
 |         actionOptions         |       object        |                                                                 {}                                                                  |                                                              A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.                                                               |
 |           onSuccess           |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (modal, response, state, xhr, form) when form has been successfully submitted. if value is a string, this is the name of a function at window level            |
 |          onFormError          |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (modal, response, state, xhr, form) when backend has sent an error after form submission. if value is a string, this is the name of a function at window level |
-|            onError            |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level                           |</p>
-
-      </main>
-    </div>
-  </body>
-</html>
+|            onError            |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level                           |</vertical></horizontal></p>

@@ -1,360 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Mockup docs</title>
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <link rel="stylesheet" href="/dist/main.css" />
-    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
-    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
-    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
-    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
-    <script type="module" src="/dist/fakeserver.js"></script>
-  </head>
-  <body>
-    <div id="main-wrapper">
-      <nav id="sidebar">
-        <ul class="menu">
-          <li class="">
-            <a class="" href="/">Home</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/datatables/">DataTables</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/modal/">Modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/querystring/">Querystring</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/relateditems/">Related items</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/select2/">Select2</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/sortable/">Sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure/">Structure</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toggle/">Toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tree/">Tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/upload/">Upload</a>
-          </li>
-          
-          <li>---</li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
-          </li>
-          
-        </ul>
-      </nav>
-
-      <main id="content">
-        <h2>Description</h2>
+<h2>Description</h2>
 <p>Produce web content while only focussing on the content itself instead of on tags or tools. That's markdown. With the Patterns Markdown pattern you can easily disclose Markdown based content in a prototype or production environment.</p>
 <h2>Documentation</h2>
 <p>The markdown pattern can render <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> in a HTML page. This is done by putting markdown text in an element and adding a pat-markdown class.</p>
-<pre><code>&lt;pre class=&quot;pat-markdown&quot;&gt;
-   This is list of things.
-
-   1. Number one.
-   2. Number two.
-&lt;/div&gt;
-</code></pre>
+<p></p><pre class="pat-markdown">
+This is list of things.<p></p>
+<p>1. Number one.
+2. Number two.
+</p>
 <p>The text inside the element will be rendered using the
 <a href="http://code.google.com/p/pagedown/">PageDown</a> renderer. The original
 element will be replaced with a div containing the renderer text:</p>
-<pre><code>&lt;div&gt;
-  &lt;p&gt;This is a list of things.&lt;/p&gt;
-  &lt;ol&gt;
-    &lt;li&gt;Number one.&lt;/li&gt;
-    &lt;li&gt;Number two.&lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/div&gt;
-</code></pre>
+<p></p><div>
+<p>This is a list of things.</p>
+<ol>
+<li>Number one.</li>
+<li>Number two.</li>
+</ol>
+</div><p></p>
 <h3>Using markdown with injection</h3>
 <p>You can also use markdown rendering in combination with injection: if
 the injected content is markdown it will automatically be rendered.
@@ -362,28 +24,17 @@ There are two ways for Patterns to detect that you are injection
 markdown: filename extension and explicit configuration.</p>
 <p>If you inject a URL which ends in <code>.md</code> it will be assumed to be
 markdown source.</p>
-<pre><code>&lt;a href=&quot;content.md&quot; class=&quot;pat-inject&quot; data-pat-inject=&quot;target: #target&quot;&gt;Show me the money!&lt;/a&gt;
-</code></pre>
+<p><a href="content.md" class="pat-inject" data-pat-inject="target: #target">Show me the money!</a></p>
 <p>If you have no control over the URL you can also explicitly tell the
 injection pattern that it is loading markdown content through its
 <code>data-type</code> option.</p>
-<pre><code>&lt;a href=&quot;content&quot; class=&quot;pat-inject&quot; data-pat-inject=&quot;target: #target; data-type: markdown&quot;&gt;Show me the money!&lt;/a&gt;
-</code></pre>
+<p><a href="content" class="pat-inject" data-pat-inject="target: #target; data-type: markdown">Show me the money!</a></p>
 <p>You can also extract specific sections of your markdown source by specifying a
 <code>source</code> option which points to a heading in your markdown source. For example
 if your markdown looks like this:</p>
-<pre><code># Top level section
-
-## An interesting section
-
-## Possibly less interesting
-</code></pre>
+<p># Top level section</p>
+<p>## An interesting section</p>
+<p>## Possibly less interesting</p>
 <p>You can include interesting section like this:</p>
-<pre><code>&lt;a href=&quot;content.md&quot; class=&quot;pat-inject&quot;
-   data-pat-inject=&quot;source: ## An interesting section; target: #target&quot;&gt;Show me the money!&lt;/a&gt;
-</code></pre>
-
-      </main>
-    </div>
-  </body>
-</html>
+<p><a href="content.md" class="pat-inject" data-pat-inject="source: ## An interesting section; target: #target">Show me the money!</a></p>
+</pre>

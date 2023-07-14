@@ -1,387 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Mockup docs</title>
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <link rel="stylesheet" href="/dist/main.css" />
-    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
-    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
-    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
-    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
-    <script type="module" src="/dist/fakeserver.js"></script>
-  </head>
-  <body>
-    <div id="main-wrapper">
-      <nav id="sidebar">
-        <ul class="menu">
-          <li class="">
-            <a class="" href="/">Home</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/datatables/">DataTables</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/modal/">Modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/querystring/">Querystring</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/relateditems/">Related items</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/select2/">Select2</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/sortable/">Sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/structure/">Structure</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toggle/">Toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/tree/">Tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/upload/">Upload</a>
-          </li>
-          
-          <li>---</li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
-          </li>
-          
-          <li class="">
-            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
-          </li>
-          
-        </ul>
-      </nav>
-
-      <main id="content">
-        <h2>Description</h2>
+<h2>Description</h2>
 <p>Injection makes it trivial to load content from a server and display it on a web page with a rich, modern web experience without any page reloads. Pat-inject works on existing infra structures, is designed with respect for accessibility and follows the principles of progressive enhancement.</p>
 <h2>Documentation</h2>
 <h3>Concept</h3>
 <p>Injection is an enhancement on regular HTML links that point from one HTML page to another. Without JavaScript and injection, you would keep this standard behaviour. With JavaScript and pat-inject, a richer experience is created for modern graphical browsers.</p>
 <p>Pat-inject intercepts the page refresh, invisibly collects the remote page, extracts parts out of it that you're interested in and replaces the content somewhere on the currently visible page without refreshing the browser window.</p>
 <p>The principle is illustrated in the following graphic.</p>
-<p><img src="/src/pat/inject/injection-single.svg" alt="image"></p>
+<p><img src="/mockup/src/pat/inject/injection-single.svg" alt="image"></p>
 <p>This typical example illustrates how in this case the content of the main content region is replaced by the content of the same region of another page. One could for instance create a series of links styled as tabs this way, which would each refresh the content area of the page, without refreshing the browser window.</p>
 <p>A slightly more complex case is illustrated below. You see how multiple regions are extracted out of one page and injected into similar areas on another page. It doesn't matter if the regions on the remote page are differently named or styled.</p>
-<p><img src="/src/pat/inject/injection-multiple.svg" alt="image"></p>
+<p><img src="/mockup/src/pat/inject/injection-multiple.svg" alt="image"></p>
 <p>It's also possible to inject content from another page into a modal panel:</p>
-<p><img src="/src/pat/inject/injection-modal.svg" alt="image"></p>
+<p><img src="/mockup/src/pat/inject/injection-modal.svg" alt="image"></p>
 <p>The possibilities don't stop here. Other applications of injection include injection in tooltips (pat-tooltip) and injection in 'self healing messages' (Similar to Mac OS banners or Growl) (pat-notification). Those ways of working with injection are explained in the respective documentation sections of the components pat-tooltip and pat-notification.</p>
 <h3>Code examples</h3>
 <p>The most simple form of injection is a link which loads content when clicked:</p>
-<pre><code>&lt;a href=&quot;demos/frobber.html#demo-content&quot; class=&quot;pat-inject&quot;&gt;Demo the frobber&lt;/a&gt;
-
-&lt;section id=&quot;demo-content&quot;&gt;
-  …
-&lt;/section&gt;
-</code></pre>
+<p><a href="demos/frobber.html#demo-content" class="pat-inject">Demo the frobber</a></p>
+<p></p><section id="demo-content">
+…
+</section><p></p>
 <p>When a user clicks this link <code>demos/frobber.html</code> will be fetched via AJAX, the element with id <code>demo-content</code> is extracted and used to replace the content of <code>#demo-content</code> on the current page.</p>
 <p>In another situation you may not want to replace content but add new content. You can easily do that by using a modifier:</p>
-<pre><code>&lt;a href=&quot;latest-news.html#demo-content&quot; class=&quot;pat-inject&quot;
-   data-pat-inject=&quot;target: #news::before&quot;&gt;Tell me more&lt;/a&gt;
-
-&lt;section id=&quot;news&quot;&gt;
-  …
-&lt;/section&gt;
-</code></pre>
+<p><a href="latest-news.html#demo-content" class="pat-inject" data-pat-inject="target: #news::before">Tell me more</a></p>
+<p></p><section id="news">
+…
+</section><p></p>
 <p>In this example clicking on the <em>Tell me more</em> link will load the latest news content and inject it before the content of <code>#news</code>.</p>
 <p>Perhaps inserting a single block of content is not enough for your needs? Don't worry! Let's give you another example:</p>
-<pre><code>&lt;section id=&quot;section&quot;&gt;
-  &lt;form action=&quot;/my/form&quot; class=&quot;pat-inject&quot;
-   data-pat-inject=&quot;#demo-content #section &amp;&amp; #notice #notices::after&quot;&gt;
-    …
-  &lt;/form&gt;
-&lt;/section&gt;
-</code></pre>
+<p></p><section id="section">
+<form action="/mockup/my/form" class="pat-inject" data-pat-inject="#demo-content #section && #notice #notices::after">
+…
+</form>
+</section><p></p>
 <p>When you submit this form two things happen: <code>#demo-content</code> from the
 response is used to replace <code>#section</code>'s content of the page, replacing the current form with a new form or a feedback message. In addition a <code>#notice</code> element is extracted from the response and added at the bottom
 of <code>#notices</code>.</p>
 <h3>Where and what to inject</h3>
 <p>The most simple injection fetches a source via AJAX, extracts its body's content and replaces the current body's content with it:</p>
-<pre><code>&lt;a href=&quot;news.html&quot; class=&quot;pat-inject&quot;&gt;
-  Display news content in body content
-&lt;/a&gt;
-</code></pre>
+<p><a href="news.html" class="pat-inject">
+Display news content in body content
+</a></p>
 <p>Admittedly, this is a rare use case. However, it is ideal for understanding the defaults:</p>
 <blockquote>
 <p>Default selector and source and target selector</p>
@@ -397,39 +54,30 @@ worked on.</p>
 <p>XXX: add references to the sections.</p>
 <h3>Select individual elements via <code>#id</code></h3>
 <p>The simple injections replace the content of an element in <code>target</code> with the content of an element in <code>source</code>. There is a one-to-one relation between elements in source and target:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src1; target: #tgt1 &amp;&amp;
-                    source: #src2; target: #tgt2&quot;&gt;
-  Multi-injection with a one-to-one mapping.
-&lt;/a&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src1; target: #tgt1 &&
+                        source: #src2; target: #tgt2">
+Multi-injection with a one-to-one mapping.
+</a></p>
 <p>In case one source element is to be used for both targets, it can be specified as part of the <code>href</code> (or <code>action</code> in case of forms):</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target: #tgt1 &amp;&amp;
-                    source: #src; target: #tgt2&quot;&gt;
-  One source element for two targets.
-&lt;/a&gt;
-
-&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html#src&quot;
-   data-pat-inject=&quot;target: #tgt1 &amp;&amp;
-                    target: #tgt2&quot;&gt;
-  One source element for two targets, source specified via href.
-&lt;/a&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target: #tgt1 &&
+                        source: #src; target: #tgt2">
+One source element for two targets.
+</a></p>
+<p><a class="pat-inject" href="sources.html#src" data-pat-inject="target: #tgt1 &&
+                        target: #tgt2">
+One source element for two targets, source specified via href.
+</a></p>
 <p>The source id specified as part of <code>href</code>/<code>action</code> is the default source selector and can be overriden for one or more injections:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html#src&quot;
-   data-pat-inject=&quot;target: #tgt1 &amp;&amp;
-                    target: #tgt2 &amp;&amp;
-                    source: #other; target: #tgt3&quot;&gt;
-  One injection overrides the default source element.
-&lt;/a&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html#src" data-pat-inject="target: #tgt1 &&
+                        target: #tgt2 &&
+                        source: #other; target: #tgt3">
+One injection overrides the default source element.
+</a></p>
 <p>Sometimes it is useful to use the triggering element itself as a target.</p>
 <p>This can be done by using the special <em>self</em> target:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot; data-pat-inject=&quot;target: self&quot;&gt;
-  Replace me with sources.html.
-&lt;/a&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="target: self">
+Replace me with sources.html.
+</a></p>
 <h3>Modifiers</h3>
 <p>So far you can replace the target element's content with the source element's content.
 In order to work on the actual elements, or to place things relative to theselected elements, we have three modifiers:</p>
@@ -444,98 +92,64 @@ Like in CSS, the pseudo-element (a position) right before the content of the sel
 <p>Let's see these in action and combination:</p>
 <h4>Still working on content</h4>
 <p>Replace target content with source content (default, just a reminder):</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target:  #tgt&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target:  #tgt"></a></p>
 <p>Put source content before target content:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target: #tgt::before&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target: #tgt::before"></a></p>
 <p>Put source content after target content:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target: #tgt::after&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target: #tgt::after"></a></p>
 <h4>Elements instead of content</h4>
 <p>Replace target element with source element:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src::element; target: #tgt::element&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src::element; target: #tgt::element"></a></p>
 <p>Put source element before target element:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src::element; target: #tgt::element::before&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src::element; target: #tgt::element::before"></a></p>
 <p>Put source element after target element:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src::element; target: #tgt::element::after&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src::element; target: #tgt::element::after"></a></p>
 <h4>Mixing element and content</h4>
 <p>Replace target element with source content:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target: #tgt::element&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target: #tgt::element"></a></p>
 <p>Replace target content with source element:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src::element; target: #tgt&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src::element; target: #tgt"></a></p>
 <p>Source content before target element:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target: #tgt::element::before&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target: #tgt::element::before"></a></p>
 <p>Source content after target element:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src; target: #tgt::element::after&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src; target: #tgt::element::after"></a></p>
 <p>Source element before target content:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src::element; target: #tgt::before&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src::element; target: #tgt::before"></a></p>
 <p>Source element after target content:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;source: #src::element; target: #tgt::after&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="sources.html" data-pat-inject="source: #src::element; target: #tgt::after"></a></p>
 <h3>Using full-blown jQuery selectors</h3>
 <p>For both selectors every conceivable jQuery selector is allowed. If multiple elements match, all will be replaced.</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot;
-   data-pat-inject=&quot;target: #parentid &gt; .childrensclass&quot;&gt;
+<p><a class="pat-inject" href="sources.html" data-pat-inject="target: #parentid > .childrensclass">
 ...
-&lt;div id=&quot;parentid&quot;&gt;
-  &lt;div class=&quot;childrensclass&quot;&gt;
-    to be replaced by sources.html's body
-  &lt;/div&gt;
-  &lt;div class=&quot;childrensclass&quot;&gt;
-    to be replaced by sources.html's body
-  &lt;/div&gt;
-  &lt;div&gt;to stay untouched&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
+<div id="parentid">
+<div class="childrensclass">
+to be replaced by sources.html's body
+</div>
+<div class="childrensclass">
+to be replaced by sources.html's body
+</div>
+<div>to stay untouched</div>
+</div></a></p>
 <h3>Non-existing targets</h3>
 <p>In case the target selector returns no elements, we will attempt to create a matching element for you.</p>
 <p>So far we are able to handle 'target' selectors that consist of only an id: A <code>div</code> with that id will be created and injected as the last child of <code>body</code>:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot; data-pat-inject=&quot;target: #non-existing&quot;&gt;
+<p><a class="pat-inject" href="sources.html" data-pat-inject="target: #non-existing">
 …
-&lt;/body&gt;
-</code></pre>
+</a></p>
 <p>After the injection:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;sources.html&quot; data-pat-inject=&quot;target: #non-existing&quot;&gt;
+<p><a class="pat-inject" href="sources.html" data-pat-inject="target: #non-existing">
 …
-&lt;div id=&quot;non-existing&quot;&gt;
-  Content of body of sources.html
-&lt;/div&gt;
-&lt;/body&gt;
-</code></pre>
+<div id="non-existing">
+Content of body of sources.html
+</div>
+</a></p>
 <h2>Trigger</h2>
 <p>By default injection is triggered on click for anchors and on submit for forms. Further, it can be triggered upon initialisation (<code>autoload</code>) and when coming into view (<code>autoload-visible</code>). <code>autoload</code> injection is useful to deliver a page skeleton, where e.g. header, body, and sidebar load their content in parallel. <code>autoload-visible</code> injection is useful
 to build infinite lists, where the injection element replaces itself with the next 10 entries and a new <code>autoload-visible</code> injection link.</p>
 <p>A <code>autoload</code> may be delayed, by providing a <code>delay</code> argument in <code>data-pat-inject</code>. The delay is specified in milliseconds. This is useful to build a polling loop. Note that using this in combination with other injections may create race conditions with weird effects. This <code>delay</code> is only supported for <code>autoload</code>, not for <code>autoload-visible</code> or for click triggers).</p>
-<pre><code>&lt;a href=&quot;sources.html#id&quot; class=&quot;pat-inject&quot;
-   data-pat-inject=&quot;trigger: autoload&quot;&gt;Autoloads as soon as initialised&lt;/a&gt;
-
-&lt;a href=&quot;sources.html#id&quot; class=&quot;pat-inject&quot;
-   data-pat-inject=&quot;trigger: autoload-visible&quot;&gt;Autoloads as soon as visible&lt;/a&gt;
-
-&lt;a href=&quot;sources.html#id&quot; class=&quot;pat-inject&quot;
-   data-pat-inject=&quot;trigger: autoload; delay: 2000&quot;&gt;Autoloads 2 seconds after the page is initialised.&lt;/a&gt;
-</code></pre>
+<p><a href="sources.html#id" class="pat-inject" data-pat-inject="trigger: autoload">Autoloads as soon as initialised</a></p>
+<p><a href="sources.html#id" class="pat-inject" data-pat-inject="trigger: autoload-visible">Autoloads as soon as visible</a></p>
+<p><a href="sources.html#id" class="pat-inject" data-pat-inject="trigger: autoload; delay: 2000">Autoloads 2 seconds after the page is initialised.</a></p>
 <!--
 XXX: example infinite list
 -->
@@ -543,52 +157,42 @@ XXX: example infinite list
 <p><em>Note: This feature is experimental</em></p>
 <p>For anchors, you can specify an href to point to, after the injection was triggered. If that element exists already during initialisation, the injection is not initialised and the href changed to next-href.</p>
 <p>before:</p>
-<pre><code>&lt;a class=&quot;next-month pat-inject&quot; ref=&quot;calendar.html#2012-05&quot;
-   data-pat-inject=&quot;post: #2012-04; next-href: 2012-05&quot;&gt;Next month&lt;/a&gt;
+<p><a class="next-month pat-inject" ref="calendar.html#2012-05" data-pat-inject="post: #2012-04; next-href: 2012-05">Next month</a>
 …
-&lt;div class=&quot;month&quot; id=&quot;2012-04&quot;&gt;
-  …
-&lt;/div&gt;
-</code></pre>
+</p><div class="month" id="2012-04">
+…
+</div><p></p>
 <p>after:</p>
-<pre><code>&lt;a class=&quot;next-month&quot; href=&quot;#2012-05&quot; data-pat-inject=&quot;&quot;&gt;Next month&lt;/a&gt;
+<p><a class="next-month" href="#2012-05" data-pat-inject="">Next month</a>
 …
-&lt;div class=&quot;month&quot; id=&quot;2012-04&quot;&gt;
-    …
-&lt;/div&gt;
-&lt;a class=&quot;next-month pat-inject&quot; ref=&quot;calendar.html#2012-06&quot;
-   data-pat-inject=&quot;post: #2012-05; next-href: #2012-06&quot;&gt;Next month&lt;/a&gt;
-	…
-&lt;div class=&quot;month&quot; id=&quot;2012-05&quot;&gt;
-	…
-&lt;/div&gt;
-</code></pre>
+</p><div class="month" id="2012-04">
+…
+</div>
+<a class="next-month pat-inject" ref="calendar.html#2012-06" data-pat-inject="post: #2012-05; next-href: #2012-06">Next month</a>
+…
+<div class="month" id="2012-05">
+…
+</div><p></p>
 <h3>Modals</h3>
 <p>Inject a modal panel: modal-source.html is fetched, its body's content is wrapped into a <code>div#modal.modal</code>, any existing such modal is removed and the new modal injected as last element of the body:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;modal-source.html&quot; data-pat-inject=&quot;type: modal&quot;&gt;
-  …
-&lt;/body&gt;
-</code></pre>
-<p>It corresponds and is shorthand notation for:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;modal-source.html&quot; data-pat-inject=&quot;target: div#modal.modal&quot;&gt;
+<p><a class="pat-inject" href="modal-source.html" data-pat-inject="type: modal">
 …
-&lt;/body&gt;
-</code></pre>
+</a></p>
+<p>It corresponds and is shorthand notation for:</p>
+<p><a class="pat-inject" href="modal-source.html" data-pat-inject="target: div#modal.modal">
+…
+</a></p>
 <p>After injection was triggered:</p>
-<pre><code>&lt;a class=&quot;pat-inject&quot; href=&quot;modal-source.html&quot; data-pat-inject=&quot;type: modal&quot;&gt;
-
-&lt;div id=&quot;modal&quot; class=&quot;pat-modal&quot;&gt;
-  Content from modal-source.html's ``body``.
-&lt;/div&gt;
-&lt;/body&gt;
-
-&lt;a class=&quot;pat-inject&quot; href=&quot;modal-source.html&quot; data-pat-inject=&quot;type: modal&quot;&gt;
-</code></pre>
+<p><a class="pat-inject" href="modal-source.html" data-pat-inject="type: modal"></a></p>
+<p></p><div id="modal" class="pat-modal">
+Content from modal-source.html's <code>body</code>.
+</div>
+<p></p>
+<p><a class="pat-inject" href="modal-source.html" data-pat-inject="type: modal"></a></p>
 <h3>Configurable error pages.</h3>
 <p>In cases of AJAX errors, you can provide custom error pages by providing custom meta tags.
 For example, if you add this meta tag to the html <code>&lt;head&gt;</code>:</p>
-<pre><code>&lt;meta name=&quot;pat-inject-status-404&quot; content=&quot;/test_404.html&quot; /&gt;
-</code></pre>
+<p><meta name="pat-inject-status-404" content="/test_404.html"></p>
 <p>Then, in case of a <code>404</code> error, it will try to retrieve the error page and replace the document body contents with the body contents of the error page.
 The code looks for a meta tag with the name <code>pat-inject-status-</code> plus the HTTP status code.</p>
 <p>Another example: You can present the user with a login page in case the session has expired (<code>401</code> error).</p>
@@ -596,10 +200,9 @@ The code looks for a meta tag with the name <code>pat-inject-status-</code> plus
 <code>pat-inject-errorhandler.off</code>.</p>
 <h3>Options reference</h3>
 <p>You can customise the behaviour of injection through options in the <code>data-pat-inject</code> attribute.</p>
-<pre><code>&lt;a href=&quot;#&quot; class=&quot;pat-inject&quot; data-pat-inject=&quot;type: modal&quot;&gt;
-  …
-&lt;/a&gt;
-</code></pre>
+<p><a href="#" class="pat-inject" data-pat-inject="type: modal">
+…
+</a></p>
 <table>
 <thead>
 <tr>
@@ -697,8 +300,3 @@ The code looks for a meta tag with the name <code>pat-inject-status-</code> plus
 </tr>
 </tbody>
 </table>
-
-      </main>
-    </div>
-  </body>
-</html>
