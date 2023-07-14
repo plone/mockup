@@ -38,11 +38,11 @@ var LinkType = Base.extend({
 
     load: function (element) {
         let val = this.tiny.dom.getAttrib(element, "data-val");
-        this.set(val)
+        this.set(val);
     },
 
     set: function (val) {
-        this.getEl().setAttribute('value', val)
+        this.getEl().setAttribute("value", val);
     },
 
     attributes: function () {
@@ -59,7 +59,7 @@ var ExternalLink = LinkType.extend({
     init: function () {
         LinkType.prototype.init.call(this);
         // selectedItemsNode.addEventListener("change", readSelectedItemsFromInput);
-        this.getEl().addEventListener("change", function(){
+        this.getEl().addEventListener("change", function () {
             // check here if we should automatically add in http:// to url
             var val = $(this).val();
             if (new RegExp("https?://").test(val)) {
@@ -72,17 +72,22 @@ var ExternalLink = LinkType.extend({
             }
         });
     },
+    load: function (element) {
+        let val = this.tiny.dom.getAttrib(element, "data-val");
+        this.set(val);
+    },
 });
 
 var InternalLink = LinkType.extend({
     name: "internallinktype",
     trigger: ".pat-internallinktype-dummy",
     init: function () {
-        if (!this.getEl()) {
+        const linkEl = this.getEl();
+        if (!linkEl) {
             return;
         }
         LinkType.prototype.init.call(this);
-        this.getEl().classList.add("pat-contentbrowser");
+        linkEl.classList.add("pat-contentbrowser");
         this.createContentBrowser();
     },
 
@@ -91,35 +96,26 @@ var InternalLink = LinkType.extend({
     },
 
     createContentBrowser: async function () {
-        var options =  {}
-        options['max-selectionsize'] = 1;
+        var options = {};
+        options["max-selectionsize"] = 1;
         const inputEl = this.getEl();
-        const ContentBrowser = (await import("../../contentbrowser/contentbrowser")).default;
-        this.contentBrowser = new ContentBrowser(inputEl, options);
+        console.log("links options: ", options);
+        const element = this.tiny.selection.getNode();
+        const linkType = this.tiny.dom.getAttrib(element, "data-linktype");
+        if (linkType === "internal" || linkType === "image") {
+            var val = this.tiny.dom.getAttrib(element, "data-val");
+            options["selection"] = [val];
+            console.log(options.selection);
+        }
+        // options['selection'] = inputEl.value.split(';');
+        const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
+            .default;
+        this.contentBrowserPattern = new ContentBrowser(inputEl, options);
+
+        document.addEventListener("updateSelection", (event) => {
+            inputEl.value = event.detail.content.join(";");
+        });
     },
-
-    updateSelection: function(val) {
-        debugger;
-        // update select value, if not a uid (external url),
-        // reset SelectedItems component list
-        // this.component_instance_sel_items
-    },
-
-    // updateRelatedItems: function (val) {
-    //     if (!this.relatedItems) {
-    //         // prevent toolbar from being rendered twice
-    //         this.createRelatedItems();
-    //     }
-    //     this.relatedItems.selectItem(val);
-    // },
-
-    // value: function () {
-    //     var val = this.getEl().value;
-    //     if (val && typeof val === "object") {
-    //         val = val[0];
-    //     }
-    //     return val;
-    // },
 
     toUrl: function () {
         var value = this.value();
@@ -129,31 +125,9 @@ var InternalLink = LinkType.extend({
         return null;
     },
 
-    load: function (element) {
-        var val = this.tiny.dom.getAttrib(element, "data-val");
-        if (val) {
-            this.set(val);
-            // update select value, if not a uid (external url),
-            // reset SelectedItems component list
-            this.updateSelection(val);
-        }
-    },
+    // initial data is read and tranfert to contentbrowser pattern on creating time, not here!
+    load: function (element) {},
 
-    // set: function (val) {
-    //     // var $el = this.getEl();
-    //     // $el.val(val).trigger("change");
-    // },
-
-    // attributes: function () {
-    //     debugger
-    //     var val = this.value();
-    //     if (val) {
-    //         return {
-    //             "data-val": val,
-    //         };
-    //     }
-    //     return {};
-    // },
 });
 
 var UploadLink = LinkType.extend({
@@ -549,7 +523,7 @@ export default Base.extend({
         self.$alt = $('input[name="alt"]', self.modal.$modal);
         self.$align = $('select[name="align"]', self.modal.$modal);
         self.$scale = $('select[name="scale"]', self.modal.$modal);
-        self.$selectedItems = $('input.pat-contentbrowser', self.modal.$modal);
+        self.$selectedItems = $("input.pat-contentbrowser", self.modal.$modal);
         self.$enableImageZoom = $('input[name="enableImageZoom"]', self.modal.$modal);
         self.$captionFromDescription = $(
             'input[name="captionFromDescription"]',
@@ -662,7 +636,7 @@ export default Base.extend({
     },
 
     updateImage: function (src) {
-        console.log(`updateImage: ${src}`)
+        console.log(`updateImage: ${src}`);
         var self = this;
         var title = self.$title.val();
         var captionFromDescription = self.$captionFromDescription.prop("checked");
@@ -800,7 +774,7 @@ export default Base.extend({
             try {
                 href = self.getLinkUrl();
             } catch (error) {
-                console.log(error)
+                console.log(error);
                 return; // just cut out if no url
             }
             if (!href) {
@@ -833,7 +807,6 @@ export default Base.extend({
 
     initData: function () {
         var self = this;
-
         self.data = {};
         // get selection BEFORE..
         // This is pulled from TinyMCE link plugin
@@ -964,7 +937,7 @@ export default Base.extend({
     },
 
     guessAnchorLink: function (href) {
-        console.log("href: " + href)
+        console.log("href: " + href);
         if (
             this.options.prependToUrl &&
             href.indexOf(this.options.prependToUrl) !== -1
