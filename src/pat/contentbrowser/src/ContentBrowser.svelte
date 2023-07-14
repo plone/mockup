@@ -8,6 +8,7 @@
         selectedUids,
         showContentBrowser,
     } from "./stores.js";
+    import {resolveIcon} from './resolveIcon.js';
     import contentStore from "./ContentStore";
     import { config_unsubscribe } from "./ContentStore";
     import { clickOutside } from "./clickOutside";
@@ -155,27 +156,13 @@
             on:click_outside={cancelSelection}
         >
             <div class="toolBar">
-                <svg
-                    class="homeAction bi bi-house"
-                    role="button"
+                <button
+                    type="button"
+                    class="toolbarAction"
                     tabindex="0"
                     on:keydown={() => changePath("/")}
                     on:click={() => changePath("/")}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"
-                    />
-                    <path
-                        fill-rule="evenodd"
-                        d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"
-                    />
-                </svg>
+                ><svg use:resolveIcon={{iconName: 'house'}} /></button>
                 <span class="path">{$currentPath}</span>
                 <div class="filter">
                     <label for="filter">filter</label> <input type="text" name="filter" on:input={filterItems}>
@@ -283,7 +270,14 @@
     .toolBar > .filter {
         line-height: 1em;
     }
+    .toolBar :global(svg){
+        width: 1.5rem;
+        height: 1.5rem;
         vertical-align: -0.125em;
+    }
+    .toolbarAction {
+        background-color: transparent;
+        border: none;
     }
 
     .levelColumns {
