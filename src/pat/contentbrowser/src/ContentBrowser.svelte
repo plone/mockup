@@ -117,6 +117,17 @@
         return inPath;
     }
 
+    function filterItems() {
+        console.log($contentItems, this.value)
+        let timeoutId;
+        if(timeoutId){
+            clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => {
+            contentItems.get($currentPath, this.value);
+        }, 300)
+    }
+
     $: {
         if ($config.vocabularyUrl) {
             contentItems.get($currentPath);
@@ -166,6 +177,9 @@
                     />
                 </svg>
                 <span class="path">{$currentPath}</span>
+                <div class="filter">
+                    <label for="filter">filter</label> <input type="text" name="filter" on:input={filterItems}>
+                </div>
                 <button
                     class="btn btn-secondary btn-sm"
                     tabindex="0"
@@ -181,7 +195,7 @@
                             class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
                             in:fly|local={{ duration: 300 }}
                         >
-                            <div class="levelPath">{level.path}</div>
+                            <!-- <div class="levelPath">{level.path}</div> -->
                             {#each level.results as item, n}
                                 <div
                                     class="contentItem{n % 2 == 0
@@ -266,9 +280,9 @@
         line-height: 1em;
         overflow: hidden;
     }
-    .homeAction {
-        width: 1em;
-        height: 1em;
+    .toolBar > .filter {
+        line-height: 1em;
+    }
         vertical-align: -0.125em;
     }
 
@@ -288,14 +302,14 @@
         border-top: 5px solid skyblue;
     } */
 
-    .levelPath {
+    /* .levelPath {
         background: #eee;
         padding: 0.5rem 1rem;
         height: 3rem;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
+    } */
     .contentItem {
         /* padding: 1rem 1rem; */
         display: flex;
