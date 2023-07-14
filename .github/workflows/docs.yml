@@ -32,3 +32,4 @@ jobs:
       with:
         publish_dir: ./_site
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh_docs_deploy
