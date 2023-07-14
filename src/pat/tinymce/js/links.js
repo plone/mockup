@@ -773,61 +773,61 @@ export default Base.extend({
         await self.initElements();
         self.initData();
         // upload init
-        if (self.options.upload) {
-            self.$upload = $(".uploadify-me", self.modal.$modal);
-            self.options.upload.relatedItems = $.extend(
-                true,
-                {},
-                self.options.relatedItems
-            );
-            self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
-            self.$upload.addClass("pat-upload");
-            new PatternUpload(self.$upload, self.options.upload);
-            self.$upload.on(
-                "uploadAllCompleted",
-                function (evt, data) {
-                    if (self.linkTypes.image) {
-                        self.linkTypes.image.set(data.data.UID);
-                        $(
-                            "#" + $("#tinylink-image", self.modal.$modal).data("navref")
-                        ).trigger("click");
-                    } else {
-                        self.linkTypes.internal.set(data.data.UID);
-                        $(
-                            "#" +
-                                $("#tinylink-internal", self.modal.$modal).data("navref")
-                        ).trigger("click");
-                    }
-                }.bind(self)
-            );
-        }
+        // if (self.options.upload) {
+        //     self.$upload = $(".uploadify-me", self.modal.$modal);
+        //     self.options.upload.relatedItems = $.extend(
+        //         true,
+        //         {},
+        //         self.options.relatedItems
+        //     );
+        //     self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
+        //     self.$upload.addClass("pat-upload");
+        //     new PatternUpload(self.$upload, self.options.upload);
+        //     self.$upload.on(
+        //         "uploadAllCompleted",
+        //         function (evt, data) {
+        //             if (self.linkTypes.image) {
+        //                 self.linkTypes.image.set(data.data.UID);
+        //                 $(
+        //                     "#" + $("#tinylink-image", self.modal.$modal).data("navref")
+        //                 ).trigger("click");
+        //             } else {
+        //                 self.linkTypes.internal.set(data.data.UID);
+        //                 $(
+        //                     "#" +
+        //                         $("#tinylink-internal", self.modal.$modal).data("navref")
+        //                 ).trigger("click");
+        //             }
+        //         }.bind(self)
+        //     );
+        // }
 
         self.$button.off("click").on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
             self.linkType = self.modal.$modal.find("fieldset.active").data("linktype");
-            if (self.linkType === "uploadImage" || self.linkType === "upload") {
-                var patUpload = self.$upload.data().patternUpload;
-                if (patUpload.dropzone.files.length > 0) {
-                    patUpload.processUpload();
-                    // eslint-disable-next-line no-unused-vars
-                    self.$upload.on("uploadAllCompleted", function (evt, data) {
-                        var counter = 0;
-                        var checkUpload = function () {
-                            if (counter < 5 && !self.linkTypes[self.linkType].value()) {
-                                counter += 1;
-                                setTimeout(checkUpload, 100);
-                                return;
-                            } else {
-                                var href = self.getLinkUrl();
-                                self.updateImage(href);
-                                self.hide();
-                            }
-                        };
-                        checkUpload();
-                    });
-                }
-            }
+            // if (self.linkType === "uploadImage" || self.linkType === "upload") {
+            //     var patUpload = self.$upload.data().patternUpload;
+            //     if (patUpload.dropzone.files.length > 0) {
+            //         patUpload.processUpload();
+            //         // eslint-disable-next-line no-unused-vars
+            //         self.$upload.on("uploadAllCompleted", function (evt, data) {
+            //             var counter = 0;
+            //             var checkUpload = function () {
+            //                 if (counter < 5 && !self.linkTypes[self.linkType].value()) {
+            //                     counter += 1;
+            //                     setTimeout(checkUpload, 100);
+            //                     return;
+            //                 } else {
+            //                     var href = self.getLinkUrl();
+            //                     self.updateImage(href);
+            //                     self.hide();
+            //                 }
+            //             };
+            //             checkUpload();
+            //         });
+            //     }
+            // }
             var href;
             try {
                 href = self.getLinkUrl();
