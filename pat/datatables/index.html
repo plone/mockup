@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h1>DataTables</h1>
+<p>This pattern provides the functionality from https://datatables.net/</p>
+<table class="pat-datatables table table-striped table-bordered" id="datatables-example">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Salary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Tiger Nixon</td>
+            <td>System Architect</td>
+            <td>Edinburgh</td>
+            <td>61</td>
+            <td>2011/04/25</td>
+            <td>$320,800</td>
+        </tr>
+        <tr>
+            <td>Garrett Winters</td>
+            <td>Accountant</td>
+            <td>Tokyo</td>
+            <td>63</td>
+            <td>2011/07/25</td>
+            <td>$170,750</td>
+        </tr>
+        <tr>
+            <td>Ashton Cox</td>
+            <td>Junior Technical Author</td>
+            <td>San Francisco</td>
+            <td>66</td>
+            <td>2009/01/12</td>
+            <td>$86,000</td>
+        </tr>
+        <tr>
+            <td>Cedric Kelly</td>
+            <td>Senior Javascript Developer</td>
+            <td>Edinburgh</td>
+            <td>22</td>
+            <td>2012/03/29</td>
+            <td>$433,060</td>
+        </tr>
+        <tr>
+            <td>Airi Satou</td>
+            <td>Accountant</td>
+            <td>Tokyo</td>
+            <td>33</td>
+            <td>2008/11/28</td>
+            <td>$162,700</td>
+        </tr>
+        <tr>
+            <td>Brielle Williamson</td>
+            <td>Integration Specialist</td>
+            <td>New York</td>
+            <td>61</td>
+            <td>2012/12/02</td>
+            <td>$372,000</td>
+        </tr>
+        <tr>
+            <td>Herrod Chandler</td>
+            <td>Sales Assistant</td>
+            <td>San Francisco</td>
+            <td>59</td>
+            <td>2012/08/06</td>
+            <td>$137,500</td>
+        </tr>
+        <tr>
+            <td>Rhona Davidson</td>
+            <td>Integration Specialist</td>
+            <td>Tokyo</td>
+            <td>55</td>
+            <td>2010/10/14</td>
+            <td>$327,900</td>
+        </tr>
+        <tr>
+            <td>Colleen Hurst</td>
+            <td>Javascript Developer</td>
+            <td>San Francisco</td>
+            <td>39</td>
+            <td>2009/09/15</td>
+            <td>$205,500</td>
+        </tr>
+        <tr>
+            <td>Sonya Frost</td>
+            <td>Software Engineer</td>
+            <td>Edinburgh</td>
+            <td>23</td>
+            <td>2008/12/13</td>
+            <td>$103,600</td>
+        </tr>
+        <tr>
+            <td>Jena Gaines</td>
+            <td>Office Manager</td>
+            <td>London</td>
+            <td>30</td>
+            <td>2008/12/19</td>
+            <td>$90,560</td>
+        </tr>
+        <tr>
+            <td>Quinn Flynn</td>
+            <td>Support Lead</td>
+            <td>Edinburgh</td>
+            <td>22</td>
+            <td>2013/03/03</td>
+            <td>$342,000</td>
+        </tr>
+        <tr>
+            <td>Charde Marshall</td>
+            <td>Regional Director</td>
+            <td>San Francisco</td>
+            <td>36</td>
+            <td>2008/10/16</td>
+            <td>$470,600</td>
+        </tr>
+        <tr>
+            <td>Haley Kennedy</td>
+            <td>Senior Marketing Designer</td>
+            <td>London</td>
+            <td>43</td>
+            <td>2012/12/18</td>
+            <td>$313,500</td>
+        </tr>
+        <tr>
+            <td>Tatyana Fitzpatrick</td>
+            <td>Regional Director</td>
+            <td>London</td>
+            <td>19</td>
+            <td>2010/03/17</td>
+            <td>$385,750</td>
+        </tr>
+        <tr>
+            <td>Michael Silva</td>
+            <td>Marketing Designer</td>
+            <td>London</td>
+            <td>66</td>
+            <td>2012/11/27</td>
+            <td>$198,500</td>
+        </tr>
+        <tr>
+            <td>Paul Byrd</td>
+            <td>Chief Financial Officer (CFO)</td>
+            <td>New York</td>
+            <td>64</td>
+            <td>2010/06/09</td>
+            <td>$725,000</td>
+        </tr>
+        <tr>
+            <td>Gloria Little</td>
+            <td>Systems Administrator</td>
+            <td>New York</td>
+            <td>59</td>
+            <td>2009/04/10</td>
+            <td>$237,500</td>
+        </tr>
+        <tr>
+            <td>Bradley Greer</td>
+            <td>Software Engineer</td>
+            <td>London</td>
+            <td>41</td>
+            <td>2012/10/13</td>
+            <td>$132,000</td>
+        </tr>
+        <tr>
+            <td>Dai Rios</td>
+            <td>Personnel Lead</td>
+            <td>Edinburgh</td>
+            <td>35</td>
+            <td>2012/09/26</td>
+            <td>$217,500</td>
+        </tr>
+        <tr>
+            <td>Jenette Caldwell</td>
+            <td>Development Lead</td>
+            <td>New York</td>
+            <td>30</td>
+            <td>2011/09/03</td>
+            <td>$345,000</td>
+        </tr>
+        <tr>
+            <td>Yuri Berry</td>
+            <td>Chief Marketing Officer (CMO)</td>
+            <td>New York</td>
+            <td>40</td>
+            <td>2009/06/25</td>
+            <td>$675,000</td>
+        </tr>
+        <tr>
+            <td>Caesar Vance</td>
+            <td>Pre-Sales Support</td>
+            <td>New York</td>
+            <td>21</td>
+            <td>2011/12/12</td>
+            <td>$106,450</td>
+        </tr>
+        <tr>
+            <td>Doris Wilder</td>
+            <td>Sales Assistant</td>
+            <td>Sidney</td>
+            <td>23</td>
+            <td>2010/09/20</td>
+            <td>$85,600</td>
+        </tr>
+        <tr>
+            <td>Angelica Ramos</td>
+            <td>Chief Executive Officer (CEO)</td>
+            <td>London</td>
+            <td>47</td>
+            <td>2009/10/09</td>
+            <td>$1,200,000</td>
+        </tr>
+        <tr>
+            <td>Gavin Joyce</td>
+            <td>Developer</td>
+            <td>Edinburgh</td>
+            <td>42</td>
+            <td>2010/12/22</td>
+            <td>$92,575</td>
+        </tr>
+        <tr>
+            <td>Jennifer Chang</td>
+            <td>Regional Director</td>
+            <td>Singapore</td>
+            <td>28</td>
+            <td>2010/11/14</td>
+            <td>$357,650</td>
+        </tr>
+        <tr>
+            <td>Brenden Wagner</td>
+            <td>Software Engineer</td>
+            <td>San Francisco</td>
+            <td>28</td>
+            <td>2011/06/07</td>
+            <td>$206,850</td>
+        </tr>
+        <tr>
+            <td>Fiona Green</td>
+            <td>Chief Operating Officer (COO)</td>
+            <td>San Francisco</td>
+            <td>48</td>
+            <td>2010/03/11</td>
+            <td>$850,000</td>
+        </tr>
+        <tr>
+            <td>Shou Itou</td>
+            <td>Regional Marketing</td>
+            <td>Tokyo</td>
+            <td>20</td>
+            <td>2011/08/14</td>
+            <td>$163,000</td>
+        </tr>
+        <tr>
+            <td>Michelle House</td>
+            <td>Integration Specialist</td>
+            <td>Sidney</td>
+            <td>37</td>
+            <td>2011/06/02</td>
+            <td>$95,400</td>
+        </tr>
+        <tr>
+            <td>Suki Burks</td>
+            <td>Developer</td>
+            <td>London</td>
+            <td>53</td>
+            <td>2009/10/22</td>
+            <td>$114,500</td>
+        </tr>
+        <tr>
+            <td>Prescott Bartlett</td>
+            <td>Technical Author</td>
+            <td>London</td>
+            <td>27</td>
+            <td>2011/05/07</td>
+            <td>$145,000</td>
+        </tr>
+        <tr>
+            <td>Gavin Cortez</td>
+            <td>Team Leader</td>
+            <td>San Francisco</td>
+            <td>22</td>
+            <td>2008/10/26</td>
+            <td>$235,500</td>
+        </tr>
+        <tr>
+            <td>Martena Mccray</td>
+            <td>Post-Sales support</td>
+            <td>Edinburgh</td>
+            <td>46</td>
+            <td>2011/03/09</td>
+            <td>$324,050</td>
+        </tr>
+        <tr>
+            <td>Unity Butler</td>
+            <td>Marketing Designer</td>
+            <td>San Francisco</td>
+            <td>47</td>
+            <td>2009/12/09</td>
+            <td>$85,675</td>
+        </tr>
+        <tr>
+            <td>Howard Hatfield</td>
+            <td>Office Manager</td>
+            <td>San Francisco</td>
+            <td>51</td>
+            <td>2008/12/16</td>
+            <td>$164,500</td>
+        </tr>
+        <tr>
+            <td>Hope Fuentes</td>
+            <td>Secretary</td>
+            <td>San Francisco</td>
+            <td>41</td>
+            <td>2010/02/12</td>
+            <td>$109,850</td>
+        </tr>
+        <tr>
+            <td>Vivian Harrell</td>
+            <td>Financial Controller</td>
+            <td>San Francisco</td>
+            <td>62</td>
+            <td>2009/02/14</td>
+            <td>$452,500</td>
+        </tr>
+        <tr>
+            <td>Timothy Mooney</td>
+            <td>Office Manager</td>
+            <td>London</td>
+            <td>37</td>
+            <td>2008/12/11</td>
+            <td>$136,200</td>
+        </tr>
+        <tr>
+            <td>Jackson Bradshaw</td>
+            <td>Director</td>
+            <td>New York</td>
+            <td>65</td>
+            <td>2008/09/26</td>
+            <td>$645,750</td>
+        </tr>
+        <tr>
+            <td>Olivia Liang</td>
+            <td>Support Engineer</td>
+            <td>Singapore</td>
+            <td>64</td>
+            <td>2011/02/03</td>
+            <td>$234,500</td>
+        </tr>
+        <tr>
+            <td>Bruno Nash</td>
+            <td>Software Engineer</td>
+            <td>London</td>
+            <td>38</td>
+            <td>2011/05/03</td>
+            <td>$163,500</td>
+        </tr>
+        <tr>
+            <td>Sakura Yamamoto</td>
+            <td>Support Engineer</td>
+            <td>Tokyo</td>
+            <td>37</td>
+            <td>2009/08/19</td>
+            <td>$139,575</td>
+        </tr>
+        <tr>
+            <td>Thor Walton</td>
+            <td>Developer</td>
+            <td>New York</td>
+            <td>61</td>
+            <td>2013/08/11</td>
+            <td>$98,540</td>
+        </tr>
+        <tr>
+            <td>Finn Camacho</td>
+            <td>Support Engineer</td>
+            <td>San Francisco</td>
+            <td>47</td>
+            <td>2009/07/07</td>
+            <td>$87,500</td>
+        </tr>
+        <tr>
+            <td>Serge Baldwin</td>
+            <td>Data Coordinator</td>
+            <td>Singapore</td>
+            <td>64</td>
+            <td>2012/04/09</td>
+            <td>$138,575</td>
+        </tr>
+        <tr>
+            <td>Zenaida Frank</td>
+            <td>Software Engineer</td>
+            <td>New York</td>
+            <td>63</td>
+            <td>2010/01/04</td>
+            <td>$125,250</td>
+        </tr>
+        <tr>
+            <td>Zorita Serrano</td>
+            <td>Software Engineer</td>
+            <td>San Francisco</td>
+            <td>56</td>
+            <td>2012/06/01</td>
+            <td>$115,000</td>
+        </tr>
+        <tr>
+            <td>Jennifer Acosta</td>
+            <td>Junior Javascript Developer</td>
+            <td>Edinburgh</td>
+            <td>43</td>
+            <td>2013/02/01</td>
+            <td>$75,650</td>
+        </tr>
+        <tr>
+            <td>Cara Stevens</td>
+            <td>Sales Assistant</td>
+            <td>New York</td>
+            <td>46</td>
+            <td>2011/12/06</td>
+            <td>$145,600</td>
+        </tr>
+        <tr>
+            <td>Hermione Butler</td>
+            <td>Regional Director</td>
+            <td>London</td>
+            <td>47</td>
+            <td>2011/03/21</td>
+            <td>$356,250</td>
+        </tr>
+        <tr>
+            <td>Lael Greer</td>
+            <td>Systems Administrator</td>
+            <td>London</td>
+            <td>21</td>
+            <td>2009/02/27</td>
+            <td>$103,500</td>
+        </tr>
+        <tr>
+            <td>Jonas Alexander</td>
+            <td>Developer</td>
+            <td>San Francisco</td>
+            <td>30</td>
+            <td>2010/07/14</td>
+            <td>$86,500</td>
+        </tr>
+        <tr>
+            <td>Shad Decker</td>
+            <td>Regional Director</td>
+            <td>Edinburgh</td>
+            <td>51</td>
+            <td>2008/11/13</td>
+            <td>$183,000</td>
+        </tr>
+        <tr>
+            <td>Michael Bruce</td>
+            <td>Javascript Developer</td>
+            <td>Singapore</td>
+            <td>29</td>
+            <td>2011/06/27</td>
+            <td>$183,000</td>
+        </tr>
+        <tr>
+            <td>Donna Snider</td>
+            <td>Customer Support</td>
+            <td>New York</td>
+            <td>27</td>
+            <td>2011/01/25</td>
+            <td>$112,000</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Salary</th>
+        </tr>
+    </tfoot>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>

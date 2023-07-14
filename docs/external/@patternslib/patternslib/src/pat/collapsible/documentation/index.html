@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h2>Description</h2>
+<p>A <em>collapsible</em> is an element where content is can be shown or visible by clicking on a triggering element.</p>
+<h2>Documentation</h2>
+<p>A <em>collapsible</em> is an element inside which content can be shown or hidden
+by clicking on a triggering element. One way to use this is to implement
+a very minimal accordion.</p>
+<pre><code>&lt;section class=&quot;pat-collapsible&quot;&gt;
+  &lt;h3&gt;About us&lt;/h3&gt;
+  &lt;p&gt;Sed ut perspiciatis unde omnis iste natus error sit...&lt;/p&gt;
+  &lt;p&gt;Neque porro quisquam est, qui dolorem ipsum quia...&lt;/p&gt;
+&lt;/section&gt;
+</code></pre>
+<p>In the above example clicking on the <em>About us</em> header will hide or
+show the remainder of the section content. Another possible use case is
+to create a simple contextual menu.</p>
+<pre><code>&lt;div class=&quot;pat-collapsible&quot;&gt;
+  &lt;h3&gt;&lt;i class=&quot;icon-wrench&quot;&gt;&lt;/i&gt; Settings&lt;/h3&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;...&quot;&gt;Edit&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;...&quot;&gt;Rename&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;...&quot;&gt;Move&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;...&quot;&gt;Delete&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Collapsibles default to being open. You can change this by adding a
+<code>closed</code> class to the collapsible.</p>
+<h3>Custom triggers</h3>
+<p>The standard behaviour is to use the first element as the trigger to open or
+close a collapsible. You can also use the <code>trigger</code> option to specify a
+different element.</p>
+<pre><code>&lt;button id=&quot;trigger&quot;&gt;About us&lt;/button&gt;
+
+&lt;aside class=&quot;pat-collapsible&quot; data-pat-collapsible=&quot;trigger: #trigger&quot;&gt;
+  &lt;h3&gt;About us&lt;/h3&gt;
+  &lt;p&gt;Sed ut perspiciatis unde omnis iste natus error sit...&lt;/p&gt;
+  &lt;p&gt;Neque porro quisquam est, qui dolorem ipsum quia...&lt;/p&gt;
+&lt;/aside&gt;
+</code></pre>
+<p>You can also specify triggers specifically for <em>closing</em> or <em>opening</em> a
+collapsible.</p>
+<p>The options for doing so are <strong>open-trigger</strong> and <strong>close-trigger</strong>.</p>
+<pre><code>&lt;button id=&quot;open-trigger&quot;&gt;About us&lt;/button&gt;
+
+&lt;aside class=&quot;pat-collapsible&quot; data-pat-collapsible=&quot;open-trigger: #open-trigger&quot;&gt;
+  &lt;h3&gt;About us&lt;/h3&gt;
+  &lt;p&gt;Sed ut perspiciatis unde omnis iste natus error sit...&lt;/p&gt;
+  &lt;p&gt;Neque porro quisquam est, qui dolorem ipsum quia...&lt;/p&gt;
+&lt;/aside&gt;
+</code></pre>
+<h2>Markup structure</h2>
+<p>The markup structure for a collapsible is very simple: the first child
+of an element with the <code>pat-collapsible</code> class will be used as the
+triggering element (unless otherwise configured) and will always be visible.</p>
+<p>All further children will be part of the content that collapses.</p>
+<p>The containing element will get a <code>open</code> or <code>closed</code> class which indicates if
+the collapsible is currently open (content is visible) or closed (content is
+not visible). Likewise the triggering element will get a <code>collapsible-open</code> or
+<code>collapsible-closed</code> class. the content of the collapsible is wrapped in a new
+<code>div</code> element with class <code>panel-content</code>.</p>
+<p>Post-processing our first example will look like this after the
+collapsible pattern has initialised:</p>
+<pre><code>&lt;section class=&quot;pat-collapsible open&quot;&gt;
+  &lt;h3 class=&quot;collapsible-open&quot;&gt;About us&lt;/h3&gt;
+  &lt;div class=&quot;panel-content&quot;&gt;
+    &lt;p&gt;Sed ut perspiciatis unde omnis iste natus error sit...&lt;/p&gt;
+    &lt;p&gt;Neque porro quisquam est, qui dolorem ipsum quia...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+<h3>AJAX loading of content</h3>
+<p>Occasionally you may want to display content in a collapsible that
+should be loaded on demand. This is supported through the <code>load-content</code>
+option. Using this option you can provide a URL for content that should
+be loaded and shown in a collapsible when it is opened.</p>
+<pre><code>&lt;section class=&quot;pat-collapsible&quot;
+    data-pat-collapsible=&quot;load-content: /status.html#summary&quot;&gt;
+  &lt;h3&gt;System status&lt;/h3&gt;
+&lt;/section&gt;
+</code></pre>
+<p>This example will load the system status from <code>/status.html</code>, extract
+the element with the id <code>summary</code> and use that as the panel content.
+When the collapsible is closed and reopened the content is reloaded.</p>
+<h3>Remembering the state</h3>
+<p>Sometimes you need to remember the toggle state of an collapsible. This
+can be done by telling the collapsible pattern to store the state of an
+element using the <code>store</code> parameter.</p>
+<pre><code>&lt;section id=&quot;about-us&quot; class=&quot;pat-collapsible&quot;
+        data-pat-collapsible=&quot;store: session&quot;&gt;
+  &lt;h3&gt;About us&lt;/h3&gt;
+  ...
+&lt;/section&gt;
+</code></pre>
+<p>To use this you requirements must be met:</p>
+<ol>
+<li>the element must have an <code>id</code></li>
+<li>The browser must support <a href="http://www.w3.org/TR/webstorage/">Web Storage</a></li>
+</ol>
+<p>The possible values for the <code>store</code> parameter are:</p>
+<ul>
+<li><code>none</code>: do not remember the toggle state (default).</li>
+<li><code>local</code>: remember the state as part of the local storage.</li>
+<li><code>session</code>: remember the status as part of the session storage.</li>
+</ul>
+<h3>Transitions</h3>
+<p>You can specify the transition effect to use when a collapsible
+is opened or closed. The default behaviour is to not use a slide transition.
+If you prefer to control the effect completely with CSS you can use the <code>css</code>
+transition.</p>
+<pre><code>&lt;style&gt;
+  .pat-collapsible {
+      transition-property: opacity;
+      transition-duration: 1s;
+  }
+  .open {
+      opacity: 1;
+  }
+
+  .closed {
+      opacity: 0;
+  }
+&lt;/style&gt;
+
+&lt;section class=&quot;pat-collapsible&quot; data-pat-depends=&quot;transition: css&quot;&gt;
+  &lt;h3&gt;System status&lt;/h3&gt;
+  ...
+&lt;/section&gt;
+</code></pre>
+<p>This allow full control in CSS, including the use of animation for
+browsers supporting CSS animation. Two non-CSS based animation options
+are also included: <code>fade</code> will fade the element in and out, and <code>slide</code>
+uses a vertical sliding effect. During a transition an <code>in-progress</code>
+class will be set on the element.</p>
+<h3>Option reference</h3>
+<p>The collapsible can be configured through a <code>data-pat-collapsible</code>
+attribute. The available options are:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>load-content</code></td>
+<td></td>
+<td>A URL (possibly including a fragment id) for content which must be loaded and used as content for the collapsible.</td>
+</tr>
+<tr>
+<td><code>trigger</code></td>
+<td><code>::first</code></td>
+<td>Selector used to identify the open/close trigger for the collapsible.</td>
+</tr>
+<tr>
+<td><code>close-trigger</code></td>
+<td></td>
+<td>Selector used to identify a trigger for closing the collapsible.</td>
+</tr>
+<tr>
+<td><code>open-trigger</code></td>
+<td></td>
+<td>Selector used to identify a trigger for opening the collapsible.</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>none</code></td>
+<td>How to remember the state of a collapsible. Must be one of <code>none</code>, <code>session</code> or <code>local</code>.</td>
+</tr>
+<tr>
+<td><code>transition</code></td>
+<td><code>slide</code></td>
+<td>Transition effect when opening or closing a collapsinble. Must be one of <code>none</code>, <code>css</code>, <code>fade</code>, <code>slide</code> or <code>slide-horizontal</code>.</td>
+</tr>
+<tr>
+<td><code>effect-duration</code></td>
+<td><code>fast</code></td>
+<td>Duration of transition. This is ignored if the transition is <code>none</code> or <code>css</code>.</td>
+</tr>
+<tr>
+<td><code>effect-easing</code></td>
+<td><code>swing</code></td>
+<td>Easing to use for the open/close animation. This must be a known jQuery easing method. jQuery includes <code>swing</code> and <code>linear</code>, but more can be included via jQuery UI.</td>
+</tr>
+<tr>
+<td><code>scroll-selector</code></td>
+<td></td>
+<td>CSS selector or <code>self</code>. Defines which element will be scrolled into view. <code>self</code> if it is the collapsible element itself.</td>
+</tr>
+<tr>
+<td><code>scroll-offset</code></td>
+<td></td>
+<td><code>offset</code> in pixels to stop scrolling before the target position defines by <code>scroll-selector</code>. Can also be a negative number.</td>
+</tr>
+</tbody>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>

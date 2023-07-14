@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h2>Description</h2>
+<p>This pattern allows you to change the order of appearance of a list by dragging and dropping the individual elements.</p>
+<h2>Documentation</h2>
+<p>You can make lists sortable by adding a <code>pat-sortable</code> class to it.</p>
+<p>Here is a simple example:</p>
+<pre><code>&lt;ol class=&quot;pat-sortable&quot;&gt;
+  &lt;li id=&quot;one&quot; &gt;One&lt;/li&gt;
+  &lt;li id=&quot;two&quot;&gt;Two&lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+<p>The sortable pattern automatically adds a drag handle</p>
+<pre><code>&lt;a href=&quot;#&quot; class=&quot;sortable-handle&quot;&gt;&lt;/a&gt;
+</code></pre>
+<p>to each list element. The handle is the element that can be grabbed with
+the pointer to initiate a drag and drop operation.</p>
+<p>During a drag and drop operation the pattern will set the CSS class
+<code>.dragged</code> on the list element that is currently being moved. It will
+also indicate the current drop position by setting one of two different
+CSS classes on exactly one list element:</p>
+<ol>
+<li><code>.drop-target-above</code> indicates that the element being moved is going
+to be inserted above this list element.</li>
+<li><code>.drop-target-below</code> indicates that the element being moved is going
+to be inserted below this list element.</li>
+</ol>
+<h3>Using it in a form, so that changes can be submitted to the back end.</h3>
+<p>It's also possible to use <strong>pat-sortable</strong> inside a form with <strong>pat-inject</strong>, so
+that the change in the ordering can be submitted to the server.</p>
+<p>When using patterns, you should apply progressive enhancement, so that your
+webpage will be accessible for people with disabilities and still be functional
+for people without javascript.</p>
+<p>So, in the example below, we start with a form for changing the order fo
+elements and then put the &quot;pat-sortable&quot; class on it to make it dynamic
+and to avoid page reloads.</p>
+<p>We add a <code>button type=&quot;submit&quot;</code> with values &quot;up&quot; and &quot;down&quot; which are used to
+move an element up or down. We then also add a text input which specifies the
+amount a sortable element is moved up or down.</p>
+<p>It's up to the involved designers and developers to decide whether they want to
+show or hide these elements to the user. For example, it might be preferable to
+show the buttons, to provide accessibility to users with Parkinsons or similar
+diseases.</p>
+<h4>Classes expected by pat-sortable when using it in a form</h4>
+<p>It's important that the &quot;up&quot; and &quot;down&quot; buttons have the class
+<code>sortable-button-up</code> and <code>sortable-button-down</code> and that the input element has
+the class <code>sortable-amount</code>. The sortable pattern will use these class names to
+locate the particular elements, and without them the pattern won't work
+properly.</p>
+<pre><code>&lt;form class=&quot;pat-inject&quot; action=&quot;/src/pat/sortable/index.html&quot; id=&quot;sortable-form&quot;
+        data-pat-inject=&quot;source: #sortable-form; target: #sortable-form&quot;&gt;
+
+    &lt;ol class=&quot;pat-sortable&quot; data-pat-sortable=&quot;selector: .sortable&quot;&gt;
+        &lt;li class=&quot;sortable&quot;&gt;
+            Item 1
+            &lt;span class=&quot;button-cluster&quot;&gt;
+                &lt;!-- This classes &quot;sortable-button-up&quot; and &quot;sortable-button-down&quot; are required by pat-sortable in order to locate the buttons. --&gt;
+                &lt;button class=&quot;button sortable-button-up&quot; type=&quot;submit&quot; name=&quot;up_item_1&quot; value=&quot;up&quot; hidden&gt;Up&lt;/button&gt;
+                &lt;button class=&quot;button sortable-button-down&quot; type=&quot;submit&quot; name=&quot;down_item_1&quot; value=&quot;down&quot; hidden&gt;down&lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/li&gt;
+
+        &lt;li class=&quot;sortable&quot;&gt;
+            Item 2
+            &lt;span class=&quot;button-cluster&quot;&gt;
+                &lt;button class=&quot;button sortable-button-up&quot; type=&quot;submit&quot; name=&quot;up_item_2&quot; value=&quot;up&quot;&gt;Up&lt;/button&gt;
+                &lt;button class=&quot;button sortable-button-down&quot; type=&quot;submit&quot; name=&quot;down_item_2&quot; value=&quot;down&quot;&gt;down&lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/li&gt;
+
+        &lt;li class=&quot;sortable&quot;&gt;
+            Item 3
+            &lt;span class=&quot;button-cluster&quot;&gt;
+                &lt;button class=&quot;button sortable-button-up&quot; type=&quot;submit&quot; name=&quot;up_item_3&quot; value=&quot;up&quot;&gt;Up&lt;/button&gt;
+                &lt;button class=&quot;button sortable-button-down&quot; type=&quot;submit&quot; name=&quot;down_item_3&quot; value=&quot;down&quot;&gt;down&lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;!-- This element's class &quot;sortable-amount&quot; required by pat-sortable in order to locate it. --&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;amount&quot; class=&quot;sortable-amount&quot; value=&quot;1&quot;/&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>Option reference</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Available values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>selector</strong></td>
+<td>string</td>
+<td>li</td>
+<td>Any valid CSS selector</td>
+<td>This is the selector the pattern will use to determine which are the sortable elements.</td>
+</tr>
+<tr>
+<td><strong>drag-class</strong></td>
+<td>string</td>
+<td>dragged</td>
+<td>Any valid CSS class</td>
+<td>A class name applied to the item being dragged.</td>
+</tr>
+<tr>
+<td><strong>drop</strong></td>
+<td>string</td>
+<td></td>
+<td>A Javascript function</td>
+<td>A Javascript callback function, called when the item is dropped.</td>
+</tr>
+</tbody>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>

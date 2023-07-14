@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h1>Related items</h1>
+<p>This is the related items pattern.</p>
+<h2>Configuration</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Default</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">attributes</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">['UID', 'Title', 'portal_type', 'path']</td>
+<td style="text-align:center">This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.</td>
+</tr>
+<tr>
+<td style="text-align:center">basePath</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">set to rootPath.</td>
+<td style="text-align:center">Start browse/search in this path.</td>
+</tr>
+<tr>
+<td style="text-align:center">breadcrumbTemplate</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Template to use for a single item in the breadcrumbs.</td>
+</tr>
+<tr>
+<td style="text-align:center">breadcrumbTemplateSelector</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">Select an element from the DOM from which to grab the breadcrumbTemplate.</td>
+</tr>
+<tr>
+<td style="text-align:center">closeOnSelect</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">Select2 option. Whether or not the drop down should be closed when an item is selected.</td>
+</tr>
+<tr>
+<td style="text-align:center">contextPath</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Path of the object, which is currently edited. If this path is given, this object will not be selectable.</td>
+</tr>
+<tr>
+<td style="text-align:center">dropdownCssClass</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'pattern-relateditems-dropdown'</td>
+<td style="text-align:center">Select2 option. CSS class to add to the drop down element.</td>
+</tr>
+<tr>
+<td style="text-align:center">favorites</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">[]</td>
+<td style="text-align:center">Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes &quot;title&quot; and &quot;path&quot;.</td>
+</tr>
+<tr>
+<td style="text-align:center">maximumSelectionSize</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited.</td>
+</tr>
+<tr>
+<td style="text-align:center">minimumInputLength</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">Number of characters necessary to start a search.</td>
+</tr>
+<tr>
+<td style="text-align:center">mode</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Initial widget mode. Possible values: are 'auto', 'search' and 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'browse', which means the search and browse in separated tabs. Auto would combine global search and browse in one selection.</td>
+</tr>
+<tr>
+<td style="text-align:center">orderable</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">Whether or not items should be drag-and-drop sortable.</td>
+</tr>
+<tr>
+<td style="text-align:center">pageSize</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">Batch size to break down big result sets into multiple pages.</td>
+</tr>
+<tr>
+<td style="text-align:center">recentlyUsed</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">false</td>
+<td style="text-align:center">Show the recently used items dropdown.</td>
+</tr>
+<tr>
+<td style="text-align:center">recentlyUsedMaxItems</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">Maximum items to keep in recently used list. 0: no restriction.</td>
+</tr>
+<tr>
+<td style="text-align:center">resultTemplate</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">Refer to source</td>
+<td style="text-align:center">Template for an item in the in the list of results. Refer to source for default.</td>
+</tr>
+<tr>
+<td style="text-align:center">resultTemplateSelector</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">Select an element from the DOM from which to grab the resultTemplate.</td>
+</tr>
+<tr>
+<td style="text-align:center">rootPath</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;/&quot;</td>
+<td style="text-align:center">Only display breadcrumb path elements deeper than this path.</td>
+</tr>
+<tr>
+<td style="text-align:center">rootUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.</td>
+</tr>
+<tr>
+<td style="text-align:center">scanSelection</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Scan the list of selected elements for other patterns.</td>
+</tr>
+<tr>
+<td style="text-align:center">selectableTypes</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.</td>
+</tr>
+<tr>
+<td style="text-align:center">selectionTemplate</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">Refer to source</td>
+<td style="text-align:center">Template for element that will be used to construct a selected item.</td>
+</tr>
+<tr>
+<td style="text-align:center">selectionTemplateSelector</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">Select an element from the DOM from which to grab the selectionTemplate.</td>
+</tr>
+<tr>
+<td style="text-align:center">separator</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">','</td>
+<td style="text-align:center">Select2 option. String which separates multiple items.</td>
+</tr>
+<tr>
+<td style="text-align:center">sortOn</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">Index on which to sort on. If null, will default to term relevance (no sort) when searching and folder order (getObjPositionInParent) when browsing.</td>
+</tr>
+<tr>
+<td style="text-align:center">sortOrder</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'ascending'</td>
+<td style="text-align:center">Sort ordering.</td>
+</tr>
+<tr>
+<td style="text-align:center">tokenSeparators</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">[&quot;,&quot;, &quot; &quot;]</td>
+<td style="text-align:center">Select2 option, refer to select2 documentation.</td>
+</tr>
+<tr>
+<td style="text-align:center">toolbarTemplate</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Template for element to which toolbar items will be appended.</td>
+</tr>
+<tr>
+<td style="text-align:center">toolbarTemplateSelector</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">Select an element from the DOM from which to grab the toolbarTemplate.</td>
+</tr>
+<tr>
+<td style="text-align:center">upload</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Allow file and image uploads from within the related items widget.</td>
+</tr>
+<tr>
+<td style="text-align:center">uploadAllowView</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">View, which returns a JSON response in the form of {allowUpload: true}, if upload is allowed in the current context.</td>
+</tr>
+<tr>
+<td style="text-align:center">vocabularyUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">This is a URL to a JSON-formatted file used to populate the list</td>
+</tr>
+<tr>
+<td style="text-align:center">width</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'100%'</td>
+<td style="text-align:center">Specify a width for the widget.</td>
+</tr>
+</tbody>
+</table>
+<h2>Default, mode &quot;browse&quot; (separate browse and search tabs)</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test.json"}' /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test.json"}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Default, mode &quot;auto&quot; (search/browser combined)</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems="width:30em;
+                            mode:auto;
+                            vocabularyUrl:relateditems-test.json" /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width:30em;<br>                            mode:auto;<br>                            vocabularyUrl:relateditems-test.json<span class="token punctuation">"</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Default, mode &quot;search&quot;</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems="width:30em;
+                            mode:search;
+                            vocabularyUrl:relateditems-test.json" /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width:30em;<br>                            mode:search;<br>                            vocabularyUrl:relateditems-test.json<span class="token punctuation">"</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Default, mode browse, favorites, recently used and upload</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems='{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true, "upload": true}' /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true, "upload": true}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Existing values, some bad</h2>
+<p><input type="text" class="pat-relateditems"
+    value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
+    data-pat-relateditems="width:30em; vocabularyUrl:relateditems-test.json" /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width:30em; vocabularyUrl:relateditems-test.json<span class="token punctuation">"</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Selectable Types</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test-selectale.json"}' /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test-selectable.json"}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Select a single item</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test.json", "maximumSelectionSize": 1}' /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test.json", "maximumSelectionSize": 1}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Mode &quot;browse&quot;, Upload</h2>
+<p><input type="text" class="pat-relateditems"
+    data-pat-relateditems='{"selectableTypes": ["Image", "File"], "vocabularyUrl": "relateditems-test.json", "upload": true}' /></p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Image", "File"], "vocabularyUrl": "relateditems-test.json", "upload": true}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+
+      </main>
+    </div>
+  </body>
+</html>

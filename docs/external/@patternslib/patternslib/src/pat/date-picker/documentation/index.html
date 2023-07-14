@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h2>Description</h2>
+<p>A pattern for creating a custom date picker or polyfill.</p>
+<h2>Documentation</h2>
+<p>This pattern provides a styleable date picker. It can be used as a fallback
+for browsers which don't yet support the HTML5 date input.</p>
+<h3>Examples</h3>
+<p>####Falling back to the browser's HTML5 picker if available.</p>
+<p>Set the <code>behavior</code> option to <code>native</code> to use the browser's HTML5 date input
+rendering when available.</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; type=&quot;date&quot; data-pat-date-picker=&quot;behavior: native&quot;&gt;
+</code></pre>
+<p>####Enforcing the styled non-HTML5 picker universally.</p>
+<p>By default this pattern will NOT defer to the browser's HTML5 picker.</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; type=&quot;date&quot;&gt;
+</code></pre>
+<p>####Default value</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; type=&quot;date&quot; value=&quot;2015-01-01&quot;&gt;
+</code></pre>
+<p>####First day on Monday</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; type=&quot;date&quot; value=&quot;2015-01-01&quot; data-pat-date-picker=&quot;first-day: 1&quot;&gt;
+</code></pre>
+<p>####Specifying the &quot;min&quot; and &quot;max&quot; attributes.</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; min=&quot;2015-01-01&quot; max=&quot;2015-12-31&quot; type=&quot;date&quot;&gt;
+</code></pre>
+<p>####Show the week number.</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; data-pat-date-picker=&quot;week-numbers: show;&quot; type=&quot;date&quot;&gt;
+</code></pre>
+<p>####Multilingual support with German translations</p>
+<p>The picker's UI can be translated by providing a URL to the <code>i18n</code> option. This
+URL must point to a JSON encoded resource containing the translations.</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; data-pat-date-picker=&quot;i18n: /src/pat/date-picker/i18n.json;&quot; type=&quot;date&quot;&gt;
+</code></pre>
+<p>Here are all the i18n values in JSON format:</p>
+<pre><code> {
+   &quot;previousMonth&quot;: &quot;Previous Month&quot;,
+   &quot;nextMonth&quot;: &quot;Next Month&quot;,
+   &quot;months&quot;: [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;, &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;],
+   &quot;weekdays&quot;: [&quot;Sunday&quot;, &quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;],
+   &quot;weekdaysShort&quot;: [&quot;Sun&quot;, &quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;]
+ }
+</code></pre>
+<p>####Automatically update one date when changing another</p>
+<p>You can define one date input to be after another date with the <code>after</code> option.
+The the other date is changed after the first, it will be automatically updated to be offset days after the first.</p>
+<pre><code>&lt;input name=&quot;start&quot; class=&quot;pat-date-picker&quot; type=&quot;date&quot;/&gt;
+&lt;input name=&quot;end&quot;   class=&quot;pat-date-picker&quot; type=&quot;date&quot; data-pat-date-picker=&quot;after: input[name=start]; offset-days: 2;&quot;/&gt;
+</code></pre>
+<p>####Format the displayed date</p>
+<p>In the default <code>styled</code> behavior mode, you can format the displayed date.
+The date input will be hidden and updated with an ISO8601 date to submit values which are machine-readable.
+The formating options are those from MomentJS: https://momentjs.com/docs/#/displaying/format/
+The locale option allows you to define the language in which the formatted date is displayed.</p>
+<pre><code>&lt;input class=&quot;pat-date-picker&quot; data-pat-date-picker=&quot;output-format: Do MMMM YYYY; locale: de&quot; type=&quot;date&quot; /&gt;
+</code></pre>
+<h3>Why did we base this library on Pikaday?</h3>
+<p>When looking for the underlying library to use for this pattern, we compared
+pikaday and <a href="https://dbushell.github.io/Pikaday/">pickadate</a>.</p>
+<ul>
+<li>Prefixed CSS classes</li>
+</ul>
+<p>Pikaday's CSS classes are prefixed to make them unique, whereas Pickadate's
+classes are very generic and therefore prone to clash with existing classes and CSS in certain sites.</p>
+<ul>
+<li>Better markup</li>
+</ul>
+<p>One of the main drawbacks of pickadate is the markup that it produces.
+Pickaday's special markup is inserted relative to the input element being overridden.</p>
+<p>In contrast, the markup generated by pikaday is appended to the end of the
+<code>&lt;body&gt;</code> tag, and it then uses absolute positioning to position the picker.</p>
+<p>This is easier to style and less prone to create problems when integrating the
+picker in diverse styling environments.</p>
+<ul>
+<li>Simpler, more modest featureset and Javascript</li>
+</ul>
+<p>Pikaday is only 5KB compressed. The code is AMD aware and easy to read and
+understand.</p>
+<h3>Option reference</h3>
+<p>The HTML5 attributes <code>min</code> and <code>max</code> will be honoured.</p>
+<p>In addition, the following options can be passed to <code>data-pat-date-picker</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Available values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>behavior</strong> (or behaviour)</td>
+<td>string</td>
+<td>styled</td>
+<td>native, styled</td>
+<td>Styled will always show the styled date picker. Native will use the system native date picker, provided the browser supports this.</td>
+</tr>
+<tr>
+<td><strong>week-numbers</strong></td>
+<td>string</td>
+<td>hide</td>
+<td>show, hide</td>
+<td>&quot;show&quot; will show the weeks' numbers in a leftmost column.</td>
+</tr>
+<tr>
+<td><strong>i18n</strong></td>
+<td>URL</td>
+<td></td>
+<td></td>
+<td>Provide a URL to a JSON resource which gives the i18n values.</td>
+</tr>
+<tr>
+<td><strong>first-day</strong></td>
+<td>Integer</td>
+<td>0</td>
+<td></td>
+<td>Set the first day of the week (0 -&gt; Sunday, 1-&gt; Monday, ...).</td>
+</tr>
+<tr>
+<td><strong>after</strong></td>
+<td>string</td>
+<td></td>
+<td></td>
+<td>CSS selector of another date input. If this date is before the other, it will be updated to the oder date plus offset-days.</td>
+</tr>
+<tr>
+<td><strong>offset-days</strong></td>
+<td>Integer</td>
+<td>0</td>
+<td></td>
+<td>Number of days added to the <strong>after</strong> reference date which will be used to update this date value.</td>
+</tr>
+<tr>
+<td><strong>output-format</strong></td>
+<td>String</td>
+<td>null</td>
+<td></td>
+<td>MomentJS compatible formatting option. If not given, the date will be displayed in ISO 8601 format.</td>
+</tr>
+<tr>
+<td><strong>locale</strong></td>
+<td>String</td>
+<td>null</td>
+<td></td>
+<td>Define the language in which the formatted date should be displayed.</td>
+</tr>
+</tbody>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>

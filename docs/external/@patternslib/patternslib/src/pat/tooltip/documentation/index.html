@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h2>Description</h2>
+<p>This pattern allows you to easily add tooltips with a variety of behaviours to your website.</p>
+<h2>Documentation</h2>
+<p>Tooltips are intended to display contextual information and function about the trigger element.</p>
+<h3>Markup structure</h3>
+<pre><code>&lt;label&gt;Website address
+  &lt;a href=&quot;#&quot; title=&quot;Please enter the full URL for the website&quot;
+      class=&quot;pat-tooltip&quot;&gt;More information&lt;/a&gt;
+&lt;/label&gt;
+</code></pre>
+<h3>Display</h3>
+<p>Tooltips are shown when clicking on the triggering element.</p>
+<p>The trigger can be changed to require the mouse to hover over the triggering element,
+and to be hidden when the mouse leaves the triggering element
+by adding a <code>hover</code> option.</p>
+<pre><code>&lt;a href=&quot;#&quot; title=&quot;Please enter the full URL for the website&quot;
+   class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;hover&quot;&gt;More information&lt;/a&gt;
+</code></pre>
+<h3>Positioning</h3>
+<p>Tooltips will be positioned close to the element that triggered them,
+with an arrow tip pointing to the centre of the triggering item. The
+placement of the tip on the tooltip determines the positioning of the
+tooltip. For example if the tip is placed at the right side of the
+tooltip, it naturally follows that the tooltip itself will be placed to
+the left of the triggering element.</p>
+<p>The position of the tip within the tooltip can be specified with a
+<em>position</em> property which specifies the preferred positions. This is
+formatted as <code>&lt;preference&gt;[,preference]*</code>. The possible preferences are:</p>
+<ul>
+<li><code>tl</code>: tip placed at the leftmost corner of the top side of the tooltip</li>
+<li><code>tm</code>: tip placed at the middle of the top side of the tooltip</li>
+<li><code>tr</code>: tip placed at the rightmost corner of the top side of the tooltip</li>
+<li><code>rt</code>: tip placed at the top corner of the right side of the tooltip</li>
+<li><code>rm</code>: tip placed at the middle of the right side of the tooltip</li>
+<li><code>rb</code>: tip placed at the bottom corner of the right side of the tooltip</li>
+<li><code>bl</code>: tip placed at the leftmost corner of the bottom side of the tooltip</li>
+<li><code>bm</code>: tip placed at the middle of the bottom side of the tooltip</li>
+<li><code>br</code>: tip placed at the rightmost corner of the bottom side of the tooltip</li>
+<li><code>lt</code>: tip placed at the top corner of the left side of the tooltip</li>
+<li><code>lm</code>: tip placed at the middle of the left side of the tooltip</li>
+<li><code>lb</code>: tip placed at the bottom corner of the left side of the tooltip</li>
+</ul>
+<p>An example:</p>
+<pre><code>&lt;a href=&quot;#tip&quot; class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;position: lt,lm,rt,rm&quot;&gt;
+ …
+&lt;/a&gt;
+</code></pre>
+<p>This specifies that the preferred position of the tip is at the top left
+side of the tooltip (placing the tooltip itself on the right side of the
+link). Notice that the position is the first defined property so you can use
+shorthand syntax directly. If the tooltip does not fit at that position
+then the left-middle position is tried, and then the right-top or if all
+previous options failed the middle of the right side is tried. If the tooltip
+does not fit at any of the preferred positions, then it will be
+positioned at the location that has the most space, even if this is not
+one of the preferred positions.</p>
+<p>It is possible to force a specific tooltip position by adding the
+<code>force</code> flag.</p>
+<pre><code>&lt;a href=&quot;#&quot; title=&quot;Please enter the full URL for the website&quot;
+   class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;position: lt force&quot;&gt;
+ …
+&lt;/a&gt;
+</code></pre>
+<h3>Sticky tooltips</h3>
+<p>By default, the tooltip disappears when the cursor is moved off the element or
+the triggering element is clicked. If this is not desired behaviour, there is
+the option to change the closing behaviour to <code>sticky</code> or to <code>close-button</code>.</p>
+<p>With <code>sticky</code>, the tooltip will remain until the user clicks outside of the
+tooltip, or on mobile, if the user clicks on the close button.</p>
+<p>With the <code>close-button</code> option, the tooltip will only be closed if the close
+button is clicked.</p>
+<p>For example, setting closing to <code>sticky</code>:</p>
+<pre><code>&lt;a href=&quot;#&quot; class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;closing: sticky&quot;&gt;
+ …
+&lt;/a&gt;
+</code></pre>
+<h3>AJAX tooltips</h3>
+<p>The tooltip content can be loaded via an AJAX request by providing an ajax
+option:</p>
+<pre><code>&lt;a href=&quot;balloon-contents.html#myTip&quot; class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;source: ajax&quot;&gt;
+ …
+&lt;/a&gt;
+</code></pre>
+<p>This will load the contents of the <code>#myTip</code> element of
+balloon-contents.html and display it in a tooltip.</p>
+<h3>Generated markup</h3>
+<p>The first time the tooltip is shown the tip itself will be wrapped in a
+new tooltip container. This container will be positioned correctly.</p>
+<p>Source markup:</p>
+<pre><code>&lt;label&gt;Website address
+  &lt;a href=&quot;#&quot; title=&quot;Please enter the full URL for the website.&quot;
+     class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;sticky&quot;&gt;More information&lt;/a&gt;
+&lt;/label&gt;
+</code></pre>
+<p>will be transformed into:</p>
+<pre><code>&lt;label&gt;Website address
+  &lt;a href=&quot;#&quot; class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;sticky&quot;&gt;More information&lt;/a&gt;
+&lt;/label&gt;
+…
+&lt;div class=&quot;tooltip-container rt&quot;
+     style=&quot;top: 208px; left: 750px; visibility: visible&quot;&gt;
+  &lt;div&gt;
+    &lt;button class=&quot;closePanel&quot;&gt;Close&lt;/button&gt;
+    &lt;p&gt;
+      Please enter the full URL for the website.
+    &lt;/p&gt;
+  &lt;/div&gt;
+  &lt;span class=&quot;pointer&quot; style=&quot;top: 111px; left: -22px&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p>for tooltips which fetch their content with an AJAX call the tooltip may
+be temporarily shown with a progress indicator:</p>
+<pre><code>&lt;label&gt;Website address
+  &lt;a href=&quot;/tips/#info&quot; class=&quot;pat-tooltip&quot; data-pat-tooltip=&quot;closing: sticky; source: ajax&quot;&gt;More information&lt;/a&gt;
+&lt;/label&gt;
+…
+&lt;div class=&quot;tooltip-container rt&quot;
+     style=&quot;top: 208px; left: 750px; visibility: visible&quot;&gt;
+  &lt;div&gt;
+    &lt;button class=&quot;closePanel&quot;&gt;Close&lt;/button&gt;
+    &lt;progress/&gt;
+  &lt;span class=&quot;pointer&quot; style=&quot;top: 111px; left: -22px&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Options reference</h3>
+<p>The tooltip can be configured through a <code>data-pat-tooltip</code> attribute.
+The available options are:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default value</th>
+<th>Values</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position-list</code></td>
+<td><code>auto</code></td>
+<td><code>tl</code> <code>tm</code> <code>tr</code> <code>rt</code> <code>rm</code> <code>rb</code> <code>br</code> <code>bm</code> <code>bl</code> <code>lb</code> <code>lm</code> <code>lt</code></td>
+<td>The priority in which the pattern will try to position the tooltip. With the tooltip is positioned where the most space is on the screen. The two letters indicate the position of the triangle as opposed to the tooltip body. Adding <code>force</code> will force the tooltip position, even if it would end up out of view.</td>
+<td>Multiple value</td>
+</tr>
+<tr>
+<td><code>position-policy</code></td>
+<td><code>auto</code></td>
+<td><code>auto</code> <code>force</code></td>
+<td>Policy used to place a tooltip: either always use a listed position, or allow other positions if no space is available for the listed positions.</td>
+<td>Mutually exclusive</td>
+</tr>
+<tr>
+<td><code>trigger</code></td>
+<td><code>click</code></td>
+<td><code>click</code> <code>hover</code></td>
+<td>Sets which user action should make the tooltip appear.</td>
+<td>Mutually exclusive</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td><code>title</code></td>
+<td><code>ajax</code> <code>content</code> <code>title</code></td>
+<td>Select where the contents of the tooltip is taken from: <code>ajax</code> load the tooltip contents from the link target url or from a selector given by the <code>href</code> attrobite. <code>content</code>: tooltip contents are the tooltip elements children. <code>title</code>: tooltip content is the title attribute value.</td>
+<td>Mutually exclusive</td>
+</tr>
+<tr>
+<td><code>delay</code></td>
+<td><code>0</code></td>
+<td><em>time</em></td>
+<td>The delay for the tooltip to appear, expressed in milliseconds or with <code>m</code> (minutes), <code>s</code> (seconds), <code>ms</code> (milliseconds) units.</td>
+<td>Time</td>
+</tr>
+<tr>
+<td><code>mark-inactive</code></td>
+<td><code>true</code></td>
+<td><code>true</code> <code>false</code></td>
+<td>Should we add inactive class to the tooltip trigger?</td>
+<td>Bool</td>
+</tr>
+<tr>
+<td><code>closing</code></td>
+<td><code>auto</code></td>
+<td><code>auto</code> <code>sticky</code> <code>close-button</code></td>
+<td>Auto means that the tooltip will disappear when the user clicks out of the tooltip, or — in case of hover triggered tooltips — hovers away from the trigger element. <code>close-button</code> will add a close button to the tooltip which must be used to close the tooltip.</td>
+<td>Mutually exclusive</td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td><em>none</em></td>
+<td><em>class value</em></td>
+<td>Assigns a class to the tooltip. For instance to give a specific tooltip a different colour</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ajax-data-type</code></td>
+<td><code>html</code></td>
+<td><code>html</code> <code>markdown</code></td>
+<td>Data type of content to be loaded when AJAX is used as source.</td>
+<td>Mutually exclusive</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>body</code></td>
+<td><em>selector</em></td>
+<td>Selects where the tooltip container is appended in the DOM</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>

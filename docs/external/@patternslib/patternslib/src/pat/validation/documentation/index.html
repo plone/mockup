@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h2>Description</h2>
+<p>This pattern provides a simple but powerful form validation beyond what HTML5 offers.</p>
+<h2>Documentation</h2>
+<p>The validation pattern is triggered by a single class <code>pat-validation</code> on the form tag. The rest is handled mostly with standard HTML5 validation attributes.</p>
+<p>This pattern has several advantages over standard HTML 5 form validation:</p>
+<ul>
+<li>it supports older browsers</li>
+<li>it uses simple documented HTML markup to allow non-browser-specific styling of error messages</li>
+<li>it supports extra validation rules</li>
+</ul>
+<h3>The following attributes may be used.</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>required=&quot;required&quot;</code></td>
+<td>Mark an input as required.</td>
+</tr>
+<tr>
+<td>Email address</td>
+<td><code>type=&quot;email&quot;</code></td>
+<td>Only allow valid email addresses.</td>
+</tr>
+<tr>
+<td>Numeric value</td>
+<td><code>type=&quot;number&quot;</code></td>
+<td>Only allow valid numbers.</td>
+</tr>
+<tr>
+<td>Minimum value</td>
+<td><code>type=&quot;number&quot; min=&quot;6&quot;</code></td>
+<td>Check if a number is greater than or equal to a given value.</td>
+</tr>
+<tr>
+<td>Maximum value</td>
+<td><code>type=&quot;number&quot; max=&quot;10&quot;</code></td>
+<td>Check if a number is less than or equal to a given value.</td>
+</tr>
+</tbody>
+</table>
+<h3>Error messages</h3>
+<p>Error messages are inserted into the DOM as <code>em</code> elements with a <code>message warning</code> class.
+For most input elements error messages are inserted immediately after the input element.
+In addition both the input element and its label will get an <code>warning</code> class.</p>
+<pre><code>&lt;label class=&quot;warning&quot;&gt;First name
+    &lt;input type=&quot;text&quot; required=&quot;required&quot; /&gt;
+    &lt;em class=&quot;message warning&quot;&gt;Please fill out this field&lt;/em&gt;
+&lt;/label&gt;
+</code></pre>
+<p>Checkboxes and radio buttons are treated differently: if they are contained in a fieldset with class <code>checklist</code> error messages are added at the end of the fieldset.</p>
+<pre><code>&lt;fieldset class=&quot;checklist radio&quot;&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;radio&quot; /&gt; Strawberry&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;radio&quot; /&gt; Banana&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;radio&quot; /&gt; Raspberry&lt;/label&gt;
+    &lt;em class=&quot;message warning&quot;&gt;Please make a choice&lt;/em&gt;
+&lt;/fieldset&gt;
+</code></pre>
+<h4>Overriding error messages</h4>
+<p>Error messages are unique per type of validation (e.g. <code>required</code>, <code>email</code> or <code>number</code>) and can be overridden:</p>
+<pre><code>&lt;form method=&quot;post&quot; class=&quot;pat-validation&quot;
+    data-pat-validation=&quot;
+        message-date: This value must be a valid date;
+        message-datetime: This value must be a valid date and time;
+        message-email: This value must be a valid email address;
+        message-number: This value must be a number;
+        message-required: This field is required;&quot;&gt;
+
+    &lt;!-- Form fields come here --&gt;
+
+&lt;/form&gt;
+</code></pre>
+<p>Error messages can also be overridden on a per-field basis, for example:</p>
+<pre><code>&lt;input type=&quot;date&quot; name=&quot;date&quot; data-pat-validation=&quot;type: date; not-after: #planning-end-${number}; message-date: This date must be on or before the end date.&quot;/&gt;
+</code></pre>
+<h3>Options reference</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>disable-selector</td>
+<td>A selector for elements that should be disabled when there are errors in the form.</td>
+<td></td>
+<td>CSS Selector</td>
+</tr>
+<tr>
+<td>equality</td>
+<td>Field-specific. The name of another input this input should equal to (useful for password confirmation).</td>
+<td></td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-date</td>
+<td>The error message for date fields.</td>
+<td>This value must be a valid date</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-datetime</td>
+<td>The error message for datetime fields.</td>
+<td>This value must be a valid date and time</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-email</td>
+<td>The error message for email fields.</td>
+<td>This value must be a valid email address</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-equality</td>
+<td>The error message for fields required to be equal</td>
+<td>is not equal to %{attribute}</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-integer</td>
+<td>The error message for integers.</td>
+<td>This value must be an integer</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-max</td>
+<td>The error message for max number values.</td>
+<td>This value must be less than or equal to %{count}</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-min</td>
+<td>The error message for min number values.</td>
+<td>This value must be greater than or equal to %{count}</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-number</td>
+<td>The error message for numbers.</td>
+<td>This value must be a number.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>message-required</td>
+<td>The error message for required fields.</td>
+<td>This field is required.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>not-after</td>
+<td>Field-specific. A lower time limit restriction for date and datetime fields.</td>
+<td></td>
+<td>CSS Selector or a ISO8601 date string.</td>
+</tr>
+<tr>
+<td>not-before</td>
+<td>Field-specific. An upper time limit restriction for date and datetime fields.</td>
+<td></td>
+<td>CSS Selector or a ISO8601 date string.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Field-specific. Denotes a special field type not supported by default in (all) browsers. Can be integer, date or datetime.</td>
+<td></td>
+<td>String</td>
+</tr>
+</tbody>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>

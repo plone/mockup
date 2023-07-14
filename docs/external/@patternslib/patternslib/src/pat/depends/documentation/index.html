@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/dist/main.css" />
+    <link rel="stylesheet" href="/dist/prismjs/themes/prism-okaidia.css" />
+    <link rel="stylesheet" href="/dist/bootstrap/dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h2>Description</h2>
+<p>The <em>depends</em> pattern makes it possible to make visibility of content conditional on form data.</p>
+<h2>Documentation</h2>
+<p>The <em>depends</em> pattern makes it possible to make visibility of content
+conditional on form data. A common use case is to only show parts of a
+form when relevant. Here is an example from a hypothetical pizza order
+form:</p>
+<pre><code>&lt;form&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;custom&quot;/&gt; Add extra toppings&lt;/label&gt;
+
+  &lt;fieldset class=&quot;pat-depends&quot; data-pat-depends=&quot;custom&quot;&gt;
+    &lt;legend&gt;Extra toppings&lt;/legend&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;pineapple&quot;/&gt; Pineapple&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;gorgonzola&quot;/&gt; Gorgonzola&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;peanuts&quot;/&gt; Peanuts&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;redonion&quot;/&gt; Red onions&lt;/label&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+</code></pre>
+<p>In this example the fieldset with options for extra toppings is only
+shown when the user indicates he wants to add extra toppings.</p>
+<p>Another common use case is filtering a list based on some options:</p>
+<pre><code>&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;paid&quot;/&gt; Show paid invoices&lt;/label&gt;
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;draft&quot;/&gt; Show draft invoices&lt;/label&gt;
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;overdue&quot; checked=&quot;checked&quot;/&gt; Show overdue invoices&lt;/label&gt;
+
+&lt;ul&gt;
+  &lt;li class=&quot;pat-depends&quot; data-pat-depends=&quot;paid&quot;&gt;A paid invoice&lt;/li&gt;
+  &lt;li class=&quot;pat-depends&quot; data-pat-depends=&quot;paid&quot;&gt;Another paid invoice&lt;/li&gt;
+  &lt;li class=&quot;pat-depends&quot; data-pat-depends=&quot;overdue&quot;&gt;An overdue invoice&lt;/li&gt;
+  &lt;li class=&quot;pat-depends&quot; data-pat-depends=&quot;draft&quot;&gt;A draft invoice&lt;/li&gt;
+  …
+&lt;/ul&gt;
+</code></pre>
+<h3>Dependency expressions</h3>
+<p>Dependencies are specified via <em>dependency expression</em>. These are
+expressions that specify when an item should be visible or not.</p>
+<p>The simplest form of a dependency expression is <code>&lt;input name&gt;</code> which
+indicates that an input element with the given name (or id) must have a
+value (if it is a checkbox must be checked). You can also test for a
+specific value:</p>
+<ul>
+<li><code>&lt;input name&gt; = &lt;value&gt;</code>: indicates that an input element must have a
+specific value. This is most useful when used to check which radio
+button is checked.</li>
+<li><code>&lt;input name&gt; != &lt;value&gt;</code>: indicates that an input element must not
+have a specific value. This is most useful when used to check if a
+specific radio button is not checked.</li>
+<li><code>&lt;input name&gt; &lt;= &lt;value&gt;</code>: indicates that an input element must have
+a value less than or equal than the given value. This is most useful
+for number and range inputs.</li>
+<li><code>&lt;input name&gt; &lt; &lt;value&gt;</code>: indicates that an input element must have
+a value less than the given value. This is most useful for number
+and range inputs. inputs.</li>
+<li><code>&lt;input name&gt; &gt; &lt;value&gt;</code>: indicates that an input element must have
+a value greater than the given value. This is most useful for number
+and range inputs. inputs.</li>
+<li><code>&lt;input name&gt; &gt;= &lt;value&gt;</code>: indicates that an input element must have
+a value greater than or equal than the given value. This is most
+useful for number and range inputs.</li>
+<li><code>&lt;input name&gt; ~= &lt;value&gt;</code>: check if the value is a substring of the
+current value of the input.</li>
+</ul>
+<p>You can also revert a test by putting the <code>not</code> keyword in front of it.
+Here are some examples:</p>
+<pre><code>&lt;input type=&quot;checkbox&quot; name=&quot;hidden&quot;/&gt;
+
+&lt;p class=&quot;pat-depends&quot; data-pat-depends=&quot;condition: hidden&quot;&gt;
+    Hidden items will be included.
+&lt;/p&gt;
+
+&lt;p class=&quot;pat-depends&quot; data-pat-depends=&quot;condition: not hidden&quot;&gt;
+    Not showing hidden items.
+&lt;/p&gt;
+
+&lt;input type=&quot;range&quot; name=&quot;price&quot; value=&quot;50&quot;/&gt;
+
+&lt;p class=&quot;pat-depends&quot; data-pat-depends=&quot;price&lt;100&quot;&gt;
+    Showing cheap options.
+&lt;/p&gt;
+</code></pre>
+<p>You can also combine multiple tests using <code>and</code> and <code>or</code>, optionally
+using parenthesis to specify the desired grouping. Here is a more
+complex example which demonstrates the use of <code>and</code>:</p>
+<pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Select your flavour&lt;/legend&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;flavour&quot; value=&quot;hawaii&quot;/&gt; Hawaii&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;flavour&quot; value=&quot;meat&quot;/&gt; Meat fest &lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;flavour&quot; value=&quot;veg&quot;/&gt; Vegeration &lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;custom&quot;/&gt; Add extra ingredients&lt;/label&gt;
+&lt;/fieldset&gt;
+
+&lt;fieldset class=&quot;pat-depends&quot; data-pat-depends=&quot;custom&quot;&gt;
+  &lt;legend&gt;Select custom ingredients&lt;/legend&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;cheese&quot;/&gt; Extra cheese&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;bacon&quot;/&gt; Bacon&lt;/label&gt;
+&lt;/fieldset&gt;
+
+&lt;em class=&quot;warning pat-depends&quot;
+    data-pat-depends=&quot;condition:flavour=veg and custom and bacon&quot;&gt;
+  Adding bacon means your pizza is no longer vegetarian!&lt;/em&gt;
+</code></pre>
+<p>This pizza menu will show a warning if the user selects a vegetarian
+pizza but then also adds extra bacon to it.</p>
+<h3>Actions</h3>
+<p>Two types of actions can be taken by the pattern: changing visibility
+and disabling elements. The action can be specified using the <code>action</code>
+property.</p>
+<pre><code>&lt;button data-pat-depends=&quot;title enable&quot;&gt;Submit&lt;/button&gt;
+</code></pre>
+<p>This example shows a submit button which is disabled if the title input
+has no value.</p>
+<p>The available actions are:</p>
+<ul>
+<li><code>show</code>: make an item's visibility conditional, based on the
+dependencies. If the dependencies are not met the item will
+be made invisible. In addition a CSS class of <code>hidden</code> or
+<code>visible</code> will be set.</li>
+<li><code>enable</code>: disables items and adds a <code>disabled</code> class if the
+dependencies are not met. Input elements are disabled by setting
+their disabled property. Links are disabled by registered a
+temporary event handler that blocks their default behaviour.</li>
+<li><code>both</code>: both the <code>enable</code> and <code>show</code> actions will be applied. Conversely, an
+element will be both hidden and disabled when the condition is not met.</li>
+</ul>
+<h3>Transitions</h3>
+<p>When hiding or showing items you can specify a transition effect to be
+used. The default behaviour is to not use any transition and immediately
+hide or show the element by toggling its <code>display</code> style. If you prefer
+to control the effect completely with CSS you can use the <code>css</code>
+transition.</p>
+<pre><code>&lt;style&gt;
+  .pat-depends {
+      transition-property: opacity;
+      transition-duration: 1s;
+  }
+  .visible {
+      opacity: 1;
+  }
+
+  .hidden {
+      opacity: 0;
+  }
+&lt;/style&gt;
+
+&lt;fieldset class=&quot;pat-depends&quot; data-pat-depends=&quot;condition:custom; transition: css&quot;&gt;
+  &lt;legend&gt;Select custom ingredients&lt;/legend&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;cheese&quot;/&gt; Extra cheese&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;bacon&quot;/&gt; Bacon&lt;/label&gt;
+&lt;/fieldset&gt;
+</code></pre>
+<p>This allow full control in CSS, including the use of animation for
+browsers supporting CSS animation. Two non-CSS based animation options
+are also included: <code>fade</code> will fade the element in and out, and <code>slide</code>
+uses a vertical sliding effect. During a transition an <code>in-progress</code>
+class will be set on the element.</p>
+<h3>Option reference</h3>
+<p>The depends can be configured through a <code>data-pat-depends</code> attribute.
+The available options are:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>condition</code></td>
+<td></td>
+<td>The dependency condition.</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td><code>show</code></td>
+<td>Action to perform. One of <code>show</code>, <code>enable</code> or <code>both</code>.</td>
+</tr>
+<tr>
+<td><code>transition</code></td>
+<td><code>show</code></td>
+<td>Transition effect to use if the action is <code>show</code>. Must be one of <code>none</code>, <code>css</code>, <code>fade</code> or <code>slide</code>.</td>
+</tr>
+<tr>
+<td><code>effect-duration</code></td>
+<td><code>fast</code></td>
+<td>Duration of transition. This is ignored if the transition is <code>none</code> or <code>css</code>.</td>
+</tr>
+<tr>
+<td><code>effect-easing</code></td>
+<td><code>swing</code></td>
+<td>Easing to use for the transition. This must be a known jQuery easing method. jQuery includes <code>swing</code> and <code>linear</code>, but more can be included via jQuery UI.</td>
+</tr>
+</tbody>
+</table>
+
+      </main>
+    </div>
+  </body>
+</html>
