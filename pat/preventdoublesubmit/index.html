@@ -1,4 +1,339 @@
-<h1>Prevent double submit pattern.</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/mockup/favicon.ico">
+    <link rel="stylesheet" href="/mockup/dist/main.css">
+    <link rel="stylesheet" href="/mockup/dist/prismjs/themes/prism-okaidia.css">
+    <link rel="stylesheet" href="/mockup/dist/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://localhost:8000/bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="/dist/bundle.min.js"></script> -->
+    <script type="module" src="/mockup/dist/fakeserver.js"></script>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/mockup/">Home</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/autotoc/">Autotoc</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/backdrop/">Backdrop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/contentloader/">Content loader</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/cookietrigger/">Cookie Trigger</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/datatables/">DataTables</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/formautofocus/">Formautofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/formunloadalert/">Formunloadalert</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/livesearch/">Livesearch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/portletmanager/">Portlet Manager</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/markspeciallinks/">MarkSpecialLinks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/modal/">Modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/navigationmarker/">Navigation marker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/passwordstrength/">Password strength</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/preventdoublesubmit/">Prevent double submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/querystring/">Querystring</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/recurrence/">Recurrence</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/relateditems/">Related items</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/select2/">Select2</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/sortable/">Sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/structure-updater/">Structure Updater</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/structure/">Structure</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/textareamimetypeselector/">Textarea Mimetype Selector</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/texteditor/">Text Editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/tinymce/">tinyMCE</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/toggle/">Toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/toolbar/">Toolbar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/tree/">Tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/upload/">Upload</a>
+          </li>
+          
+          <li>---</li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/pat-code-editor/README/">pat-code-editor</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/pat/miller-columns-browser/">Miller Columns Browser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/auto-scale/documentation/">auto-scale</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/auto-submit/documentation/">auto-submit</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/auto-suggest/documentation/">auto-suggest</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/autofocus/documentation/">autofocus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/bumper/documentation/">bumper</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/calendar/documentation/">calendar</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/carousel/documentation/">carousel</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/checklist/documentation/">checklist</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/clone/documentation/">clone</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/collapsible/documentation/">collapsible</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/colour-picker/documentation/">colour-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/date-picker/documentation/">date-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/datetime-picker/documentation/">datetime-picker</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/depends/documentation/">depends</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/display-time/documentation/">display-time</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/equaliser/documentation/">equaliser</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/expandable-tree/documentation/">expandable-tree</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/focus/documentation/">focus</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/forward/documentation/">forward</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/fullscreen/documentation/">fullscreen</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/gallery/documentation/">gallery</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/grid/documentation/">grid</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/image-crop/documentation/">image-crop</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/inject-history/documentation/">inject-history</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/inject/documentation/">inject</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/markdown/documentation/">markdown</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/masonry/documentation/">masonry</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/menu/documentation/">menu</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/minimalpattern/documentation/">minimalpattern</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/modal/documentation/">modal</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/navigation/documentation/">navigation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/notification/documentation/">notification</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/push/documentation/">push</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/scroll-box/documentation/">scroll-box</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/scroll/documentation/">scroll</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/selectbox/documentation/">selectbox</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/slides/documentation/">slides</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/sortable/documentation/">sortable</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/stacks/documentation/">stacks</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/subform/documentation/">subform</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/switch/documentation/">switch</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/syntax-highlight/documentation/">syntax-highlight</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/tabs/documentation/">tabs</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/toggle/documentation/">toggle</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/tooltip/documentation/">tooltip</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/validation/documentation/">validation</a>
+          </li>
+          
+          <li class="">
+            <a class="menu-item" href="/mockup/docs/external/@patternslib/patternslib/src/pat/zoom/documentation/">zoom</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+      <main id="content">
+        <h1>Prevent double submit pattern.</h1>
 <h2>Configuration</h2>
 <table>
 <thead>
@@ -37,3 +372,8 @@
   <input class="btn btn-large btn-primary allowMultiSubmit" type="submit" value="Multi submit">
 </form>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-preventdoublesubmit<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">onsubmit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token literal-property property">javascript</span><span class="token operator">:</span><span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit this value please!<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-large btn-primary<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Single submit<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>        <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-large btn-primary allowMultiSubmit<span class="token punctuation">"</span></span><br>        <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><br>        <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Multi submit<span class="token punctuation">"</span></span><br>    <span class="token punctuation">/></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span></code></pre>
+
+      </main>
+    </div>
+  </body>
+</html>
