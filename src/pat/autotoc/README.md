@@ -1,4 +1,5 @@
 ---
+layout: layout.liquid
 permalink: "pat/autotoc/"
 title: Autotoc
 ---
