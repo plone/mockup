@@ -65,7 +65,7 @@ export default Base.extend({
         var self = this;
 
         if (self.$el.find(".upload-area").length) {
-            logger.info("Found already a dropzone on element, skipping!");
+            log.info("Found already a dropzone on element, skipping!");
             return;
         }
 
