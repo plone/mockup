@@ -2,7 +2,10 @@ import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import Base from "@patternslib/patternslib/src/core/base";
+import logger from "@patternslib/patternslib/src/core/logging";
 import utils from "../../core/utils";
+
+const log = logger.getLogger("pat-upload");
 
 let Dropzone;
 
@@ -62,7 +65,7 @@ export default Base.extend({
         var self = this;
 
         if (self.$el.find(".upload-area").length) {
-            console.warn("Found already a dropzone on element, skipping!");
+            logger.info("Found already a dropzone on element, skipping!");
             return;
         }
 
