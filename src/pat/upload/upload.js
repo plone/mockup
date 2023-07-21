@@ -61,6 +61,11 @@ export default Base.extend({
 
         var self = this;
 
+        if (self.$el.find(".upload-area").length) {
+            console.warn("Found already a dropzone on element, skipping!");
+            return;
+        }
+
         if (typeof self.options.allowPathSelection === "undefined") {
             // Set allowPathSelection to true, if we can use path based urls.
             self.options.allowPathSelection =
