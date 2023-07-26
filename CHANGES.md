@@ -2,6 +2,23 @@
 
 
 
+## [5.1.2](https://github.com/plone/mockup/compare/5.1.1...5.1.2) (2023-07-26)
+
+
+### Bug Fixes
+
+
+* **pat-upload:** Prevent duplicate initialization of the dropzone. ([5e15a78](https://github.com/plone/mockup/commit/5e15a78e62b1f8e9f73550555d63a5051ccbed3e))
+
+  Fixes: https://github.com/plone/Products.CMFPlone/issues/3814
+
+
+
+### Maintenance
+
+
+* Upgrade Bootstrap to 5.3.1 ([ccb066a](https://github.com/plone/mockup/commit/ccb066abc086388ed6bd0c70609dc686e2da4aff))
+
 ## [5.1.1](https://github.com/plone/mockup/compare/5.1.0-alpha.5...5.1.1) (2023-05-31)
 
 
