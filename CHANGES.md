@@ -24,6 +24,17 @@
 
 * **Dependencies:** Upgrade dependencies. ([b41d4ca](https://github.com/plone/mockup/commit/b41d4caf4aa83083119b6eca83896d7ee62e0365))
 
+## [5.1.3](https://github.com/plone/mockup/compare/5.1.2...5.1.3) (2023-07-30)
+
+
+### Maintenance
+
+
+* Add sinon to  in jest config. ([7aa8a9e](https://github.com/plone/mockup/commit/7aa8a9e56fc7e9eb75b157594d255c97d0ac5b44))
+
+
+* **Dependencies:** Upgrade dependencies. ([b41d4ca](https://github.com/plone/mockup/commit/b41d4caf4aa83083119b6eca83896d7ee62e0365))
+
 ## [5.1.2](https://github.com/plone/mockup/compare/5.1.1...5.1.2) (2023-07-26)
 
 
