@@ -392,27 +392,132 @@ Modal with TinyMCE</a></p>
 </div>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><br>    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal5<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-large plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modalSizeClass: modal-lg;<span class="token punctuation">"</span></span><br>    <span class="token punctuation">></span></span>Modal large!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><br><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal5<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Basic screen modal!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span><br>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Indeed. Whoa whoa whoa whoa. Wait.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Configuration</h2>
-<p>|            Option             |        Type         |                                                               Default                                                               |                                                                                                                                                                                Description                                                                                                                                                                                |
-| :---------------------------: | :-----------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|            height             |       string        |                                                                 ''                                                                  |                                                                                                                                                              Set the height of the modal, for example: 250px                                                                                                                                                              |
-|             width             |       string        |                                                                 ''                                                                  |                                                                                                                                                          Set the width of the modal, for example: 80% or 500px.                                                                                                                                                           |
-|        modalSizeClass         |       string        |                                                                 ''                                                                  |                                                                                                                                         Set the modal size class, for example: modal-sm, modal-lg, modal-xl or modal-fullscreen.                                                                                                                                          |
-|            margin             | function or integer |                                                                 20                                                                  |                                                                                                               A function, Integer or String which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.                                                                                                               |
-|           position            |       string        |                                                           'center middle'                                                           |                                                                                                             Position the modal relative to the window with the format: &quot;<horizontal> <vertical>&quot; -- allowed values: top, bottom, left, right, center, middle.                                                                                                             |
-|           triggers            |        array        |                                                                 []                                                                  | Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format <code>[&quot;EVENT SELECTOR&quot;]</code> or <code>[&quot;EVENT&quot;]</code>. For example, <code>[&quot;click .someButton&quot;]</code>. If you pass in only an event such as, <code>[&quot;change&quot;]</code>, the event listener will be added to the element on which the modal was initiated, usually a link or button. |
-|             title             |       string        |                                                                null                                                                 |                                                                                                                                          A string to place in the modal header. If title is provided, titleSelector is not used.                                                                                                                                          |
-|         titleSelector         |       string        |                                                             'h1:first'                                                              |                                                                                                                                 Selector for an element to extract from the content provided to the modal and place in the modal header.                                                                                                                                  |
-|            content            |       string        |                                                             '#content'                                                              |                                                                                                                                        Selector for an element within the content provided to the modal to use as the modal body.                                                                                                                                         |
-|        prependContent         |       string        |                                                          '.portalMessage'                                                           |                                              Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.                                               |
-|           backdrop            |       string        |                                                               'body'                                                                |                                                                   Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.                                                                    |
-|        backdropOptions        |       object        | { zIndex: &quot;1040&quot;, opacity: &quot;0.8&quot;, className: &quot;backdrop&quot;, classActiveName: &quot;backdrop-active&quot;, closeOnEsc: true, closeOnClick: true } |                                                                                                                                                                   Look at options at backdrop pattern.                                                                                                                                                                    |
-|            buttons            |       string        |                                               '.formControls &gt; input[type=&quot;submit&quot;]'                                                |                                                                                                Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.                                                                                                |
-| automaticallyAddButtonActions |       boolean       |                                                                true                                                                 |                                                                                                                     Automatically create actions for elements matched with the buttons selector. They will use the options provided in actionOptions.                                                                                                                     |
-|     loadLinksWithinModal      |       boolean       |                                                                true                                                                 |                                                                                                                                                         Automatically load links inside of the modal using AJAX.                                                                                                                                                          |
-|         actionOptions         |       object        |                                                                 {}                                                                  |                                                              A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.                                                               |
-|           onSuccess           |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (modal, response, state, xhr, form) when form has been successfully submitted. if value is a string, this is the name of a function at window level            |
-|          onFormError          |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (modal, response, state, xhr, form) when backend has sent an error after form submission. if value is a string, this is the name of a function at window level |
-|            onError            |      Function       |                                                               string                                                                |                                                                                                                                                                                                                                                                                                                                                                           | function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level                           |</vertical></horizontal></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Default</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">height</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">''</td>
+<td style="text-align:center">Set the height of the modal, for example: 250px</td>
+</tr>
+<tr>
+<td style="text-align:center">width</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">''</td>
+<td style="text-align:center">Set the width of the modal, for example: 80% or 500px.</td>
+</tr>
+<tr>
+<td style="text-align:center">modalSizeClass</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">''</td>
+<td style="text-align:center">Set the modal size class, for example: modal-sm, modal-lg, modal-xl or modal-fullscreen.</td>
+</tr>
+<tr>
+<td style="text-align:center">margin</td>
+<td style="text-align:center">function or integer</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">A function, Integer or String which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.</td>
+</tr>
+<tr>
+<td style="text-align:center">position</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'center middle'</td>
+<td style="text-align:center">Position the modal relative to the window with the format: &quot;<horizontal> <vertical>&quot; -- allowed values: top, bottom, left, right, center, middle.</vertical></horizontal></td>
+</tr>
+<tr>
+<td style="text-align:center">triggers</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">[]</td>
+<td style="text-align:center">Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format <code>[&quot;EVENT SELECTOR&quot;]</code> or <code>[&quot;EVENT&quot;]</code>. For example, <code>[&quot;click .someButton&quot;]</code>. If you pass in only an event such as, <code>[&quot;change&quot;]</code>, the event listener will be added to the element on which the modal was initiated, usually a link or button.</td>
+</tr>
+<tr>
+<td style="text-align:center">title</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">A string to place in the modal header. If title is provided, titleSelector is not used.</td>
+</tr>
+<tr>
+<td style="text-align:center">titleSelector</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'h1:first'</td>
+<td style="text-align:center">Selector for an element to extract from the content provided to the modal and place in the modal header.</td>
+</tr>
+<tr>
+<td style="text-align:center">content</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'#content'</td>
+<td style="text-align:center">Selector for an element within the content provided to the modal to use as the modal body.</td>
+</tr>
+<tr>
+<td style="text-align:center">prependContent</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'.portalMessage'</td>
+<td style="text-align:center">Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.</td>
+</tr>
+<tr>
+<td style="text-align:center">backdrop</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'body'</td>
+<td style="text-align:center">Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.</td>
+</tr>
+<tr>
+<td style="text-align:center">backdropOptions</td>
+<td style="text-align:center">object</td>
+<td style="text-align:center">{ zIndex: &quot;1040&quot;, opacity: &quot;0.8&quot;, className: &quot;backdrop&quot;, classActiveName: &quot;backdrop-active&quot;, closeOnEsc: true, closeOnClick: true }</td>
+<td style="text-align:center">Look at options at backdrop pattern.</td>
+</tr>
+<tr>
+<td style="text-align:center">buttons</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'.formControls &gt; input[type=&quot;submit&quot;]'</td>
+<td style="text-align:center">Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.</td>
+</tr>
+<tr>
+<td style="text-align:center">automaticallyAddButtonActions</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">Automatically create actions for elements matched with the buttons selector. They will use the options provided in actionOptions.</td>
+</tr>
+<tr>
+<td style="text-align:center">loadLinksWithinModal</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">Automatically load links inside of the modal using AJAX.</td>
+</tr>
+<tr>
+<td style="text-align:center">actionOptions</td>
+<td style="text-align:center">object</td>
+<td style="text-align:center">{}</td>
+<td style="text-align:center">A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.</td>
+</tr>
+<tr>
+<td style="text-align:center">onSuccess</td>
+<td style="text-align:center">Function</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">onFormError</td>
+<td style="text-align:center">Function</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">onError</td>
+<td style="text-align:center">Function</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
 
       </main>
     </div>
