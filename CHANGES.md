@@ -2,6 +2,27 @@
 
 
 
+## [5.1.4](https://github.com/plone/mockup/compare/5.1.3...5.1.4) (2023-08-09)
+
+
+### Bug Fixes
+
+
+* **pat structure:** Fix popover-structure-columns, use 2-column layout ([9fb499e](https://github.com/plone/mockup/commit/9fb499e41f47b19629163c3cb2bd9c69fd829881))
+
+
+* **pat structure:** Fix sticky position when toolbar is on top ([2b20d9b](https://github.com/plone/mockup/commit/2b20d9b8f03f15c9be0f365aed80899d0f3f900a))
+
+
+* **pat tinymce:** Fix image modal with selected image. ([da50ee3](https://github.com/plone/mockup/commit/da50ee3b9d13cd1290e68a15777b3ca2fd76b567))
+
+
+
+### Maintenance
+
+
+* **Docs:** fix table in modal. ([f2eb54a](https://github.com/plone/mockup/commit/f2eb54a09d7743d36622c63024244376a789e07e))
+
 ## [5.1.3](https://github.com/plone/mockup/compare/5.1.2...5.1.3) (2023-07-30)
 
 
