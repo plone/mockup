@@ -390,3 +390,7 @@
         }
     }
 }
+
+body.plone-toolbar-top .pat-structure .navbar {
+    top:var(--plone-toolbar-top-height);
+}
