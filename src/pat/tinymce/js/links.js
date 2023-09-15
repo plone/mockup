@@ -352,6 +352,12 @@ tinymce.PluginManager.add("ploneimage", function (editor) {
         onAction: editor.settings.addImageClicked,
         // stateSelector: "img:not([data-mce-object])",
     });
+    editor.ui.registry.addMenuItem("ploneimage", {
+        icon: "image",
+        text: "Insert image",
+        onAction: editor.settings.addImageClicked,
+        // stateSelector: "img:not([data-mce-object])",
+    });
 });
 
 /* register the tinymce plugin */
@@ -359,6 +365,13 @@ tinymce.PluginManager.add("plonelink", function (editor) {
     editor.ui.registry.addButton("plonelink", {
         icon: "link",
         tooltip: "Insert/edit link",
+        shortcut: "Ctrl+K",
+        onAction: editor.settings.addLinkClicked,
+        stateSelector: "a[href]",
+    });
+    editor.ui.registry.addMenuItem("plonelink", {
+        icon: "link",
+        text: "Insert link",
         shortcut: "Ctrl+K",
         onAction: editor.settings.addLinkClicked,
         stateSelector: "a[href]",
