@@ -1,6 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import Base from "@patternslib/patternslib/src/core/base";
+import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 
 import tinymce from "tinymce/tinymce";
@@ -79,32 +80,33 @@ var ExternalLink = LinkType.extend({
 var InternalLink = LinkType.extend({
     name: "internallinktype",
     trigger: ".pat-internallinktype-dummy",
-    init: function () {
+    init: async function () {
         if (!this.getEl().length) {
             return;
         }
         LinkType.prototype.init.call(this);
         this.getEl().addClass("pat-relateditems");
-        this.createRelatedItems();
+        await this.createRelatedItems();
     },
 
     getEl: function () {
         return this.$el.find("input:not(.select2-input)");
     },
 
-    createRelatedItems: function () {
+    createRelatedItems: async function () {
         if (!this.getEl().length) {
             return;
         }
         var options = this.linkModal.options.relatedItems;
         options.upload = false; // ensure that related items upload is off.
         this.relatedItems = new RelatedItems(this.getEl(), options);
+        await events.await_pattern_init(this.relatedItems)
     },
 
-    updateRelatedItems: function (val) {
+    updateRelatedItems: async function (val) {
         if (!this.relatedItems) {
             // prevent toolbar from being rendered twice
-            this.createRelatedItems();
+            await this.createRelatedItems();
         }
         this.relatedItems.selectItem(val);
     },
@@ -350,6 +352,12 @@ tinymce.PluginManager.add("ploneimage", function (editor) {
         onAction: editor.settings.addImageClicked,
         // stateSelector: "img:not([data-mce-object])",
     });
+    editor.ui.registry.addMenuItem("ploneimage", {
+        icon: "image",
+        text: "Insert image",
+        onAction: editor.settings.addImageClicked,
+        // stateSelector: "img:not([data-mce-object])",
+    });
 });
 
 /* register the tinymce plugin */
@@ -357,6 +365,13 @@ tinymce.PluginManager.add("plonelink", function (editor) {
     editor.ui.registry.addButton("plonelink", {
         icon: "link",
         tooltip: "Insert/edit link",
+        shortcut: "Ctrl+K",
+        onAction: editor.settings.addLinkClicked,
+        stateSelector: "a[href]",
+    });
+    editor.ui.registry.addMenuItem("plonelink", {
+        icon: "link",
+        text: "Insert link",
         shortcut: "Ctrl+K",
         onAction: editor.settings.addLinkClicked,
         stateSelector: "a[href]",
@@ -531,7 +546,7 @@ export default Base.extend({
         return ["image", "uploadImage", "externalImage"].indexOf(this.linkType) !== -1;
     },
 
-    initElements: function () {
+    initElements: async function () {
         var self = this;
         self.$target = $('select[name="target"]', self.modal.$modal);
         self.$button = $('.modal-footer input[name="insert"]', self.modal.$modal);
@@ -549,18 +564,21 @@ export default Base.extend({
         self.$caption = $('textarea[name="caption"]', self.modal.$modal);
 
         /* load up all the link types */
-        _.each(self.options.linkTypes, function (type) {
+        for (var index = 0; index < self.options.linkTypes.length; index++) {
+            var type = self.options.linkTypes[index];
             var $container = $(".linkType." + type + " .main", self.modal.$modal);
             if ($container.length) {
-                self.linkTypes[type] = new self.options.linkTypeClassMapping[type](
+                var instance  = new self.options.linkTypeClassMapping[type](
                     $container,
                     {
                         linkModal: self,
                         tinypattern: self.tinypattern,
                     }
                 );
+                await events.await_pattern_init(instance);
+                self.linkTypes[type] = instance;
             }
-        });
+        }
 
         $(".autotoc-nav a", self.modal.$modal).on("click", function () {
             var $fieldset = $("fieldset.linkType", self.modal.$modal).eq(
@@ -729,9 +747,9 @@ export default Base.extend({
     },
 
     // eslint-disable-next-line no-unused-vars
-    modalShown: function (e) {
+    modalShown: async function (e) {
         var self = this;
-        self.initElements();
+        await self.initElements();
         self.initData();
         // upload init
         if (self.options.upload) {
