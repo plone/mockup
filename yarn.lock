@@ -1833,7 +1833,7 @@
     colorette "^2.0.16"
     ora "^5.4.1"
 
-"@patternslib/dev@^3.4.0":
+"@patternslib/dev@^3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@patternslib/dev/-/dev-3.5.0.tgz#fb47cf70bb97c7e282b88cef1a85d659a792f032"
   integrity sha512-UJWNdKGcxT2mkwRraYUo0Li/ssdxpiAfEKJsEInLyTK6qq1LfZJMbtELZEAFdArEEgY7+L4QRh9TW15Fit5E/g==
