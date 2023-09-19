@@ -2,6 +2,24 @@
 
 
 
+## 5.1.5 (2023-09-19)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** Properly await the select2 initialization when using it from the insert image or insert link dialogs ([#1342](https://github.com/plone/mockup/issues/1342)) ([a580112](https://github.com/plone/mockup/commit/a5801127a38c9c97e464e8918ed01e424ff28686))
+
+
+
+### Maintenance
+
+
+* `@patternslib/dev = 3.5.0` ([2d5140c](https://github.com/plone/mockup/commit/2d5140ccfe2a0db2e4a0e5082aa520c28e258b0b))
+
+
+* Bootstrap 5.3.2 ([f82b469](https://github.com/plone/mockup/commit/f82b4690f474430262284f20466aa4721bbe012c))
+
 ## [5.1.4](https://github.com/plone/mockup/compare/5.1.3...5.1.4) (2023-08-09)
 
 
