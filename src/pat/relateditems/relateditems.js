@@ -427,7 +427,6 @@ export default Base.extend({
                             data.push.apply(data, e.results);
                             this.$el.select2("data", data, true);
                             this.emit("selected");
-                            this.popover.hide();
                         },
                         false
                     );

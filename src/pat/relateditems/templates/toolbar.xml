@@ -38,13 +38,13 @@
 
 <% if (upload) { %>
 <div class="upload dropdown dropdown-menu-end ms-2">
-  <button type="button" class="upload dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button type="button" class="upload dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-haspopup="true" aria-expanded="false">
     <%= icon_upload %>
     <%- upload_text %>
     <span class="caret"/>
   </button>
-  <ul class="dropdown-menu">
+  <div class="dropdown-menu p-2">
     <div class="pat-upload"></div>
-  </ul>
+  </div>
 </div>
 <% } %>
