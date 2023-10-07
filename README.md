@@ -3,6 +3,24 @@
 Mockup is the JavaScript stack of the Plone Classic UI.
 
 
+## Usage
+
+There are several options to integrate Mockup.
+
+- First, it comes pre-installed with Plone 6 Classic UI.
+- Second, you can install and compile a bundle. See below.
+- Third you can download a ZIP from Mockup's release pages on GitHub.
+- Fourth, you can use a precompiled bundle from a CDN, like:
+
+  ```
+  <script src="https://unpkg.com/@plone/mockup@latest/dist/bundle.min.js"></script>
+  ```
+  or:
+  ```
+  <script src="https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js"></script>
+  ```
+
+
 ## Install
 
 -   Have a current version of Node.js installed.
