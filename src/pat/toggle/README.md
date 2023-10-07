@@ -5,7 +5,8 @@ title: Toggle
 
 # Toggle pattern
 
-Toggles things.
+A pattern to toggle classes on HTML elements.
+
 
 ## Migration note (Plone 6)
 

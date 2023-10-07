@@ -5,6 +5,8 @@ title: MarkSpecialLinks
 
 # MarkSpecialLinks pattern.
 
+Add a special class to links in certain conditions.
+
 Scan all links in the container and mark external links with class if they point outside the site, or are special protocols.
 Also implements new window opening for external links.
 To disable this effect for links on a one-by-one-basis, give them a class of 'link-plain'

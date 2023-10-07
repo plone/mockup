@@ -5,6 +5,8 @@ title: Livesearch
 
 # Livesearch pattern.
 
+Provide Plone's live search functionality.
+
 ## Configuration
 
 |   Option    |  Type   | Default |                                  Description                                  |

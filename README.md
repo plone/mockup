@@ -21,6 +21,80 @@ Mockup is the JavaScript stack of the Plone Classic UI.
     On this port our demo and documentation pages are served.
 
 
+## Mockup overview
+
+Mockup is a JavaScrip UI library which provides widgets, apps and functionality for the Plone Classic UI variant.
+It is based on Patternslib(XXX) and provides it's functionality through so-called Patterns which are initialized and get active if a triggering CSS selector is found in the DOM tree.
+For example, the related items widget is initialized on a form input field with the CSS class `pat-relateditems`.
+The configuration is done via data attributes, in case of the related items pattern it's an attribute called `data-pat-relateditems`.
+The data strucutre of the configuration can be a JSON string or CSS declaration like key-value pairs separated by a semicolon.
+Defining a JSON structure is more flexible though.
+
+Here are two examples.
+
+`pat-relateditems` configuration as JSON structure:
+```html
+<input
+    type="text"
+    class="pat-relateditems"
+    data-pat-relateditems='{
+        "selectableTypes": ["Document"],
+        "vocabularyUrl": "relateditems-test.json"
+    }'
+/>
+```
+
+`pat-relateditems` configuration as CSS declarations:
+```html
+<input
+    type="text"
+    class="pat-relateditems"
+    data-pat-relateditems="
+        selectableTypes: Document;
+        vocabularyUrl: relateditems-test.json;
+    "
+/>
+```
+
+Because of historic reasons the Mockup Pattern attributes are written in "camelCase" like the `vocabularyUrl`.
+But in order to resemble the CSS syntax new Patterns should rather separate each word with a dash, like `vocabulary-url`.
+
+
+## Mockup Patterns
+
+- [pat-autotoc](src/pat/autotoc/README.md): Automatically create a table of contents.
+- [pat-cookietrigger](src/pat/cookietrigger/README.md): Show a DOM element if browser cookies are disabled.
+- [pat-datatables](src/pat/datatables/README.md): This pattern provides the functionality from https://datatables.net/
+- [pat-formautofocus](src/pat/formautofocus/README.md): Automatically set the focus on a form input field.
+- [pat-formunloadalert](src/pat/formunloadalert/README.md): Show a warning if the user leaves an unsaved form.
+- [pat-livesearch](src/pat/livesearch/README.md): Provide Plone's live search functionality.
+- [pat-manage-portlets](src/pat/manageportlets/README.md): Used by plone.app.portlets to manage portlets.
+- [pat-markspeciallinks](src/pat/markspeciallinks/README.md): Add a special class to links in certain conditions.
+- [pat-modal](src/pat/modal/README.md): Show content in a modal.
+- [pat-navigationmarker](src/pat/navigationmarker/README.md): Add classes to the main navigation.
+- [pat-passwordstrength](src/pat/passwordstrength/README.md): Check the strength of a password.
+- [pat-preventdoublesubmit](src/pat/preventdoublesubmit/README.md): Prevent multiple submissions of the same forn.
+- [pat-querystring](src/pat/querystring/README.md): Show the querystring selection app.
+- [pat-recurrence](src/pat/recurrence/README.md): Show the recurrence widget.
+- [pat-relateditems](src/pat/relateditems/README.md): Show a widget to select related items.
+- [pat-select2](src/pat/select2/README.md): Show a widget which enhances dropdown selections with automatic suggestions, search and tagging functionality.
+- [pat-sortable](src/pat/sortable/README.md): A pattern to make listings sortable.
+- [pat-structure](src/pat/structure/README.md): Plone's folder contents app.
+- [pat-structureupdater](src/pat/structure-updater/README.md): Update title and description based on the current folder contents location.
+- [pat-textareamimetypeselector](src/pat/textareamimetypeselector/README.md): Display the mime type selection widget for textareas.
+- [pat-tinymce](src/pat/tinymce/README.md): Use the TinyMCE editor for HTML editing.
+- [pat-toggle](src/pat/toggle/README.md): A pattern to toggle classes on HTML elements.
+- [pat-toolbar](src/pat/toolbar/README.md): Render the Plone toolbar.
+- [pat-tree](src/pat/tree/README.md): Renders a navigatable tree from a data structure.
+- [pat-upload](src/pat/upload/README.md): Upload files to Plone.
+
+Deprecated patterns:
+
+- [pat-backdrop](src/pat/backdrop/README.md) (_deprecated_): Renders a dark background.
+- [pat-contentloader](src/pat/contentloader/README.md) (_deprecated_): Load remote or local content into a target.
+- [pat-texteditor](src/pat/texteditor/README.md) (_deprecated_): Show a code editor.
+
+
 ## Development
 
 You can directly develop with the 11ty based documentation / demo server by running ``make serve``.

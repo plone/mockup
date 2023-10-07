@@ -5,7 +5,8 @@ title: Modal
 
 # Modal
 
-This is the modal pattern.
+Show content in a modal.
+
 
 ## Basic Modal
 

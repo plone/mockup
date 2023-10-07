@@ -5,7 +5,8 @@ title: Select2
 
 # Select2 pattern.
 
-Autoselection widget.
+Show a widget which enhances dropdown selections with automatic suggestions, search and tagging functionality.
+
 
 ## Configuration
 

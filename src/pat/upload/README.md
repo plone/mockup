@@ -5,6 +5,9 @@ title: Upload
 
 # Upload pattern.
 
+Upload files to Plone.
+
+
 ## Configuration
 
 |       Option       |   Type   |                                                                                                                 Default                                                                                                                 |                                                            Description                                                            |

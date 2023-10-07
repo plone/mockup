@@ -3,7 +3,9 @@ permalink: "pat/tinymce/"
 title: tinyMCE
 ---
 
-# tinyMCE pattern.
+# TinyMCE pattern.
+
+Use the TinyMCE editor for HTML editing.
 
 ## Configuration
 

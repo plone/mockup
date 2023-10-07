@@ -5,6 +5,9 @@ title: Toolbar
 
 # Toolbar pattern.
 
+Render the Plone toolbar.
+
+
 ## Example
 
 ```html

@@ -5,6 +5,8 @@ title: Structure Updater
 
 # Structure updater pattern.
 
+Update title and description based on the current folder contents location.
+
 The Structure Updater pattern updates the information of the current context after a user navigated to a new folder.
 
 ## Configuration

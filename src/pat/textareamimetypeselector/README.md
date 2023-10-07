@@ -5,7 +5,10 @@ title: Textarea Mimetype Selector
 
 # Textarea Mimetype Selector pattern.
 
-This pattern displays a mimetype selection widget for textareas. It switches the widget according to the selected mimetype.
+Display the mime type selection widget for textareas.
+
+This pattern displays a mimetype selection widget for textareas.
+It switches the widget according to the selected mimetype.
 
 ## widgets option Structure
 
