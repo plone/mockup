@@ -7,18 +7,18 @@ Mockup is the JavaScript stack of the Plone Classic UI.
 
 There are several options to integrate Mockup.
 
-- First, it comes pre-installed with Plone 6 Classic UI.
-- Second, you can install and compile a bundle. See below.
-- Third you can download a ZIP from Mockup's release pages on GitHub.
-- Fourth, you can use a precompiled bundle from a CDN, like:
+1.  It comes pre-installed with Plone 6 Classic UI.
+2.  You can install and compile a bundle. See [insert anchor to specific section, as "below" is vague].
+3.  You can download a `.zip` from [Mockup's releases page on GitHub](https://github.com/plone/mockup/releases).
+4.  You can use a precompiled bundle from a CDN, like:
 
-  ```
-  <script src="https://unpkg.com/@plone/mockup@latest/dist/bundle.min.js"></script>
-  ```
-  or:
-  ```
-  <script src="https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js"></script>
-  ```
+    ```html
+    <script src="https://unpkg.com/@plone/mockup@latest/dist/bundle.min.js"></script>
+    ```
+    or:
+  ```html
+    <script src="https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js"></script>
+    ```
 
 
 ## Install
@@ -41,10 +41,12 @@ There are several options to integrate Mockup.
 
 ## Mockup overview
 
-Mockup is a JavaScrip UI library which provides widgets, apps and functionality for the Plone Classic UI variant.
-It is based on Patternslib(XXX) and provides it's functionality through so-called Patterns which are initialized and get active if a triggering CSS selector is found in the DOM tree.
+Mockup is a JavaScript UI library which provides widgets, apps, and functionality for the Plone Classic UI frontend.
+It is based on Patternslib(XXX), and provides its functionality through patterns.
+Patterns are initialized and activated when a triggering CSS selector is found in the DOM tree.
 For example, the related items widget is initialized on a form input field with the CSS class `pat-relateditems`.
-The configuration is done via data attributes, in case of the related items pattern it's an attribute called `data-pat-relateditems`.
+The configuration is done via data attributes.
+For the related items pattern, it's an attribute called `data-pat-relateditems`.
 The data strucutre of the configuration can be a JSON string or CSS declaration like key-value pairs separated by a semicolon.
 Defining a JSON structure is more flexible though.
 
@@ -74,8 +76,8 @@ Here are two examples.
 />
 ```
 
-Because of historic reasons the Mockup Pattern attributes are written in "camelCase" like the `vocabularyUrl`.
-But in order to resemble the CSS syntax new Patterns should rather separate each word with a dash, like `vocabulary-url`.
+Because of historic reasons, the Mockup pattern attributes are written in "camelCase", for example `vocabularyUrl`.
+But to resemble the CSS syntax, new patterns should instead separate each word with a dash, for example `vocabulary-url`.
 
 
 ## Mockup Patterns
@@ -86,7 +88,7 @@ But in order to resemble the CSS syntax new Patterns should rather separate each
 - [pat-formautofocus](src/pat/formautofocus/README.md): Automatically set the focus on a form input field.
 - [pat-formunloadalert](src/pat/formunloadalert/README.md): Show a warning if the user leaves an unsaved form.
 - [pat-livesearch](src/pat/livesearch/README.md): Provide Plone's live search functionality.
-- [pat-manage-portlets](src/pat/manageportlets/README.md): Used by plone.app.portlets to manage portlets.
+- [pat-manage-portlets](src/pat/manageportlets/README.md): Used by `plone.app.portlets` to manage portlets.
 - [pat-markspeciallinks](src/pat/markspeciallinks/README.md): Add a special class to links in certain conditions.
 - [pat-modal](src/pat/modal/README.md): Show content in a modal.
 - [pat-navigationmarker](src/pat/navigationmarker/README.md): Add classes to the main navigation.
@@ -99,11 +101,11 @@ But in order to resemble the CSS syntax new Patterns should rather separate each
 - [pat-sortable](src/pat/sortable/README.md): A pattern to make listings sortable.
 - [pat-structure](src/pat/structure/README.md): Plone's folder contents app.
 - [pat-structureupdater](src/pat/structure-updater/README.md): Update title and description based on the current folder contents location.
-- [pat-textareamimetypeselector](src/pat/textareamimetypeselector/README.md): Display the mime type selection widget for textareas.
+- [pat-textareamimetypeselector](src/pat/textareamimetypeselector/README.md): Display the MIME type selection widget for textareas.
 - [pat-tinymce](src/pat/tinymce/README.md): Use the TinyMCE editor for HTML editing.
 - [pat-toggle](src/pat/toggle/README.md): A pattern to toggle classes on HTML elements.
 - [pat-toolbar](src/pat/toolbar/README.md): Render the Plone toolbar.
-- [pat-tree](src/pat/tree/README.md): Renders a navigatable tree from a data structure.
+- [pat-tree](src/pat/tree/README.md): Renders a navigable tree from a data structure.
 - [pat-upload](src/pat/upload/README.md): Upload files to Plone.
 
 Deprecated patterns:
@@ -254,9 +256,9 @@ The ``@@plonejsi18n`` view is called one time for a given domain and language an
 The only way to test the new translations is to restart the instance to update the mo file from the po file, and then to purge the localStorage to trigger a new download of the translations.
 
 
-### Styleguide
+## Style guide
 
--   Tab: 4 spaces for everything except for HTML and XML files (2 Spaces) and the Makefile (TAB).
+-   Tab: 4 spaces for everything, except for HTML and XML files which must use 2 spaces, and the Makefile which must use tabs.
     This rule is defined in the [.editorconfig file](./.editorconfig).
 
 ### Commit style guide
@@ -274,22 +276,22 @@ We have 4 different types of changelog entries:
 -   Bug Fixes (type: `fix`),
 -   Maintenance (type: `maint`).
 
-We can group commits in the changelog via a scope - or grouping.
-Let's follow a convention and use these groupings - but the grouping is optional and any other group name can be used.
+We can group commits in the changelog via a scope or grouping.
+Let's follow a convention and use these groupings, but the grouping is optional and any other group name can be used.
 
 -   "Dependencies" for upgrading package.json dependencies.
 -   "Docs" for documentation.
 -   "Build" for everything related to the release workflow, Webpack and building bundles.
 -   "Cleanup" for cleaning up or reformatting code.
--   "pat PATTERNNAME" for changes to individual patterns in src/pat.
--   "core MODULENAME" for changes to core modules in src/core.
+-   "pat PATTERNNAME" for changes to individual patterns in `src/pat`.
+-   "core MODULENAME" for changes to core modules in `src/core`.
 
-A commit message with a changelog-grouping must be structured like so: `TYPE(GROUP): MESSAGE`.
+A commit message with a changelog grouping must be structured like so: `TYPE(GROUP): MESSAGE`.
 Without grouping: `TYPE: MESSAGE`
 
-If the commit message doesn't follow this convention it won't be included in the changelog.
+If the commit message doesn't follow this convention, then it won't be included in the changelog.
 To bypass the pre-commit hook, use the git `-n` switch.
-Example: `git commit yarn.lock -m"yarn install." -n`.
+Example: `git commit yarn.lock -m "yarn install." -n`.
 
 If you are working on a component like the structure pattern (pat-structure), use `pat structure` as a group.
 
@@ -297,21 +299,21 @@ Examples:
 
 Add a feature to the structure pattern:
 
-```
-git commit src/pat/structure -m"feat(pat structure): Add feature to cook some coffee"
+```shell
+git commit src/pat/structure -m "feat(pat structure): Add feature to cook some coffee"
 ```
 
 Cleanup task:
 
-```
-git commit -am"maint(Cleanup): Remove whitespace from documentation."
+```shell
+git commit -am "maint(Cleanup): Remove whitespace from documentation."
 
 ```
 
 or without a grouping:
 
-```
-git commit -am"maint: Remove unnecessary file from root directory."
+```shell
+git commit -am "maint: Remove unnecessary file from root directory."
 ```
 
 ---
@@ -320,10 +322,10 @@ git commit -am"maint: Remove unnecessary file from root directory."
 
 Please keep commits on the `yarn.lock` file or any other auto-generated code seperate.
 
-Just commit them seperately with `git commit yarn.lock -m"yarn install" -n`.
+Just commit them seperately with `git commit yarn.lock -m "yarn install" -n`.
 
-Having them seperately reduces the effort when merging or rebasing branches where a merge conflict can easily happen.
-In such cases you can just withdraw your changes on the yarn.lock file or remove those commits and re-install with `yarn install` at the end of a successful merge or rebase.
+Keeping them seperate reduces the effort when merging or rebasing branches where a merge conflict can easily happen.
+In such cases you can just withdraw your changes on the `yarn.lock` file, or remove those commits and reinstall with `yarn install` at the end of a successful merge or rebase.
 
 ---
 

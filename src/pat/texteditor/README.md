@@ -10,7 +10,7 @@ Show a code editor.
 ---
 **Deprecated**
 
-This pattern is deprecated. Use Patternslib' pat-code-editor instead.
+This pattern is deprecated. Use Patternslib's pat-code-editor instead.
 
 ---
 

@@ -5,7 +5,7 @@ title: Tree
 
 # Tree
 
-Renders a navigatable tree from a data structure.
+Renders a navigable tree from a data structure.
 
 Tree pattern.
 

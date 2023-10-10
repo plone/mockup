@@ -5,7 +5,7 @@ title: Prevent double submit
 
 # Prevent double submit pattern.
 
-Prevent multiple submissions of the same forn.
+Prevent multiple submissions of the same form.
 
 ## Configuration
 

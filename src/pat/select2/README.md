@@ -5,7 +5,7 @@ title: Select2
 
 # Select2 pattern.
 
-Show a widget which enhances dropdown selections with automatic suggestions, search and tagging functionality.
+Show a widget which enhances dropdown selections with automatic suggestions, search, and tagging functionality.
 
 
 ## Configuration
