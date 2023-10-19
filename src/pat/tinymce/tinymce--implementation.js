@@ -188,6 +188,7 @@ export default class TinyMCE {
         var tinyOptions = self.options.tiny;
         if (self.options.inline === true) {
             self.options.tiny.inline = true;
+            self.options.tiny.toolbar_mode = "scrolling";
         }
         self.tinyId = self.options.inline ? id + "-editable" : id; // when displaying TinyMCE inline, a separate div is created.
         tinyOptions.selector = "#" + self.tinyId;
