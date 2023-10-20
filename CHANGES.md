@@ -2,6 +2,31 @@
 
 
 
+## [5.2.0-alpha.0](https://github.com/plone/mockup/compare/5.1.5...5.2.0-alpha.0) (2023-10-20)
+
+
+### Features
+
+
+* **pat tinymce:** Update TinyMCE to version 6 ([9f22404](https://github.com/plone/mockup/commit/9f224048b2d1cb6de6f8818f84f18cb73724ea1a))
+
+
+
+### Bug Fixes
+
+
+* **pat relateditems:** Do not auto-close upload dropdown when clicking "browse" button. ([cd30774](https://github.com/plone/mockup/commit/cd30774e80b8262fa602e0af7486f22e96cbfa23))
+
+
+* **pat relateditems:** Fix styling when inside a modal. ([e5d5aa9](https://github.com/plone/mockup/commit/e5d5aa9f495f36b03184e25b57838608a6edab31))
+
+
+
+### Maintenance
+
+
+* Update dependencies ([37d8675](https://github.com/plone/mockup/commit/37d8675a64e56718f1d9bcadff33646eb1e2411d))
+
 ## [5.1.5](https://github.com/plone/mockup/compare/a5801127a38c9c97e464e8918ed01e424ff28686...5.1.5) (2023-09-19)
 
 
