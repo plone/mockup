@@ -356,6 +356,17 @@ export default class TinyMCE {
             return url;
         }
 
+        // BBB: TinyMCE 6 has renamed toolbar and menuitem plugins.
+        // map them here until they are updated in Plone's configuration:
+        // menu: "formats" -> "styles"
+        if(tinyOptions?.menu?.format) {
+            tinyOptions.menu.format.items = tinyOptions.menu.format.items.replace('formats', 'styles');
+        }
+        // toolbar: "styleselect" -> "styles"
+        if(tinyOptions?.toolbar) {
+            tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
+        }
+
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
 
