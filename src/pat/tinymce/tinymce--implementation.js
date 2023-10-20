@@ -149,6 +149,8 @@ export default class TinyMCE {
         import (`tinymce/skins/ui/${css}/skin.css`);
 
         const tinymce = (await import("tinymce/tinymce")).default;
+        await import("tinymce/models/dom");
+
         let valid_plugins = [];
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
@@ -186,18 +188,74 @@ export default class TinyMCE {
         var tinyOptions = self.options.tiny;
         if (self.options.inline === true) {
             self.options.tiny.inline = true;
+            self.options.tiny.toolbar_mode = "scrolling";
         }
         self.tinyId = self.options.inline ? id + "-editable" : id; // when displaying TinyMCE inline, a separate div is created.
         tinyOptions.selector = "#" + self.tinyId;
-        tinyOptions.addLinkClicked = function () {
-            self.addLinkClicked.apply(self, []);
-        };
-        tinyOptions.addImageClicked = function (file) {
-            self.addImageClicked.apply(self, [file]);
-        };
         // XXX: disabled skin means it wont load css files which we already
         // include in widgets.min.css
         tinyOptions.skin = false;
+        // do not show the "upgrade" button for plugins
+        tinyOptions.promotion = false;
+
+        // image plugin
+        // eslint-disable-next-line no-unused-vars
+        tinymce.PluginManager.add("ploneimage", (editor, url) => {
+            editor.ui.registry.addButton("ploneimage", {
+                icon: "image",
+                text: "Insert image",
+                tooltip: "Insert/edit image",
+                // eslint-disable-next-line no-unused-vars
+                onAction: (api) => {
+                    self.addImageClicked();
+                },
+                // stateSelector: "img:not([data-mce-object])",
+            });
+            editor.ui.registry.addMenuItem("ploneimage", {
+                icon: "image",
+                text: "Insert image",
+                // eslint-disable-next-line no-unused-vars
+                onAction: (api) => {
+                    self.addImageClicked();
+                },
+                // stateSelector: "img:not([data-mce-object])",
+            });
+        });
+
+        // link plugin
+        // eslint-disable-next-line no-unused-vars
+        tinymce.PluginManager.add("plonelink", function (editor, url) {
+            editor.ui.registry.addButton("plonelink", {
+                icon: "link",
+                tooltip: "Insert/edit link",
+                shortcut: "Ctrl+K",
+                // eslint-disable-next-line no-unused-vars
+                onAction: (api) => {
+                    self.addLinkClicked();
+                },
+                stateSelector: "a[href]",
+            });
+            editor.ui.registry.addMenuItem("plonelink", {
+                icon: "link",
+                text: "Insert link",
+                shortcut: "Ctrl+K",
+                // eslint-disable-next-line no-unused-vars
+                onAction: (api) => {
+                    self.addLinkClicked();
+                },
+                stateSelector: "a[href]",
+            });
+
+            editor.ui.registry.addButton("unlink", {
+                icon: "unlink",
+                tooltip: "Remove link",
+                // eslint-disable-next-line no-unused-vars
+                onAction: (api) => {
+                    editor.execCommand("unlink");
+                },
+                stateSelector: "a[href]",
+            });
+        });
 
         tinyOptions.init_instance_callback = function (editor) {
             if (self.tiny === undefined || self.tiny === null) {
@@ -291,11 +349,22 @@ export default class TinyMCE {
                 return url;
             }
             // otherwise default tiny behavior
-            if (self.tiny.settings.relative_urls) {
+            if (self.tiny.options.get('relative_urls')) {
                 return self.tiny.documentBaseURI.toRelative(url);
             }
-            url = self.tiny.documentBaseURI.toAbsolute(url, self.tiny.settings.remove_script_host);
+            url = self.tiny.documentBaseURI.toAbsolute(url, self.tiny.options.get('remove_script_host'));
             return url;
+        }
+
+        // BBB: TinyMCE 6 has renamed toolbar and menuitem plugins.
+        // map them here until they are updated in Plone's configuration:
+        // menu: "formats" -> "styles"
+        if(tinyOptions?.menu?.format) {
+            tinyOptions.menu.format.items = tinyOptions.menu.format.items.replace('formats', 'styles');
+        }
+        // toolbar: "styleselect" -> "styles"
+        if(tinyOptions?.toolbar) {
+            tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
         }
 
         tinymce.init(tinyOptions);

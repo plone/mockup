@@ -9787,15 +9787,15 @@ timezone-mock@^1.3.6:
   resolved "https://registry.yarnpkg.com/timezone-mock/-/timezone-mock-1.3.6.tgz#44e4c5aeb57e6c07ae630a05c528fc4d9aab86f4"
   integrity sha512-YcloWmZfLD9Li5m2VcobkCDNVaLMx8ohAb/97l/wYS3m+0TIEK5PFNMZZfRcusc6sFjIfxu8qcJT0CNnOdpqmg==
 
-tinymce-i18n@^22.12.27:
-  version "22.12.27"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-22.12.27.tgz#9f36a999699bcb2e5fc078d96989aef9952013a7"
-  integrity sha512-vRanI30NxPKL3igTikx0YTvgflp4R2HbToeiTFvZiNbUtabnUJECKR0ZaJKbFt+6bcscrUPFpiZbwV2sHM2nYA==
+tinymce-i18n@^23.10.9:
+  version "23.10.9"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-23.10.9.tgz#1b686f6235e7053d8bc235a1f5a74be7c4998a87"
+  integrity sha512-CwO5pbfhO+GzFXMkTxzV1G8JSSY9mu8lkXQ53nuGBB57m5YqN+jLDz2NZZiFIZ76OZauGf4hjrcIxyZlggpuZg==
 
-tinymce@^5.10.7:
-  version "5.10.7"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.10.7.tgz#d89d446f1962f2a1df6b2b70018ce475ec7ffb80"
-  integrity sha512-9UUjaO0R7FxcFo0oxnd1lMs7H+D0Eh+dDVo5hKbVe1a+VB0nit97vOqlinj+YwgoBDt6/DSCUoWqAYlLI8BLYA==
+tinymce@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.7.0.tgz#0ec245502cdefbfa0ff9042b423ac9a01e781423"
+  integrity sha512-Wf2RSobIXQ7XNw3/v4z1lPGiH3Pjsmc/6/7fG28aIS6uVWj/7IhvOPuwfJJDeOx0o0D3nSnoLHgR2KU8JAdE+w==
 
 tippy.js@^6.3.7:
   version "6.3.7"

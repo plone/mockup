@@ -113,7 +113,8 @@ div.linkModal {
     min-width: 0.6em; // enforce a min-width while editing for tables with visual aid turned on
 }
 
-div.mce-content-body[contenteditable="true"] {
+div.mce-content-body[contenteditable="true"],
+.tox-tinymce {
     border: 1px solid var(--bs-border-color);
     border-radius: var(--bs-border-radius);
 }

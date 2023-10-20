@@ -4,7 +4,6 @@ import Base from "@patternslib/patternslib/src/core/base";
 import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 
-import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
 import RelatedItems from "../../relateditems/relateditems";
@@ -342,61 +341,6 @@ var AnchorLink = LinkType.extend({
         var anchor = this.getIndex(val);
         this.$select.select2("data", "" + anchor);
     },
-});
-
-tinymce.PluginManager.add("ploneimage", function (editor) {
-    editor.ui.registry.addButton("ploneimage", {
-        icon: "image",
-        text: "Insert image",
-        tooltip: "Insert/edit image",
-        onAction: editor.settings.addImageClicked,
-        // stateSelector: "img:not([data-mce-object])",
-    });
-    editor.ui.registry.addMenuItem("ploneimage", {
-        icon: "image",
-        text: "Insert image",
-        onAction: editor.settings.addImageClicked,
-        // stateSelector: "img:not([data-mce-object])",
-    });
-});
-
-/* register the tinymce plugin */
-tinymce.PluginManager.add("plonelink", function (editor) {
-    editor.ui.registry.addButton("plonelink", {
-        icon: "link",
-        tooltip: "Insert/edit link",
-        shortcut: "Ctrl+K",
-        onAction: editor.settings.addLinkClicked,
-        stateSelector: "a[href]",
-    });
-    editor.ui.registry.addMenuItem("plonelink", {
-        icon: "link",
-        text: "Insert link",
-        shortcut: "Ctrl+K",
-        onAction: editor.settings.addLinkClicked,
-        stateSelector: "a[href]",
-    });
-
-    editor.ui.registry.addButton("unlink", {
-        icon: "unlink",
-        tooltip: "Remove link",
-        onAction: function () {
-            editor.execCommand("unlink");
-        },
-        stateSelector: "a[href]",
-    });
-
-    // editor.ui.registry.addButton("Ctrl+K", "", editor.settings.addLinkClicked);
-
-    // editor.ui.registry.addButton("plonelink", {
-    //     icon: "link",
-    //     text: "Insert link",
-    //     shortcut: "Ctrl+K",
-    //     onAction: editor.settings.addLinkClicked,
-    //     stateSelector: "a[href]",
-    //     context: "insert",
-    //     prependToContext: true,
-    // });
 });
 
 export default Base.extend({
@@ -861,8 +805,8 @@ export default Base.extend({
 
         if (self.anchorElm) {
             self.data.target = self.tiny.dom.getAttrib(self.anchorElm, "target");
-        } else if (self.tiny.settings.default_link_target) {
-            self.data.target = self.tiny.settings.default_link_target;
+        } else if (self.tiny.options.get('link_default_target')) {
+            self.data.target = self.tiny.options.get('link_default_target');
         }
 
         if ((value = self.tiny.dom.getAttrib(self.anchorElm, "rel"))) {
