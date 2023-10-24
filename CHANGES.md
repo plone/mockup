@@ -2,6 +2,24 @@
 
 
 
+## [5.1.6](https://github.com/plone/mockup/compare/5.1.5...5.1.6) (2023-10-24)
+
+
+### Bug Fixes
+
+
+* **pat relateditems:** Do not auto-close upload dropdown when clicking "browse" button. ([579c669](https://github.com/plone/mockup/commit/579c669543c196584eb12d234d05bb200b567675))
+
+
+* **pat relateditems:** Fix styling when inside a modal. ([eda8afa](https://github.com/plone/mockup/commit/eda8afab88040feed10b13222073f72ef4f702ac))
+
+
+
+### Maintenance
+
+
+* update dependencies ([b5d9598](https://github.com/plone/mockup/commit/b5d95989f8081e940e64c869b29affc5cfd130a8))
+
 ## 5.1.5 (2023-09-19)
 
 
