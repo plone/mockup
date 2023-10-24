@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-alpha.1](https://github.com/plone/mockup/compare/5.2.0-alpha.0...5.2.0-alpha.1) (2023-10-24)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** fix path to translations ([61adac7](https://github.com/plone/mockup/commit/61adac75e805e31d3ff842c51671435eb9e877b6))
+
 ## [5.2.0-alpha.0](https://github.com/plone/mockup/compare/5.1.5...5.2.0-alpha.0) (2023-10-20)
 
 
