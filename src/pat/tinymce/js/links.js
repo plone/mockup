@@ -4,6 +4,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 
+import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
 import RelatedItems from "../../relateditems/relateditems";
