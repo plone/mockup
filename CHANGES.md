@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-alpha.2](https://github.com/plone/mockup/compare/5.2.0-alpha.1...5.2.0-alpha.2) (2023-10-31)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** call link/image plugins on the correct tiny instance. ([9228721](https://github.com/plone/mockup/commit/9228721ccc8751804a4a852d05edeb3cf8faa4ce))
+
 ## [5.2.0-alpha.1](https://github.com/plone/mockup/compare/5.2.0-alpha.0...5.2.0-alpha.1) (2023-10-24)
 
 
