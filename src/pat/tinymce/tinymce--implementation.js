@@ -198,65 +198,6 @@ export default class TinyMCE {
         // do not show the "upgrade" button for plugins
         tinyOptions.promotion = false;
 
-        // image plugin
-        // eslint-disable-next-line no-unused-vars
-        tinymce.PluginManager.add("ploneimage", (editor, url) => {
-            editor.ui.registry.addButton("ploneimage", {
-                icon: "image",
-                text: "Insert image",
-                tooltip: "Insert/edit image",
-                // eslint-disable-next-line no-unused-vars
-                onAction: (api) => {
-                    self.addImageClicked();
-                },
-                // stateSelector: "img:not([data-mce-object])",
-            });
-            editor.ui.registry.addMenuItem("ploneimage", {
-                icon: "image",
-                text: "Insert image",
-                // eslint-disable-next-line no-unused-vars
-                onAction: (api) => {
-                    self.addImageClicked();
-                },
-                // stateSelector: "img:not([data-mce-object])",
-            });
-        });
-
-        // link plugin
-        // eslint-disable-next-line no-unused-vars
-        tinymce.PluginManager.add("plonelink", function (editor, url) {
-            editor.ui.registry.addButton("plonelink", {
-                icon: "link",
-                tooltip: "Insert/edit link",
-                shortcut: "Ctrl+K",
-                // eslint-disable-next-line no-unused-vars
-                onAction: (api) => {
-                    self.addLinkClicked();
-                },
-                stateSelector: "a[href]",
-            });
-            editor.ui.registry.addMenuItem("plonelink", {
-                icon: "link",
-                text: "Insert link",
-                shortcut: "Ctrl+K",
-                // eslint-disable-next-line no-unused-vars
-                onAction: (api) => {
-                    self.addLinkClicked();
-                },
-                stateSelector: "a[href]",
-            });
-
-            editor.ui.registry.addButton("unlink", {
-                icon: "unlink",
-                tooltip: "Remove link",
-                // eslint-disable-next-line no-unused-vars
-                onAction: (api) => {
-                    editor.execCommand("unlink");
-                },
-                stateSelector: "a[href]",
-            });
-        });
-
         tinyOptions.init_instance_callback = function (editor) {
             if (self.tiny === undefined || self.tiny === null) {
                 self.tiny = editor;

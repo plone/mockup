@@ -4,6 +4,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 
+import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
 import RelatedItems from "../../relateditems/relateditems";
@@ -341,6 +342,71 @@ var AnchorLink = LinkType.extend({
         var anchor = this.getIndex(val);
         this.$select.select2("data", "" + anchor);
     },
+});
+
+const add_image = (editor) => {
+    var pattern_inst = document.getElementById(editor.id)["pattern-tinymce"].instance;
+    pattern_inst.addImageClicked();
+}
+
+const add_link = (editor) => {
+    var pattern_inst = document.getElementById(editor.id)["pattern-tinymce"].instance;
+    pattern_inst.addLinkClicked();
+}
+
+// image plugin
+// eslint-disable-next-line no-unused-vars
+tinymce.PluginManager.add("ploneimage", (editor, url) => {
+    editor.ui.registry.addButton("ploneimage", {
+        icon: "image",
+        text: "Insert image",
+        tooltip: "Insert/edit image",
+        onAction: () => {
+            add_image(editor);
+        },
+        // stateSelector: "img:not([data-mce-object])",
+    });
+    editor.ui.registry.addMenuItem("ploneimage", {
+        icon: "image",
+        text: "Insert image",
+        onAction: () => {
+            add_image(editor);
+        },
+        // stateSelector: "img:not([data-mce-object])",
+    });
+});
+
+// link plugin
+// eslint-disable-next-line no-unused-vars
+tinymce.PluginManager.add("plonelink", function (editor, url) {
+    editor.ui.registry.addButton("plonelink", {
+        icon: "link",
+        tooltip: "Insert/edit link",
+        shortcut: "Ctrl+K",
+        onAction: () => {
+            add_link(editor);
+        },
+        stateSelector: "a[href]",
+    });
+    editor.ui.registry.addMenuItem("plonelink", {
+        icon: "link",
+        text: "Insert link",
+        shortcut: "Ctrl+K",
+        onAction: () => {
+            add_link(editor);
+        },
+        stateSelector: "a[href]",
+    });
+
+    editor.ui.registry.addButton("unlink", {
+        icon: "unlink",
+        tooltip: "Remove link",
+        // eslint-disable-next-line no-unused-vars
+        onAction: (api) => {
+            editor.execCommand("unlink");
+        },
+        stateSelector: "a[href]",
+    });
 });
 
 export default Base.extend({
