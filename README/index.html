@@ -336,79 +336,64 @@
       <main id="content">
         <h1>Plone Mockup</h1>
 <p>Mockup is the JavaScript stack of the Plone Classic UI.</p>
-<h2>Styleguide</h2>
-<ul>
-<li>Tab: 4 spaces for everything except for HTML and XML files (2 Spaces) and the Makefile (TAB).
-This rule is defined in the <a href=".editorconfig">.editorconfig file</a>.</li>
-</ul>
-<h2>Commit style guide</h2>
-<p>We automatically generate the changelog from the commit messages following the <a href="https://www.conventionalcommits.org/">Conventional Commits specification</a>.
-Changelog generation is done by the <a href="https://github.com/release-it/conventional-changelog/">conventional changelog plugin</a> for <a href="https://github.com/release-it/release-it">release-it</a>.
-This is enforced via a pre-commit hook managed by <a href="https://github.com/typicode/husky">husky</a>.</p>
-<h3>And this is how you use it</h3>
-<p>We have 4 different types of changelog entries:</p>
-<ul>
-<li>Breaking Changes (type: <code>breaking</code>),</li>
-<li>Features (type: <code>feat</code>),</li>
-<li>Bug Fixes (type: <code>fix</code>),</li>
-<li>Maintenance (type: <code>maint</code>).</li>
-</ul>
-<p>We can group commits in the changelog via a scope - or grouping.
-Let's follow a convention and use these groupings - but the grouping is optional and any other group name can be used.</p>
-<ul>
-<li>&quot;Dependencies&quot; for upgrading package.json dependencies.</li>
-<li>&quot;Docs&quot; for documentation.</li>
-<li>&quot;Build&quot; for everything related to the release workflow, Webpack and building bundles.</li>
-<li>&quot;Cleanup&quot; for cleaning up or reformatting code.</li>
-<li>&quot;pat PATTERNNAME&quot; for changes to individual patterns in src/pat.</li>
-<li>&quot;core MODULENAME&quot; for changes to core modules in src/core.</li>
-</ul>
-<p>A commit message with a changelog-grouping must be structured like so: <code>TYPE(GROUP): MESSAGE</code>.
-Without grouping: <code>TYPE: MESSAGE</code></p>
-<p>If the commit message doesn't follow this convention it won't be included in the changelog.
-To bypass the pre-commit hook, use the git <code>-n</code> switch.
-Example: <code>git commit yarn.lock -m&quot;yarn install.&quot; -n</code>.</p>
-<p>If you are working on a component like the structure pattern (pat-structure), use <code>pat structure</code> as a group.</p>
-<p>Examples:</p>
-<p>Add a feature to the structure pattern:</p>
-<pre><code>git commit src/pat/structure -m&quot;feat(pat structure): Add feature to cook some coffee&quot;
-</code></pre>
-<p>Cleanup task:</p>
-<pre><code>git commit -am&quot;maint(Cleanup): Remove whitespace from documentation.&quot;
-
-</code></pre>
-<p>or without a grouping:</p>
-<pre><code>git commit -am&quot;maint: Remove unnecessary file from root directory.&quot;
-</code></pre>
-<hr>
-<p>** Note **</p>
-<p>Please keep commits on the <code>yarn.lock</code> file or any other auto-generated code seperate.</p>
-<p>Just commit them seperately with <code>git commit yarn.lock -m&quot;yarn install&quot; -n</code>.</p>
-<p>Having them seperately reduces the effort when merging or rebasing branches where a merge conflict can easily happen.
-In such cases you can just withdraw your changes on the yarn.lock file or remove those commits and re-install with <code>yarn install</code> at the end of a successful merge or rebase.</p>
-<hr>
-<h2>Install</h2>
-<ul>
+<h2>Usage</h2>
+<p>There are several options to integrate Mockup.</p>
+<ol>
 <li>
-<p>Have a current version of Node.js installed.</p>
+<p>It comes pre-installed with Plone 6 Classic UI.</p>
 </li>
 <li>
-<p>To install, run: <code>make install</code>.</p>
+<p>You can install and compile a bundle. See [insert anchor to specific section, as &quot;below&quot; is vague].</p>
 </li>
 <li>
-<p>To run the demo server, do: <code>make serve</code>.</p>
-<p>This starts up the webpack build process in watch mode.
-Any JavaScript changes are immediately compiled.
-For some changes - like for adding new packages via <code>yarn add</code> and then using it you might need to restart.
-The command also spins up a development server for our <code>11ty</code> based documentation and demo pages.
-If you don't need the docs running, you can run <code>yarn start:webpack</code> or <code>npm run start:webpack</code> instead, so that only the webpack devserver is running.</p>
+<p>You can download a <code>.zip</code> from <a href="https://github.com/plone/mockup/releases">Mockup's releases page on GitHub</a>.</p>
 </li>
 <li>
-<p>Go to <code>http://localhost:8000</code>:
-On this port our demo and documentation pages are served.</p>
+<p>You can use a precompiled bundle from a CDN, like:</p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://unpkg.com/@plone/mockup@latest/dist/bundle.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
+<p>or:</p>
 </li>
+</ol>
+<pre class="language-html"><code class="language-html">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><br>  ```<br><br><br>## Install<br><br>-   Have a current version of Node.js installed.<br><br>-   To install, run: `make install`.<br><br>-   To run the demo server, do: `make serve`.<br><br>  This starts up the webpack build process in watch mode.<br>  Any JavaScript changes are immediately compiled.<br>  For some changes - like for adding new packages via `yarn add` and then using it you might need to restart.<br>  The command also spins up a development server for our `11ty` based documentation and demo pages.<br>  If you don't need the docs running, you can run `yarn start:webpack` or `npm run start:webpack` instead, so that only the webpack devserver is running.<br><br>-   Go to `http://localhost:8000`:<br>  On this port our demo and documentation pages are served.<br><br><br>## Mockup overview<br><br>Mockup is a JavaScript UI library which provides widgets, apps, and functionality for the Plone Classic UI frontend.<br>It is based on Patternslib(XXX), and provides its functionality through patterns.<br>Patterns are initialized and activated when a triggering CSS selector is found in the DOM tree.<br>For example, the related items widget is initialized on a form input field with the CSS class `pat-relateditems`.<br>The configuration is done via data attributes.<br>For the related items pattern, it's an attribute called `data-pat-relateditems`.<br>The data strucutre of the configuration can be a JSON string or CSS declaration like key-value pairs separated by a semicolon.<br>Defining a JSON structure is more flexible though.<br><br>Here are two examples.<br><br>`pat-relateditems` configuration as JSON structure:<br>```html<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>  <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>  <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>  <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{<br>      "selectableTypes": ["Document"],<br>      "vocabularyUrl": "relateditems-test.json"<br>  }<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<p><code>pat-relateditems</code> configuration as CSS declarations:</p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><br>        selectableTypes: Document;<br>        vocabularyUrl: relateditems-test.json;<br>    <span class="token punctuation">"</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<p>Because of historic reasons, the Mockup pattern attributes are written in &quot;camelCase&quot;, for example <code>vocabularyUrl</code>.
+But to resemble the CSS syntax, new patterns should instead separate each word with a dash, for example <code>vocabulary-url</code>.</p>
+<h2>Mockup Patterns</h2>
+<ul>
+<li><a href="src/pat/autotoc/README.md">pat-autotoc</a>: Automatically create a table of contents.</li>
+<li><a href="src/pat/cookietrigger/README.md">pat-cookietrigger</a>: Show a DOM element if browser cookies are disabled.</li>
+<li><a href="src/pat/datatables/README.md">pat-datatables</a>: This pattern provides the functionality from https://datatables.net/</li>
+<li><a href="src/pat/formautofocus/README.md">pat-formautofocus</a>: Automatically set the focus on a form input field.</li>
+<li><a href="src/pat/formunloadalert/README.md">pat-formunloadalert</a>: Show a warning if the user leaves an unsaved form.</li>
+<li><a href="src/pat/livesearch/README.md">pat-livesearch</a>: Provide Plone's live search functionality.</li>
+<li><a href="src/pat/manageportlets/README.md">pat-manage-portlets</a>: Used by <code>plone.app.portlets</code> to manage portlets.</li>
+<li><a href="src/pat/markspeciallinks/README.md">pat-markspeciallinks</a>: Add a special class to links in certain conditions.</li>
+<li><a href="src/pat/modal/README.md">pat-modal</a>: Show content in a modal.</li>
+<li><a href="src/pat/navigationmarker/README.md">pat-navigationmarker</a>: Add classes to the main navigation.</li>
+<li><a href="src/pat/passwordstrength/README.md">pat-passwordstrength</a>: Check the strength of a password.</li>
+<li><a href="src/pat/preventdoublesubmit/README.md">pat-preventdoublesubmit</a>: Prevent multiple submissions of the same forn.</li>
+<li><a href="src/pat/querystring/README.md">pat-querystring</a>: Show the querystring selection app.</li>
+<li><a href="src/pat/recurrence/README.md">pat-recurrence</a>: Show the recurrence widget.</li>
+<li><a href="src/pat/relateditems/README.md">pat-relateditems</a>: Show a widget to select related items.</li>
+<li><a href="src/pat/select2/README.md">pat-select2</a>: Show a widget which enhances dropdown selections with automatic suggestions, search and tagging functionality.</li>
+<li><a href="src/pat/sortable/README.md">pat-sortable</a>: A pattern to make listings sortable.</li>
+<li><a href="src/pat/structure/README.md">pat-structure</a>: Plone's folder contents app.</li>
+<li><a href="src/pat/structure-updater/README.md">pat-structureupdater</a>: Update title and description based on the current folder contents location.</li>
+<li><a href="src/pat/textareamimetypeselector/README.md">pat-textareamimetypeselector</a>: Display the MIME type selection widget for textareas.</li>
+<li><a href="src/pat/tinymce/README.md">pat-tinymce</a>: Use the TinyMCE editor for HTML editing.</li>
+<li><a href="src/pat/toggle/README.md">pat-toggle</a>: A pattern to toggle classes on HTML elements.</li>
+<li><a href="src/pat/toolbar/README.md">pat-toolbar</a>: Render the Plone toolbar.</li>
+<li><a href="src/pat/tree/README.md">pat-tree</a>: Renders a navigable tree from a data structure.</li>
+<li><a href="src/pat/upload/README.md">pat-upload</a>: Upload files to Plone.</li>
 </ul>
-<h1>Development</h1>
+<p>Deprecated patterns:</p>
+<ul>
+<li><a href="src/pat/backdrop/README.md">pat-backdrop</a> (<em>deprecated</em>): Renders a dark background.</li>
+<li><a href="src/pat/contentloader/README.md">pat-contentloader</a> (<em>deprecated</em>): Load remote or local content into a target.</li>
+<li><a href="src/pat/texteditor/README.md">pat-texteditor</a> (<em>deprecated</em>): Show a code editor.</li>
+</ul>
+<h2>Development</h2>
 <p>You can directly develop with the 11ty based documentation / demo server by running <code>make serve</code>.</p>
 <p>If you want to develop in Plone, you have two options:</p>
 <ol>
@@ -421,7 +406,7 @@ Mockup will compile it's bundle directly into the <code>++plone++static</code> d
 </li>
 </ol>
 <p>For more commands inspect Makefile and the script part of the package.json.</p>
-<h2>Running tests</h2>
+<h3>Running tests</h3>
 <p>Run <code>make check</code> to run all tests including <code>eslint</code> checks.</p>
 <p>To run individual tests, run:</p>
 <ul>
@@ -430,7 +415,7 @@ Mockup will compile it's bundle directly into the <code>++plone++static</code> d
 <li><code>jest src/pat/PATH-TO-PATTERN -t &quot;Test name&quot;</code>: Run a specific test matching &quot;Test name&quot; from a specific test suite.</li>
 <li><code>jest --watch</code>: Run the interactive test runner.</li>
 </ul>
-<h2>Debugging tests</h2>
+<h3>Debugging tests</h3>
 <p>The tests are based on jsdom - a library mocking DOM and HTML standards in JavaScript.
 No real browsers are involved, which make the tests run really fast.</p>
 <p>Still, you can connect to the Chrome debugging interface via:</p>
@@ -443,7 +428,7 @@ No real browsers are involved, which make the tests run really fast.</p>
 <pre><code>node --inspect-brk node_modules/.bin/jest --runInBand ./src/pat/PATH-TO-PATTERN -t test.name
 </code></pre>
 <p>You can put some <code>debugger;</code> statements to the code to break the execution and investigate.</p>
-<h2>Developing external Packages</h2>
+<h3>Developing external Packages</h3>
 <p>If you want to work on ony external package like Patternslib or any external Mockup pattern you can do so by linking those packages into the node_modules folder via <code>yarn link</code>.</p>
 <ol>
 <li>
@@ -468,7 +453,7 @@ No real browsers are involved, which make the tests run really fast.</p>
 </ul>
 <p><strong>Please note:</strong>: Make sure to unlink and reinstall development pacakges before building a production bundle.
 In doubt, remove the node_modules directory and re-install.</p>
-<h2>Bundle build analyzation</h2>
+<h3>Bundle build analyzation</h3>
 <p>https://survivejs.com/webpack/optimizing/build-analysis/
 https://formidable.com/blog/2018/finding-webpack-duplicates-with-inspectpack-plugin/</p>
 <p>Build the stats.json file:</p>
@@ -482,7 +467,7 @@ https://www.npmjs.com/package/whybundled</p>
 https://www.npmjs.com/package/webpack-bundle-analyzer</p>
 <pre><code>npx webpack-bundle-analyzer stats.json
 </code></pre>
-<h2>i18n message extraction</h2>
+<h3>i18n message extraction</h3>
 <p>To update the translation file, the following needs to be done:</p>
 <ol>
 <li>Extract the messages from this package:</li>
@@ -502,7 +487,7 @@ https://www.npmjs.com/package/webpack-bundle-analyzer</p>
 <pre><code>cd ../plone.app.locales/plone/app/locales/locales
 i18ndude sync --pot widgets.pot */LC_MESSAGES/widgets.po
 </code></pre>
-<h2>i18n message handling in Plone</h2>
+<h3>i18n message handling in Plone</h3>
 <p>To test a translation, for example French:</p>
 <ul>
 <li>
@@ -519,6 +504,53 @@ i18ndude sync --pot widgets.pot */LC_MESSAGES/widgets.po
 This translation helper that calls the <code>@@plonejsi18n</code> view defined in plone.app.content to generate a JSON of the translations from the mo file.
 The <code>@@plonejsi18n</code> view is called one time for a given domain and language and the result is cached in localStorage for 24 hours.
 The only way to test the new translations is to restart the instance to update the mo file from the po file, and then to purge the localStorage to trigger a new download of the translations.</p>
+<h2>Style guide</h2>
+<ul>
+<li>Tab: 4 spaces for everything, except for HTML and XML files which must use 2 spaces, and the Makefile which must use tabs.
+This rule is defined in the <a href=".editorconfig">.editorconfig file</a>.</li>
+</ul>
+<h3>Commit style guide</h3>
+<p>We automatically generate the changelog from the commit messages following the <a href="https://www.conventionalcommits.org/">Conventional Commits specification</a>.
+Changelog generation is done by the <a href="https://github.com/release-it/conventional-changelog/">conventional changelog plugin</a> for <a href="https://github.com/release-it/release-it">release-it</a>.
+This is enforced via a pre-commit hook managed by <a href="https://github.com/typicode/husky">husky</a>.</p>
+<p><strong>And this is how you use it:</strong></p>
+<p>We have 4 different types of changelog entries:</p>
+<ul>
+<li>Breaking Changes (type: <code>breaking</code>),</li>
+<li>Features (type: <code>feat</code>),</li>
+<li>Bug Fixes (type: <code>fix</code>),</li>
+<li>Maintenance (type: <code>maint</code>).</li>
+</ul>
+<p>We can group commits in the changelog via a scope or grouping.
+Let's follow a convention and use these groupings, but the grouping is optional and any other group name can be used.</p>
+<ul>
+<li>&quot;Dependencies&quot; for upgrading package.json dependencies.</li>
+<li>&quot;Docs&quot; for documentation.</li>
+<li>&quot;Build&quot; for everything related to the release workflow, Webpack and building bundles.</li>
+<li>&quot;Cleanup&quot; for cleaning up or reformatting code.</li>
+<li>&quot;pat PATTERNNAME&quot; for changes to individual patterns in <code>src/pat</code>.</li>
+<li>&quot;core MODULENAME&quot; for changes to core modules in <code>src/core</code>.</li>
+</ul>
+<p>A commit message with a changelog grouping must be structured like so: <code>TYPE(GROUP): MESSAGE</code>.
+Without grouping: <code>TYPE: MESSAGE</code></p>
+<p>If the commit message doesn't follow this convention, then it won't be included in the changelog.
+To bypass the pre-commit hook, use the git <code>-n</code> switch.
+Example: <code>git commit yarn.lock -m &quot;yarn install.&quot; -n</code>.</p>
+<p>If you are working on a component like the structure pattern (pat-structure), use <code>pat structure</code> as a group.</p>
+<p>Examples:</p>
+<p>Add a feature to the structure pattern:</p>
+<pre class="language-shell"><code class="language-shell"><span class="token function">git</span> commit src/pat/structure <span class="token parameter variable">-m</span> <span class="token string">"feat(pat structure): Add feature to cook some coffee"</span></code></pre>
+<p>Cleanup task:</p>
+<pre class="language-shell"><code class="language-shell"><span class="token function">git</span> commit <span class="token parameter variable">-am</span> <span class="token string">"maint(Cleanup): Remove whitespace from documentation."</span><br></code></pre>
+<p>or without a grouping:</p>
+<pre class="language-shell"><code class="language-shell"><span class="token function">git</span> commit <span class="token parameter variable">-am</span> <span class="token string">"maint: Remove unnecessary file from root directory."</span></code></pre>
+<hr>
+<p><strong>Note</strong></p>
+<p>Please keep commits on the <code>yarn.lock</code> file or any other auto-generated code seperate.</p>
+<p>Just commit them seperately with <code>git commit yarn.lock -m &quot;yarn install&quot; -n</code>.</p>
+<p>Keeping them seperate reduces the effort when merging or rebasing branches where a merge conflict can easily happen.
+In such cases you can just withdraw your changes on the <code>yarn.lock</code> file, or remove those commits and reinstall with <code>yarn install</code> at the end of a successful merge or rebase.</p>
+<hr>
 
       </main>
     </div>
