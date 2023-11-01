@@ -16,7 +16,7 @@ There are several options to integrate Mockup.
     <script src="https://unpkg.com/@plone/mockup@latest/dist/bundle.min.js"></script>
     ```
     or:
-  ```html
+    ```html
     <script src="https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js"></script>
     ```
 
