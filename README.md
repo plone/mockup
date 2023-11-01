@@ -47,7 +47,7 @@ Patterns are initialized and activated when a triggering CSS selector is found i
 For example, the related items widget is initialized on a form input field with the CSS class `pat-relateditems`.
 The configuration is done via data attributes.
 For the related items pattern, it's an attribute called `data-pat-relateditems`.
-The data strucutre of the configuration can be a JSON string or CSS declaration like key-value pairs separated by a semicolon.
+The data structure of the configuration can be a JSON string or CSS declaration as key-value pairs, with the key and value separated by a colon (`:`), and the pairs separated by a semicolon (`;`).
 Defining a JSON structure is more flexible though.
 
 Here are two examples.
