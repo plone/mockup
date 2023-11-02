@@ -307,7 +307,6 @@ Cleanup task:
 
 ```shell
 git commit -am "maint(Cleanup): Remove whitespace from documentation."
-
 ```
 
 or without a grouping:
