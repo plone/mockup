@@ -337,23 +337,108 @@
         <h1>TinyMCE pattern</h1>
 <p>Use the TinyMCE editor for HTML editing.</p>
 <h2>Configuration</h2>
-<p>|       Option       |  Type   |                                                                                                                                                                                                   Default                                                                                                                                                                                                   |                                                                                          Description                                                                                           |
-| :----------------: | :-----: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------: | :-------------------------------------------: | :----------------------------: | :---------------------------------------------------------: | :--: |
-|    relatedItems    | object  |                                                                                   { attributes: [&quot;UID&quot;, &quot;Title&quot;, &quot;Description&quot;, &quot;getURL&quot;, &quot;portal_type&quot;, &quot;path&quot;, &quot;ModificationDate&quot;], batchSize: 20, basePath: &quot;/&quot;, vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: &quot;Search for item on site...&quot; }                                                                                   |                                                                                 Related items pattern options.                                                                                 |
-|       upload       | object  |                                                                                                                                                                     { attributes: look at upload pattern for getting the options list }                                                                                                                                                                     |                                                                                    Upload pattern options.                                                                                     |
-|        text        | object  | { insertBtn: &quot;Insert&quot;, cancelBtn: &quot;Cancel&quot;, insertHeading: &quot;Insert link&quot;, title: &quot;Title&quot;, internal: &quot;Internal&quot;, external: &quot;External&quot;, email: &quot;Email&quot;, anchor: &quot;Anchor&quot;, subject: &quot;Subject&quot; image: &quot;Image&quot;, imageAlign: &quot;Align&quot;, scale: &quot;Size&quot;, alt: &quot;Alternative Text&quot;, captionFromDescription: &quot;Show Image Caption from Image Description&quot;, caption: &quot;Image Caption&quot;, externalImage: &quot;External Image URI&quot;} |                                                                                      Translation strings                                                                                       |
-|    imageScales     | string  |                                                                                                                                                                                                                                                                                                                                                                                                             |                                                        Image scale name/value object-array or JSON string for use in the image dialog.                                                         |
-|     targetList     |  array  |                                                                                       [ {text: &quot;Open in this window / frame&quot;, value: &quot;&quot;}, {text: &quot;Open in new window&quot;, value: &quot;_blank&quot;}, {text: &quot;Open in parent window / frame&quot;, value: &quot;_parent&quot;}, {text: &quot;Open in top frame (replaces all frames)&quot;, value: &quot;_top&quot;}]                                                                                       |                                                                                              TODO                                                                                              |
-|     imageTypes     | string  |                                                                                                                                                                                                   'Image'                                                                                                                                                                                                   |                                                                                              TODO                                                                                              |
-|    folderTypes     | string  |                                                                                                                                                                                             'Folder,Plone Site'                                                                                                                                                                                             |                                                                                              TODO                                                                                              |
-|        tiny        | object  |                                                                  { plugins: [ &quot;advlist autolink lists charmap print preview anchor&quot;, &quot;usearchreplace visualblocks code fullscreen autoresize&quot;, &quot;insertdatetime media table contextmenu paste plonelink ploneimage&quot; ], menubar: &quot;edit table format tools view insert&quot;, toolbar: &quot;undo redo                                                                   |                                                                                          styleselect                                                                                           | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage&quot;, autoresize_max_height: 1500 } | TODO |
-|    prependToUrl    | string  |                                                                                                                                                                                                     &quot;&quot;                                                                                                                                                                                                      |                                                                          Text to prepend to generated internal urls.                                                                           |
-|    appendToUrl     | string  |                                                                                                                                                                                                     &quot;&quot;                                                                                                                                                                                                      |                                                                           Text to append to generated internal urls.                                                                           |
-| prependToScalePart | string  |                                                                                                                                                                                               &quot;/imagescale/&quot;                                                                                                                                                                                                |                                                                       Text to prepend to generated image scale url part.                                                                       |
-| appendToScalePart  | string  |                                                                                                                                                                                                     &quot;&quot;                                                                                                                                                                                                      |                                                                       Text to append to generated image scale url part.                                                                        |
-|   linkAttribute    | string  |                                                                                                                                                                                                   &quot;path&quot;                                                                                                                                                                                                    |                                                                          Ajax response data attribute to use for url.                                                                          |
-|    defaultScale    | string  |                                                                                                                                                                                                 &quot;Original&quot;                                                                                                                                                                                                  |                                                                                   Scale name to default to.                                                                                    |
-|       inline       | boolean |                                                                                                                                                                                                    false                                                                                                                                                                                                    | Show tinyMCE editor inline instead in an iframe. Use this on textarea inputs. If you want to use this pattern directly on a contenteditable, pass &quot;inline: true&quot; to the &quot;tiny&quot; options object. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Default</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">relatedItems</td>
+<td style="text-align:center">object</td>
+<td style="text-align:center">{ attributes: [&quot;UID&quot;, &quot;Title&quot;, &quot;Description&quot;, &quot;getURL&quot;, &quot;portal_type&quot;, &quot;path&quot;, &quot;ModificationDate&quot;], batchSize: 20, basePath: &quot;/&quot;, vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: &quot;Search for item on site...&quot; }</td>
+<td style="text-align:center">Related items pattern options.</td>
+</tr>
+<tr>
+<td style="text-align:center">upload</td>
+<td style="text-align:center">object</td>
+<td style="text-align:center">{ attributes: look at upload pattern for getting the options list }</td>
+<td style="text-align:center">Upload pattern options.</td>
+</tr>
+<tr>
+<td style="text-align:center">text</td>
+<td style="text-align:center">object</td>
+<td style="text-align:center">{ insertBtn: &quot;Insert&quot;, cancelBtn: &quot;Cancel&quot;, insertHeading: &quot;Insert link&quot;, title: &quot;Title&quot;, internal: &quot;Internal&quot;, external: &quot;External&quot;, email: &quot;Email&quot;, anchor: &quot;Anchor&quot;, subject: &quot;Subject&quot; image: &quot;Image&quot;, imageAlign: &quot;Align&quot;, scale: &quot;Size&quot;, alt: &quot;Alternative Text&quot;, captionFromDescription: &quot;Show Image Caption from Image Description&quot;, caption: &quot;Image Caption&quot;, externalImage: &quot;External Image URI&quot;}</td>
+<td style="text-align:center">Translation strings</td>
+</tr>
+<tr>
+<td style="text-align:center">imageScales</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Image scale name/value object-array or JSON string for use in the image dialog.</td>
+</tr>
+<tr>
+<td style="text-align:center">targetList</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">[ {text: &quot;Open in this window / frame&quot;, value: &quot;&quot;}, {text: &quot;Open in new window&quot;, value: &quot;_blank&quot;}, {text: &quot;Open in parent window / frame&quot;, value: &quot;_parent&quot;}, {text: &quot;Open in top frame (replaces all frames)&quot;, value: &quot;_top&quot;}]</td>
+<td style="text-align:center">TODO</td>
+</tr>
+<tr>
+<td style="text-align:center">imageTypes</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'Image'</td>
+<td style="text-align:center">TODO</td>
+</tr>
+<tr>
+<td style="text-align:center">folderTypes</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">'Folder,Plone Site'</td>
+<td style="text-align:center">TODO</td>
+</tr>
+<tr>
+<td style="text-align:center">tiny</td>
+<td style="text-align:center">object</td>
+<td style="text-align:center">{ plugins: [ &quot;advlist autolink lists charmap print preview anchor&quot;, &quot;usearchreplace visualblocks code fullscreen autoresize&quot;, &quot;insertdatetime media table contextmenu paste plonelink ploneimage&quot; ], menubar: &quot;edit table format tools view insert&quot;, toolbar: &quot;undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage&quot;, autoresize_max_height: 1500 }</td>
+<td style="text-align:center">TODO</td>
+</tr>
+<tr>
+<td style="text-align:center">prependToUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;&quot;</td>
+<td style="text-align:center">Text to prepend to generated internal urls.</td>
+</tr>
+<tr>
+<td style="text-align:center">appendToUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;&quot;</td>
+<td style="text-align:center">Text to append to generated internal urls.</td>
+</tr>
+<tr>
+<td style="text-align:center">prependToScalePart</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;/imagescale/&quot;</td>
+<td style="text-align:center">Text to prepend to generated image scale url part.</td>
+</tr>
+<tr>
+<td style="text-align:center">appendToScalePart</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;&quot;</td>
+<td style="text-align:center">Text to append to generated image scale url part.</td>
+</tr>
+<tr>
+<td style="text-align:center">linkAttribute</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;path&quot;</td>
+<td style="text-align:center">Ajax response data attribute to use for url.</td>
+</tr>
+<tr>
+<td style="text-align:center">defaultScale</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;Original&quot;</td>
+<td style="text-align:center">Scale name to default to.</td>
+</tr>
+<tr>
+<td style="text-align:center">inline</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">false</td>
+<td style="text-align:center">Show tinyMCE editor inline instead in an iframe. Use this on textarea inputs. If you want to use this pattern directly on a contenteditable, pass &quot;inline: true&quot; to the &quot;tiny&quot; options object.</td>
+</tr>
+</tbody>
+</table>
 <h2>Examples</h2>
 <h3>Default</h3>
 <form>
