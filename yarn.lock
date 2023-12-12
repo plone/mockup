@@ -2002,6 +2002,41 @@
     codejar "^3.6.0"
     highlight.js "<11"
 
+"@patternslib/patternslib@^9.9.10":
+  version "9.9.10"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-9.9.10.tgz#a4f54b20e8cb3f7089190d38eeebcd0c8ed8f104"
+  integrity sha512-kRI2h3fWpoH9YDHjMwk32DtnPGZ6jRQ7i3YLZH9tPwWMq5COjsgpewvPyrLzPFAkfIHsafmcYScGSNNib0CT4g==
+  dependencies:
+    "@fullcalendar/adaptive" "^5.11.3"
+    "@fullcalendar/core" "^5.11.3"
+    "@fullcalendar/daygrid" "^5.11.3"
+    "@fullcalendar/interaction" "^5.11.3"
+    "@fullcalendar/list" "^5.11.3"
+    "@fullcalendar/luxon2" "^5.11.3"
+    "@fullcalendar/timegrid" "^5.11.3"
+    "@stomp/stompjs" "^7.0.0"
+    dompurify "^3.0.6"
+    highlight.js "<11"
+    imagesloaded "^4.1.4"
+    jquery "^3.7.1"
+    jquery-jcrop "^0.9.13"
+    luxon "3.4.4"
+    marked "^4.3.0"
+    masonry-layout "^4.2.2"
+    moment "^2.29.4"
+    moment-timezone "^0.5.43"
+    photoswipe "^4.1.3"
+    pikaday "^1.8.0"
+    prettier "^2.8.8"
+    screenfull "^6.0.2"
+    select2 "^3.5.1"
+    showdown "^2.1.0"
+    showdown-prettify "^1.3.0"
+    slick-carousel "^1.8.1"
+    slides "git+https://github.com/Patternslib/slides.git"
+    spectrum-colorpicker "^1.8.0"
+    tippy.js "^6.3.7"
+
 "@patternslib/patternslib@^9.9.8":
   version "9.9.8"
   resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-9.9.8.tgz#95ca85785d6076e6898a2733b498607d2e5fa34c"
@@ -7360,6 +7395,11 @@ luxon@3.4.3, luxon@^3.3.0:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.3.tgz#8ddf0358a9492267ffec6a13675fbaab5551315d"
   integrity sha512-tFWBiv3h7z+T/tDaoxA8rqTxy1CHV6gHS//QdaH4pulbq/JuBSGgQspQQqcgnwdAx6pNI7cmvz5Sv/addzHmUg==
+
+luxon@3.4.4:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.4.tgz#cf20dc27dc532ba41a169c43fdcc0063601577af"
+  integrity sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==
 
 macos-release@^3.1.0:
   version "3.2.0"
