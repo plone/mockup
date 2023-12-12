@@ -2,6 +2,27 @@
 
 
 
+## [5.1.7](https://github.com/plone/mockup/compare/5.1.6...5.1.7) (2023-12-12)
+
+
+### Bug Fixes
+
+
+* **pat structure:** do not close filter popover when selecting query criterias (firefox) ([0d635ab](https://github.com/plone/mockup/commit/0d635aba511f4836b62f6ae11e78f57b3f1ce70c))
+
+
+
+### Maintenance
+
+
+* **bundle:** dependency upgrades ([8f02b38](https://github.com/plone/mockup/commit/8f02b38b984f79abfb05dfef31c0f8c6a80d2bde))
+
+
+* **bundle:** upgrade patternslib to 9.10.0 ([b803ea8](https://github.com/plone/mockup/commit/b803ea8c11e06813b6c242980fc73f9841416462))
+
+
+* fix CI setup ([275ad25](https://github.com/plone/mockup/commit/275ad2528b64462ef7ae83a2db0eacf52df7661b))
+
 ## [5.1.6](https://github.com/plone/mockup/compare/5.1.5...5.1.6) (2023-10-24)
 
 
