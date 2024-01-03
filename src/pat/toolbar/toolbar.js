@@ -1,16 +1,19 @@
 import $ from "jquery";
-import Base from "@patternslib/patternslib/src/core/base";
+import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
+import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import Cookies from "js-cookie";
 
-export default Base.extend({
-    name: "toolbar",
-    trigger: ".pat-toolbar",
-    parser: "mockup",
-    defaults: {},
+export const parser = new Parser("toolbar");
+parser.addArgument("example-option", "Stranger");
 
-    init: function () {
+class Pattern extends BasePattern {
+    static name = "toolbar";
+    static trigger = ".pat-toolbar";
+    static parser = parser;
+
+    async init() {
         $("body").on("structure-url-changed", (e, path) => {
             $.ajax({
                 url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
@@ -27,8 +30,10 @@ export default Base.extend({
             });
         });
 
+        const $el = $(this.el);
+
         // unpin toolbar and save state
-        this.$el.on("click", ".toolbar-collapse", () => {
+        $el.on("click", ".toolbar-collapse", () => {
             $("body").removeClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({ expanded: false }), {
                 path: "/",
@@ -36,7 +41,7 @@ export default Base.extend({
         });
 
         // pin toolbar and save state
-        this.$el.on("click", ".toolbar-expand", () => {
+        $el.on("click", ".toolbar-expand", () => {
             $("body").addClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({ expanded: true }), {
                 path: "/",
@@ -44,5 +49,8 @@ export default Base.extend({
         });
 
         this.el.classList.add("initialized");
-    },
-});
+    }
+}
+registry.register(Pattern);
+export default Pattern;
+export { Pattern };
