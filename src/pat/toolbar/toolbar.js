@@ -14,6 +14,10 @@ class Pattern extends BasePattern {
     static parser = parser;
 
     async init() {
+        if (window.__patternslib_import_styles) {
+            import("./toolbar.scss");
+        }
+
         $("body").on("structure-url-changed", (e, path) => {
             $.ajax({
                 url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
