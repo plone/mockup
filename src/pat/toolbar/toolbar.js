@@ -2,7 +2,6 @@ import $ from "jquery";
 import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
-import utils from "../../core/utils";
 import Cookies from "js-cookie";
 
 export const parser = new Parser("toolbar");
@@ -21,27 +20,34 @@ class Pattern extends BasePattern {
             import("./toolbar.scss");
         }
 
-        $("body").on(this.options["update-trigger"], (e, path) => {
-            $.ajax({
-                url: $("body").attr("data-portal-url") + path + "/" + this.options["render-url"],
-            }).done((data) => {
-                const wrapper = $(utils.parseBodyTag(data));
-                const $main_toolbar = wrapper.find("#edit-zone .plone-toolbar-main");
-                const $personal_tools = wrapper.find(
-                    "#edit-zone #collapse-personaltools"
-                );
-                // setup modals
-                registry.scan($main_toolbar);
-                $(".plone-toolbar-main", this.$el).replaceWith($main_toolbar);
-                $("#collapse-personaltools", this.$el).replaceWith($personal_tools);
-            });
+        $("body").on(this.options["update-trigger"], async (e, path) => {
+            // fetch toolbar
+            const response = await fetch(
+                `${document.body.dataset.portalUrl}${path}/${this.options["render-url"]}`
+            );
+            const data = await response.text();
+
+            // Find toolbar nodes
+            const div = document.createElement("div");
+            div.innerHTML = data;
+            const main_toolbar = div.querySelector("#edit-zone .plone-toolbar-main");
+            const personal_tools = div.querySelector(
+                "#edit-zone #collapse-personaltools"
+            );
+
+            // setup modals
+            registry.scan(main_toolbar);
+            document.querySelector(".plone-toolbar-main").replaceWith(main_toolbar);
+            document
+                .querySelector("#collapse-personaltools")
+                .replaceWith(personal_tools);
         });
 
         const $el = $(this.el);
 
         // unpin toolbar and save state
         $el.on("click", ".toolbar-collapse", () => {
-            $("body").removeClass("plone-toolbar-left-expanded");
+            document.body.classList.remove("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({ expanded: false }), {
                 path: "/",
             });
@@ -49,7 +55,7 @@ class Pattern extends BasePattern {
 
         // pin toolbar and save state
         $el.on("click", ".toolbar-expand", () => {
-            $("body").addClass("plone-toolbar-left-expanded");
+            document.body.classList.add("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({ expanded: true }), {
                 path: "/",
             });
