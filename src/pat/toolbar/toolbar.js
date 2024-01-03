@@ -61,6 +61,7 @@ class Pattern extends BasePattern {
 
         // setup modals
         registry.scan(main_toolbar);
+        registry.scan(personal_tools);
         document.querySelector(".plone-toolbar-main").replaceWith(main_toolbar);
         document.querySelector("#collapse-personaltools").replaceWith(personal_tools);
     }
