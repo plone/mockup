@@ -6,21 +6,24 @@ import utils from "../../core/utils";
 import Cookies from "js-cookie";
 
 export const parser = new Parser("toolbar");
-parser.addArgument("example-option", "Stranger");
+parser.addArgument("update-trigger", "structure-url-changed");
+parser.addArgument("render-url", "@@render-toolbar");
 
 class Pattern extends BasePattern {
     static name = "toolbar";
     static trigger = ".pat-toolbar";
     static parser = parser;
 
+    parser_group_options = false;
+
     async init() {
         if (window.__patternslib_import_styles) {
             import("./toolbar.scss");
         }
 
-        $("body").on("structure-url-changed", (e, path) => {
+        $("body").on(this.options["update-trigger"], (e, path) => {
             $.ajax({
-                url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
+                url: $("body").attr("data-portal-url") + path + "/" + this.options["render-url"],
             }).done((data) => {
                 const wrapper = $(utils.parseBodyTag(data));
                 const $main_toolbar = wrapper.find("#edit-zone .plone-toolbar-main");
