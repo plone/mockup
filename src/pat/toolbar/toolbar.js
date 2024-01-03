@@ -20,27 +20,11 @@ class Pattern extends BasePattern {
             import("./toolbar.scss");
         }
 
+        // Reload on context change in folder content browser.
         $("body").on(this.options["update-trigger"], async (e, path) => {
-            // fetch toolbar
-            const response = await fetch(
-                `${document.body.dataset.portalUrl}${path}/${this.options["render-url"]}`
+            await this.reload_toolbar(
+                `${document.body.dataset["portal-url"]}${path}/${this.options["render-url"]}`
             );
-            const data = await response.text();
-
-            // Find toolbar nodes
-            const div = document.createElement("div");
-            div.innerHTML = data;
-            const main_toolbar = div.querySelector("#edit-zone .plone-toolbar-main");
-            const personal_tools = div.querySelector(
-                "#edit-zone #collapse-personaltools"
-            );
-
-            // setup modals
-            registry.scan(main_toolbar);
-            document.querySelector(".plone-toolbar-main").replaceWith(main_toolbar);
-            document
-                .querySelector("#collapse-personaltools")
-                .replaceWith(personal_tools);
         });
 
         const $el = $(this.el);
@@ -62,6 +46,23 @@ class Pattern extends BasePattern {
         });
 
         this.el.classList.add("initialized");
+    }
+
+    async reload_toolbar(url) {
+        // fetch toolbar
+        const response = await fetch(url);
+        const data = await response.text();
+
+        // Find toolbar nodes
+        const div = document.createElement("div");
+        div.innerHTML = data;
+        const main_toolbar = div.querySelector("#edit-zone .plone-toolbar-main");
+        const personal_tools = div.querySelector("#edit-zone #collapse-personaltools");
+
+        // setup modals
+        registry.scan(main_toolbar);
+        document.querySelector(".plone-toolbar-main").replaceWith(main_toolbar);
+        document.querySelector("#collapse-personaltools").replaceWith(personal_tools);
     }
 }
 registry.register(Pattern);
