@@ -14,6 +14,7 @@
         "@patternslib/pat-code-editor": "4.0.1",
         "@patternslib/patternslib": "9.9.16",
         "@plone/registry": "^2.1.0",
+        "@plone/plonetheme-barceloneta-base": "^3.2.1",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "5.3.3",
