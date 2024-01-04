@@ -64,6 +64,9 @@ class Pattern extends BasePattern {
         registry.scan(personal_tools);
         document.querySelector(".plone-toolbar-main").replaceWith(main_toolbar);
         document.querySelector("#collapse-personaltools").replaceWith(personal_tools);
+
+        // Notify others that the toolbar has been reloaded.
+        this.el.dispatchEvent(events.generic_event("pat-toolbar--reloaded"));
     }
 }
 registry.register(Pattern);
