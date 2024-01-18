@@ -130,7 +130,6 @@ describe("TinyMCE", function () {
         ).appendTo("body");
         registry.scan($el);
         await utils.timeout(10);
-        console.log(tinymce.get(0).getContent());
         expect(tinymce.get(0).getContent()).toEqual("<p>foobar</p>");
         tinymce.get(0).remove();
     });
@@ -141,8 +140,10 @@ describe("TinyMCE", function () {
         ).appendTo("body");
         registry.scan($el);
         await utils.timeout(10);
-        expect(tinymce.get(0).settings.plugins).toContain("plonelink ploneimage");
-        expect(tinymce.get(0).settings.toolbar).toContain("plonelink ploneimage");
+        expect(tinymce.get(0).options.get('plugins')).toContain("ploneimage");
+        expect(tinymce.get(0).options.get('plugins')).toContain("plonelink");
+        expect(tinymce.get(0).options.get('toolbar')).toContain("plonelink");
+        expect(tinymce.get(0).options.get('toolbar')).toContain("ploneimage");
         tinymce.get(0).remove();
     });
 

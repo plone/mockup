@@ -1,0 +1,39 @@
+name: build mockup docs with webpack and 11ty
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build mockup
+      run: |
+        npx yarn
+        npm run build:webpack:docs
+
+    - name: Build docs
+      run: |
+        npm run build:docs
+
+    - name: Deploy docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        publish_dir: ./_site
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh_docs_deploy

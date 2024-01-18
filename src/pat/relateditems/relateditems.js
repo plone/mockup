@@ -427,7 +427,6 @@ export default Base.extend({
                             data.push.apply(data, e.results);
                             this.$el.select2("data", data, true);
                             this.emit("selected");
-                            this.popover.hide();
                         },
                         false
                     );
@@ -458,9 +457,9 @@ export default Base.extend({
 
     selectItem(item) {
         this.emit("selecting");
-        const data = this.$el.select2("data");
+        const data = $(this.el).select2("data");
         data.push(item);
-        this.$el.select2("data", data, true);
+        $(this.el).select2("data", data, true);
 
         if (this.options.recentlyUsed) {
             // add to recently added items

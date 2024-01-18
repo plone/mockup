@@ -1,8 +1,12 @@
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
+const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
+// const UpgradeHelper = require("@11ty/eleventy-upgrade-help");
 
 module.exports = function (eleventyConfig) {
     eleventyConfig.setUseGitIgnore(false);
     eleventyConfig.addPlugin(syntaxHighlight);
+    eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+    // eleventyConfig.addPlugin(UpgradeHelper);
     eleventyConfig.addPassthroughCopy({ "favicon.ico": "favicon.ico" });
     eleventyConfig.addPassthroughCopy({ "docs/main.css": "dist/main.css" });
     eleventyConfig.addPassthroughCopy({ dist: "dist" });
@@ -51,10 +55,11 @@ module.exports = function (eleventyConfig) {
     });
 
     eleventyConfig["dir"] = {
-        input: "./",
-        ouput: "docs/_site",
-        includes: "docs/_includes",
-        data: "docs/_data",
+        input: ".",
+        ouput: "_site",
+        includes: "_includes",
+        layouts: "_includes",
+        data: "_data",
     };
     return eleventyConfig;
 };

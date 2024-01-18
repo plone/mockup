@@ -2,13 +2,135 @@
 
 
 
-## [5.1.1](https://github.com/plone/mockup/compare/5.1.0-alpha.5...5.1.1) (2023-05-31)
+## [5.2.0-alpha.3](https://github.com/plone/mockup/compare/5.2.0-alpha.2...5.2.0-alpha.3) (2023-12-12)
+
+
+### Bug Fixes
+
+
+* **pat structure:** do not close filter popover when selecting query criterias (firefox) ([40c6b9e](https://github.com/plone/mockup/commit/40c6b9e9fb6163c92c402e215957c8a0530b9641))
+
 
 
 ### Maintenance
 
 
-* Bootstrap 5.3 final ([e9c7824](https://github.com/plone/mockup/commit/e9c78241b7b42e935f66086f1e572b98c1336fd1))
+* fix CI setup ([f47e612](https://github.com/plone/mockup/commit/f47e612f6d849bc8f2e5096d0b39ba4b346b7810))
+
+
+* upgrade dependencies ([a2c6eaf](https://github.com/plone/mockup/commit/a2c6eaf109a027b6cf70dbc78872718cbe104431))
+
+## [5.2.0-alpha.2](https://github.com/plone/mockup/compare/5.2.0-alpha.1...5.2.0-alpha.2) (2023-10-31)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** call link/image plugins on the correct tiny instance. ([9228721](https://github.com/plone/mockup/commit/9228721ccc8751804a4a852d05edeb3cf8faa4ce))
+
+## [5.2.0-alpha.1](https://github.com/plone/mockup/compare/5.2.0-alpha.0...5.2.0-alpha.1) (2023-10-24)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** fix path to translations ([61adac7](https://github.com/plone/mockup/commit/61adac75e805e31d3ff842c51671435eb9e877b6))
+
+## [5.2.0-alpha.0](https://github.com/plone/mockup/compare/5.1.5...5.2.0-alpha.0) (2023-10-20)
+
+
+### Features
+
+
+* **pat tinymce:** Update TinyMCE to version 6 ([9f22404](https://github.com/plone/mockup/commit/9f224048b2d1cb6de6f8818f84f18cb73724ea1a))
+
+
+
+### Bug Fixes
+
+
+* **pat relateditems:** Do not auto-close upload dropdown when clicking "browse" button. ([cd30774](https://github.com/plone/mockup/commit/cd30774e80b8262fa602e0af7486f22e96cbfa23))
+
+
+* **pat relateditems:** Fix styling when inside a modal. ([e5d5aa9](https://github.com/plone/mockup/commit/e5d5aa9f495f36b03184e25b57838608a6edab31))
+
+
+
+### Maintenance
+
+
+* Update dependencies ([37d8675](https://github.com/plone/mockup/commit/37d8675a64e56718f1d9bcadff33646eb1e2411d))
+
+## [5.1.5](https://github.com/plone/mockup/compare/a5801127a38c9c97e464e8918ed01e424ff28686...5.1.5) (2023-09-19)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** Properly await the select2 initialization when using it from the insert image or insert link dialogs ([#1342](https://github.com/plone/mockup/issues/1342)) ([a580112](https://github.com/plone/mockup/commit/a5801127a38c9c97e464e8918ed01e424ff28686))
+
+
+
+### Maintenance
+
+
+* `@patternslib/dev = 3.5.0` ([2d5140c](https://github.com/plone/mockup/commit/2d5140ccfe2a0db2e4a0e5082aa520c28e258b0b))
+
+
+* Bootstrap 5.3.2 ([f82b469](https://github.com/plone/mockup/commit/f82b4690f474430262284f20466aa4721bbe012c))
+
+
+## [5.1.4](https://github.com/plone/mockup/compare/5.1.3...5.1.4) (2023-08-09)
+
+
+### Bug Fixes
+
+
+* **pat structure:** Fix popover-structure-columns, use 2-column layout ([9fb499e](https://github.com/plone/mockup/commit/9fb499e41f47b19629163c3cb2bd9c69fd829881))
+
+
+* **pat structure:** Fix sticky position when toolbar is on top ([2b20d9b](https://github.com/plone/mockup/commit/2b20d9b8f03f15c9be0f365aed80899d0f3f900a))
+
+
+* **pat tinymce:** Fix image modal with selected image. ([da50ee3](https://github.com/plone/mockup/commit/da50ee3b9d13cd1290e68a15777b3ca2fd76b567))
+
+
+
+### Maintenance
+
+
+* **Docs:** fix table in modal. ([f2eb54a](https://github.com/plone/mockup/commit/f2eb54a09d7743d36622c63024244376a789e07e))
+
+
+## [5.1.3](https://github.com/plone/mockup/compare/5.1.2...5.1.3) (2023-07-30)
+
+
+### Maintenance
+
+
+* Add sinon to  in jest config. ([7aa8a9e](https://github.com/plone/mockup/commit/7aa8a9e56fc7e9eb75b157594d255c97d0ac5b44))
+
+
+* **Dependencies:** Upgrade dependencies. ([b41d4ca](https://github.com/plone/mockup/commit/b41d4caf4aa83083119b6eca83896d7ee62e0365))
+
+
+## [5.1.2](https://github.com/plone/mockup/compare/5.1.1...5.1.2) (2023-07-26)
+
+
+### Bug Fixes
+
+
+* **pat-upload:** Prevent duplicate initialization of the dropzone. ([5e15a78](https://github.com/plone/mockup/commit/5e15a78e62b1f8e9f73550555d63a5051ccbed3e))
+
+  Fixes: https://github.com/plone/Products.CMFPlone/issues/3814
+
+
+
+### Maintenance
+
+
+* Upgrade Bootstrap to 5.3.1 ([ccb066a](https://github.com/plone/mockup/commit/ccb066abc086388ed6bd0c70609dc686e2da4aff))
+
 
 ## [5.1.1](https://github.com/plone/mockup/compare/5.1.0-alpha.5...5.1.1) (2023-05-31)
 

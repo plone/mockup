@@ -2,7 +2,10 @@ import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import Base from "@patternslib/patternslib/src/core/base";
+import logger from "@patternslib/patternslib/src/core/logging";
 import utils from "../../core/utils";
+
+const log = logger.getLogger("pat-upload");
 
 let Dropzone;
 
@@ -60,6 +63,11 @@ export default Base.extend({
         const UploadTemplate = (await import("./templates/upload.xml")).default;
 
         var self = this;
+
+        if (self.$el.find(".upload-area").length) {
+            log.info("Found already a dropzone on element, skipping!");
+            return;
+        }
 
         if (typeof self.options.allowPathSelection === "undefined") {
             // Set allowPathSelection to true, if we can use path based urls.

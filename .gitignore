@@ -17,3 +17,4 @@ docs/mockup/patterns
 node_modules/
 stamp-yarn
 stats.json
+/_site/*

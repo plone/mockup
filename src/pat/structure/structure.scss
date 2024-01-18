@@ -151,7 +151,10 @@
     }
 
     .upload-container .upload-area {
-        width: 500px;
+        // Why is this pinned?
+        // It's make no sense, it breaks the Text of Upload Button
+        // width: 500px;
+        width: auto;
     }
 
     li.disabled a {
@@ -204,6 +207,7 @@
         position: absolute !important;
 
         .popover-title {
+            font-weight:bold;
             padding: 8px 14px;
             background-color: var(--bs-secondary-bg);
 
@@ -348,6 +352,36 @@
     }
 
     .popover.attribute-columns {
+        min-width: 600px;
+
+        > .popover-title{
+            width:100%;
+            display: block;
+        }
+        
+        >.popover-content{
+            display:flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding:0 1rem;
+            
+            > label{
+                order:1;
+                margin-bottom:0.5rem;
+            }
+            
+            > ul{
+                column-count: 2;
+                order:3;
+                margin-bottom:0.5rem;
+            }
+          
+            > button{
+                order:2;
+                margin-bottom:0.5rem;
+            }
+        }
+        
         ul {
             list-style: none;
             margin: 0 0 1ex 0;
@@ -366,6 +400,7 @@
 
                 label {
                     margin-bottom: 0;
+                    align-items: flex-start;
 
                     input[type="checkbox"] {
                         margin-right: 1ex;
@@ -389,4 +424,8 @@
             }
         }
     }
+}
+
+body.plone-toolbar-top .pat-structure .navbar {
+    top:var(--plone-toolbar-top-height);
 }

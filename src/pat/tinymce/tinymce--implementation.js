@@ -117,7 +117,7 @@ export default class TinyMCE {
         var lang = i18n.currentLanguage;
         if (lang !== "en" && self.options.tiny.language !== "en") {
             try {
-                await import(`tinymce-i18n/langs5/${lang}`);
+                await import(`tinymce-i18n/langs6/${lang}`);
             } catch (e) {
                 log.debug("Could not load TinyMCE language: ", lang);
                 try {
@@ -128,7 +128,7 @@ export default class TinyMCE {
                         lang = lang + "_" + lang.toUpperCase();
                     }
                     log.debug("Trying with: ", lang);
-                    await import(`tinymce-i18n/langs5/${lang}`);
+                    await import(`tinymce-i18n/langs6/${lang}`);
                     self.options.tiny.language = lang;
                 } catch (e) {
                     log.debug("Could not load TinyMCE language. Fallback to English");
@@ -149,6 +149,8 @@ export default class TinyMCE {
         import (`tinymce/skins/ui/${css}/skin.css`);
 
         const tinymce = (await import("tinymce/tinymce")).default;
+        await import("tinymce/models/dom");
+
         let valid_plugins = [];
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
@@ -186,18 +188,15 @@ export default class TinyMCE {
         var tinyOptions = self.options.tiny;
         if (self.options.inline === true) {
             self.options.tiny.inline = true;
+            self.options.tiny.toolbar_mode = "scrolling";
         }
         self.tinyId = self.options.inline ? id + "-editable" : id; // when displaying TinyMCE inline, a separate div is created.
         tinyOptions.selector = "#" + self.tinyId;
-        tinyOptions.addLinkClicked = function () {
-            self.addLinkClicked.apply(self, []);
-        };
-        tinyOptions.addImageClicked = function (file) {
-            self.addImageClicked.apply(self, [file]);
-        };
         // XXX: disabled skin means it wont load css files which we already
         // include in widgets.min.css
         tinyOptions.skin = false;
+        // do not show the "upgrade" button for plugins
+        tinyOptions.promotion = false;
 
         tinyOptions.init_instance_callback = function (editor) {
             if (self.tiny === undefined || self.tiny === null) {
@@ -291,11 +290,22 @@ export default class TinyMCE {
                 return url;
             }
             // otherwise default tiny behavior
-            if (self.tiny.settings.relative_urls) {
+            if (self.tiny.options.get('relative_urls')) {
                 return self.tiny.documentBaseURI.toRelative(url);
             }
-            url = self.tiny.documentBaseURI.toAbsolute(url, self.tiny.settings.remove_script_host);
+            url = self.tiny.documentBaseURI.toAbsolute(url, self.tiny.options.get('remove_script_host'));
             return url;
+        }
+
+        // BBB: TinyMCE 6 has renamed toolbar and menuitem plugins.
+        // map them here until they are updated in Plone's configuration:
+        // menu: "formats" -> "styles"
+        if(tinyOptions?.menu?.format) {
+            tinyOptions.menu.format.items = tinyOptions.menu.format.items.replace('formats', 'styles');
+        }
+        // toolbar: "styleselect" -> "styles"
+        if(tinyOptions?.toolbar) {
+            tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
         }
 
         tinymce.init(tinyOptions);
