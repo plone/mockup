@@ -16,7 +16,7 @@
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "5.3.2",
-        "bootstrap-icons": "1.11.2",
+        "bootstrap-icons": "1.11.3",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
         "datatables.net-bs5": "1.12.1",
@@ -39,9 +39,9 @@
         "jquery.browser": "0.1.0",
         "js-cookie": "^3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
-        "sortablejs": "^1.15.1",
+        "sortablejs": "^1.15.2",
         "tinymce": "^6.8.2",
-        "tinymce-i18n": "^23.12.4",
+        "tinymce-i18n": "^24.1.22",
         "underscore": "^1.13.6"
     },
     "devDependencies": {
