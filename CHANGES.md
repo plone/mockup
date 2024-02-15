@@ -2,6 +2,24 @@
 
 
 
+## [5.2.0-alpha.3](https://github.com/plone/mockup/compare/5.2.0-alpha.2...5.2.0-alpha.3) (2023-12-12)
+
+
+### Bug Fixes
+
+
+* **pat structure:** do not close filter popover when selecting query criterias (firefox) ([40c6b9e](https://github.com/plone/mockup/commit/40c6b9e9fb6163c92c402e215957c8a0530b9641))
+
+
+
+### Maintenance
+
+
+* fix CI setup ([f47e612](https://github.com/plone/mockup/commit/f47e612f6d849bc8f2e5096d0b39ba4b346b7810))
+
+
+* upgrade dependencies ([a2c6eaf](https://github.com/plone/mockup/commit/a2c6eaf109a027b6cf70dbc78872718cbe104431))
+
 ## [5.2.0-alpha.2](https://github.com/plone/mockup/compare/5.2.0-alpha.1...5.2.0-alpha.2) (2023-10-31)
 
 
