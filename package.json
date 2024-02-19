@@ -37,11 +37,11 @@
         "jquery": "3.7.1",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
-        "js-cookie": "^3.0.5",
+        "js-cookie": "3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
-        "sortablejs": "^1.15.2",
-        "tinymce": "^5.10.8",
-        "tinymce-i18n": "^23.12.4",
+        "sortablejs": "1.15.2",
+        "tinymce": "5.10.9",
+        "tinymce-i18n": "24.1.29",
         "underscore": "^1.13.6"
     },
     "devDependencies": {
