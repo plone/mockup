@@ -2002,7 +2002,7 @@
     codejar "^3.6.0"
     highlight.js "<11"
 
-"@patternslib/patternslib@^9.9.10":
+"@patternslib/patternslib@9.9.10":
   version "9.9.10"
   resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-9.9.10.tgz#a4f54b20e8cb3f7089190d38eeebcd0c8ed8f104"
   integrity sha512-kRI2h3fWpoH9YDHjMwk32DtnPGZ6jRQ7i3YLZH9tPwWMq5COjsgpewvPyrLzPFAkfIHsafmcYScGSNNib0CT4g==
@@ -2021,41 +2021,6 @@
     jquery "^3.7.1"
     jquery-jcrop "^0.9.13"
     luxon "3.4.4"
-    marked "^4.3.0"
-    masonry-layout "^4.2.2"
-    moment "^2.29.4"
-    moment-timezone "^0.5.43"
-    photoswipe "^4.1.3"
-    pikaday "^1.8.0"
-    prettier "^2.8.8"
-    screenfull "^6.0.2"
-    select2 "^3.5.1"
-    showdown "^2.1.0"
-    showdown-prettify "^1.3.0"
-    slick-carousel "^1.8.1"
-    slides "git+https://github.com/Patternslib/slides.git"
-    spectrum-colorpicker "^1.8.0"
-    tippy.js "^6.3.7"
-
-"@patternslib/patternslib@^9.9.8":
-  version "9.9.8"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-9.9.8.tgz#95ca85785d6076e6898a2733b498607d2e5fa34c"
-  integrity sha512-2ykS7VJJgBiSyCD13TKu/WkeBojUkm7wh1+M7pFDxwxwqmWIJvZNa5uNBDvPrJamcv3EkYSOQJN9odv9qDg+UA==
-  dependencies:
-    "@fullcalendar/adaptive" "^5.11.3"
-    "@fullcalendar/core" "^5.11.3"
-    "@fullcalendar/daygrid" "^5.11.3"
-    "@fullcalendar/interaction" "^5.11.3"
-    "@fullcalendar/list" "^5.11.3"
-    "@fullcalendar/luxon2" "^5.11.3"
-    "@fullcalendar/timegrid" "^5.11.3"
-    "@stomp/stompjs" "^7.0.0"
-    dompurify "^3.0.6"
-    highlight.js "<11"
-    imagesloaded "^4.1.4"
-    jquery "^3.7.1"
-    jquery-jcrop "^0.9.13"
-    luxon "3.4.3"
     marked "^4.3.0"
     masonry-layout "^4.2.2"
     moment "^2.29.4"
@@ -3282,10 +3247,10 @@ boolbase@^1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
 
-bootstrap-icons@1.11.2:
-  version "1.11.2"
-  resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.11.2.tgz#e1c75daec154e25958db04c4eb3cbda6041e7118"
-  integrity sha512-TgdiPv+IM9tgDb+dsxrnGIyocsk85d2M7T0qIgkvPedZeoZfyeG/j+yiAE4uHCEayKef2RP05ahQ0/e9Sv75Wg==
+bootstrap-icons@1.11.3:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.11.3.tgz#03f9cb754ec005c52f9ee616e2e84a82cab3084b"
+  integrity sha512-+3lpHrCw/it2/7lBL15VR0HEumaBss0+f/Lb6ZvHISn1mlK83jjFpooTLsMWbIjJMDjDjOExMsTxnXSIT4k4ww==
 
 bootstrap@5.3.2:
   version "5.3.2"
@@ -7391,15 +7356,15 @@ lru-cache@^7.14.1:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.18.3.tgz#f793896e0fd0e954a59dfdd82f0773808df6aa89"
   integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
 
-luxon@3.4.3, luxon@^3.3.0:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.3.tgz#8ddf0358a9492267ffec6a13675fbaab5551315d"
-  integrity sha512-tFWBiv3h7z+T/tDaoxA8rqTxy1CHV6gHS//QdaH4pulbq/JuBSGgQspQQqcgnwdAx6pNI7cmvz5Sv/addzHmUg==
-
 luxon@3.4.4:
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.4.tgz#cf20dc27dc532ba41a169c43fdcc0063601577af"
   integrity sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==
+
+luxon@^3.3.0:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.3.tgz#8ddf0358a9492267ffec6a13675fbaab5551315d"
+  integrity sha512-tFWBiv3h7z+T/tDaoxA8rqTxy1CHV6gHS//QdaH4pulbq/JuBSGgQspQQqcgnwdAx6pNI7cmvz5Sv/addzHmUg==
 
 macos-release@^3.1.0:
   version "3.2.0"
@@ -9496,10 +9461,10 @@ socks@^2.7.1:
     ip "^2.0.0"
     smart-buffer "^4.2.0"
 
-sortablejs@^1.15.1:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.1.tgz#9a35f52cdff449fb42ea8ecf222f3468d76e0a47"
-  integrity sha512-P5Cjvb0UG1ZVNiDPj/n4V+DinttXG6K8n7vM/HQf0C25K3YKQTQY6fsr/sEGsJGpQ9exmPxluHxKBc0mLKU1lQ==
+sortablejs@^1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.15.2.tgz#4e9f7bda4718bd1838add9f1866ec77169149809"
+  integrity sha512-FJF5jgdfvoKn1MAKSdGs33bIqLi3LmsgVTliuX6iITj834F+JRQZN90Z93yql8h0K2t0RwDPBmxwlbZfDcxNZA==
 
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.2:
   version "1.0.2"
