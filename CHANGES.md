@@ -10,14 +10,6 @@
 
 * dependency upgrades ([73c874f](https://github.com/plone/mockup/commit/73c874fbdc9d276ef119cdb86a9bd48f14e50997))
 
-## [5.1.8](https://github.com/plone/mockup/compare/5.1.7...5.1.8) (2024-02-21)
-
-
-### Maintenance
-
-
-* dependency upgrades ([73c874f](https://github.com/plone/mockup/commit/73c874fbdc9d276ef119cdb86a9bd48f14e50997))
-
 ## [5.1.7](https://github.com/plone/mockup/compare/5.1.6...5.1.7) (2023-12-12)
 
 
