@@ -2,6 +2,14 @@
 
 
 
+## [5.1.9](https://github.com/plone/mockup/compare/5.1.8...5.1.9) (2024-02-21)
+
+
+### Maintenance
+
+
+* upgrade Bootstrap 5.3.3 ([6805875](https://github.com/plone/mockup/commit/6805875f8894e496c7bda60813c85ac4aa6f19d4))
+
 ## [5.1.8](https://github.com/plone/mockup/compare/5.1.7...5.1.8) (2024-02-21)
 
 
