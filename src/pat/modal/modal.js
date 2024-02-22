@@ -914,10 +914,10 @@ export default Base.extend({
                 self.$el.parents(self.options.backdrop),
                 self.options.backdropOptions
             ),
-            zIndex = self.options.backdropOptions.zIndex || 1041;
+            zIndex = parseInt(self.options.backdropOptions.zIndex || 1040) + 1;
 
         $(self.options.zIndexSelector).each(function () {
-            zIndex = Math.max(zIndex, parseInt($(this).css("zIndex")) + 1 || 1041);
+            zIndex = Math.max(zIndex, parseInt($(this).css("zIndex") || 1040) + 1);
         });
 
         self.$wrapper = $("<div/>")
