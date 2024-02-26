@@ -689,7 +689,7 @@ export default Base.extend({
             let yMax = window.innerHeight || document.documentElement.clientHeight;
             const relitem_rect = this.el.parentElement.getBoundingClientRect();
             const element = $(
-                ".pat-relateditems-dropdown.select2-drop-active .select2-results"
+                "#select2-drop.pat-relateditems-dropdown.select2-drop-active .select2-results"
             )[0];
             const rect = element.getBoundingClientRect();
             const maxHeight = ((relitem_rect.top > rect.top) ? relitem_rect.top : yMax - rect.top) - 18;
