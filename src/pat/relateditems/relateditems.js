@@ -687,11 +687,12 @@ export default Base.extend({
         this.renderToolbar();
         this.$el.on("select2-loaded", () => {
             let yMax = window.innerHeight || document.documentElement.clientHeight;
+            const relitem_rect = this.el.parentElement.getBoundingClientRect();
             const element = $(
                 ".pat-relateditems-dropdown.select2-drop-active .select2-results"
             )[0];
             const rect = element.getBoundingClientRect();
-            const maxHeight = yMax - rect.top - 18;
+            const maxHeight = ((relitem_rect.top > rect.top) ? relitem_rect.top : yMax - rect.top) - 18;
             $(element).css("max-height", `${maxHeight}px`);
         });
 
