@@ -13,17 +13,6 @@
 
 * correct selector for current select2 results list for calculating max-height ([0ecd52d](https://github.com/plone/mockup/commit/0ecd52da12be524a4312e0238e51bef30645ff0e))
 
-## [5.1.10](https://github.com/plone/mockup/compare/5.1.9...5.1.10) (2024-02-26)
-
-
-### Bug Fixes
-
-
-* calculate select2 results max-height correctly when they are opened as "dropup" ([44b8544](https://github.com/plone/mockup/commit/44b854400df60e5b525d1cf856b71e51d85a03fb))
-
-
-* correct selector for current select2 results list for calculating max-height ([0ecd52d](https://github.com/plone/mockup/commit/0ecd52da12be524a4312e0238e51bef30645ff0e))
-
 ## [5.1.9](https://github.com/plone/mockup/compare/5.1.8...5.1.9) (2024-02-21)
 
 
