@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-alpha.5](https://github.com/plone/mockup/compare/5.2.0-alpha.4...5.2.0-alpha.5) (2024-02-27)
+
+
+### Bug Fixes
+
+
+* fix duplicating image node when updateing already inserted image. ([d7c1ae7](https://github.com/plone/mockup/commit/d7c1ae7f4992dd0874a64d11ef561f597b2f96db))
+
 ## [5.2.0-alpha.4](https://github.com/plone/mockup/compare/5.2.0-alpha.3...5.2.0-alpha.4) (2024-02-26)
 
 
