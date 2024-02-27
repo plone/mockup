@@ -691,8 +691,10 @@ export default Base.extend({
         self.tiny.selection.setRng(self.rng);
         var cssclasses = [
             "image-richtext",
-            self.$align.val(),
         ];
+        if(self.$align.val()) {
+            cssclasses.push(self.$align.val());
+        }
         if(self.linkType !== "externalImage"){
             cssclasses.push("picture-variant-" + self.$scale.val())
         }
@@ -702,19 +704,16 @@ export default Base.extend({
         if (enableImageZoom) {
             cssclasses.push("zoomable");
         }
-        var data = $.extend(
-            true,
-            {},
-            {
-                "src": src,
-                "title": title ? title : null,
-                "alt": self.$alt.val(),
-                "class": cssclasses.join(" "),
-                "data-linkType": self.linkType,
-                "data-scale": self.getScaleFromSrcset(self.$scale.val()),
-            },
-            self.linkTypes[self.linkType].attributes()
-        );
+        var data = {
+            "src": src,
+            "title": title ? title : null,
+            "alt": self.$alt.val(),
+            "class": cssclasses.join(" "),
+            "data-linkType": self.linkType,
+            "data-scale": self.getScaleFromSrcset(self.$scale.val()),
+            ...self.linkTypes[self.linkType].attributes()
+        };
+
         if(self.linkType !== "externalImage"){
             data["data-picturevariant"] = self.$scale.val();
         }
@@ -724,12 +723,12 @@ export default Base.extend({
         }
         if (self.imgElm && !self.imgElm.getAttribute("data-mce-object")) {
             const imgWidth = self.dom.getAttrib(self.imgElm, "width");
-            const imgHight = self.dom.getAttrib(self.imgElm, "height");
+            const imgHeight = self.dom.getAttrib(self.imgElm, "height");
             if (imgWidth) {
                 data.width = imgWidth;
             }
-            if (imgHight) {
-                data.height = imgHight;
+            if (imgHeight) {
+                data.height = imgHeight;
             }
         } else {
             self.imgElm = null;
@@ -742,13 +741,14 @@ export default Base.extend({
             };
         }
 
-        data.id = "__mcenew";
-        var html_inner = self.dom.createHTML("img", data);
-        var html_string;
-        html_string = html_inner;
-        self.tiny.insertContent(html_string);
-        self.imgElm = self.dom.get("__mcenew");
-        self.dom.setAttrib(self.imgElm, "id", null);
+        var newImgElm = self.dom.create("img", data);
+
+        if(self.imgElm && self.imgElm.tagName.toLowerCase() == "img") {
+            self.imgElm.replaceWith(newImgElm);
+        } else {
+            self.rng.insertNode(newImgElm);
+        }
+        self.imgElm = newImgElm;
 
         waitLoad(self.imgElm);
         if (self.imgElm.complete) {
