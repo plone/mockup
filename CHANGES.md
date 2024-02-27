@@ -2,6 +2,14 @@
 
 
 
+## [5.1.11](https://github.com/plone/mockup/compare/5.1.10...5.1.11) (2024-02-27)
+
+
+### Bug Fixes
+
+
+* fix duplicating image node when updateing already inserted image. ([48e1852](https://github.com/plone/mockup/commit/48e1852c9f6603536612e188f1d47a51063e5ec8))
+
 ## [5.1.10](https://github.com/plone/mockup/compare/5.1.9...5.1.10) (2024-02-26)
 
 
