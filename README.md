@@ -42,7 +42,7 @@ There are several options to integrate Mockup.
 ## Mockup overview
 
 Mockup is a JavaScript UI library which provides widgets, apps, and functionality for the Plone Classic UI frontend.
-It is based on Patternslib(XXX), and provides its functionality through patterns.
+It is based on Patternslib, and provides its functionality through patterns.
 Patterns are initialized and activated when a triggering CSS selector is found in the DOM tree.
 For example, the related items widget is initialized on a form input field with the CSS class `pat-relateditems`.
 The configuration is done via data attributes.
