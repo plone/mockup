@@ -2,6 +2,14 @@
 
 
 
+## [5.1.12](https://github.com/plone/mockup/compare/5.1.11...5.1.12) (2024-02-28)
+
+
+### Maintenance
+
+
+* explicit datatables.net* resolution versions ([9101b3a](https://github.com/plone/mockup/commit/9101b3a192eb4d13f9159cbe2734ae884dbbeb54))
+
 ## [5.1.11](https://github.com/plone/mockup/compare/5.1.10...5.1.11) (2024-02-27)
 
 
