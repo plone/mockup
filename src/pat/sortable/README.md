@@ -5,6 +5,9 @@ title: Sortable
 
 # Sortable pattern.
 
+A pattern to make listings sortable.
+
+
 ## Configuration
 
 |   Option   |       Type       |     Default     |                                              Description                                              |

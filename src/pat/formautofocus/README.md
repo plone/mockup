@@ -5,6 +5,9 @@ title: Formautofocus
 
 # Formautofocus pattern.
 
+Automatically set the focus on a form input field.
+
+
 ## Configuration
 
 |  Option   |  Type  |                     Default                     | Description |

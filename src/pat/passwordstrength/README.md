@@ -5,6 +5,9 @@ title: Password strength
 
 # Password strength pattern.
 
+Check the strength of a password.
+
+
 ## Configuration
 
 | Option |  Type  | Default |                   Description                   |

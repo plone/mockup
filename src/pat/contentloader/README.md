@@ -7,6 +7,13 @@ title: Content loader
 
 Load remote or local content into a target.
 
+---
+**Deprecated**
+
+Please use `pat-inject` from Patternslib instead.
+
+---
+
 ## Configuration
 
 | Option  |  Type  | Default |                                                                            Description                                                                            |

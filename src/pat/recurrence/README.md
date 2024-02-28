@@ -5,6 +5,8 @@ title: Recurrence
 
 # Recurrence pattern.
 
+Show the recurrence widget.
+
 ## Configuration
 
 |    Option     |  Type  | Default |             Description              |

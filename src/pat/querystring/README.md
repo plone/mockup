@@ -5,6 +5,8 @@ title: Querystring
 
 # Querystring
 
+Show the querystring selection app.
+
 ## Configuration
 
 |             Option             |  Type   |                    Default                     |                                                                    Description                                                                    |
