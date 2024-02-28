@@ -2,6 +2,32 @@
 
 
 
+## [5.2.0-alpha.5](https://github.com/plone/mockup/compare/5.2.0-alpha.4...5.2.0-alpha.5) (2024-02-27)
+
+
+### Bug Fixes
+
+
+* pat-tinymce: fix duplicating image node when updateing already inserted image. ([d7c1ae7](https://github.com/plone/mockup/commit/d7c1ae7f4992dd0874a64d11ef561f597b2f96db))
+
+## [5.2.0-alpha.4](https://github.com/plone/mockup/compare/5.2.0-alpha.3...5.2.0-alpha.4) (2024-02-26)
+
+
+### Bug Fixes
+
+
+* calculate select2 results max-height correctly when they are opened as "dropup" ([4dfebfe](https://github.com/plone/mockup/commit/4dfebfeed08b9c8bc7ffd0c586f1a29c781dd70d))
+
+
+* correct selector for current select2 results list for calculating max-height ([6a51881](https://github.com/plone/mockup/commit/6a51881f1866fbda68f7a4ed517ba6f03cefb63a))
+
+
+
+### Maintenance
+
+
+* upgrade dependencies ([005aa14](https://github.com/plone/mockup/commit/005aa1405f7b275c4c5123bab9bf0019efcef6c8))
+
 ## [5.2.0-alpha.3](https://github.com/plone/mockup/compare/5.2.0-alpha.2...5.2.0-alpha.3) (2023-12-12)
 
 
