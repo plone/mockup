@@ -727,5 +727,11 @@ describe("Structure", function () {
     it("text drag and drop ordering", async function() {
         registry.scan(this.$el);
         await utils.timeout(100);
+
+        // check for "order-support" wrapper class
+        // this would have prevented issue https://github.com/plone/mockup/pull/1371
+        expect(this.$el.find(".order-support").length).toEqual(1)
+
+        // XXX: actually simulate mousedown/move/up somehow
     });
 });
