@@ -155,7 +155,7 @@ export default class TinyMCE {
         let valid_plugins = [];
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
-            if (plugin == "plonelink" || plugin == "ploneimage" || plugin=="plonelink") {
+            if (plugin == "plonelink" || plugin == "ploneimage" || plugin=="help") {
                 valid_plugins.push(plugin);
                 continue;
             }
