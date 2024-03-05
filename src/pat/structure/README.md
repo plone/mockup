@@ -5,6 +5,9 @@ title: Structure
 
 # Structure pattern.
 
+Plone's folder contents app.
+
+
 ## Configuration
 
 |     Option      |  Type  | Default |               Description                |

@@ -42,6 +42,13 @@ function getQueryVariable(url, variable) {
 
 var extraDataJsonItem = null;
 
+const mockFetch =
+    (json = {}) =>
+    () =>
+        Promise.resolve({
+            json: () => Promise.resolve(json),
+        });
+
 /* ==========================
     TEST: AppView constructor internal attribute/object correctness
 ========================== */
@@ -127,6 +134,9 @@ describe("Structure", function () {
         this.server.autoRespond = true;
         this.server.autoRespondAfter = 0;
 
+        // stub window.confirm
+        global.confirm = () => true;
+
         this.server.respondWith("GET", /data.json/, function (xhr) {
             var batch = JSON.parse(getQueryVariable(xhr.url, "batch"));
             var query = JSON.parse(getQueryVariable(xhr.url, "query"));
@@ -199,16 +209,6 @@ describe("Structure", function () {
                 })
             );
         });
-        this.server.respondWith("POST", "/paste", function (xhr) {
-            xhr.respond(
-                200,
-                { "Content-Type": "application/json" },
-                JSON.stringify({
-                    status: "success",
-                    msg: "pasted",
-                })
-            );
-        });
         this.server.respondWith("POST", "/moveitem", function (xhr) {
             xhr.respond(
                 200,
@@ -216,16 +216,6 @@ describe("Structure", function () {
                 JSON.stringify({
                     status: "success",
                     msg: "moved " + xhr.requestBody,
-                })
-            );
-        });
-        this.server.respondWith("POST", "/setDefaultPage", function (xhr) {
-            xhr.respond(
-                200,
-                { "Content-Type": "application/json" },
-                JSON.stringify({
-                    status: "success",
-                    msg: "defaulted",
                 })
             );
         });
@@ -270,13 +260,32 @@ describe("Structure", function () {
         });
 
         var structure = {
-            vocabularyUrl: "/data.json",
+            vocabularyUrl: "http://localhost:9876/data.json",
             uploadUrl: "/upload",
             moveUrl: "/moveitem",
-            indexOptionsUrl: "./test-querystringcriteria.json",
             contextInfoUrl: "{path}/contextInfo",
-            setDefaultPageUrl: "/setDefaultPage",
+            setDefaultPageUrl: "http://localhost:9876/setDefaultPage",
             defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
+            buttons: [
+                {
+                    "tooltip": "Cut",
+                    "id": "cut",
+                    "icon": "plone-cut",
+                    "url": "http://localhost:9876/cut"
+                },
+                {
+                    "tooltip": "Copy",
+                    "id": "copy",
+                    "icon": "plone-copy",
+                    "url": "http://localhost:9876/copy"
+                },
+                {
+                    "tooltip": "Paste",
+                    "id": "paste",
+                    "icon": "plone-paste",
+                    "url": "http://localhost:9876/paste"
+                },
+            ],
             urlStructure: {
                 base: "http://localhost:9876",
                 appended: "/folder_contents",
@@ -306,6 +315,7 @@ describe("Structure", function () {
         sinon.restore();
         document.body.innerHTML = "";
         structureUrlChangedPath = "";
+        delete global.confirm;
     });
 
     it("initialize", async function () {
@@ -430,19 +440,19 @@ describe("Structure", function () {
         expect(this.$el.css("overflow")).not.toEqual("hidden");
     });
 
-    it.skip("test rearrange button", async function () {
+    it("test rearrange button", async function () {
         /* test not working in firefox */
         registry.scan(this.$el);
         await utils.timeout(100);
         var $popover = this.$el.find(".popover.rearrange");
-        this.$el.find("#btn-rearrange").trigger("click");
+        this.$el.find("#btn-structure-rearrange").trigger("click");
         await utils.timeout(100);
         expect($popover.hasClass("active")).toEqual(true);
         $popover.find("button").trigger("click");
         await utils.timeout(100);
         expect($popover.hasClass("active")).toEqual(false);
-        expect(this.$el.find(".order-support .fc-status").html()).toContain("rearrange");
-        expect(this.app.$(".fc-status").hasClass("alert-success"));
+        expect(this.$el.find(".fc-status").html()).toContain("rearrange");
+        expect(this.$el.find(".fc-status").hasClass("alert-success"));
     });
 
     it("test select all", async function () {
@@ -503,7 +513,7 @@ describe("Structure", function () {
         );
     });
 
-    it.skip("test select displayed columns", async function () {
+    it("test select displayed columns", async function () {
         registry.scan(this.$el);
         await utils.timeout(100);
         var $row = this.$el.find("table thead tr").eq(0);
@@ -578,7 +588,13 @@ describe("Structure", function () {
         );
     });
 
-    it.skip("test itemRow default actionmenu item", async function () {
+    it("test itemRow default actionmenu item", async function () {
+        global.fetch = jest.fn().mockImplementation(
+            mockFetch({
+                status: "success",
+                msg: "defaulted",
+            }));
+
         registry.scan(this.$el);
         await utils.timeout(200);
 
@@ -595,10 +611,19 @@ describe("Structure", function () {
         $("a.set-default-page", item).trigger("click");
         await utils.timeout(100);
         expect(this.$el.find(".fc-status").html()).toContain("defaulted");
+
+        global.fetch.mockClear();
+        delete global.fetch;
     });
 
-    it.skip("test itemRow actionmenu paste click", async function () {
-        // item pending to be pasted
+    it("test itemRow actionmenu paste click", async function () {
+        global.fetch = jest.fn().mockImplementation(
+            mockFetch({
+                status: "success",
+                msg: "pasted",
+            }));
+
+            // item pending to be pasted
         Cookies.set("__cp", "dummy");
         await utils.timeout(100);
         registry.scan(this.$el);
@@ -611,6 +636,9 @@ describe("Structure", function () {
         $("a.pasteItem", item0).trigger("click");
         await utils.timeout(100);
         expect(this.$el.find(".fc-status").html()).toContain('Pasted into "Folder"');
+
+        global.fetch.mockClear();
+        delete global.fetch;
     });
 
     it("test itemRow actionmenu move-top click", async function () {
@@ -662,7 +690,7 @@ describe("Structure", function () {
         );
     });
 
-    it.skip("test navigate to folder push states", async function () {
+    it("test navigate to folder push states", async function () {
         registry.scan(this.$el);
         await utils.timeout(200);
         var item = this.$el.find(".itemRow").eq(0);
@@ -694,5 +722,16 @@ describe("Structure", function () {
         $(window).trigger("popstate");
         await utils.timeout(100);
         expect(structureUrlChangedPath).toEqual("/folder/folder");
+    });
+
+    it("text drag and drop ordering", async function() {
+        registry.scan(this.$el);
+        await utils.timeout(100);
+
+        // check for "order-support" wrapper class
+        // this would have prevented issue https://github.com/plone/mockup/pull/1371
+        expect(this.$el.find(".order-support").length).toEqual(1)
+
+        // XXX: actually simulate mousedown/move/up somehow
     });
 });

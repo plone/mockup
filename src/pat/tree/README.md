@@ -5,6 +5,8 @@ title: Tree
 
 # Tree
 
+Renders a navigable tree from a data structure.
+
 Tree pattern.
 
 ## Configuration

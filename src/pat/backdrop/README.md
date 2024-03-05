@@ -5,6 +5,15 @@ title: Backdrop
 
 # Backdrop pattern.
 
+Renders a dark background.
+
+---
+**Deprecated**
+
+This pattern is deprecated. Just use plain CSS instead.
+
+---
+
 ## Configuration
 
 |     Option      |  Type   |      Default      |                  Description                   |

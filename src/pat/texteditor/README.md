@@ -5,6 +5,15 @@ title: Text Editor
 
 # Text Editor pattern.
 
+Show a code editor.
+
+---
+**Deprecated**
+
+This pattern is deprecated. Use Patternslib's pat-code-editor instead.
+
+---
+
 ## Configuration
 
 |     Option      |  Type   |          Default           |                          Description                          |

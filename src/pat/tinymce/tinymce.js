@@ -126,7 +126,7 @@ export default Base.extend({
             ],
             menubar: "edit table format tools view insert",
             toolbar:
-                "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage",
+                "undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage",
             //'autoresize_max_height': 900,
             height: 400,
             language: "en",

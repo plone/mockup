@@ -5,7 +5,8 @@ title: Formunloadalert
 
 # Formunloadalert pattern.
 
-PATTERN description
+Show a warning if the user leaves an unsaved form.
+
 
 ## Configuration
 

@@ -5,7 +5,8 @@ title: Related items
 
 # Related items
 
-This is the related items pattern.
+Show a widget to select related items.
+
 
 ## Configuration
 
