@@ -176,7 +176,7 @@ export default class TinyMCE {
         HelpModal = (await import("./js/help")).default;
 
         var self = this;
-        self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = self.helpModal = null;
+        self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
         // tiny needs an id in order to initialize. Creat it if not set.
         var id = utils.setId(self.$el);
 
