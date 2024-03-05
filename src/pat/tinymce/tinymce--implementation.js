@@ -7,6 +7,7 @@ import utils from "../../core/utils";
 const log = logger.getLogger("tinymce--implementation");
 
 let LinkModal = null;
+let HelpModal = null;
 
 export default class TinyMCE {
     constructor(el, options) {
@@ -154,7 +155,7 @@ export default class TinyMCE {
         let valid_plugins = [];
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
-            if (plugin == "plonelink" || plugin == "ploneimage") {
+            if (plugin == "plonelink" || plugin == "ploneimage" || plugin=="help") {
                 valid_plugins.push(plugin);
                 continue;
             }
@@ -172,6 +173,7 @@ export default class TinyMCE {
         await import("tinymce/icons/default");
 
         LinkModal = (await import("./js/links")).default;
+        HelpModal = (await import("./js/help")).default;
 
         var self = this;
         self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
