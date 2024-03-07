@@ -1,19 +1,19 @@
 <script>
-    import { onMount } from "svelte";
-    import { onDestroy } from "svelte";
+    import registry from "@patternslib/patternslib/src/core/registry";
+    import utils from "@patternslib/patternslib/src/core/utils";
+    import { onDestroy, onMount } from "svelte";
+    import * as animateScroll from "svelte-scrollto";
+    import { fly } from "svelte/transition";
+    import contentStore, { config_unsubscribe } from "./ContentStore";
+    import { clickOutside } from "./clickOutside";
+    import { resolveIcon } from './resolveIcon.js';
     import {
-        currentPath,
         config,
+        currentPath,
         selectedItems,
         selectedUids,
         showContentBrowser,
     } from "./stores.js";
-    import {resolveIcon} from './resolveIcon.js';
-    import contentStore from "./ContentStore";
-    import { config_unsubscribe } from "./ContentStore";
-    import { clickOutside } from "./clickOutside";
-    import { fly } from "svelte/transition";
-    import * as animateScroll from "svelte-scrollto";
     // import Keydown from "svelte-keydown";
 
     animateScroll.setGlobalOptions({
@@ -27,7 +27,7 @@
     export let attributes;
     export let vocabularyUrl;
     export const contentItems = contentStore();
-
+    let showUpload = false;
     let previewItem = { UID: "" };
 
     let vw = Math.max(
@@ -79,9 +79,13 @@
             const uploadEl = document.querySelector('.uploadify-me');
             uploadEl.classList.add("pat-upload");
             this.upload_pattern_instance = new PatternUpload(uploadEl, options);
-            debugger
+            this.upload_pattern_instance.currentPath = $currentPath;
+            showUpload = true;
+            const patUploadEl = document.querySelector('.upload-wrapper');
+            registry.scan(patUploadEl);
+            await utils.timeout(1);
             uploadEl.addEventListener("uploadAllCompleted", function () {
-                debugger
+                // debugger
                 // function (evt, data) {
                 //     if (self.linkTypes.image) {
                 //         self.linkTypes.image.set(data.data.UID);
@@ -303,6 +307,12 @@
                             >
                         </div>
                     {/if}
+                    {#if showUpload}
+                    <div class="upload-wrapper">
+                        <div class="pat-upload" data-pat-upload="hiddenInputContainer:.content-browser">upload</div>
+                    </div>
+                    {/if}
+
                 </div>
             {:catch error}
                 <p style="color: red">{error.message}</p>
