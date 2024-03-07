@@ -7,7 +7,6 @@ import _ from "underscore";
 import tinymce from "tinymce/tinymce";
 import "../../autotoc/autotoc";
 import "../../modal/modal";
-import PatternUpload from "../../upload/upload";
 import ImageTemplate from "../templates/image.xml";
 import LinkTemplate from "../templates/link.xml";
 
@@ -83,11 +82,12 @@ var InternalLink = LinkType.extend({
     name: "internallinktype",
     trigger: ".pat-internallinktype-dummy",
     init: async function () {
-        if (!this.getEl().length) {
+        const linkEl = this.getEl();
+        if (!linkEl) {
             return;
         }
         LinkType.prototype.init.call(this);
-        this.getEl().classList.add("pat-contentbrowser");
+        linkEl.classList.add("pat-contentbrowser");
         await this.createContentBrowser();
     },
 
