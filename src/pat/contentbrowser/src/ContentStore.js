@@ -84,7 +84,7 @@ export default function () {
         }
     };
 
-    store.get = async (path, searchTerm) => {
+    store.get = async (path, searchTerm, levelData) => {
         let parts = path.split("/") || [];
         const depth = parts.length >= cfg.maxDepth ? cfg.maxDepth : parts.length;
         let paths = [];
@@ -106,13 +106,10 @@ export default function () {
         for (var p of paths) {
             pathCounter++;
             const isFirstPath = pathCounter == 1;
-            console.log(isFirstPath, p);
             const skipCache = isFirstPath && searchTerm;
             let level = {};
             const c = get(cache);
-            console.log(searchTerm)
             if (Object.keys(c).indexOf(p) === -1 || skipCache) {
-                console.log("not in cache: ", p);
                 let query = {
                     method: "GET"
                 };
@@ -133,11 +130,11 @@ export default function () {
                     });
                 }
             } else {
-                console.log("in cache: ", p);
                 level = c[p];
             }
-            // console.log(get(cache));
             level.path = p;
+            level.UID = levelData?.UID;
+            level.Title = levelData?.Title;
             levels = [level, ...levels];
         }
         store.set(levels);
