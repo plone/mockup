@@ -6,7 +6,9 @@
     import { fly } from "svelte/transition";
     import contentStore, { config_unsubscribe } from "./ContentStore";
     import { clickOutside } from "./clickOutside";
-    import { resolveIcon } from './resolveIcon.js';
+    import { resolveIcon } from "./resolveIcon.js";
+    import Upload from "../../upload/upload";
+
     import {
         config,
         currentPath,
@@ -23,17 +25,15 @@
     });
 
     export let maxDepth;
-    export let basePath = '';
+    export let basePath = "";
     export let attributes;
     export let vocabularyUrl;
     export const contentItems = contentStore();
     let showUpload = false;
     let previewItem = { UID: "" };
+    let currentLevelData = {};
 
-    let vw = Math.max(
-        document.documentElement.clientWidth || 0,
-        window.innerWidth || 0
-    );
+    let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     // let vh = Math.max(
     //     document.documentElement.clientHeight || 0,
     //     window.innerHeight || 0
@@ -41,10 +41,7 @@
     let breakPoint = ["xs", 0];
 
     function getBreakPoint() {
-        vw = Math.max(
-            document.documentElement.clientWidth || 0,
-            window.innerWidth || 0
-        );
+        vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         //vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
         if (vw >= 576) {
             breakPoint = ["sm", 576];
@@ -70,89 +67,37 @@
     });
 
     async function upload() {
-            const options = {
-                uploadMultiple: false,
-                maxFiles: 1,
-                showTitle: false,
-            }
-            const PatternUpload = (await import("../../upload/upload")).default;
-            const uploadEl = document.querySelector('.uploadify-me');
-            uploadEl.classList.add("pat-upload");
-            this.upload_pattern_instance = new PatternUpload(uploadEl, options);
-            this.upload_pattern_instance.currentPath = $currentPath;
-            showUpload = true;
-            const patUploadEl = document.querySelector('.upload-wrapper');
-            registry.scan(patUploadEl);
-            await utils.timeout(1);
-            uploadEl.addEventListener("uploadAllCompleted", function () {
-                // debugger
-                // function (evt, data) {
-                //     if (self.linkTypes.image) {
-                //         self.linkTypes.image.set(data.data.UID);
-                //         $(
-                //             "#" + $("#tinylink-image", self.modal.$modal).data("navref")
-                //         ).trigger("click");
-                //     } else {
-                //         self.linkTypes.internal.set(data.data.UID);
-                //         $(
-                //             "#" +
-                //                 $("#tinylink-internal", self.modal.$modal).data("navref")
-                //         ).trigger("click");
-                //     }
-                // }.bind(self)
-
-            });
-                // var patUpload = self.$upload.data().patternUpload;
-                // if (patUpload.dropzone.files.length > 0) {
-                //     patUpload.processUpload();
-                //     // eslint-disable-next-line no-unused-vars
-                //     self.$upload.on("uploadAllCompleted", function (evt, data) {
-                //         var counter = 0;
-                //         var checkUpload = function () {
-                //             if (counter < 5 && !self.linkTypes[self.linkType].value()) {
-                //                 counter += 1;
-                //                 setTimeout(checkUpload, 100);
-                //                 return;
-                //             } else {
-                //                 var href = self.getLinkUrl();
-                //                 self.updateImage(href);
-                //                 self.hide();
-                //             }
-                //         };
-                //         checkUpload();
-                //     });
-                // }
-            // self.$upload.on(
-            //     "uploadAllCompleted",
-            //     function (evt, data) {
-            //         if (self.linkTypes.image) {
-            //             self.linkTypes.image.set(data.data.UID);
-            //             $(
-            //                 "#" + $("#tinylink-image", self.modal.$modal).data("navref")
-            //             ).trigger("click");
-            //         } else {
-            //             self.linkTypes.internal.set(data.data.UID);
-            //             $(
-            //                 "#" +
-            //                     $("#tinylink-internal", self.modal.$modal).data("navref")
-            //             ).trigger("click");
-            //         }
-            //     }.bind(self)
-            // );
+        showUpload = true;
+        await utils.timeout(1);
+        const uploadEl = document.querySelector(".upload-wrapper");
+        uploadEl.classList.add("pat-upload");
+        const patUpload = new Upload(uploadEl, {
+            currentPath: $currentPath,
+            allowPathSelection: false,
+            hiddenInputContainer: ".upload-wrapper",
+            success: () => {
+                debugger;
+            },
+        });
     }
 
     function changePath(item) {
+        showUpload = false;
+        currentLevelData = {};
         if (item === "/") {
             currentPath.set(item);
             previewItem = { UID: "" };
         } else if (item.is_folderish) {
             currentPath.set(item.path);
             previewItem = { UID: "" };
+            currentLevelData = {
+                UID: item.UID,
+                Title: item.Title,
+            };
+            console.log(JSON.stringify(currentLevelData));
         } else {
             const pathParts = item.path.split("/");
-            const folderPath = pathParts
-                .slice(0, pathParts.length - 1)
-                .join("/");
+            const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
             currentPath.set(folderPath);
             previewItem = item;
         }
@@ -164,6 +109,8 @@
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
         $showContentBrowser = false;
         previewItem = { UID: "" };
+        console.log($selectedItems);
+        console.log($selectedUids);
     }
 
     function cancelSelection() {
@@ -191,19 +138,19 @@
     }
 
     function filterItems() {
-        console.log($contentItems, this.value)
+        console.log($contentItems, this.value);
         let timeoutId;
-        if(timeoutId){
+        if (timeoutId) {
             clearTimeout(timeoutId);
         }
         timeoutId = setTimeout(() => {
             contentItems.get($currentPath, this.value);
-        }, 300)
+        }, 300);
     }
 
     $: {
         if ($config.vocabularyUrl) {
-            contentItems.get($currentPath);
+            contentItems.get($currentPath, null, currentLevelData);
             // contentItems.set([])
         }
     }
@@ -227,34 +174,35 @@
             use:clickOutside
             on:click_outside={cancelSelection}
         >
-            <div class="toolBar">
+            <div class="toolBar navbar">
                 <button
                     type="button"
                     class="toolbarAction"
                     tabindex="0"
                     on:keydown={() => changePath("/")}
                     on:click={() => changePath("/")}
-                ><svg use:resolveIcon={{iconName: 'house'}} /></button>
-                <span class="path">{$currentPath}</span>
+                    ><svg use:resolveIcon={{ iconName: "house" }} /></button
+                ><span class="path">{$currentPath}</span>
                 <div class="filter">
-                    <label for="filter">filter</label> <input type="text" name="filter" on:input={filterItems}>
+                    <input type="text" name="filter" on:input={filterItems} />
+                    <label for="filter"
+                        ><svg use:resolveIcon={{ iconName: "search" }} /></label
+                    >
                 </div>
                 <button
                     type="button"
-                    class="toolbarAction"
+                    class="upload btn btn-secondary btn-sm"
                     tabindex="0"
                     on:keydown={upload}
                     on:click={upload}
-                ><svg use:resolveIcon={{iconName: 'upload'}} /></button>
-                <button
-                    class="btn btn-secondary btn-sm"
-                    tabindex="0"
-                    on:click={() => cancelSelection()}>cancel</button
+                    ><svg use:resolveIcon={{ iconName: "upload" }} /> upload</button
                 >
-            </div>
-            <input type="text" name="upload" style="display:none" />
-            <div class="uploadify-me">
-
+                <button
+                    class="btn btn-link text-white"
+                    tabindex="0"
+                    on:click={() => cancelSelection()}
+                    ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
+                >
             </div>
             {#await $contentItems}
                 <p>...loading content items</p>
@@ -265,7 +213,22 @@
                             class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
                             in:fly|local={{ duration: 300 }}
                         >
-                            <!-- <div class="levelPath">{level.path}</div> -->
+                            <div class="levelToolbar">
+                                {#if i > 0}
+                                    <button
+                                        class="btn btn-primary btn-sm"
+                                        disabled={!isSelectable(level)}
+                                        on:click={() => selectItem(level)}
+                                    >
+                                        select
+                                    </button>
+                                {/if}
+                                <div class="levelActions">
+                                    <button class="btn btn-link btn-sm grid-view">
+                                        <svg use:resolveIcon={{ iconName: "grid" }} />
+                                    </button>
+                                </div>
+                            </div>
                             {#each level.results as item, n}
                                 <div
                                     class="contentItem{n % 2 == 0
@@ -281,38 +244,51 @@
                                     on:click={() => changePath(item)}
                                 >
                                     <div title={item.portal_type}>
+                                        <svg
+                                            use:resolveIcon={{
+                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                            }}
+                                        />
                                         {item.Title}
                                     </div>
+                                    {#if item.is_folderish}
+                                        <svg
+                                            use:resolveIcon={{
+                                                iconName: "arrow-right-circle",
+                                            }}
+                                        />
+                                    {/if}
                                 </div>
                             {/each}
                         </div>
                     {/each}
                     {#if previewItem.UID}
                         <div class="preview">
-                            <h4>{previewItem.Title}</h4>
-                            <p>{previewItem.Description}</p>
-                            {#if previewItem.portal_type === "Image"}
-                                <div>
-                                    <img
-                                        src="{previewItem.getURL}/@@images/image/preview"
-                                        alt={previewItem.Title}
-                                    />
-                                </div>
-                            {/if}
-                            <button
-                                class="btn btn-primary btn-lg"
-                                on:click={() => selectItem(previewItem)}
-                                disabled={!isSelectable(previewItem)}
-                                >select</button
-                            >
+                            <div class="levelToolbar">
+                                <button
+                                    class="btn btn-primary btn-sm"
+                                    disabled={!isSelectable(previewItem)}
+                                    on:click={() => selectItem(previewItem)}
+                                    >select</button
+                                >
+                            </div>
+                            <div class="info">
+                                {#if previewItem.portal_type === "Image"}
+                                    <div>
+                                        <img
+                                            src="{previewItem.getURL}/@@images/image/preview"
+                                            alt={previewItem.Title}
+                                        />
+                                    </div>
+                                {/if}
+                                <h4>{previewItem.Title}</h4>
+                                <p>{previewItem.Description}</p>
+                            </div>
                         </div>
                     {/if}
                     {#if showUpload}
-                    <div class="upload-wrapper">
-                        <div class="pat-upload" data-pat-upload="hiddenInputContainer:.content-browser">upload</div>
-                    </div>
+                        <div class="upload-wrapper"></div>
                     {/if}
-
                 </div>
             {:catch error}
                 <p style="color: red">{error.message}</p>
@@ -321,50 +297,51 @@
     </div>
 {/if}
 
-
 <style>
     .content-browser-position-wrapper {
         position: fixed;
         top: 0;
         right: 0;
+        display: flex;
+        justify-content: end;
         z-index: 1500;
-        /* width: 95vw; */
+        width: 100%;
         height: 100vh;
+        background-color: rgba(0, 0, 0, 0.25);
     }
     .content-browser {
         height: 99vh;
         /* padding: 1rem; */
-        width: 95%;
-        background-color: #eee;
+        min-width: 550px;
+        background-color: var(--bs-light-bg-subtle);
+        border-left: var(--bs-border-style) var(--bs-border-width) #fff;
         z-index: 1500;
         display: flex;
         flex-direction: column;
     }
 
     .toolBar {
-        background-color: lightskyblue;
-        padding: 0.5rem 1rem;
-        color: #333;
-        font-size: 1.2rem;
+        background-color: var(--bs-primary);
+        padding: 0.325rem 0.75rem;
+        color: var(--bs-light);
         width: 100%;
-        height: 2.1em;
         display: flex;
-        justify-content: space-between;
+        justify-content: start;
     }
     .toolBar > .path {
-        padding: 0 1.5rem;
-        line-height: 1em;
-        overflow: hidden;
+        padding-right: 1.5rem;
     }
     .toolBar > .filter {
-        line-height: 1em;
+        margin-left: auto;
     }
-    .toolBar :global(svg){
-        width: 1.5rem;
-        height: 1.5rem;
+    .toolBar > .upload {
+        margin: 0 1rem 0 2rem;
+    }
+    .toolBar :global(svg) {
         vertical-align: -0.125em;
     }
     .toolbarAction {
+        color: var(--bs-light);
         background-color: transparent;
         border: none;
     }
@@ -375,12 +352,29 @@
         width: 100%;
         overflow-x: auto;
         flex-grow: 3;
+        border-left: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
     }
 
     .levelColumn {
         min-width: 320px;
+        border-right: var(--bs-border-style) var(--bs-border-width)
+            var(--bs-border-color);
         /* border-top: 5px solid transparent; */
     }
+
+    .levelToolbar {
+        width: 100%;
+        height: 2.8rem;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.375rem;
+        border-bottom: var(--bs-border-style) var(--bs-border-width)
+            var(--bs-border-color);
+    }
+    .levelToolbar > .levelActions {
+        margin-left: auto;
+    }
+
     /* .levelColumn.even {
         border-top: 5px solid skyblue;
     } */
@@ -396,30 +390,25 @@
     .contentItem {
         /* padding: 1rem 1rem; */
         display: flex;
-        align-items: baseline;
+        align-items: center;
         justify-content: space-between;
-        border-right: 1px solid #ddd;
         font-size: 90%;
-        background-color: #fff;
-        height: 3rem;
-        border-top: 3px solid transparent;
-        border-bottom: 3px solid transparent;
+        min-height: 2rem;
+        padding-right: 0.375rem;
     }
     .contentItem.even {
-        background-color: aliceblue;
+        background-color: var(--bs-secondary-bg);
     }
     .contentItem.inPath {
-        border-right: 3px solid lightskyblue;
+        background-color: rgba(var(--bs-primary-rgb), 0.15);
     }
     .contentItem.currentItem {
-        border-top: 3px dashed lightskyblue;
-        border-bottom: 3px dashed lightskyblue;
+        background-color: var(--bs-primary);
+        color: var(--bs-body-bg);
     }
     .contentItem > * {
         padding: 0.5rem;
         white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
         max-width: 100%;
     }
 
@@ -430,6 +419,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    .preview .info {
         padding: 0.5rem;
     }
     .preview h4 {
@@ -440,23 +431,9 @@
         max-width: 100%;
         margin-bottom: 0.5rem;
     }
-    .preview button {
-        width: 100%;
-    }
 
-    @media screen and (min-width: 800px) {
-        .content-browser {
-            width: 700px;
-        }
-    }
-    @media screen and (min-width: 1000px) {
-        .content-browser {
-            width: 900px;
-        }
-    }
-    @media screen and (min-width: 1200px) {
-        .content-browser {
-            width: 1100px;
-        }
+    .upload-wrapper {
+        padding: 1rem;
+        width: 590px;
     }
 </style>

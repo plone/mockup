@@ -2,16 +2,13 @@ import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 
-// This pattern
+// Contentbrowser pattern
 
 export const parser = new Parser("contentbrowser");
 
 const portalUrl = document.body.dataset["portalUrl"];
 
-parser.addArgument(
-    "vocabulary-url",
-    `${portalUrl}/@@getVocabulary?name=plone.app.vocabularies.Catalog`
-);
+parser.addArgument("vocabulary-url");
 parser.addArgument(
     "attributes",
     [
@@ -40,9 +37,10 @@ parser.addArgument(
 );
 parser.addArgument("max-depth", "200");
 // parser.addArgument("base-path", `/`);
-parser.addArgument("max-selectionsize", "9999");
+parser.addArgument("maximum-selection-size", -1);
 // parser.addArgument("selectable-types", [],[], true);
 //parser.addArgument("selectable-types", [],[], true);
+parser.addArgument("separator", ";");
 parser.addArgument("selection", []);
 
 class Pattern extends BasePattern {
@@ -53,8 +51,6 @@ class Pattern extends BasePattern {
     async init() {
         const ContentBrowser = (await import("./src/ContentBrowser.svelte")).default;
         const SelectedItems = (await import("./src/SelectedItems.svelte")).default;
-        console.log("init ContentBrowser pattern with options: ", this.options);
-        console.log("init contentbrowser pattern selection: ", this.options.selection);
 
         const contentBrowserEl = document.createElement("div");
         contentBrowserEl.classList.add("content-browser-wrapper");
@@ -62,13 +58,8 @@ class Pattern extends BasePattern {
         bodyElement.append(contentBrowserEl);
 
         this.component_instance_browser = new ContentBrowser({
-           target: contentBrowserEl,
-           props: {
-               maxDepth: this.options.max.depth,
-               basePath: this.options.basePath,
-               attributes: this.options.attributes,
-               vocabularyUrl: this.options.vocabularyUrl,
-           },
+            target: contentBrowserEl,
+            props: this.options,
         });
 
         const selectedItemsEl = document.createElement("div");
@@ -77,12 +68,13 @@ class Pattern extends BasePattern {
 
         this.el.setAttribute('style', 'display: none');
         this.component_instance_sel_items = new SelectedItems({
-           target: selectedItemsEl,
-           props: {
-               maxSelectionsize: this.options.max.selectionsize,
-               selectedItemsNode: this.el,
-               selection: this.options.selection
-           },
+            target: selectedItemsEl,
+            props: {
+                maximumSelectionSize: this.options.maximumSelectionSize,
+                selectedItemsNode: this.el,
+                separator: this.options.separator,
+                selection: this.options.selection,
+            },
         });
     }
 }
