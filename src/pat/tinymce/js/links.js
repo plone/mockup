@@ -96,25 +96,20 @@ var InternalLink = LinkType.extend({
     },
 
     createContentBrowser: async function () {
-        var options = {};
-        options["max-selectionsize"] = 1;
+        var options = {
+            "selection": [],
+        };
+        options["maximum-selection-size"] = 1;
         const inputEl = this.getEl();
-        console.log("links options: ", options);
         const element = this.tiny.selection.getNode();
         const linkType = this.tiny.dom.getAttrib(element, "data-linktype");
         if (linkType === "internal" || linkType === "image") {
-            var val = this.tiny.dom.getAttrib(element, "data-val");
-            options["selection"] = [val];
-            console.log(options.selection);
+            options.selection.push(this.tiny.dom.getAttrib(element, "data-val"));
         }
-        // options['selection'] = inputEl.value.split(';');
         const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
             .default;
+        console.log(options);
         this.contentBrowserPattern = new ContentBrowser(inputEl, options);
-
-        document.addEventListener("updateSelection", (event) => {
-            inputEl.value = event.detail.content.join(";");
-        });
     },
 
     // deactivated during rebase:

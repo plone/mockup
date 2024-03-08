@@ -1,19 +1,23 @@
 <script>
+    import utils from "@patternslib/patternslib/src/core/utils";
     import { onMount } from "svelte";
     import { selectedItems, selectedUids, showContentBrowser } from "./stores.js";
     import { flip } from "svelte/animate";
     import { request } from "./api.js";
+    import { resolveIcon } from "./resolveIcon.js";
 
-    export let maxSelectionsize;
-    export let selection = [];
+    export let maximumSelectionSize;
+    export let selectedItemsNode;
+    export let separator = ";";
+    export let selection = []; // inject selected values (eg. TinyMCE)
 
     let ref;
     function event_dispatch(name, detail) {
-        const event  = new CustomEvent(name, {
+        const event = new CustomEvent(name, {
             detail: {
-                content: detail
+                content: detail,
             },
-            bubbles: true
+            bubbles: true,
         });
         document.dispatchEvent(event);
     }
@@ -27,116 +31,150 @@
             n.splice(i, 1);
             return n;
         });
-        selectedUids.update(() => $selectedItems.map((x) => x.UID))
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
     async function getSelectedItemsByUids(uids) {
-        if(!uids){
-            return []
+        if (!uids) {
+            return [];
         }
         let selectedItemsFromUids;
-        selectedItemsFromUids = await request({method:"GET", uids:uids});
+        selectedItemsFromUids = await request({ method: "GET", uids: uids });
         return await selectedItemsFromUids.results;
     }
 
     async function initializeSelectedItemsStore() {
-        let selectedItemsFromUids = await getSelectedItemsByUids(selection);
+        const initialValue = selection.length
+            ? selection
+            : selectedItemsNode?.value.split(separator);
+        debugger;
+        const selectedItemsFromUids = await getSelectedItemsByUids(initialValue);
         $selectedItems = selectedItemsFromUids;
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        await utils.timeout(1);
+        let Sortable = await import("sortablejs");
+        Sortable = Sortable.default;
+        Sortable.create(document.querySelector(".content-browser-selected-items"), {
+            draggable: ".selected-item",
+            onUpdate: (e) => {
+                let sortedUuids = [];
+                for (const el of e.target.children) {
+                    sortedUuids.push(el.dataset["uuid"]);
+                }
+                setNodeValue(sortedUuids);
+            },
+        });
     }
 
-    function selectedUidsFromSelectedItems(){
+    function selectedUidsFromSelectedItems() {
         let items = [];
-        $selectedItems.forEach(item => {
+        $selectedItems.forEach((item) => {
             items.push(item.UID);
         });
         return items;
     }
 
+    function setNodeValue(selectedUids) {
+        selectedItemsNode.value = selectedUids.join(separator);
+    }
+
     $: {
         $selectedItems;
         if ($selectedItems.length) {
-            console.log("dispatch event: updateselection");
-            event_dispatch('updateSelection', selectedUidsFromSelectedItems());
+            setNodeValue(selectedUidsFromSelectedItems());
+            event_dispatch("updateSelection", selectedUids);
         }
-        console.log($selectedItems);
     }
-
 </script>
 
 <div class="content-browser-selected-items-wrapper" bind:this={ref}>
-    <button
-        class="btn btn-primary"
-        disabled="{$selectedItems.length >= maxSelectionsize}"
-        on:click={() => ($showContentBrowser = true)}>add</button>
     <!-- {maxSelectionsize} -->
-    <ul class="content-browser-selected-items">
+    <div
+        class="content-browser-selected-items"
+        tabindex="0"
+        role="button"
+        on:click={() => ($showContentBrowser = !$selectedItems.length)}
+        on:keyup={() => ($showContentBrowser = !$selectedItems.length)}
+    >
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
-                <li class="selected-item" animate:flip={{ duration: 500 }}>
-                    <button class="btn btn-sm btn-danger"
-                        on:click={() => unselectItem(i)}
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-trash"
-                            viewBox="0 0 16 16"
+                <div
+                    class="selected-item"
+                    animate:flip={{ duration: 500 }}
+                    data-uuid={selItem.UID}
+                >
+                    <div class="item-info">
+                        <!-- svelte-ignore a11y-missing-attribute -->
+                        <button
+                            class="btn btn-link btn-sm link-secondary"
+                            on:click={() => unselectItem(i)}
+                            ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                         >
-                            <path
-                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
-                            />
-                            <path
-                                fill-rule="evenodd"
-                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                            />
-                        </svg></button
-                    >
-                    <span class="item-title">{selItem.Title}</span>
+                        <div>
+                            <span class="item-title">{selItem.Title}</span><br />
+                            <span class="small">{selItem.path}</span>
+                        </div>
+                    </div>
                     {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img
                             src="{selItem.getURL}/@@images/image/mini"
                             alt={selItem.Title}
                         />{/if}
-                </li>
+                </div>
             {/each}
         {/if}
         {#if !$selectedItems}
             <p>loading selected items</p>
         {/if}
-    </ul>
+    </div>
+    <button
+        class="btn btn-primary"
+        style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
+        disabled={maximumSelectionSize > 0 &&
+            $selectedItems.length >= maximumSelectionSize}
+        on:click|preventDefault={() => ($showContentBrowser = true)}>add</button
+    >
 </div>
 
 <style>
-
+    .content-browser-selected-items-wrapper {
+        display: flex;
+        align-items: start;
+    }
     .content-browser-selected-items {
         list-style: none;
-        padding-left: 0;
-        background-color: #eee;
-        border-radius: 0.3rem;
-        min-height: 2rem;
-        padding: 0.5rem;
+        background-color: var(--bs-body-bg);
+        border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius);
+        border: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
+        min-height: 2.4rem;
+        padding: 0.5rem 0.5rem 0 0.5rem;
+        flex: 1 1 auto;
     }
-    .content-browser-selected-items li {
-        border-radius: 0.3rem;
-        background-color: #fff;
+    .content-browser-selected-items .selected-item {
+        border-radius: var(--bs-border-radius);
+        background-color: var(--bs-tertiary-bg);
+        border: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
         padding: 0.5rem;
         margin-bottom: 0.5rem;
         display: flex;
         flex-wrap: nowrap;
-        align-items: center;
+        align-items: start;
         justify-content: space-between;
     }
-    .content-browser-selected-items li > * {
+    .content-browser-selected-items .selected-item > * {
         margin-right: 0.5rem;
         display: block;
     }
-    .content-browser-selected-items li .item-title {
-        flex-grow: 3;
+    .content-browser-selected-items .selected-item button {
+        cursor: pointer;
+        padding: 0 0.375rem 0.374rem 0;
     }
-    .content-browser-selected-items li > img {
+    .content-browser-selected-items .selected-item .item-info {
+        display: flex;
+        align-items: start;
+    }
+    .content-browser-selected-items .selected-item > img {
         object-fit: cover;
-        width: 128px;
-        height: 128px;
+        width: 95px;
+        height: 95px;
     }
-
 </style>

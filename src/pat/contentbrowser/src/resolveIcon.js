@@ -5,7 +5,6 @@ export async function resolveIcon(node, { iconName }) {
 
     async function getIcon(iconName) {
         const icon = await utils.resolveIcon(iconName)
-        console.log(icon)
         return icon;
     }
     const iconCode = await getIcon(iconName);
