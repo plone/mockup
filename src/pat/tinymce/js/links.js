@@ -50,7 +50,7 @@ var LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
-    updateRelatedItems: function () {},
+    updateRelatedItems: function () { },
 });
 
 var ExternalLink = LinkType.extend({
@@ -87,7 +87,6 @@ var InternalLink = LinkType.extend({
             return;
         }
         LinkType.prototype.init.call(this);
-        linkEl.classList.add("pat-contentbrowser");
         await this.createContentBrowser();
     },
 
@@ -108,38 +107,8 @@ var InternalLink = LinkType.extend({
         }
         const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
             .default;
-        console.log(options);
         this.contentBrowserPattern = new ContentBrowser(inputEl, options);
     },
-
-    // deactivated during rebase:
-    //updateRelatedItems: async function (val) {
-    //    if (!this.relatedItems) {
-    //        // prevent toolbar from being rendered twice
-    //        await this.createRelatedItems();
-    //    }
-    //    this.relatedItems.selectItem(val);
-    //},
-    // updateSelection: function(val) {
-    //     debugger;
-    //     this.component_instance_sel_items
-    // },
-
-    // updateRelatedItems: function (val) {
-    //     if (!this.relatedItems) {
-    //         // prevent toolbar from being rendered twice
-    //         this.createRelatedItems();
-    //     }
-    //     this.relatedItems.selectItem(val);
-    // },
-
-    // value: function () {
-    //     var val = this.getEl().value;
-    //     if (val && typeof val === "object") {
-    //         val = val[0];
-    //     }
-    //     return val;
-    // },
 
     toUrl: function () {
         var value = this.value();
@@ -150,7 +119,7 @@ var InternalLink = LinkType.extend({
     },
 
     // initial data is read and tranfert to contentbrowser pattern on creating time, not here!
-    load: function (element) {},
+    load: function (element) { },
 
 });
 
@@ -583,7 +552,7 @@ export default Base.extend({
             var type = self.options.linkTypes[index];
             var $container = $(".linkType." + type + " .main", self.modal.$modal);
             if ($container.length) {
-                var instance  = new self.options.linkTypeClassMapping[type](
+                var instance = new self.options.linkTypeClassMapping[type](
                     $container,
                     {
                         linkModal: self,
@@ -698,10 +667,10 @@ export default Base.extend({
         var cssclasses = [
             "image-richtext",
         ];
-        if(self.$align.val()) {
+        if (self.$align.val()) {
             cssclasses.push(self.$align.val());
         }
-        if(self.linkType !== "externalImage"){
+        if (self.linkType !== "externalImage") {
             cssclasses.push("picture-variant-" + self.$scale.val())
         }
         if (captionFromDescription || caption) {
@@ -720,7 +689,7 @@ export default Base.extend({
             ...self.linkTypes[self.linkType].attributes()
         };
 
-        if(self.linkType !== "externalImage"){
+        if (self.linkType !== "externalImage") {
             data["data-picturevariant"] = self.$scale.val();
         }
 
@@ -749,7 +718,7 @@ export default Base.extend({
 
         var newImgElm = self.dom.create("img", data);
 
-        if(self.imgElm && self.imgElm.tagName.toLowerCase() == "img") {
+        if (self.imgElm && self.imgElm.tagName.toLowerCase() == "img") {
             self.imgElm.replaceWith(newImgElm);
         } else {
             self.rng.insertNode(newImgElm);
