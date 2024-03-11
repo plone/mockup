@@ -1,20 +1,13 @@
-import { get } from "svelte/store";
-import { config } from "./stores";
-
-let cfg = get(config);
-
-// update cfg when config store changes
-export const config_unsubscribe = config.subscribe((value) => {
-    cfg = value;
-});
-
 
 export async function request({
     method = "GET",
+    vocabularyUrl = null,
+    attributes = {},
     path = null,
     uids = null,
     params = null,
 }) {
+    if(!vocabularyUrl) return;
     let vocabQuery;
     if (path) {
         vocabQuery = {
@@ -41,9 +34,9 @@ export async function request({
         };
     }
 
-    let url = `${cfg.vocabularyUrl}&query=${JSON.stringify(
+    let url = `${vocabularyUrl}&query=${JSON.stringify(
         vocabQuery
-    )}&attributes=${JSON.stringify(cfg.attributes)}&batch=${JSON.stringify({
+    )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
         page: 1,
         size: 100,
     })}`;
