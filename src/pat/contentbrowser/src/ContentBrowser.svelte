@@ -1,5 +1,4 @@
 <script>
-    import registry from "@patternslib/patternslib/src/core/registry";
     import utils from "@patternslib/patternslib/src/core/utils";
     import { onDestroy, onMount } from "svelte";
     import * as animateScroll from "svelte-scrollto";
@@ -12,7 +11,7 @@
     import {
         config,
         currentPath,
-        selectedItems,
+        selectedItemsMap,
         selectedUids,
         showContentBrowser,
     } from "./stores.js";
@@ -28,7 +27,9 @@
     export let basePath = "";
     export let attributes;
     export let vocabularyUrl;
+    export let fieldId;
     export const contentItems = contentStore();
+
     let showUpload = false;
     let previewItem = { UID: "" };
     let currentLevelData = {};
@@ -57,12 +58,14 @@
         return breakPoint;
     }
 
-    onMount(async () => {
+    onMount(() => {
         $config.maxDepth = maxDepth;
         $config.basePath = basePath;
         $config.vocabularyUrl = vocabularyUrl;
         $config.attributes = attributes;
         breakPoint = getBreakPoint();
+        console.log(fieldId);
+        console.log($config);
         //contentItems.get($currentPath);
     });
 
@@ -94,7 +97,6 @@
                 UID: item.UID,
                 Title: item.Title,
             };
-            console.log(JSON.stringify(currentLevelData));
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
@@ -104,12 +106,13 @@
         scrollToRight();
     }
 
-    function selectItem(item) {
-        selectedItems.update((n) => [...n, item]);
-        selectedUids.update(() => $selectedItems.map((x) => x.UID));
+    async function selectItem(item) {
+        console.log(`add ${JSON.stringify(item)} to ${fieldId}`);
+        $selectedItemsMap.push(fieldId, item);
+        selectedUids.update(() => $selectedItemsMap.get(fieldId).map((x) => x.UID));
         $showContentBrowser = false;
         previewItem = { UID: "" };
-        console.log($selectedItems);
+        console.log($selectedItemsMap.get(fieldId));
         console.log($selectedUids);
     }
 
@@ -151,7 +154,6 @@
     $: {
         if ($config.vocabularyUrl) {
             contentItems.get($currentPath, null, currentLevelData);
-            // contentItems.set([])
         }
     }
 
@@ -214,7 +216,7 @@
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
-                                {#if i > 0}
+                                {#if i > 0 && level?.UID}
                                     <button
                                         class="btn btn-primary btn-sm"
                                         disabled={!isSelectable(level)}
@@ -237,7 +239,7 @@
                                         ? ' inPath'
                                         : ''}{previewItem.UID === item.UID
                                         ? ' currentItem'
-                                        : ''}"
+                                        : ''}{!isSelectable(item) ? ' text-muted' : ''}"
                                     role="button"
                                     tabindex="0"
                                     on:keydown={() => changePath(item)}

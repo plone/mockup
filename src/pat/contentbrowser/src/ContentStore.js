@@ -51,7 +51,7 @@ export default function () {
 
             })
         }
-
+        console.log(JSON.stringify(cfg));
         let url = `${cfg.vocabularyUrl}&query=${JSON.stringify(
             vocabQuery
         )}&attributes=${JSON.stringify(cfg.attributes)}&batch=${JSON.stringify({
