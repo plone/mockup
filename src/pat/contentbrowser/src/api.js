@@ -7,8 +7,8 @@ export async function request({
     uids = null,
     params = null,
 }) {
-    if(!vocabularyUrl) return;
     let vocabQuery;
+
     if (path) {
         vocabQuery = {
             criteria: [
@@ -33,7 +33,6 @@ export async function request({
             ],
         };
     }
-
     let url = `${vocabularyUrl}&query=${JSON.stringify(
         vocabQuery
     )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({

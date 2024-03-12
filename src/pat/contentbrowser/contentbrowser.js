@@ -59,28 +59,29 @@ class Pattern extends BasePattern {
             this.el.setAttribute("id", nodeId);
         }
 
-        const SelectedItems = (await import("./src/SelectedItems.svelte")).default;
+        const ContentBrowser = (await import("./src/ContentBrowser.svelte")).default;
 
-        let contentBrowserEl = document.querySelector(".content-browser-wrapper");
+        // create wrapper
+        const contentBrowserEl = document.createElement("div");
+        contentBrowserEl.classList.add("content-browser-wrapper");
+        this.el.parentNode.insertBefore(contentBrowserEl, this.el);
 
-        if (!contentBrowserEl) {
-            // create wrapper only once
-            contentBrowserEl = document.createElement("div");
-            contentBrowserEl.classList.add("content-browser-wrapper");
-            const bodyElement = document.querySelector("body");
-            bodyElement.append(contentBrowserEl);
-        }
+        this.component_instance_browser = new ContentBrowser({
+            target: contentBrowserEl,
+            props: this.options,
+        });
 
         const selectedItemsEl = document.createElement("div");
         selectedItemsEl.classList.add("selected-items");
-        this.el.parentNode.insertBefore(selectedItemsEl, this.el);
+        contentBrowserEl.append(selectedItemsEl);
+
+        const SelectedItems = (await import("./src/SelectedItems.svelte")).default;
 
         this.component_instance_sel_items = new SelectedItems({
             target: selectedItemsEl,
             props: {
                 maximumSelectionSize: this.options.maximumSelectionSize,
                 selectedItemsNode: this.el,
-                contentBrowserWrapperNode: contentBrowserEl,
                 ...this.options,
             },
         });
