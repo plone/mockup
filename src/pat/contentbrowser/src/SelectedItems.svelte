@@ -1,26 +1,33 @@
 <script>
     import { onMount } from "svelte";
-    import { selectedUids, showContentBrowser, selectedItemsMap } from "./stores.js";
+    import {
+        selectedUids,
+        showContentBrowser,
+        getSelectedItems,
+        getConfig,
+        setSelectedItems,
+    } from "./stores.js";
     import { flip } from "svelte/animate";
     import { request } from "./api.js";
     import { resolveIcon } from "./resolveIcon.js";
-    import ContentBrowser from "./ContentBrowser.svelte";
 
     export let maximumSelectionSize;
     export let selectedItemsNode;
-    export let contentBrowserWrapperNode;
     export let separator = ";";
     export let selection = []; // inject selected values (eg. TinyMCE)
 
-    // ContentBrowseroptions
-    export let maxDepth;
-    export let basePath = "";
-    export let attributes;
-    export let vocabularyUrl;
-
     let ref;
-    // store current fieldId
     const fieldId = selectedItemsNode.getAttribute("id");
+
+    // initialize reactive context store
+    setSelectedItems();
+    // get reactive context store
+    const selectedItems = getSelectedItems();
+
+    // get reactive context config
+    const config = getConfig();
+
+    console.log(`${fieldId} initialized reactive context store`);
 
     function event_dispatch(name, detail) {
         const event = new CustomEvent(name, {
@@ -33,28 +40,33 @@
     }
 
     onMount(async () => {
+        console.log(`${fieldId} start onMount()`);
         await initializeSelectedItemsStore();
-        console.log(fieldId);
-        console.log($selectedItemsMap);
+        console.log(
+            `${fieldId} end onMount(). $selectedItems: ${JSON.stringify($selectedItems)}`,
+        );
     });
 
     function unselectItem(i) {
-        $selectedItemsMap.splice(fieldId, i);
-        selectedUids.update(() => $selectedItemsMap.get(fieldId).map((x) => x.UID));
+        selectedItems.update((n) => {
+            n.splice(i, 1);
+            return n;
+        });
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
     async function getSelectedItemsUids(uids) {
+        console.log(`${fieldId} getSelectedItemsUids ${uids}`);
         if (!uids) {
             return [];
         }
-        let selectedItemsFromUids;
-        selectedItemsFromUids = await request({
+        const selectedItemsFromUids = await request({
             method: "GET",
-            vocabularyUrl: vocabularyUrl,
-            attributes: attributes,
+            vocabularyUrl: $config.vocabularyUrl,
+            attributes: $config.attributes,
             uids: uids,
         });
-        return await selectedItemsFromUids.results;
+        return (await selectedItemsFromUids?.results) || [];
     }
 
     async function initializeSelectedItemsStore() {
@@ -64,15 +76,12 @@
               ? selectedItemsNode.value.split(separator)
               : [];
 
-        console.log(`Initializing ${JSON.stringify(initialValue)} for ${fieldId}`);
-
         if (!initialValue.length) {
-            $selectedItemsMap.set(fieldId, []);
             return;
         }
 
         const selectedItemsUids = await getSelectedItemsUids(initialValue);
-        $selectedItemsMap.set(fieldId, selectedItemsUids);
+        $selectedItems = selectedItemsUids;
         selectedUids.update(() => selectedItemsUids.map((x) => x.UID));
 
         if (maximumSelectionSize !== 1) {
@@ -93,7 +102,7 @@
 
     function selectedUidsFromSelectedItems() {
         let items = [];
-        $selectedItemsMap.get(fieldId).forEach((item) => {
+        $selectedItems.forEach((item) => {
             items.push(item.UID);
         });
         return items;
@@ -105,23 +114,12 @@
         selectedItemsNode.value = node_val;
     }
 
-    function openContentBrowser() {
-        const component = new ContentBrowser({
-            target: contentBrowserWrapperNode,
-            props: {
-                maxDepth: maxDepth,
-                basePath: basePath,
-                attributes: attributes,
-                vocabularyUrl: vocabularyUrl,
-                fieldId: fieldId,
-            },
-        });
-        $showContentBrowser = true;
-    }
-
     $: {
-        $selectedItemsMap.get(fieldId);
-        if ($selectedItemsMap.get(fieldId)) {
+        $selectedItems;
+        console.log(
+            `${fieldId} reactive change in $selectedItems: ${JSON.stringify($selectedItems)}`,
+        );
+        if ($selectedItems.length) {
             setNodeValue(selectedUidsFromSelectedItems());
             event_dispatch("updateSelection", selectedUids);
         }
@@ -131,31 +129,33 @@
 <div class="content-browser-selected-items-wrapper" bind:this={ref}>
     <!-- {maxSelectionsize} -->
     <div class="content-browser-selected-items">
-        {#each $selectedItemsMap.get(fieldId) || [] as selItem, i (selItem.UID)}
-            <div
-                class="selected-item"
-                animate:flip={{ duration: 500 }}
-                data-uuid={selItem.UID}
-            >
-                <div class="item-info">
-                    <!-- svelte-ignore a11y-missing-attribute -->
-                    <button
-                        class="btn btn-link btn-sm link-secondary"
-                        on:click={() => unselectItem(i)}
-                        ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
-                    >
-                    <div>
-                        <span class="item-title">{selItem.Title}</span><br />
-                        <span class="small">{selItem.path}</span>
+        {#if $selectedItems}
+            {#each $selectedItems as selItem, i (selItem.UID)}
+                <div
+                    class="selected-item"
+                    animate:flip={{ duration: 500 }}
+                    data-uuid={selItem.UID}
+                >
+                    <div class="item-info">
+                        <!-- svelte-ignore a11y-missing-attribute -->
+                        <button
+                            class="btn btn-link btn-sm link-secondary"
+                            on:click={() => unselectItem(i)}
+                            ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
+                        >
+                        <div>
+                            <span class="item-title">{selItem.Title}</span><br />
+                            <span class="small">{selItem.path}</span>
+                        </div>
                     </div>
+                    {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img
+                            src="{selItem.getURL}/@@images/image/mini"
+                            alt={selItem.Title}
+                        />{/if}
                 </div>
-                {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img
-                        src="{selItem.getURL}/@@images/image/mini"
-                        alt={selItem.Title}
-                    />{/if}
-            </div>
-        {/each}
-        {#if !$selectedItemsMap.get(fieldId)}
+            {/each}
+        {/if}
+        {#if !$selectedItems}
             <p>loading selected items</p>
         {/if}
     </div>
@@ -163,8 +163,8 @@
         class="btn btn-primary"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
         disabled={maximumSelectionSize > 0 &&
-            ($selectedItemsMap.get(fieldId)?.length || 0) >= maximumSelectionSize}
-        on:click|preventDefault={openContentBrowser}
+            ($selectedItems.length || 0) >= maximumSelectionSize}
+        on:click|preventDefault={($showContentBrowser = true)}
         >{#if maximumSelectionSize == 1}choose{:else}add{/if}</button
     >
 </div>

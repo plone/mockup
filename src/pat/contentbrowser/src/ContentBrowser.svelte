@@ -3,13 +3,14 @@
     import { onDestroy, onMount } from "svelte";
     import * as animateScroll from "svelte-scrollto";
     import { fly } from "svelte/transition";
-    import contentStore, { config_unsubscribe } from "./ContentStore";
+    import contentStore from "./ContentStore";
     import { clickOutside } from "./clickOutside";
     import { resolveIcon } from "./resolveIcon.js";
     import Upload from "../../upload/upload";
 
     import {
-        config,
+        setConfig,
+        getConfig,
         currentPath,
         selectedItemsMap,
         selectedUids,
@@ -29,6 +30,11 @@
     export let vocabularyUrl;
     export let fieldId;
     export const contentItems = contentStore();
+
+    // initialize reactive context config
+    setConfig();
+    // get creative context config
+    const config = getConfig();
 
     let showUpload = false;
     let previewItem = { UID: "" };
@@ -64,9 +70,9 @@
         $config.vocabularyUrl = vocabularyUrl;
         $config.attributes = attributes;
         breakPoint = getBreakPoint();
-        console.log(fieldId);
-        console.log($config);
-        //contentItems.get($currentPath);
+        console.log(
+            `ContentBrowser initialized reactive context config: ${JSON.stringify($config)}`,
+        );
     });
 
     async function upload() {
@@ -162,7 +168,6 @@
         scrollToRight();
     }
 
-    onDestroy(config_unsubscribe);
 </script>
 
 <!-- <Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} /> -->

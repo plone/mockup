@@ -1,3 +1,4 @@
+import { getContext, setContext } from 'svelte';
 import { derived, writable } from 'svelte/store';
 
 export const currentPath = writable('/');
@@ -58,3 +59,23 @@ function createMapStore(initial) {
 // we need a store map with field_id => selectedItems to ensure correct
 // selectedItems for multiple pattern occurrences on one page
 export const selectedItemsMap = createMapStore({});
+
+// another try with reactive context stores
+export function setSelectedItems() {
+    let selItems = writable([]);
+    setContext('selectedItems', selItems);
+}
+
+export function getSelectedItems() {
+    return getContext('selectedItems');
+}
+
+export function setConfig() {
+    let config = writable({});
+    setContext('config', config);
+}
+
+export function getConfig() {
+    return getContext('config');
+}
+
