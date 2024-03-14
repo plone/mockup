@@ -1,6 +1,6 @@
 <script>
     import utils from "@patternslib/patternslib/src/core/utils";
-    import { onDestroy, onMount } from "svelte";
+    import { getContext, onMount } from "svelte";
     import * as animateScroll from "svelte-scrollto";
     import { fly } from "svelte/transition";
     import contentStore from "./ContentStore";
@@ -9,12 +9,7 @@
     import Upload from "../../upload/upload";
 
     import {
-        setConfig,
-        getConfig,
         currentPath,
-        selectedItemsMap,
-        selectedUids,
-        showContentBrowser,
     } from "./stores.js";
     // import Keydown from "svelte-keydown";
 
@@ -24,17 +19,14 @@
         duration: 500,
     });
 
-    export let maxDepth;
-    export let basePath = "";
-    export let attributes;
-    export let vocabularyUrl;
-    export let fieldId;
-    export const contentItems = contentStore();
+    // get context stores
+    const config = getContext("config");
+    const showContentBrowser = getContext("showContentBrowser");
+    const selectedItems = getContext("selectedItems");
+    const selectedUids = getContext("selectedUids");
 
-    // initialize reactive context config
-    setConfig();
-    // get creative context config
-    const config = getConfig();
+    // initialize content browser store
+    const contentItems = contentStore($config);
 
     let showUpload = false;
     let previewItem = { UID: "" };
@@ -65,10 +57,6 @@
     }
 
     onMount(() => {
-        $config.maxDepth = maxDepth;
-        $config.basePath = basePath;
-        $config.vocabularyUrl = vocabularyUrl;
-        $config.attributes = attributes;
         breakPoint = getBreakPoint();
         console.log(
             `ContentBrowser initialized reactive context config: ${JSON.stringify($config)}`,
@@ -113,12 +101,12 @@
     }
 
     async function selectItem(item) {
-        console.log(`add ${JSON.stringify(item)} to ${fieldId}`);
-        $selectedItemsMap.push(fieldId, item);
-        selectedUids.update(() => $selectedItemsMap.get(fieldId).map((x) => x.UID));
+        console.log(`add ${JSON.stringify(item)} to ${$config.fieldId}`);
+        selectedItems.update((n) => [...n, item]);
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
         $showContentBrowser = false;
         previewItem = { UID: "" };
-        console.log($selectedItemsMap.get(fieldId));
+        console.log($selectedItems);
         console.log($selectedUids);
     }
 
@@ -225,7 +213,7 @@
                                     <button
                                         class="btn btn-primary btn-sm"
                                         disabled={!isSelectable(level)}
-                                        on:click={() => selectItem(level)}
+                                        on:click|preventDefault={() => selectItem(level)}
                                     >
                                         select
                                     </button>
@@ -275,7 +263,7 @@
                                 <button
                                     class="btn btn-primary btn-sm"
                                     disabled={!isSelectable(previewItem)}
-                                    on:click={() => selectItem(previewItem)}
+                                    on:click|preventDefault={() => selectItem(previewItem)}
                                     >select</button
                                 >
                             </div>
