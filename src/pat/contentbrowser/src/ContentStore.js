@@ -1,14 +1,8 @@
 import { writable, get } from "svelte/store";
-import { config, cache } from "./stores";
+import { cache } from "./stores";
 
-let cfg = get(config);
 
-// update cfg when config store changes
-export const config_unsubscribe = config.subscribe((value) => {
-    cfg = value;
-});
-
-export default function () {
+export default function (config) {
     const store = writable([]);
 
     store.request = async ({
@@ -17,8 +11,11 @@ export default function () {
         uids = null,
         params = null,
         searchTerm = null,
+        selectableTypes = [],
     }) => {
-        let vocabQuery;
+        let vocabQuery = {
+            criteria: [],
+        };
         if (path) {
             vocabQuery = {
                 criteria: [
@@ -51,10 +48,21 @@ export default function () {
 
             })
         }
-
-        let url = `${cfg.vocabularyUrl}&query=${JSON.stringify(
+        // if(selectableTypes) {
+        //     if(selectableTypes.indexOf("Folder") == -1) {
+        //         // add Folder always to preserve browsing through structure
+        //         selectableTypes.push("Folder");
+        //     }
+        //     // query only selectable types
+        //     vocabQuery.criteria.push({
+        //         i: "portal_type",
+        //         o: "plone.app.querystring.operation.selection.any",
+        //         v: selectableTypes,
+        //     });
+        // }
+        let url = `${config.vocabularyUrl}&query=${JSON.stringify(
             vocabQuery
-        )}&attributes=${JSON.stringify(cfg.attributes)}&batch=${JSON.stringify({
+        )}&attributes=${JSON.stringify(config.attributes)}&batch=${JSON.stringify({
             page: 1,
             size: 100,
         })}`;
@@ -86,7 +94,7 @@ export default function () {
 
     store.get = async (path, searchTerm, levelData) => {
         let parts = path.split("/") || [];
-        const depth = parts.length >= cfg.maxDepth ? cfg.maxDepth : parts.length;
+        const depth = parts.length >= config.maxDepth ? config.maxDepth : parts.length;
         let paths = [];
 
         let partsToShow = parts.slice(parts.length - depth, parts.length);
@@ -113,7 +121,7 @@ export default function () {
                 let query = {
                     method: "GET"
                 };
-                let queryPath = cfg.basePath;
+                let queryPath = config.basePath;
                 if (queryPath === "/") {
                     queryPath = "";
                 }
@@ -121,6 +129,9 @@ export default function () {
                 query["path"] = queryPath;
                 if(isFirstPath && searchTerm){
                     query["searchTerm"] = searchTerm + "*";
+                }
+                if(config.selectableTypes.length) {
+                    query["selectableTypes"] = config.selectableTypes;
                 }
                 level = await store.request(query);
                 if(!skipCache){
