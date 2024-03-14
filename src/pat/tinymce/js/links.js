@@ -97,6 +97,7 @@ var InternalLink = LinkType.extend({
     createContentBrowser: async function () {
         var options = {
             "selection": [],
+            ...this.linkModal.options?.relatedItems,
         };
         options["maximum-selection-size"] = 1;
         const inputEl = this.getEl();
