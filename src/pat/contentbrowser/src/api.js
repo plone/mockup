@@ -1,7 +1,8 @@
+import { getContext } from "svelte";
 
 export async function request({
     method = "GET",
-    vocabularyUrl = null,
+    vocabularyUrl = "",
     attributes = {},
     path = null,
     uids = null,
@@ -40,12 +41,6 @@ export async function request({
         size: 100,
     })}`;
 
-    // store.update((data) => {
-    //     delete data.errors;
-    //     data.loading = true;
-    //     return data;
-    // });
-
     let headers = new Headers();
     // headers.set("Content-type", "application/json");
     headers.set("Accept", "application/json");
@@ -57,12 +52,6 @@ export async function request({
     if (response.ok) {
         return json;
     } else {
-        // store.update((data) => {
-        //     data.loading = false;
-        //     data.errors = json.errors;
-        //     return data;
-        // });
-        // return {};
         return json.errors;
     }
 }

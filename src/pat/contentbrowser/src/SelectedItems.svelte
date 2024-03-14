@@ -1,33 +1,27 @@
 <script>
-    import { onMount } from "svelte";
-    import {
-        selectedUids,
-        showContentBrowser,
-        getSelectedItems,
-        getConfig,
-        setSelectedItems,
-    } from "./stores.js";
+    import { getContext, onMount } from "svelte";
     import { flip } from "svelte/animate";
     import { request } from "./api.js";
     import { resolveIcon } from "./resolveIcon.js";
 
-    export let maximumSelectionSize;
-    export let selectedItemsNode;
-    export let separator = ";";
-    export let selection = []; // inject selected values (eg. TinyMCE)
-
     let ref;
-    const fieldId = selectedItemsNode.getAttribute("id");
-
-    // initialize reactive context store
-    setSelectedItems();
-    // get reactive context store
-    const selectedItems = getSelectedItems();
+    let initializing = true;
 
     // get reactive context config
-    const config = getConfig();
+    const config = getContext("config");
+    const fieldId = $config.fieldId;
+    const selectedItemsNode = document.getElementById(fieldId);
+
+    console.log(`${fieldId} get context config: ${JSON.stringify($config)}`);
+
+    // get reactive context store
+    const selectedItems = getContext("selectedItems");
+    const selectedUids = getContext("selectedUids");
 
     console.log(`${fieldId} initialized reactive context store`);
+
+    // showContentBrowser reactive state
+    const showContentBrowser = getContext("showContentBrowser");
 
     function event_dispatch(name, detail) {
         const event = new CustomEvent(name, {
@@ -45,6 +39,7 @@
         console.log(
             `${fieldId} end onMount(). $selectedItems: ${JSON.stringify($selectedItems)}`,
         );
+        initializing = false;
     });
 
     function unselectItem(i) {
@@ -53,6 +48,7 @@
             return n;
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        console.log(`Unselected i=${i}, new value: ${JSON.stringify($selectedUids)}`);
     }
 
     async function getSelectedItemsUids(uids) {
@@ -70,10 +66,10 @@
     }
 
     async function initializeSelectedItemsStore() {
-        const initialValue = selection.length
-            ? selection
+        const initialValue = $config.selection.length
+            ? $config.selection
             : selectedItemsNode?.value
-              ? selectedItemsNode.value.split(separator)
+              ? selectedItemsNode.value.split($config.separator)
               : [];
 
         if (!initialValue.length) {
@@ -84,19 +80,24 @@
         $selectedItems = selectedItemsUids;
         selectedUids.update(() => selectedItemsUids.map((x) => x.UID));
 
-        if (maximumSelectionSize !== 1) {
+        if ($config.maximumSelectionSize !== 1 && $selectedItems.length > 1) {
             let Sortable = (await import("sortablejs")).default;
-            Sortable.create(document.querySelector(".content-browser-selected-items"), {
-                draggable: ".selected-item",
-                animation: 200,
-                onUpdate: (e) => {
-                    let sortedUuids = [];
-                    for (const el of e.target.children) {
-                        sortedUuids.push(el.dataset["uuid"]);
-                    }
-                    setNodeValue(sortedUuids);
+            Sortable.create(
+                selectedItemsNode.previousSibling.querySelector(
+                    ".content-browser-selected-items",
+                ),
+                {
+                    draggable: ".selected-item",
+                    animation: 200,
+                    onUpdate: (e) => {
+                        let sortedUuids = [];
+                        for (const el of e.target.children) {
+                            sortedUuids.push(el.dataset["uuid"]);
+                        }
+                        setNodeValue(sortedUuids);
+                    },
                 },
-            });
+            );
         }
     }
 
@@ -109,9 +110,13 @@
     }
 
     function setNodeValue(selectedUids) {
-        const node_val = selectedUids.join(separator);
+        const node_val = selectedUids.join($config.separator);
         console.log(`set value of ${fieldId} to ${node_val}`);
         selectedItemsNode.value = node_val;
+    }
+
+    function openContentBrowser() {
+        $showContentBrowser = true;
     }
 
     $: {
@@ -119,7 +124,7 @@
         console.log(
             `${fieldId} reactive change in $selectedItems: ${JSON.stringify($selectedItems)}`,
         );
-        if ($selectedItems.length) {
+        if ($selectedItems.length || !initializing) {
             setNodeValue(selectedUidsFromSelectedItems());
             event_dispatch("updateSelection", selectedUids);
         }
@@ -162,10 +167,10 @@
     <button
         class="btn btn-primary"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        disabled={maximumSelectionSize > 0 &&
-            ($selectedItems.length || 0) >= maximumSelectionSize}
-        on:click|preventDefault={($showContentBrowser = true)}
-        >{#if maximumSelectionSize == 1}choose{:else}add{/if}</button
+        disabled={$config.maximumSelectionSize > 0 &&
+            ($selectedItems.length || 0) >= $config.maximumSelectionSize}
+        on:click|preventDefault={openContentBrowser}
+        >{#if config.maximumSelectionSize == 1}choose{:else}add{/if}</button
     >
 </div>
 

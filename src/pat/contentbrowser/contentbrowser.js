@@ -37,10 +37,9 @@ parser.addArgument(
     true
 );
 parser.addArgument("max-depth", "200");
-// parser.addArgument("base-path", `/`);
+parser.addArgument("base-path", `/`);
 parser.addArgument("maximum-selection-size", -1);
-// parser.addArgument("selectable-types", [],[], true);
-//parser.addArgument("selectable-types", [],[], true);
+parser.addArgument("selectable-types", [], null, true);
 parser.addArgument("separator", ";");
 parser.addArgument("selection", []);
 
@@ -52,38 +51,26 @@ class Pattern extends BasePattern {
     async init() {
         this.el.setAttribute('style', 'display: none');
 
-        // ensure an id on our elemen (eg TinyMCE doesn't have one)
+        // ensure an id on our elemen (TinyMCE doesn't have one)
         let nodeId = this.el.getAttribute("id");
         if (!nodeId) {
             nodeId = utils.generateId();
             this.el.setAttribute("id", nodeId);
         }
 
-        const ContentBrowser = (await import("./src/ContentBrowser.svelte")).default;
+        const ContentBrowserApp = (await import("./src/App.svelte")).default;
 
-        // create wrapper
+        // create browser node
         const contentBrowserEl = document.createElement("div");
         contentBrowserEl.classList.add("content-browser-wrapper");
         this.el.parentNode.insertBefore(contentBrowserEl, this.el);
 
-        this.component_instance_browser = new ContentBrowser({
+        this.component_content_browser = new ContentBrowserApp({
             target: contentBrowserEl,
-            props: this.options,
-        });
-
-        const selectedItemsEl = document.createElement("div");
-        selectedItemsEl.classList.add("selected-items");
-        contentBrowserEl.append(selectedItemsEl);
-
-        const SelectedItems = (await import("./src/SelectedItems.svelte")).default;
-
-        this.component_instance_sel_items = new SelectedItems({
-            target: selectedItemsEl,
             props: {
-                maximumSelectionSize: this.options.maximumSelectionSize,
-                selectedItemsNode: this.el,
+                fieldId: nodeId,
                 ...this.options,
-            },
+            }
         });
     }
 }
