@@ -115,10 +115,6 @@
         selectedItemsNode.value = node_val;
     }
 
-    function openContentBrowser() {
-        $showContentBrowser = true;
-    }
-
     $: {
         $selectedItems;
         console.log(
@@ -169,7 +165,7 @@
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
         disabled={$config.maximumSelectionSize > 0 &&
             ($selectedItems.length || 0) >= $config.maximumSelectionSize}
-        on:click|preventDefault={openContentBrowser}
+        on:click|preventDefault={() => ($showContentBrowser = true)}
         >{#if config.maximumSelectionSize == 1}choose{:else}add{/if}</button
     >
 </div>

@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { cache } from "./stores";
+import { pathCache } from "./stores";
 
 
 export default function (config) {
@@ -11,6 +11,7 @@ export default function (config) {
         uids = null,
         params = null,
         searchTerm = null,
+        levelInfoPath = null,
         selectableTypes = [],
     }) => {
         let vocabQuery = {
@@ -29,6 +30,17 @@ export default function (config) {
                 sort_order: "ascending",
             };
         }
+        if (levelInfoPath) {
+            vocabQuery = {
+                criteria: [
+                    {
+                        i: "path",
+                        o: "plone.app.querystring.operation.string.path",
+                        v: `${levelInfoPath}::0`,
+                    },
+                ],
+            };
+        }
         if (uids) {
             vocabQuery = {
                 criteria: [
@@ -42,7 +54,7 @@ export default function (config) {
         }
         if(searchTerm) {
             vocabQuery.criteria.push({
-                i: "Title",
+                i: "SearchableText",
                 o: "plone.app.querystring.operation.string.contains",
                 v: `${searchTerm}`,
 
@@ -92,7 +104,7 @@ export default function (config) {
         }
     };
 
-    store.get = async (path, searchTerm, levelData, skipCache) => {
+    store.get = async (path, searchTerm, skipCache) => {
         let parts = path.split("/") || [];
         const depth = parts.length >= config.maxDepth ? config.maxDepth : parts.length;
         let paths = [];
@@ -111,14 +123,15 @@ export default function (config) {
 
         let levels = [];
         let pathCounter = 0;
+
         for (var p of paths) {
             pathCounter++;
             const isFirstPath = pathCounter == 1;
             if(typeof skipCache === "undefined") {
-                skipCache = isFirstPath || searchTerm;
+                skipCache = isFirstPath && searchTerm;
             }
             let level = {};
-            const c = get(cache);
+            const c = get(pathCache);
             if (Object.keys(c).indexOf(p) === -1 || skipCache) {
                 let query = {
                     method: "GET"
@@ -130,22 +143,31 @@ export default function (config) {
                 queryPath = queryPath + p;
                 query["path"] = queryPath;
                 if(isFirstPath && searchTerm){
-                    query["searchTerm"] = searchTerm + "*";
+                    query["searchTerm"] = "*" + searchTerm + "*";
                 }
                 if(config.selectableTypes.length) {
                     query["selectableTypes"] = config.selectableTypes;
                 }
                 level = await store.request(query);
-                cache.update((n) => {
-                    n[p] = level;
-                    return n;
-                });
+                // do not update cache when searching
+                if(!skipCache) {
+                    const levelInfo = await store.request({
+                        "levelInfoPath": queryPath,
+                    });
+                    if (levelInfo.total) {
+                        level.UID = levelInfo.results[0].UID;
+                        level.Title = levelInfo.results[0].Title;
+                    }
+                    level.gridView = false;
+                    level.path = p;
+                    pathCache.update((n) => {
+                        n[p] = level;
+                        return n;
+                    });
+                }
             } else {
                 level = c[p];
             }
-            level.path = p;
-            level.UID = levelData?.UID;
-            level.Title = levelData?.Title;
             levels = [level, ...levels];
         }
         store.set(levels);

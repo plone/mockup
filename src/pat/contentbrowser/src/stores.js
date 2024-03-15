@@ -2,7 +2,8 @@ import { setContext } from 'svelte';
 import { writable } from 'svelte/store';
 
 export const currentPath = writable('/');
-export const cache = writable({});
+export const gridView = writable(false);
+export const pathCache = writable({});
 
 // reactive context stores
 export function setSelectedItems() {
