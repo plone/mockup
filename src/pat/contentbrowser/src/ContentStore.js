@@ -88,11 +88,11 @@ export default function (config) {
                 data.errors = json.errors;
                 return data;
             });
-            return {};
+            return [];
         }
     };
 
-    store.get = async (path, searchTerm, levelData) => {
+    store.get = async (path, searchTerm, levelData, skipCache) => {
         let parts = path.split("/") || [];
         const depth = parts.length >= config.maxDepth ? config.maxDepth : parts.length;
         let paths = [];
@@ -114,7 +114,9 @@ export default function (config) {
         for (var p of paths) {
             pathCounter++;
             const isFirstPath = pathCounter == 1;
-            const skipCache = isFirstPath && searchTerm;
+            if(typeof skipCache === "undefined") {
+                skipCache = isFirstPath || searchTerm;
+            }
             let level = {};
             const c = get(cache);
             if (Object.keys(c).indexOf(p) === -1 || skipCache) {
@@ -134,12 +136,10 @@ export default function (config) {
                     query["selectableTypes"] = config.selectableTypes;
                 }
                 level = await store.request(query);
-                if(!skipCache){
-                    cache.update((n) => {
-                        n[p] = level;
-                        return n;
-                    });
-                }
+                cache.update((n) => {
+                    n[p] = level;
+                    return n;
+                });
             } else {
                 level = c[p];
             }

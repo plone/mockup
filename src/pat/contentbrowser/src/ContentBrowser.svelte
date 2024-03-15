@@ -33,47 +33,27 @@
     let currentLevelData = {};
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    // let vh = Math.max(
-    //     document.documentElement.clientHeight || 0,
-    //     window.innerHeight || 0
-    // );
-    let breakPoint = ["xs", 0];
-
-    function getBreakPoint() {
-        vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        //vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-        if (vw >= 576) {
-            breakPoint = ["sm", 576];
-        } else if (vw >= 768) {
-            breakPoint = ["md", 768];
-        } else if (vw >= 992) {
-            breakPoint = ["lg", 992];
-        } else if (vw >= 1200) {
-            breakPoint = ["xl", 1200];
-        } else if (vw >= 1400) {
-            breakPoint = ["xxl", 1400];
-        }
-        return breakPoint;
-    }
 
     onMount(() => {
-        breakPoint = getBreakPoint();
         console.log(
             `ContentBrowser initialized reactive context config: ${JSON.stringify($config)}`,
         );
     });
 
     async function upload() {
+        previewItem = { UID: "" };
         showUpload = true;
         await utils.timeout(1);
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
         const patUpload = new Upload(uploadEl, {
+            baseUrl: window.base_url,
             currentPath: $currentPath,
+            relativePath: "@@fileUpload",
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
-            success: () => {
-                debugger;
+            success: (fileUpload, obj) => {
+                contentItems.get($currentPath, null, null, true);
             },
         });
     }
@@ -195,7 +175,7 @@
                 <button
                     class="btn btn-link text-white"
                     tabindex="0"
-                    on:click={() => cancelSelection()}
+                    on:click|preventDefault={() => cancelSelection()}
                     ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                 >
             </div>
@@ -219,9 +199,9 @@
                                     </button>
                                 {/if}
                                 <div class="levelActions">
-                                    <button class="btn btn-link btn-sm grid-view">
+                                    <!-- <button class="btn btn-link btn-sm grid-view">
                                         <svg use:resolveIcon={{ iconName: "grid" }} />
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                             {#each level.results as item, n}
