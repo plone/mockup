@@ -119,9 +119,6 @@ var InternalLink = LinkType.extend({
         return null;
     },
 
-    // initial data is read and tranfert to contentbrowser pattern on creating time, not here!
-    load: function (element) { },
-
 });
 
 var UploadLink = LinkType.extend({

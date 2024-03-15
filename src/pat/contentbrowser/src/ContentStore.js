@@ -60,7 +60,7 @@ export default function (config) {
 
             })
         }
-        // if(selectableTypes) {
+        if(selectableTypes) {
         //     if(selectableTypes.indexOf("Folder") == -1) {
         //         // add Folder always to preserve browsing through structure
         //         selectableTypes.push("Folder");
@@ -71,7 +71,7 @@ export default function (config) {
         //         o: "plone.app.querystring.operation.selection.any",
         //         v: selectableTypes,
         //     });
-        // }
+        }
         let url = `${config.vocabularyUrl}&query=${JSON.stringify(
             vocabQuery
         )}&attributes=${JSON.stringify(config.attributes)}&batch=${JSON.stringify({

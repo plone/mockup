@@ -7,8 +7,6 @@ import utils from "../../core/utils";
 
 export const parser = new Parser("contentbrowser");
 
-const portalUrl = document.body.dataset["portalUrl"];
-
 parser.addArgument("vocabulary-url");
 parser.addArgument(
     "attributes",
