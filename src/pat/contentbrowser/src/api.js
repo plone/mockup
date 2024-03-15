@@ -1,4 +1,3 @@
-import { getContext } from "svelte";
 
 export async function request({
     method = "GET",
