@@ -53,7 +53,7 @@
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
             success: (fileUpload, obj) => {
-                contentItems.get($currentPath, null, null, true);
+                contentItems.get($currentPath, null, true);
             },
         });
     }
@@ -127,7 +127,7 @@
 
     $: {
         if ($config.vocabularyUrl) {
-            contentItems.get($currentPath, null, currentLevelData);
+            contentItems.get($currentPath);
         }
     }
 
@@ -199,9 +199,19 @@
                                     </button>
                                 {/if}
                                 <div class="levelActions">
-                                    <!-- <button class="btn btn-link btn-sm grid-view">
+                                    {#if !level.gridView}
+                                    <button class="btn btn-link btn-sm grid-view"
+                                        on:click={() => (level.gridView = true)}
+                                    >
                                         <svg use:resolveIcon={{ iconName: "grid" }} />
-                                    </button> -->
+                                    </button>
+                                    {:else}
+                                    <button class="btn btn-link btn-sm grid-view"
+                                        on:click={() => (level.gridView = false)}
+                                    >
+                                        <svg use:resolveIcon={{ iconName: "list" }} />
+                                    </button>
+                                    {/if}
                                 </div>
                             </div>
                             {#each level.results as item, n}
@@ -218,6 +228,20 @@
                                     on:keydown={() => changePath(item)}
                                     on:click={() => changePath(item)}
                                 >
+                                    {#if level.gridView}
+                                    <div class="grid-preview">
+                                        {#if item.getIcon}
+                                        <img src={`${item.getURL}/@@images/image/thumb`} alt={item.Title}>
+                                        {:else}
+                                        <svg
+                                            use:resolveIcon={{
+                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                            }}
+                                        />
+                                        {/if}
+                                        {item.Title}
+                                    </div>
+                                    {:else}
                                     <div title={item.portal_type}>
                                         <svg
                                             use:resolveIcon={{
@@ -226,6 +250,7 @@
                                         />
                                         {item.Title}
                                     </div>
+                                    {/if}
                                     {#if item.is_folderish}
                                         <svg
                                             use:resolveIcon={{
@@ -285,8 +310,7 @@
         background-color: rgba(0, 0, 0, 0.25);
     }
     .content-browser {
-        height: 99vh;
-        /* padding: 1rem; */
+        height: 100vh;
         min-width: 550px;
         background-color: var(--bs-light-bg-subtle);
         border-left: var(--bs-border-style) var(--bs-border-width) #fff;
@@ -387,6 +411,13 @@
         max-width: 100%;
     }
 
+    .contentItem .grid-preview > img {
+        width:95px;
+        height:95px;
+        object-fit:cover;
+        float: left;
+        margin-right: 1rem;
+    }
     .preview {
         min-width: 320px;
         max-width: 500px;
@@ -397,6 +428,7 @@
     }
     .preview .info {
         padding: 0.5rem;
+        width: 100%;
     }
     .preview h4 {
         font-size: 1.2 rem;
