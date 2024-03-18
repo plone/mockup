@@ -64,7 +64,13 @@ export default class TinyMCE {
     }
     generateUrl(data) {
         var self = this;
-        return self.options.prependToUrl + data + self.options.appendToUrl;
+        let part = "undefined";
+        if(typeof data === "object" && Object.keys(data).indexOf(self.options.linkAttribute) != -1) {
+            part = data[self.options.linkAttribute];
+        } else if (typeof data === "string") {
+            part = data;
+        }
+        return self.options.prependToUrl + part + self.options.appendToUrl;
     }
     generateImageUrl(data, scale_name) {
         var self = this;
