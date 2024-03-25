@@ -177,7 +177,7 @@
                 <p>...loading content items</p>
             {:then levels}
                 <div class="levelColumns">
-                    {#each (levels || []) as level, i (level.path)}
+                    {#each levels as level, i (level.path)}
                         <div
                             class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
                             in:fly|local={{ duration: 300 }}
@@ -218,7 +218,7 @@
                                     {/if}
                                 </div>
                             </div>
-                            {#each level.results as item, n}
+                            {#each (level.results || []) as item, n}
                                 <div
                                     class="contentItem{n % 2 == 0
                                         ? ' odd'
@@ -264,7 +264,7 @@
                                     {/if}
                                 </div>
                             {/each}
-                            {#if level.results.length == 0}
+                            {#if level.total == 0}
                             <div class="contentItem">
                                 <p>no items found.</p>
                             </div>
