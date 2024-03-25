@@ -36,10 +36,13 @@ parser.addArgument(
 );
 parser.addArgument("max-depth", "200");
 parser.addArgument("base-path", `/`);
+parser.addArgument("context-path", `/`);
 parser.addArgument("maximum-selection-size", -1);
-parser.addArgument("selectable-types", [], null, true);
+parser.addArgument("selectable-types");
 parser.addArgument("separator", ";");
 parser.addArgument("selection", []);
+parser.addArgument("recently-used", []);
+parser.addArgument("recently-used-key", []);
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";

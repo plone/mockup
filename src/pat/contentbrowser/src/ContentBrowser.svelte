@@ -21,12 +21,13 @@
 
     // get context stores
     const config = getContext("config");
+    const pathCache = getContext('pathCache');
     const showContentBrowser = getContext("showContentBrowser");
     const selectedItems = getContext("selectedItems");
     const selectedUids = getContext("selectedUids");
 
     // initialize content browser store
-    const contentItems = contentStore($config);
+    const contentItems = contentStore($config, pathCache);
 
     let showUpload = false;
     let previewItem = { UID: "" };
@@ -192,7 +193,7 @@
                                         ><svg use:resolveIcon={{ iconName: "house" }} /></button
                                     >
                                 {/if}
-                                {#if i > 0 && level?.UID}
+                                {#if i > 0 && level.selectable}
                                     <button
                                         class="btn btn-primary btn-sm"
                                         disabled={!isSelectable(level)}
@@ -263,6 +264,11 @@
                                     {/if}
                                 </div>
                             {/each}
+                            {#if level.results.length == 0}
+                            <div class="contentItem">
+                                <p>no items found.</p>
+                            </div>
+                            {/if}
                         </div>
                     {/each}
                     {#if previewItem.UID}

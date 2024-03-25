@@ -1,8 +1,6 @@
 import { writable, get } from "svelte/store";
-import { pathCache } from "./stores";
 
-
-export default function (config) {
+export default function (config, pathCache) {
     const store = writable([]);
 
     store.request = async ({
@@ -12,7 +10,6 @@ export default function (config) {
         params = null,
         searchTerm = null,
         levelInfoPath = null,
-        selectableTypes = [],
     }) => {
         let vocabQuery = {
             criteria: [],
@@ -60,18 +57,7 @@ export default function (config) {
 
             })
         }
-        if(selectableTypes) {
-        //     if(selectableTypes.indexOf("Folder") == -1) {
-        //         // add Folder always to preserve browsing through structure
-        //         selectableTypes.push("Folder");
-        //     }
-        //     // query only selectable types
-        //     vocabQuery.criteria.push({
-        //         i: "portal_type",
-        //         o: "plone.app.querystring.operation.selection.any",
-        //         v: selectableTypes,
-        //     });
-        }
+
         let url = `${config.vocabularyUrl}&query=${JSON.stringify(
             vocabQuery
         )}&attributes=${JSON.stringify(config.attributes)}&batch=${JSON.stringify({
@@ -93,6 +79,21 @@ export default function (config) {
         const json = await response.json();
 
         if (response.ok) {
+            if(config.selectableTypes.length) {
+                // we iter through response and filter out non-selectable
+                // types but keeping folderish types to maintain browsing
+                // the content structure.
+                const filtered_response = {
+                    results: [],
+                    total: json.total,
+                }
+                for(const it of json.results) {
+                    if(config.selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
+                        filtered_response.results.push(it);
+                    }
+                }
+                return filtered_response;
+            }
             return json;
         } else {
             store.update((data) => {
@@ -156,6 +157,8 @@ export default function (config) {
                     if (levelInfo.total) {
                         level.UID = levelInfo.results[0].UID;
                         level.Title = levelInfo.results[0].Title;
+                        // check if level is selectable (config.selectableTypes)
+                        level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.results[0].portal_type) != -1);
                     }
                     level.gridView = false;
                     level.path = p;

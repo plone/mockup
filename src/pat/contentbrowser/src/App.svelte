@@ -4,6 +4,7 @@
     import SelectedItems from "./SelectedItems.svelte";
     import {
         setConfig,
+        setPathCache,
         setSelectedItems,
         setSelectedUids,
         setShowContentBrowser,
@@ -11,6 +12,7 @@
 
     export let maxDepth;
     export let basePath = "";
+    export let contextPath = "";
     export let selectableTypes = [];
     export let maximumSelectionSize = -1;
     export let attributes;
@@ -19,9 +21,12 @@
     export let vocabularyUrl;
     export let fieldId;
     export let upload;
+    export let recentlyUsed;
+    export let recentlyUsedKey;
 
     // initialize context stores
     setConfig();
+    setPathCache();
     setSelectedItems();
     setShowContentBrowser();
     setSelectedUids();
@@ -30,6 +35,7 @@
     $config = {
         maxDepth: maxDepth,
         basePath: basePath,
+        contextPath: contextPath,
         selectableTypes: selectableTypes,
         maximumSelectionSize: maximumSelectionSize,
         attributes: attributes,
@@ -38,6 +44,8 @@
         vocabularyUrl: vocabularyUrl,
         fieldId: fieldId,
         uploadEnabled: upload,
+        recentlyUsed: recentlyUsed,
+        recentlyUsedKey: recentlyUsedKey,
     }
 
     console.log(`Initialized App<${fieldId}> with config ${JSON.stringify($config)}`);
