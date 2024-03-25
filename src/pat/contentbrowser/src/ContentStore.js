@@ -65,12 +65,6 @@ export default function (config, pathCache) {
             size: 100,
         })}`;
 
-        store.update((data) => {
-            delete data.errors;
-            data.loading = true;
-            return data;
-        });
-
         let headers = new Headers();
         headers.set("Accept", "application/json");
         const body = params ? JSON.stringify(params) : undefined;
@@ -96,12 +90,11 @@ export default function (config, pathCache) {
             }
             return json;
         } else {
-            store.update((data) => {
-                data.loading = false;
-                data.errors = json.errors;
-                return data;
-            });
-            return [];
+            return {
+                results: [],
+                total: 0,
+                errors: json.errors,
+            };
         }
     };
 
