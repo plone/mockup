@@ -37,7 +37,7 @@ parser.addArgument(
 parser.addArgument("max-depth", "200");
 parser.addArgument("base-path", `/`);
 parser.addArgument("context-path", `/`);
-parser.addArgument("maximum-selection-size", -1);
+parser.addArgument("maximum-selection-size");
 parser.addArgument("selectable-types");
 parser.addArgument("separator", ";");
 parser.addArgument("selection", []);
