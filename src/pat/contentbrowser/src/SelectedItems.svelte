@@ -166,7 +166,7 @@
         disabled={$config.maximumSelectionSize > 0 &&
             ($selectedItems.length || 0) >= $config.maximumSelectionSize}
         on:click|preventDefault={() => ($showContentBrowser = true)}
-        >{#if config.maximumSelectionSize == 1}choose{:else}add{/if}</button
+        >{#if $config.maximumSelectionSize == 1}choose{:else}add{/if}</button
     >
 </div>
 
