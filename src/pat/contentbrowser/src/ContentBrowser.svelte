@@ -155,6 +155,7 @@
                         ><svg use:resolveIcon={{ iconName: "search" }} /></label
                     >
                 </div>
+                {#if $config.uploadEnabled}
                 <button
                     type="button"
                     class="upload btn btn-secondary btn-sm"
@@ -163,6 +164,7 @@
                     on:click={upload}
                     ><svg use:resolveIcon={{ iconName: "upload" }} /> upload files to {$currentPath}</button
                 >
+                {/if}
                 <button
                     class="btn btn-link text-white"
                     tabindex="0"
