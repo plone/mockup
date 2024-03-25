@@ -100,6 +100,8 @@ var InternalLink = LinkType.extend({
             ...this.linkModal.options?.relatedItems,
         };
         options["maximum-selection-size"] = 1;
+        // enable upload in ContentBrowser instead of separate tab
+        options["upload"] = 1;
         const inputEl = this.getEl();
         const element = this.tiny.selection.getNode();
         const linkType = this.tiny.dom.getAttrib(element, "data-linktype");
