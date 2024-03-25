@@ -18,6 +18,7 @@
     export let selection = [];
     export let vocabularyUrl;
     export let fieldId;
+    export let upload;
 
     // initialize context stores
     setConfig();
@@ -36,6 +37,7 @@
         selection: selection,
         vocabularyUrl: vocabularyUrl,
         fieldId: fieldId,
+        uploadEnabled: upload,
     }
 
     console.log(`Initialized App<${fieldId}> with config ${JSON.stringify($config)}`);
