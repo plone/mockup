@@ -104,7 +104,7 @@ export default function (config) {
         }
     };
 
-    store.get = async (path, searchTerm, skipCache) => {
+    store.get = async (path, searchTerm, updateCache) => {
         let parts = path.split("/") || [];
         const depth = parts.length >= config.maxDepth ? config.maxDepth : parts.length;
         let paths = [];
@@ -127,9 +127,7 @@ export default function (config) {
         for (var p of paths) {
             pathCounter++;
             const isFirstPath = pathCounter == 1;
-            if(typeof skipCache === "undefined") {
-                skipCache = isFirstPath && searchTerm;
-            }
+            let skipCache = isFirstPath && (searchTerm || updateCache);
             let level = {};
             const c = get(pathCache);
             if (Object.keys(c).indexOf(p) === -1 || skipCache) {
@@ -149,8 +147,9 @@ export default function (config) {
                     query["selectableTypes"] = config.selectableTypes;
                 }
                 level = await store.request(query);
+
                 // do not update cache when searching
-                if(!skipCache) {
+                if(!searchTerm) {
                     const levelInfo = await store.request({
                         "levelInfoPath": queryPath,
                     });

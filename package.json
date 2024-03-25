@@ -33,7 +33,7 @@
         "datatables.net-rowreorder-bs5": "1.2.8",
         "datatables.net-select": "1.4.0",
         "datatables.net-select-bs5": "1.4.0",
-        "dropzone": "4.3.0",
+        "dropzone": "5.9.3",
         "jqtree": "1.8.4",
         "jquery": "^3.7.1",
         "jquery-form": "4.3.0",

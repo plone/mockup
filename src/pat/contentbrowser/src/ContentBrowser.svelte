@@ -115,7 +115,6 @@
     }
 
     function filterItems() {
-        console.log($contentItems, this.value);
         let timeoutId;
         if (timeoutId) {
             clearTimeout(timeoutId);
@@ -127,7 +126,7 @@
 
     $: {
         if ($config.vocabularyUrl) {
-            contentItems.get($currentPath);
+            contentItems.get($currentPath, null, true);
         }
     }
 
@@ -150,14 +149,6 @@
             on:click_outside={cancelSelection}
         >
             <div class="toolBar navbar">
-                <button
-                    type="button"
-                    class="toolbarAction"
-                    tabindex="0"
-                    on:keydown={() => changePath("/")}
-                    on:click={() => changePath("/")}
-                    ><svg use:resolveIcon={{ iconName: "house" }} /></button
-                ><span class="path">{$currentPath}</span>
                 <div class="filter">
                     <input type="text" name="filter" on:input={filterItems} />
                     <label for="filter"
@@ -170,7 +161,7 @@
                     tabindex="0"
                     on:keydown={upload}
                     on:click={upload}
-                    ><svg use:resolveIcon={{ iconName: "upload" }} /> upload</button
+                    ><svg use:resolveIcon={{ iconName: "upload" }} /> upload files to {$currentPath}</button
                 >
                 <button
                     class="btn btn-link text-white"
@@ -183,19 +174,29 @@
                 <p>...loading content items</p>
             {:then levels}
                 <div class="levelColumns">
-                    {#each levels as level, i (level.path)}
+                    {#each (levels || []) as level, i (level.path)}
                         <div
                             class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
+                                {#if i == 0}
+                                    <button
+                                        type="button"
+                                        class="btn btn-link btn-sm"
+                                        tabindex="0"
+                                        on:keydown={() => changePath("/")}
+                                        on:click={() => changePath("/")}
+                                        ><svg use:resolveIcon={{ iconName: "house" }} /></button
+                                    >
+                                {/if}
                                 {#if i > 0 && level?.UID}
                                     <button
                                         class="btn btn-primary btn-sm"
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => selectItem(level)}
                                     >
-                                        select
+                                        select {level.path}
                                     </button>
                                 {/if}
                                 <div class="levelActions">
@@ -269,7 +270,7 @@
                                     class="btn btn-primary btn-sm"
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() => selectItem(previewItem)}
-                                    >select</button
+                                    >select "{previewItem.path.split("/").pop()}"</button
                                 >
                             </div>
                             <div class="info">
@@ -325,13 +326,7 @@
         color: var(--bs-light);
         width: 100%;
         display: flex;
-        justify-content: start;
-    }
-    .toolBar > .path {
-        padding-right: 1.5rem;
-    }
-    .toolBar > .filter {
-        margin-left: auto;
+        justify-content: end;
     }
     .toolBar > .upload {
         margin: 0 1rem 0 2rem;
@@ -339,23 +334,18 @@
     .toolBar :global(svg) {
         vertical-align: -0.125em;
     }
-    .toolbarAction {
-        color: var(--bs-light);
-        background-color: transparent;
-        border: none;
-    }
-
     .levelColumns {
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        overflow-x: auto;
+        overflow:hidden;
         flex-grow: 3;
         border-left: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
     }
 
     .levelColumn {
         min-width: 320px;
+        overflow-x: auto;
         border-right: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
         /* border-top: 5px solid transparent; */
@@ -442,5 +432,6 @@
     .upload-wrapper {
         padding: 1rem;
         width: 590px;
+        overflow-x: auto;
     }
 </style>
