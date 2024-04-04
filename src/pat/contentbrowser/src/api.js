@@ -1,56 +1,69 @@
 
 export async function request({
     method = "GET",
-    vocabularyUrl = "",
-    attributes = {},
     path = null,
-    uids = null,
-    params = null,
+    uids = [],
+    searchTerm = null,
+    levelInfoPath = null,
+    base_url = null,
+    selectableTypes = [],
 }) {
-    let vocabQuery;
-
+    let query = new URLSearchParams();
     if (path) {
-        vocabQuery = {
-            criteria: [
-                {
-                    i: "path",
-                    o: "plone.app.querystring.operation.string.path",
-                    v: `${path}::1`,
-                },
-            ],
-            sort_on: "getObjPositionInParent",
-            sort_order: "ascending",
-        };
+        query.set("path.query", path);
+        query.set("path.depth", 1);
+        query.set("sort_on", "getObjPositionInParent");
+        query.set("sort_order", "ascending");
     }
-    if (uids) {
-        vocabQuery = {
-            criteria: [
-                {
-                    i: "UID",
-                    o: "plone.app.querystring.operation.list.contains",
-                    v: uids,
-                },
-            ],
-        };
+    else if (levelInfoPath) {
+        query.set("path.query", levelInfoPath);
+        query.set("path.depth", 0);
     }
-    let url = `${vocabularyUrl}&query=${JSON.stringify(
-        vocabQuery
-    )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
-        page: 1,
-        size: 100,
-    })}`;
+    if (uids.length) {
+        for(const uid of uids) {
+            query.append("UID", uid);
+        }
+    }
+    if (searchTerm) {
+        query.set("SearchableText", searchTerm);
+    }
+
+    query.set("metadata_fields", "_all");
+
+    const url = `${base_url}/@search?${query.toString()}`;
+    console.log(url);
 
     let headers = new Headers();
-    // headers.set("Content-type", "application/json");
     headers.set("Accept", "application/json");
-    const body = params ? JSON.stringify(params) : undefined;
 
-    const response = await fetch(url, { method, body, headers });
+    const response = await fetch(url, {
+        method: method,
+        headers: headers,
+    });
     const json = await response.json();
 
     if (response.ok) {
+        if (selectableTypes.length) {
+            // we iter through response and filter out non-selectable
+            // types but keeping folderish types to maintain browsing
+            // the content structure.
+            const filtered_response = {
+                items: [],
+                items_total: json.items_total,
+            }
+            for (const it of json.items) {
+                if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
+                    filtered_response.items.push(it);
+                }
+            }
+            return filtered_response;
+        }
         return json;
     } else {
-        return json.errors;
+        return {
+            items: [],
+            items_total: 0,
+            errors: json.errors,
+        };
     }
 }
