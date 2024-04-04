@@ -1,117 +1,26 @@
 import { writable, get } from "svelte/store";
+import { request } from "./api.js";
 
 export default function (config, pathCache) {
     const store = writable([]);
 
-    store.request = async ({
-        method = "GET",
-        path = null,
-        uids = null,
-        params = null,
-        searchTerm = null,
-        levelInfoPath = null,
-    }) => {
-        let vocabQuery = {
-            criteria: [],
-        };
-        if (path) {
-            vocabQuery = {
-                criteria: [
-                    {
-                        i: "path",
-                        o: "plone.app.querystring.operation.string.path",
-                        v: `${path}::1`,
-                    },
-                ],
-                sort_on: "getObjPositionInParent",
-                sort_order: "ascending",
-            };
-        }
-        if (levelInfoPath) {
-            vocabQuery = {
-                criteria: [
-                    {
-                        i: "path",
-                        o: "plone.app.querystring.operation.string.path",
-                        v: `${levelInfoPath}::0`,
-                    },
-                ],
-            };
-        }
-        if (uids) {
-            vocabQuery = {
-                criteria: [
-                    {
-                        i: "UID",
-                        o: "plone.app.querystring.operation.list.contains",
-                        v: uids,
-                    },
-                ],
-            };
-        }
-        if(searchTerm) {
-            vocabQuery.criteria.push({
-                i: "SearchableText",
-                o: "plone.app.querystring.operation.string.contains",
-                v: `${searchTerm}`,
-
-            })
-        }
-
-        let url = `${config.vocabularyUrl}&query=${JSON.stringify(
-            vocabQuery
-        )}&attributes=${JSON.stringify(config.attributes)}&batch=${JSON.stringify({
-            page: 1,
-            size: 100,
-        })}`;
-
-        let headers = new Headers();
-        headers.set("Accept", "application/json");
-        const body = params ? JSON.stringify(params) : undefined;
-
-        const response = await fetch(url, { method, body, headers });
-        const json = await response.json();
-
-        if (response.ok) {
-            if(config.selectableTypes.length) {
-                // we iter through response and filter out non-selectable
-                // types but keeping folderish types to maintain browsing
-                // the content structure.
-                const filtered_response = {
-                    results: [],
-                    total: json.total,
-                }
-                for(const it of json.results) {
-                    if(config.selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
-                        filtered_response.results.push(it);
-                    }
-                }
-                return filtered_response;
-            }
-            return json;
-        } else {
-            return {
-                results: [],
-                total: 0,
-                errors: json.errors,
-            };
-        }
-    };
-
     store.get = async (path, searchTerm, updateCache) => {
+        const base_url = new URL(config.base_url);
+        const portalPath = base_url.pathname;
+        path = path.replace(new RegExp(`^${portalPath}`), "");
+
         let parts = path.split("/") || [];
         const depth = parts.length >= config.maxDepth ? config.maxDepth : parts.length;
         let paths = [];
 
         let partsToShow = parts.slice(parts.length - depth, parts.length);
         let partsToHide = parts.slice(0, parts.length - depth);
-        const pathPrefix = partsToHide.join("/");
+        const pathPrefix = portalPath + partsToHide.join("/");
+
         while (partsToShow.length > 0) {
-            let sub_path = partsToShow.join("/");
-            if (!sub_path.startsWith("/")) sub_path = "/" + sub_path;
-            sub_path = pathPrefix + sub_path;
+            let sub_path = partsToShow.join("/").replace(/^\//, "");
             const poped = partsToShow.pop();
-            if (poped === "") sub_path = "/";
+            sub_path = pathPrefix + ((poped != "") ? `/${sub_path}`: "");
             if (paths.indexOf(sub_path) === -1) paths.push(sub_path);
         }
 
@@ -126,32 +35,30 @@ export default function (config, pathCache) {
             const c = get(pathCache);
             if (Object.keys(c).indexOf(p) === -1 || skipCache) {
                 let query = {
-                    method: "GET"
+                    base_url: config.base_url,
+                    path: p,
                 };
-                let queryPath = config.basePath;
-                if (queryPath === "/") {
-                    queryPath = "";
-                }
-                queryPath = queryPath + p;
-                query["path"] = queryPath;
+
                 if(isFirstPath && searchTerm){
                     query["searchTerm"] = "*" + searchTerm + "*";
                 }
                 if(config.selectableTypes.length) {
                     query["selectableTypes"] = config.selectableTypes;
                 }
-                level = await store.request(query);
+
+                level = await request(query);
 
                 // do not update cache when searching
                 if(!searchTerm) {
-                    const levelInfo = await store.request({
-                        "levelInfoPath": queryPath,
+                    const levelInfo = await request({
+                        base_url: config.base_url,
+                        levelInfoPath: p,
                     });
-                    if (levelInfo.total) {
-                        level.UID = levelInfo.results[0].UID;
-                        level.Title = levelInfo.results[0].Title;
+                    if (levelInfo.items_total) {
+                        level.UID = levelInfo.items[0].UID;
+                        level.Title = levelInfo.items[0].Title;
                         // check if level is selectable (config.selectableTypes)
-                        level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.results[0].portal_type) != -1);
+                        level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.items[0].portal_type) != -1);
                     }
                     level.gridView = false;
                     level.path = p;

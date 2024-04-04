@@ -11,14 +11,13 @@
     } from "./stores";
 
     export let maxDepth;
+    export let mode;
     export let basePath = "";
-    export let contextPath = "";
     export let selectableTypes = [];
     export let maximumSelectionSize = -1;
-    export let attributes;
     export let separator;
     export let selection = [];
-    export let vocabularyUrl;
+    export let query = {};
     export let fieldId;
     export let upload;
     export let recentlyUsed;
@@ -31,21 +30,22 @@
     setShowContentBrowser();
     setSelectedUids();
 
+    const base_url = document.body.getAttribute("data-portal-url");
     let config = getContext("config");
     $config = {
+        mode: mode,
         maxDepth: maxDepth,
         basePath: basePath,
-        contextPath: contextPath,
         selectableTypes: selectableTypes,
         maximumSelectionSize: maximumSelectionSize,
-        attributes: attributes,
         separator: separator,
         selection: selection,
-        vocabularyUrl: vocabularyUrl,
+        query: query,
         fieldId: fieldId,
         uploadEnabled: upload,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,
+        base_url: base_url,
     }
 
     console.log(`Initialized App<${fieldId}> with config ${JSON.stringify($config)}`);

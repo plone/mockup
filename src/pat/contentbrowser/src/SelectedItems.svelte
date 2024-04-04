@@ -60,11 +60,10 @@
         }
         const selectedItemsFromUids = await request({
             method: "GET",
-            vocabularyUrl: $config.vocabularyUrl,
-            attributes: $config.attributes,
+            base_url: $config.base_url,
             uids: uids,
         });
-        return (await selectedItemsFromUids?.results) || [];
+        return (await selectedItemsFromUids?.items) || [];
     }
 
     async function initializeSelectedItemsStore() {
@@ -150,7 +149,7 @@
                         >
                         <div>
                             <span class="item-title">{selItem.Title}</span><br />
-                            <span class="small">{selItem.path}</span>
+                            <span class="small">{selItem.getPath}</span>
                         </div>
                     </div>
                     {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img
