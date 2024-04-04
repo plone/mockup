@@ -31,7 +31,6 @@ export async function request({
     query.set("metadata_fields", "_all");
 
     const url = `${base_url}/@search?${query.toString()}`;
-    console.log(url);
 
     let headers = new Headers();
     headers.set("Accept", "application/json");
@@ -50,6 +49,9 @@ export async function request({
             const filtered_response = {
                 items: [],
                 items_total: json.items_total,
+            }
+            if(json.batching) {
+                filtered_response.batching = json.batching;
             }
             for (const it of json.items) {
                 if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
