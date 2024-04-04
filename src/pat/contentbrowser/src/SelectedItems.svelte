@@ -3,6 +3,7 @@
     import { flip } from "svelte/animate";
     import { request } from "./api.js";
     import { resolveIcon } from "./resolveIcon.js";
+    import Sortable from "sortablejs";
 
     let ref;
     let initializing = true;
@@ -36,6 +37,7 @@
     onMount(async () => {
         console.log(`${fieldId} start onMount()`);
         await initializeSelectedItemsStore();
+        initializeSorting();
         console.log(
             `${fieldId} end onMount(). $selectedItems: ${JSON.stringify($selectedItems)}`,
         );
@@ -79,9 +81,10 @@
         const selectedItemsUids = await getSelectedItemsUids(initialValue);
         $selectedItems = selectedItemsUids;
         selectedUids.update(() => selectedItemsUids.map((x) => x.UID));
+    }
 
+    function initializeSorting() {
         if ($config.maximumSelectionSize !== 1 && $selectedItems.length > 1) {
-            let Sortable = (await import("sortablejs")).default;
             Sortable.create(
                 selectedItemsNode.previousSibling.querySelector(
                     ".content-browser-selected-items",
@@ -122,6 +125,7 @@
         );
         if ($selectedItems.length || !initializing) {
             setNodeValue(selectedUidsFromSelectedItems());
+            initializeSorting();
             event_dispatch("updateSelection", selectedUids);
         }
     }
