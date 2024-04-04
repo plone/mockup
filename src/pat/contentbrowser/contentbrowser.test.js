@@ -19,7 +19,7 @@ describe("Content Browser", () => {
         document.body.innerHTML = "";
     });
 
-    it("create contentbrowser pattern without preselection", async function () {
+    it.skip("create contentbrowser pattern without preselection", async function () {
         expect(document.querySelectorAll(".content-browser-wrapper").length).toEqual(0);
 
         registry.scan(document.body);

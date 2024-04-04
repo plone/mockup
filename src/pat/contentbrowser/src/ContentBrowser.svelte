@@ -48,7 +48,7 @@
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
         const patUpload = new Upload(uploadEl, {
-            baseUrl: window.base_url,
+            baseUrl: config.base_url,
             currentPath: $currentPath,
             relativePath: "@@fileUpload",
             allowPathSelection: false,
@@ -66,14 +66,14 @@
             currentPath.set(item);
             previewItem = { UID: "" };
         } else if (item.is_folderish) {
-            currentPath.set(item.path);
+            currentPath.set(item.getPath);
             previewItem = { UID: "" };
             currentLevelData = {
                 UID: item.UID,
                 Title: item.Title,
             };
         } else {
-            const pathParts = item.path.split("/");
+            const pathParts = item.getPath.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
             currentPath.set(folderPath);
             previewItem = item;
@@ -111,7 +111,7 @@
     }
 
     function itemInPath(item) {
-        const inPath = $currentPath.indexOf(item.path) != -1;
+        const inPath = $currentPath.indexOf(item.getPath) != -1;
         return inPath;
     }
 
@@ -126,9 +126,7 @@
     }
 
     $: {
-        if ($config.vocabularyUrl) {
-            contentItems.get($currentPath, null, true);
-        }
+        contentItems.get($currentPath, null, true);
     }
 
     $: {
@@ -218,7 +216,7 @@
                                     {/if}
                                 </div>
                             </div>
-                            {#each (level.results || []) as item, n}
+                            {#each (level.items || []) as item, n}
                                 <div
                                     class="contentItem{n % 2 == 0
                                         ? ' odd'
@@ -264,7 +262,7 @@
                                     {/if}
                                 </div>
                             {/each}
-                            {#if level.total == 0}
+                            {#if level.items_total == 0}
                             <div class="contentItem">
                                 <p>no items found.</p>
                             </div>
@@ -278,7 +276,7 @@
                                     class="btn btn-primary btn-sm"
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() => selectItem(previewItem)}
-                                    >select "{previewItem.path.split("/").pop()}"</button
+                                    >select "{previewItem.getPath.split("/").pop()}"</button
                                 >
                             </div>
                             <div class="info">

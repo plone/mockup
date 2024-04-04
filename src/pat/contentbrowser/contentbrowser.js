@@ -7,36 +7,10 @@ import utils from "../../core/utils";
 
 export const parser = new Parser("contentbrowser");
 
-parser.addArgument("vocabulary-url");
-parser.addArgument(
-    "attributes",
-    [
-        "UID",
-        "Title",
-        "Description",
-        "portal_type",
-        "path",
-        "getURL",
-        "getIcon",
-        "is_folderish",
-        "review_state",
-    ],
-    [
-        "UID",
-        "Title",
-        "Description",
-        "portal_type",
-        "path",
-        "getURL",
-        "getIcon",
-        "is_folderish",
-        "review_state",
-    ],
-    true
-);
+parser.addArgument("query");
+parser.addArgument("mode", "browse", ["browse", "search"], false);
 parser.addArgument("max-depth", "200");
 parser.addArgument("base-path", `/`);
-parser.addArgument("context-path", `/`);
 parser.addArgument("maximum-selection-size");
 parser.addArgument("selectable-types");
 parser.addArgument("separator", ";");
