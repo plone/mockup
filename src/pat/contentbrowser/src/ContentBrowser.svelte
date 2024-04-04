@@ -8,9 +8,7 @@
     import { resolveIcon } from "./resolveIcon.js";
     import Upload from "../../upload/upload";
 
-    import {
-        currentPath,
-    } from "./stores.js";
+    import { currentPath } from "./stores.js";
     // import Keydown from "svelte-keydown";
 
     animateScroll.setGlobalOptions({
@@ -21,7 +19,7 @@
 
     // get context stores
     const config = getContext("config");
-    const pathCache = getContext('pathCache');
+    const pathCache = getContext("pathCache");
     const showContentBrowser = getContext("showContentBrowser");
     const selectedItems = getContext("selectedItems");
     const selectedUids = getContext("selectedUids");
@@ -54,7 +52,7 @@
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
             success: (fileUpload, obj) => {
-                contentItems.get($currentPath, null, true);
+                contentItems.get({ path: $currentPath, updateCache: true });
             },
         });
     }
@@ -110,9 +108,15 @@
         }
     }
 
+    function loadMore(entries, observer) {
+        entries.forEach(async (entry) => {
+            if (entry.intersectionRatio === 0 || contentItems.loading) return;
+            await contentItems.loadMore(entry.target.dataset.path, $currentPath);
+        });
+    }
+
     function itemInPath(item) {
-        const inPath = $currentPath.indexOf(item.getPath) != -1;
-        return inPath;
+        return $currentPath.indexOf(item.getPath) != -1;
     }
 
     function filterItems() {
@@ -121,19 +125,26 @@
             clearTimeout(timeoutId);
         }
         timeoutId = setTimeout(() => {
-            contentItems.get($currentPath, this.value);
+            contentItems.get({ path: $currentPath, searchTerm: this.value });
         }, 300);
     }
 
+    function initIntersectionObserver() {
+        for (const el of document.querySelectorAll(".load-more")) {
+            const observer = new IntersectionObserver(loadMore);
+            observer.observe(el);
+        }
+    }
+
     $: {
-        contentItems.get($currentPath, null, true);
+        contentItems.get({ path: $currentPath });
     }
 
     $: {
         $contentItems;
         scrollToRight();
+        initIntersectionObserver();
     }
-
 </script>
 
 <!-- <Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} /> -->
@@ -155,14 +166,14 @@
                     >
                 </div>
                 {#if $config.uploadEnabled}
-                <button
-                    type="button"
-                    class="upload btn btn-secondary btn-sm"
-                    tabindex="0"
-                    on:keydown={upload}
-                    on:click={upload}
-                    ><svg use:resolveIcon={{ iconName: "upload" }} /> upload files to {$currentPath}</button
-                >
+                    <button
+                        type="button"
+                        class="upload btn btn-secondary btn-sm"
+                        tabindex="0"
+                        on:keydown={upload}
+                        on:click={upload}
+                        ><svg use:resolveIcon={{ iconName: "upload" }} /> upload files to {$currentPath}</button
+                    >
                 {/if}
                 <button
                     class="btn btn-link text-white"
@@ -188,7 +199,9 @@
                                         tabindex="0"
                                         on:keydown={() => changePath("/")}
                                         on:click={() => changePath("/")}
-                                        ><svg use:resolveIcon={{ iconName: "house" }} /></button
+                                        ><svg
+                                            use:resolveIcon={{ iconName: "house" }}
+                                        /></button
                                     >
                                 {/if}
                                 {#if i > 0 && level.selectable}
@@ -202,21 +215,27 @@
                                 {/if}
                                 <div class="levelActions">
                                     {#if !level.gridView}
-                                    <button class="btn btn-link btn-sm grid-view"
-                                        on:click={() => (level.gridView = true)}
-                                    >
-                                        <svg use:resolveIcon={{ iconName: "grid" }} />
-                                    </button>
+                                        <button
+                                            class="btn btn-link btn-sm grid-view"
+                                            on:click={() => (level.gridView = true)}
+                                        >
+                                            <svg
+                                                use:resolveIcon={{ iconName: "grid" }}
+                                            />
+                                        </button>
                                     {:else}
-                                    <button class="btn btn-link btn-sm grid-view"
-                                        on:click={() => (level.gridView = false)}
-                                    >
-                                        <svg use:resolveIcon={{ iconName: "list" }} />
-                                    </button>
+                                        <button
+                                            class="btn btn-link btn-sm grid-view"
+                                            on:click={() => (level.gridView = false)}
+                                        >
+                                            <svg
+                                                use:resolveIcon={{ iconName: "list" }}
+                                            />
+                                        </button>
                                     {/if}
                                 </div>
                             </div>
-                            {#each (level.items || []) as item, n}
+                            {#each level.items || [] as item, n}
                                 <div
                                     class="contentItem{n % 2 == 0
                                         ? ' odd'
@@ -231,27 +250,30 @@
                                     on:click={() => changePath(item)}
                                 >
                                     {#if level.gridView}
-                                    <div class="grid-preview">
-                                        {#if item.getIcon}
-                                        <img src={`${item.getURL}/@@images/image/thumb`} alt={item.Title}>
-                                        {:else}
-                                        <svg
-                                            use:resolveIcon={{
-                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                            }}
-                                        />
-                                        {/if}
-                                        {item.Title}
-                                    </div>
+                                        <div class="grid-preview">
+                                            {#if item.getIcon}
+                                                <img
+                                                    src={`${item.getURL}/@@images/image/thumb`}
+                                                    alt={item.Title}
+                                                />
+                                            {:else}
+                                                <svg
+                                                    use:resolveIcon={{
+                                                        iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                    }}
+                                                />
+                                            {/if}
+                                            {item.Title}
+                                        </div>
                                     {:else}
-                                    <div title={item.portal_type}>
-                                        <svg
-                                            use:resolveIcon={{
-                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                            }}
-                                        />
-                                        {item.Title}
-                                    </div>
+                                        <div title={item.portal_type}>
+                                            <svg
+                                                use:resolveIcon={{
+                                                    iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                }}
+                                            />
+                                            {item.Title}
+                                        </div>
                                     {/if}
                                     {#if item.is_folderish}
                                         <svg
@@ -262,10 +284,22 @@
                                     {/if}
                                 </div>
                             {/each}
-                            {#if level.items_total == 0}
-                            <div class="contentItem">
-                                <p>no items found.</p>
-                            </div>
+                            {#if level.batching}
+                                <div class="load-more" data-path={level.path}>
+                                    <div
+                                        class="spinner-border {!contentItems.loading
+                                            ? 'd-none'
+                                            : ''}"
+                                        role="status"
+                                    >
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            {/if}
+                            {#if level.items.length == 0}
+                                <div class="contentItem">
+                                    <p>no items found.</p>
+                                </div>
                             {/if}
                         </div>
                     {/each}
@@ -275,8 +309,11 @@
                                 <button
                                     class="btn btn-primary btn-sm"
                                     disabled={!isSelectable(previewItem)}
-                                    on:click|preventDefault={() => selectItem(previewItem)}
-                                    >select "{previewItem.getPath.split("/").pop()}"</button
+                                    on:click|preventDefault={() =>
+                                        selectItem(previewItem)}
+                                    >select "{previewItem.getPath
+                                        .split("/")
+                                        .pop()}"</button
                                 >
                             </div>
                             <div class="info">
@@ -344,7 +381,7 @@
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        overflow:hidden;
+        overflow: hidden;
         flex-grow: 3;
         border-left: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
     }
@@ -408,9 +445,9 @@
     }
 
     .contentItem .grid-preview > img {
-        width:95px;
-        height:95px;
-        object-fit:cover;
+        width: 95px;
+        height: 95px;
+        object-fit: cover;
         float: left;
         margin-right: 1rem;
     }
@@ -439,5 +476,10 @@
         padding: 1rem;
         width: 590px;
         overflow-x: auto;
+    }
+
+    .load-more {
+        text-align: center;
+        min-height: 1rem;
     }
 </style>

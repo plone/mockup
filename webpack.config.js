@@ -116,7 +116,7 @@ module.exports = () => {
     config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
     config.resolve.mainFields = ["browser", "module", "main", "svelte"];
     // config.resolve.conditionNames = ["svelte", "browser", "import"];
-    //config.resolve.conditionNames = ["svelte", "module", "browser"];
+    // config.resolve.conditionNames = ["svelte", "module", "browser", "import"];
 
     config.plugins.push(
         mf_config({
