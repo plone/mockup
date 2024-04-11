@@ -7,16 +7,31 @@ import utils from "../../core/utils";
 
 export const parser = new Parser("contentbrowser");
 
-parser.addArgument("query");
-parser.addArgument("mode", "browse", ["browse", "search"], false);
-parser.addArgument("max-depth", "200");
-parser.addArgument("base-path", `/`);
+parser.addArgument("vocabulary-url");
+parser.addArgument(
+    "attributes",
+    [
+        "UID",
+        "Title",
+        "Description",
+        "portal_type",
+        "path",
+        "getURL",
+        "getIcon",
+        "is_folderish",
+        "review_state",
+    ], null, true
+);
+parser.addArgument("max-depth");
+parser.addArgument("base-path");
+parser.addArgument("context-path");
 parser.addArgument("maximum-selection-size");
 parser.addArgument("selectable-types");
-parser.addArgument("separator", ";");
-parser.addArgument("selection", []);
-parser.addArgument("recently-used", []);
-parser.addArgument("recently-used-key", []);
+parser.addArgument("separator");
+parser.addArgument("selection");
+parser.addArgument("selection-template");
+parser.addArgument("recently-used");
+parser.addArgument("recently-used-key");
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";

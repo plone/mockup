@@ -1,8 +1,12 @@
 import { setContext } from 'svelte';
 import { writable } from 'svelte/store';
 
-export const currentPath = writable('/');
 export const gridView = writable(false);
+
+export function setCurrentPath() {
+    let currentPath = writable('');
+    setContext('currentPath', currentPath);
+}
 
 export function setPathCache() {
     let pathCache = writable({});

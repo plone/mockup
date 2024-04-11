@@ -13,13 +13,9 @@
     const fieldId = $config.fieldId;
     const selectedItemsNode = document.getElementById(fieldId);
 
-    console.log(`${fieldId} get context config: ${JSON.stringify($config)}`);
-
     // get reactive context store
     const selectedItems = getContext("selectedItems");
     const selectedUids = getContext("selectedUids");
-
-    console.log(`${fieldId} initialized reactive context store`);
 
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
@@ -35,12 +31,8 @@
     }
 
     onMount(async () => {
-        console.log(`${fieldId} start onMount()`);
         await initializeSelectedItemsStore();
         initializeSorting();
-        console.log(
-            `${fieldId} end onMount(). $selectedItems: ${JSON.stringify($selectedItems)}`,
-        );
         initializing = false;
     });
 
@@ -50,20 +42,18 @@
             return n;
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
-        console.log(`Unselected i=${i}, new value: ${JSON.stringify($selectedUids)}`);
     }
 
     async function getSelectedItemsUids(uids) {
-        console.log(`${fieldId} getSelectedItemsUids ${uids}`);
         if (!uids) {
             return [];
         }
         const selectedItemsFromUids = await request({
-            method: "GET",
-            base_url: $config.base_url,
+            vocabularyUrl: $config.vocabularyUrl,
+            attributes: $config.attributes,
             uids: uids,
         });
-        return (await selectedItemsFromUids?.items) || [];
+        return (await selectedItemsFromUids?.results) || [];
     }
 
     async function initializeSelectedItemsStore() {
@@ -113,15 +103,11 @@
 
     function setNodeValue(selectedUids) {
         const node_val = selectedUids.join($config.separator);
-        console.log(`set value of ${fieldId} to ${node_val}`);
         selectedItemsNode.value = node_val;
     }
 
     $: {
         $selectedItems;
-        console.log(
-            `${fieldId} reactive change in $selectedItems: ${JSON.stringify($selectedItems)}`,
-        );
         if ($selectedItems.length || !initializing) {
             setNodeValue(selectedUidsFromSelectedItems());
             initializeSorting();
@@ -149,7 +135,7 @@
                         >
                         <div>
                             <span class="item-title">{selItem.Title}</span><br />
-                            <span class="small">{selItem.getPath}</span>
+                            <span class="small">{selItem.path}</span>
                         </div>
                     </div>
                     {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img

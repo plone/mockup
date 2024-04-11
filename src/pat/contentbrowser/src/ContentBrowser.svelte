@@ -1,6 +1,6 @@
 <script>
     import utils from "@patternslib/patternslib/src/core/utils";
-    import { getContext, onMount } from "svelte";
+    import { getContext } from "svelte";
     import * as animateScroll from "svelte-scrollto";
     import { fly } from "svelte/transition";
     import contentStore from "./ContentStore";
@@ -8,7 +8,6 @@
     import { resolveIcon } from "./resolveIcon.js";
     import Upload from "../../upload/upload";
 
-    import { currentPath } from "./stores.js";
     // import Keydown from "svelte-keydown";
 
     animateScroll.setGlobalOptions({
@@ -18,6 +17,7 @@
     });
 
     // get context stores
+    const currentPath = getContext("currentPath");
     const config = getContext("config");
     const pathCache = getContext("pathCache");
     const showContentBrowser = getContext("showContentBrowser");
@@ -27,17 +27,13 @@
     // initialize content browser store
     const contentItems = contentStore($config, pathCache);
 
+    console.log(`Initialize ContentBrowser with $currentPath=${$currentPath}`);
+
     let showUpload = false;
     let previewItem = { UID: "" };
     let currentLevelData = {};
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-
-    onMount(() => {
-        console.log(
-            `ContentBrowser initialized reactive context config: ${JSON.stringify($config)}`,
-        );
-    });
 
     async function upload() {
         previewItem = { UID: "" };
@@ -64,14 +60,14 @@
             currentPath.set(item);
             previewItem = { UID: "" };
         } else if (item.is_folderish) {
-            currentPath.set(item.getPath);
+            currentPath.set(item.path);
             previewItem = { UID: "" };
             currentLevelData = {
                 UID: item.UID,
                 Title: item.Title,
             };
         } else {
-            const pathParts = item.getPath.split("/");
+            const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
             currentPath.set(folderPath);
             previewItem = item;
@@ -116,7 +112,7 @@
     }
 
     function itemInPath(item) {
-        return $currentPath.indexOf(item.getPath) != -1;
+        return $currentPath.indexOf(item.path) != -1;
     }
 
     function filterItems() {
@@ -129,21 +125,15 @@
         }, 300);
     }
 
-    function initIntersectionObserver() {
-        for (const el of document.querySelectorAll(".load-more")) {
-            const observer = new IntersectionObserver(loadMore);
-            observer.observe(el);
-        }
-    }
-
     $: {
-        contentItems.get({ path: $currentPath });
+        if ($showContentBrowser) {
+            contentItems.get({ path: $currentPath });
+        }
     }
 
     $: {
         $contentItems;
         scrollToRight();
-        initIntersectionObserver();
     }
 </script>
 
@@ -235,7 +225,7 @@
                                     {/if}
                                 </div>
                             </div>
-                            {#each level.items || [] as item, n}
+                            {#each level.results || [] as item, n}
                                 <div
                                     class="contentItem{n % 2 == 0
                                         ? ' odd'
@@ -284,19 +274,7 @@
                                     {/if}
                                 </div>
                             {/each}
-                            {#if level.batching}
-                                <div class="load-more" data-path={level.path}>
-                                    <div
-                                        class="spinner-border {!contentItems.loading
-                                            ? 'd-none'
-                                            : ''}"
-                                        role="status"
-                                    >
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            {/if}
-                            {#if level.items.length == 0}
+                            {#if level.total == 0}
                                 <div class="contentItem">
                                     <p>no items found.</p>
                                 </div>
@@ -311,9 +289,7 @@
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() =>
                                         selectItem(previewItem)}
-                                    >select "{previewItem.getPath
-                                        .split("/")
-                                        .pop()}"</button
+                                    >select "{previewItem.path.split("/").pop()}"</button
                                 >
                             </div>
                             <div class="info">
@@ -476,10 +452,5 @@
         padding: 1rem;
         width: 590px;
         overflow-x: auto;
-    }
-
-    .load-more {
-        text-align: center;
-        min-height: 1rem;
     }
 </style>
