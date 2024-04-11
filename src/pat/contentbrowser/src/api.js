@@ -1,36 +1,74 @@
 
 export async function request({
     method = "GET",
+    vocabularyUrl = null,
+    attributes = [],
     path = null,
-    uids = [],
+    uids = null,
     searchTerm = null,
     levelInfoPath = null,
-    base_url = null,
     selectableTypes = [],
 }) {
-    let query = new URLSearchParams();
+    let vocabQuery = {
+        criteria: [],
+    };
     if (path) {
-        query.set("path.query", path);
-        query.set("path.depth", 1);
-        query.set("sort_on", "getObjPositionInParent");
-        query.set("sort_order", "ascending");
+        vocabQuery = {
+            criteria: [
+                {
+                    i: "path",
+                    o: "plone.app.querystring.operation.string.path",
+                    v: `${path}::1`,
+                },
+            ],
+            sort_on: "getObjPositionInParent",
+            sort_order: "ascending",
+        };
     }
-    else if (levelInfoPath) {
-        query.set("path.query", levelInfoPath);
-        query.set("path.depth", 0);
+    if (levelInfoPath) {
+        vocabQuery = {
+            criteria: [
+                {
+                    i: "path",
+                    o: "plone.app.querystring.operation.string.path",
+                    v: `${levelInfoPath}::0`,
+                },
+            ],
+        };
     }
-    if (uids.length) {
-        for(const uid of uids) {
-            query.append("UID", uid);
-        }
+    if (uids) {
+        vocabQuery = {
+            criteria: [
+                {
+                    i: "UID",
+                    o: "plone.app.querystring.operation.list.contains",
+                    v: uids,
+                },
+            ],
+        };
     }
     if (searchTerm) {
-        query.set("SearchableText", searchTerm);
+        vocabQuery.criteria.push({
+            i: "SearchableText",
+            o: "plone.app.querystring.operation.string.contains",
+            v: `${searchTerm}`,
+
+        })
     }
 
-    query.set("metadata_fields", "_all");
+    if(!vocabQuery.criteria.length) {
+        return {
+            results: [],
+            total: 0,
+        }
+    };
 
-    const url = `${base_url}/@search?${query.toString()}`;
+    let url = `${vocabularyUrl}&query=${JSON.stringify(
+        vocabQuery
+    )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
+        page: 1,
+        size: 100,
+    })}`;
 
     let headers = new Headers();
     headers.set("Accept", "application/json");
@@ -47,15 +85,12 @@ export async function request({
             // types but keeping folderish types to maintain browsing
             // the content structure.
             const filtered_response = {
-                items: [],
-                items_total: json.items_total,
+                results: [],
+                total: json.total,
             }
-            if(json.batching) {
-                filtered_response.batching = json.batching;
-            }
-            for (const it of json.items) {
+            for (const it of json.results) {
                 if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
-                    filtered_response.items.push(it);
+                    filtered_response.results.push(it);
                 }
             }
             return filtered_response;
@@ -63,8 +98,8 @@ export async function request({
         return json;
     } else {
         return {
-            items: [],
-            items_total: 0,
+            results: [],
+            total: 0,
             errors: json.errors,
         };
     }
