@@ -53,7 +53,12 @@
             attributes: $config.attributes,
             uids: uids,
         });
-        return (await selectedItemsFromUids?.results) || [];
+        let results = (await selectedItemsFromUids?.results) || [];
+        // resort the results based on the order of uids
+        results.sort((a, b) => {
+            return uids.indexOf(a.UID) - uids.indexOf(b.UID);
+        })
+        return results;
     }
 
     async function initializeSelectedItemsStore() {
