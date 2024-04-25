@@ -27,11 +27,8 @@
     // initialize content browser store
     const contentItems = contentStore($config, pathCache);
 
-    console.log(`Initialize ContentBrowser with $currentPath=${$currentPath}`);
-
     let showUpload = false;
     let previewItem = { UID: "" };
-    let currentLevelData = {};
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
@@ -42,7 +39,7 @@
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
         const patUpload = new Upload(uploadEl, {
-            baseUrl: config.base_url,
+            baseUrl: $config.base_url,
             currentPath: $currentPath,
             relativePath: "@@fileUpload",
             allowPathSelection: false,
@@ -55,17 +52,15 @@
 
     function changePath(item) {
         showUpload = false;
-        currentLevelData = {};
         if (item === "/") {
             currentPath.set(item);
             previewItem = { UID: "" };
+        } else if ($config.mode == "search") {
+            // one level search mode
+            previewItem = item;
         } else if (item.is_folderish) {
             currentPath.set(item.path);
             previewItem = { UID: "" };
-            currentLevelData = {
-                UID: item.UID,
-                Title: item.Title,
-            };
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
@@ -76,13 +71,10 @@
     }
 
     async function selectItem(item) {
-        console.log(`add ${JSON.stringify(item)} to ${$config.fieldId}`);
         selectedItems.update((n) => [...n, item]);
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
         $showContentBrowser = false;
         previewItem = { UID: "" };
-        console.log($selectedItems);
-        console.log($selectedUids);
     }
 
     function cancelSelection() {
@@ -182,7 +174,7 @@
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
-                                {#if i == 0}
+                                {#if i == 0 && level.selectable}
                                     <button
                                         type="button"
                                         class="btn btn-link btn-sm"
@@ -265,7 +257,7 @@
                                             {item.Title}
                                         </div>
                                     {/if}
-                                    {#if item.is_folderish}
+                                    {#if item.is_folderish && $config.mode == "browse"}
                                         <svg
                                             use:resolveIcon={{
                                                 iconName: "arrow-right-circle",
@@ -345,10 +337,10 @@
         color: var(--bs-light);
         width: 100%;
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
     }
     .toolBar > .upload {
-        margin: 0 1rem 0 2rem;
+        margin: 0 1rem 0 auto;
     }
     .toolBar :global(svg) {
         vertical-align: -0.125em;

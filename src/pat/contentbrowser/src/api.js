@@ -6,6 +6,7 @@ export async function request({
     path = null,
     uids = null,
     searchTerm = null,
+    searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
 }) {
@@ -36,6 +37,25 @@ export async function request({
             ],
         };
     }
+    if (searchPath) {
+        // search from searchPath down
+        vocabQuery = {
+            criteria: [
+                {
+                    i: "path",
+                    o: "plone.app.querystring.operation.string.path",
+                    v: searchPath,
+                },
+            ],
+        };
+        if(selectableTypes) {
+            vocabQuery.criteria.push({
+                i: "portal_type",
+                o: "plone.app.querystring.operation.list.contains",
+                v: selectableTypes,
+            })
+        }
+    }
     if (uids) {
         vocabQuery = {
             criteria: [
@@ -62,7 +82,7 @@ export async function request({
             total: 0,
         }
     };
-
+    console.log(vocabQuery);
     let url = `${vocabularyUrl}&query=${JSON.stringify(
         vocabQuery
     )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
@@ -80,7 +100,7 @@ export async function request({
     const json = await response.json();
 
     if (response.ok) {
-        if (selectableTypes.length) {
+        if (!searchPath && selectableTypes.length) {
             // we iter through response and filter out non-selectable
             // types but keeping folderish types to maintain browsing
             // the content structure.
