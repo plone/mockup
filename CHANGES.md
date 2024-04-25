@@ -2,6 +2,40 @@
 
 
 
+## [5.2.0-alpha.7](https://github.com/plone/mockup/compare/5.2.0-alpha.6...5.2.0-alpha.7) (2024-04-25)
+
+
+### Features
+
+
+* **pat tinymce:** TinyMCE 7 ([661a538](https://github.com/plone/mockup/commit/661a5386db0ba4f1d859be01f3915130aa631eae))
+
+  Upgrade to TinyMCE 7 without any breaking changes in core Plone.
+If you have custom TinyMCE plugins, please check with https://www.tiny.cloud/docs/tinymce/latest/migration-from-6x/ if you need to upgrade your code.
+
+
+
+### Bug Fixes
+
+
+* **pat structure:** add test for order-support ([f3ffa0c](https://github.com/plone/mockup/commit/f3ffa0cde57cb07c098dee28bbe1805923039dcb))
+
+
+* **pat structure:** enable and fix skiped tests ([018fa28](https://github.com/plone/mockup/commit/018fa286a7584b922a2361b30be7be2482afc0e6))
+
+
+
+### Maintenance
+
+
+* **docs:** Add a Pattern overview page. ([3b70681](https://github.com/plone/mockup/commit/3b706810f344ab9f3c497a924a4400e0d22fa227))
+
+
+* **docs:** Add chapter about Mockup usage. ([f7988b2](https://github.com/plone/mockup/commit/f7988b261729c62a3324c899a3d042b956bf5988))
+
+
+* **docs:** Improve the documentation. ([1226087](https://github.com/plone/mockup/commit/1226087462e1e7b66efb31d6bac7d3e0959970cb))
+
 ## [5.2.0-alpha.6](https://github.com/plone/mockup/compare/5.2.0-alpha.5...5.2.0-alpha.6) (2024-02-28)
 
 
