@@ -18,7 +18,7 @@ msgstr ""
 
 `;
 
-    const okayFiles = ["xml", "js", "htm", "html"];
+    const okayFiles = ["xml", "js", "htm", "html", "svelte"];
     const found = [];
     const checkFile = function (filepath) {
         const split = filepath.split(".");

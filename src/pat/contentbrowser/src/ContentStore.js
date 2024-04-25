@@ -75,7 +75,6 @@ export default function (config, pathCache) {
     }
 
     const search = async (portalPath, searchTerm) => {
-        let level = {};
         let query = {
             method: "GET",
             vocabularyUrl: config.vocabularyUrl,
@@ -88,7 +87,9 @@ export default function (config, pathCache) {
         if (config.selectableTypes.length) {
             query["selectableTypes"] = config.selectableTypes;
         }
-        level = await request(query);
+        let level = await request(query);
+        level.selectable = false;
+        level.gridView = false;
         store.set([level, ]);
     }
 

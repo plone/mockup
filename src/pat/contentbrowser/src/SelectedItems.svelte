@@ -4,6 +4,7 @@
     import { request } from "./api.js";
     import { resolveIcon } from "./resolveIcon.js";
     import Sortable from "sortablejs";
+    import _t from "../../../core/i18n-wrapper";
 
     let ref;
     let initializing = true;
@@ -151,7 +152,7 @@
             {/each}
         {/if}
         {#if !$selectedItems}
-            <p>loading selected items</p>
+            <p>{_t("loading selected items")}</p>
         {/if}
     </div>
     <button
@@ -160,7 +161,7 @@
         disabled={$config.maximumSelectionSize > 0 &&
             ($selectedItems.length || 0) >= $config.maximumSelectionSize}
         on:click|preventDefault={() => ($showContentBrowser = true)}
-        >{#if $config.maximumSelectionSize == 1}choose{:else}add{/if}</button
+        >{_t("Select")}</button
     >
 </div>
 
