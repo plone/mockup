@@ -7,6 +7,7 @@
     import { clickOutside } from "./clickOutside";
     import { resolveIcon } from "./resolveIcon.js";
     import Upload from "../../upload/upload";
+    import _t from "../../../core/i18n-wrapper";
 
     // import Keydown from "svelte-keydown";
 
@@ -165,7 +166,7 @@
                 >
             </div>
             {#await $contentItems}
-                <p>...loading content items</p>
+                <p>{_t("loading content items")}</p>
             {:then levels}
                 <div class="levelColumns">
                     {#each levels as level, i (level.path)}
@@ -192,7 +193,7 @@
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => selectItem(level)}
                                     >
-                                        select {level.path}
+                                        {_t("select ${level_path}", {level_path: level.path})}
                                     </button>
                                 {/if}
                                 <div class="levelActions">
@@ -268,7 +269,7 @@
                             {/each}
                             {#if level.total == 0}
                                 <div class="contentItem">
-                                    <p>no items found.</p>
+                                    <p>{_t("no results found")}</p>
                                 </div>
                             {/if}
                         </div>
@@ -281,7 +282,7 @@
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() =>
                                         selectItem(previewItem)}
-                                    >select "{previewItem.path.split("/").pop()}"</button
+                                    >{_t("select ${preview_path}", {preview_path: previewItem.path.split("/").pop()})}</button
                                 >
                             </div>
                             <div class="info">
