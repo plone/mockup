@@ -4,18 +4,10 @@ import { request } from "./api.js";
 export default function (config, pathCache) {
     const store = writable([]);
 
-    store.get = async ({
-        path = "",
-        searchTerm = "",
-        updateCache = false,
-    }) => {
-        const base_url = new URL(config.base_url);
-        const portalPath = base_url.pathname;
-        path = path.replace(new RegExp(`^${portalPath}`), "");
-
+    const browse = async (portalPath, path, searchTerm, updateCache) => {
+        let paths = [];
         let parts = path.split("/") || [];
         const depth = parts.length >= config.maxDepth ? config.maxDepth : parts.length;
-        let paths = [];
 
         let partsToShow = parts.slice(parts.length - depth, parts.length);
         let partsToHide = parts.slice(0, parts.length - depth);
@@ -80,6 +72,41 @@ export default function (config, pathCache) {
             levels = [level, ...levels];
         }
         store.set(levels);
+    }
+
+    const search = async (portalPath, searchTerm) => {
+        let level = {};
+        let query = {
+            method: "GET",
+            vocabularyUrl: config.vocabularyUrl,
+            attributes: config.attributes,
+            searchPath: portalPath,
+        };
+        if (searchTerm) {
+            query["searchTerm"] = "*" + searchTerm + "*";
+        }
+        if (config.selectableTypes.length) {
+            query["selectableTypes"] = config.selectableTypes;
+        }
+        level = await request(query);
+        store.set([level, ]);
+    }
+
+    store.get = async ({
+        path = "",
+        searchTerm = "",
+        updateCache = false,
+    }) => {
+        const base_url = new URL(config.base_url);
+        const portalPath = base_url.pathname;
+
+        if(config.mode === "search") {
+            await search(portalPath, searchTerm)
+        } else {
+            path = path.replace(new RegExp(`^${portalPath}`), "");
+            await browse(portalPath, path, searchTerm, updateCache);
+        }
+
     };
 
     return store;
