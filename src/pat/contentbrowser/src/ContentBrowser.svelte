@@ -30,6 +30,7 @@
 
     let showUpload = false;
     let previewItem = { UID: "" };
+    let searchPage = 1; // page number for @@getVocabulary
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
@@ -97,13 +98,6 @@
         }
     }
 
-    function loadMore(entries, observer) {
-        entries.forEach(async (entry) => {
-            if (entry.intersectionRatio === 0 || contentItems.loading) return;
-            await contentItems.loadMore(entry.target.dataset.path, $currentPath);
-        });
-    }
-
     function itemInPath(item) {
         return $currentPath.indexOf(item.path) != -1;
     }
@@ -116,6 +110,28 @@
         timeoutId = setTimeout(() => {
             contentItems.get({ path: $currentPath, searchTerm: this.value });
         }, 300);
+    }
+
+    function loadMore(node) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        const path = node.dataset.levelPath;
+                        const page = parseInt(node.dataset.levelNextPage);
+                        contentItems.get({
+                            loadMorePath: path,
+                            page: page,
+                        });
+                    }
+                }
+            },
+            { threshold: 0, root: null, margin: "0px" },
+        );
+        // defer observing
+        window.setTimeout(() => {
+            observer.observe(node);
+        }, 500);
     }
 
     $: {
@@ -193,7 +209,9 @@
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => selectItem(level)}
                                     >
-                                        {_t("select ${level_path}", {level_path: level.path})}
+                                        {_t("select ${level_path}", {
+                                            level_path: level.path,
+                                        })}
                                     </button>
                                 {/if}
                                 <div class="levelActions">
@@ -218,60 +236,74 @@
                                     {/if}
                                 </div>
                             </div>
-                            {#each level.results || [] as item, n}
-                                <div
-                                    class="contentItem{n % 2 == 0
-                                        ? ' odd'
-                                        : ' even'}{itemInPath(item)
-                                        ? ' inPath'
-                                        : ''}{previewItem.UID === item.UID
-                                        ? ' currentItem'
-                                        : ''}{!isSelectable(item) ? ' text-muted' : ''}"
-                                    role="button"
-                                    tabindex="0"
-                                    on:keydown={() => changePath(item)}
-                                    on:click={() => changePath(item)}
-                                >
-                                    {#if level.gridView}
-                                        <div class="grid-preview">
-                                            {#if item.getIcon}
-                                                <img
-                                                    src={`${item.getURL}/@@images/image/thumb`}
-                                                    alt={item.Title}
-                                                />
-                                            {:else}
+                            <div class="levelItems">
+                                {#each level.results || [] as item, n}
+                                    <div
+                                        class="contentItem{n % 2 == 0
+                                            ? ' odd'
+                                            : ' even'}{itemInPath(item)
+                                            ? ' inPath'
+                                            : ''}{previewItem.UID === item.UID
+                                            ? ' currentItem'
+                                            : ''}{!isSelectable(item)
+                                            ? ' text-muted'
+                                            : ''}"
+                                        role="button"
+                                        tabindex="0"
+                                        on:keydown={() => changePath(item)}
+                                        on:click={() => changePath(item)}
+                                    >
+                                        {#if level.gridView}
+                                            <div class="grid-preview">
+                                                {#if item.getIcon}
+                                                    <img
+                                                        src={`${item.getURL}/@@images/image/thumb`}
+                                                        alt={item.Title}
+                                                    />
+                                                {:else}
+                                                    <svg
+                                                        use:resolveIcon={{
+                                                            iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                        }}
+                                                    />
+                                                {/if}
+                                                {item.Title}
+                                            </div>
+                                        {:else}
+                                            <div title={item.portal_type}>
                                                 <svg
                                                     use:resolveIcon={{
                                                         iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
                                                     }}
                                                 />
-                                            {/if}
-                                            {item.Title}
-                                        </div>
-                                    {:else}
-                                        <div title={item.portal_type}>
+                                                {item.Title}
+                                            </div>
+                                        {/if}
+                                        {#if item.is_folderish && $config.mode == "browse"}
                                             <svg
                                                 use:resolveIcon={{
-                                                    iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                    iconName: "arrow-right-circle",
                                                 }}
                                             />
-                                            {item.Title}
-                                        </div>
-                                    {/if}
-                                    {#if item.is_folderish && $config.mode == "browse"}
-                                        <svg
-                                            use:resolveIcon={{
-                                                iconName: "arrow-right-circle",
-                                            }}
-                                        />
-                                    {/if}
-                                </div>
-                            {/each}
-                            {#if level.total == 0}
-                                <div class="contentItem">
-                                    <p>{_t("no results found")}</p>
-                                </div>
-                            {/if}
+                                        {/if}
+                                    </div>
+                                {/each}
+                                {#if level.more}
+                                    <div
+                                        class="loadmore"
+                                        data-level-path={level.path}
+                                        data-level-next-page={parseInt(level.page) + 1}
+                                        use:loadMore
+                                    >
+                                        <div class="spinner-border" role="status"></div>
+                                    </div>
+                                {/if}
+                                {#if level.total == 0}
+                                    <div class="contentItem">
+                                        <p>{_t("no results found")}</p>
+                                    </div>
+                                {/if}
+                            </div>
                         </div>
                     {/each}
                     {#if previewItem.UID}
@@ -282,7 +314,9 @@
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() =>
                                         selectItem(previewItem)}
-                                    >{_t("select ${preview_path}", {preview_path: previewItem.path.split("/").pop()})}</button
+                                    >{_t("select ${preview_path}", {
+                                        preview_path: previewItem.path.split("/").pop(),
+                                    })}</button
                                 >
                             </div>
                             <div class="info">
@@ -331,7 +365,6 @@
         display: flex;
         flex-direction: column;
     }
-
     .toolBar {
         background-color: var(--bs-primary);
         padding: 0.325rem 0.75rem;
@@ -357,10 +390,10 @@
 
     .levelColumn {
         min-width: 320px;
-        overflow-x: auto;
         border-right: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
-        /* border-top: 5px solid transparent; */
+        display: flex;
+        flex-direction: column;
     }
 
     .levelToolbar {
@@ -376,18 +409,9 @@
         margin-left: auto;
     }
 
-    /* .levelColumn.even {
-        border-top: 5px solid skyblue;
-    } */
-
-    /* .levelPath {
-        background: #eee;
-        padding: 0.5rem 1rem;
-        height: 3rem;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    } */
+    .levelItems {
+        overflow-x: auto;
+    }
     .contentItem {
         /* padding: 1rem 1rem; */
         display: flex;
@@ -445,5 +469,9 @@
         padding: 1rem;
         width: 590px;
         overflow-x: auto;
+    }
+    .loadmore {
+        text-align: center;
+        padding: 0.25rem 0;
     }
 </style>

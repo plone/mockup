@@ -9,6 +9,8 @@ export async function request({
     searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
+    pageSize = 100,
+    page = 1,
 }) {
     let vocabQuery = {
         criteria: [],
@@ -86,8 +88,8 @@ export async function request({
     let url = `${vocabularyUrl}&query=${JSON.stringify(
         vocabQuery
     )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
-        page: 1,
-        size: 100,
+        page: page,
+        size: pageSize,
     })}`;
 
     let headers = new Headers();
@@ -102,7 +104,7 @@ export async function request({
     if (response.ok) {
         if (!searchPath && selectableTypes.length) {
             // we iter through response and filter out non-selectable
-            // types but keeping folderish types to maintain browsing
+            // types but keep folderish types to maintain browsing
             // the content structure.
             const filtered_response = {
                 results: [],

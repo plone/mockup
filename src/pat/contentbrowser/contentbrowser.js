@@ -32,6 +32,7 @@ parser.addArgument("selection");
 parser.addArgument("selection-template");
 parser.addArgument("recently-used");
 parser.addArgument("recently-used-key");
+parser.addArgument("b-size");
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";
