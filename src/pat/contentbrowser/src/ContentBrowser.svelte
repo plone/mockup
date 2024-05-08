@@ -30,7 +30,6 @@
 
     let showUpload = false;
     let previewItem = { UID: "" };
-    let searchPage = 1; // page number for @@getVocabulary
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
@@ -52,12 +51,8 @@
         });
     }
 
-    function changePath(item) {
-        showUpload = false;
-        if (item === "/") {
-            currentPath.set(item);
-            previewItem = { UID: "" };
-        } else if ($config.mode == "search") {
+    function showPreview(item) {
+        if ($config.mode == "search") {
             // one level search mode
             previewItem = item;
         } else if (item.is_folderish) {
@@ -66,17 +61,64 @@
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
-            currentPath.set(folderPath);
+            currentPath.set(folderPath || "/");
             previewItem = item;
         }
         scrollToRight();
     }
 
-    async function selectItem(item) {
+    function selectItems(selectedNode) {
+        // iter through the wrapper nodes and select all
+        // inbetween current selection and last selection
+        let select = false;
+        for(const el of selectedNode.closest(".levelItems").children) {
+            if (el.classList.contains("selectedItem")) {
+                console.log(el);
+                select = !select;
+            }
+            el.classList.toggle("selectedItem", select);
+        };
+    }
+
+    function changePath(item, e) {
+        showUpload = false;
+        if (item === "/") {
+            currentPath.set(item);
+            previewItem = { UID: "" };
+            return;
+        } else if (e?.shiftKey) {
+            // check for previously selected items in the same level
+            // and select all items inbetween
+            const levelWrapper = e.target.closest(".levelItems");
+            if (levelWrapper.querySelector(".selectedItem")) {
+                e.target.classList.add("selectedItem");
+                previewItem = { UID: "", multiple: true };
+                selectItems(e.target);
+                return;
+            }
+        }
+        // clear previous selection
+        e.target.closest(".levelItems").querySelectorAll(".contentItem").forEach((el) => {
+            el.classList.remove("selectedItem");
+        })
+        showPreview(item);
+    }
+
+    function keyboardNavigation(item, e) {
+        // TODO
+        return;
+    }
+
+    async function addItem(item) {
         selectedItems.update((n) => [...n, item]);
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
         $showContentBrowser = false;
         previewItem = { UID: "" };
+    }
+
+    async function addSelectedItems() {
+        // TODO
+        return;
     }
 
     function cancelSelection() {
@@ -207,7 +249,7 @@
                                     <button
                                         class="btn btn-primary btn-sm"
                                         disabled={!isSelectable(level)}
-                                        on:click|preventDefault={() => selectItem(level)}
+                                        on:click|preventDefault={() => addItem(level)}
                                     >
                                         {_t("select ${level_path}", {
                                             level_path: level.path,
@@ -244,14 +286,14 @@
                                             : ' even'}{itemInPath(item)
                                             ? ' inPath'
                                             : ''}{previewItem.UID === item.UID
-                                            ? ' currentItem'
+                                            ? ' selectedItem'
                                             : ''}{!isSelectable(item)
                                             ? ' text-muted'
                                             : ''}"
                                         role="button"
                                         tabindex="0"
-                                        on:keydown={() => changePath(item)}
-                                        on:click={() => changePath(item)}
+                                        on:keydown={(e) => keyboardNavigation(item, e)}
+                                        on:click={(e) => changePath(item, e)}
                                     >
                                         {#if level.gridView}
                                             <div class="grid-preview">
@@ -313,7 +355,7 @@
                                     class="btn btn-primary btn-sm"
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() =>
-                                        selectItem(previewItem)}
+                                        addItem(previewItem)}
                                     >{_t("select ${preview_path}", {
                                         preview_path: previewItem.path.split("/").pop(),
                                     })}</button
@@ -330,6 +372,18 @@
                                 {/if}
                                 <h4>{previewItem.Title}</h4>
                                 <p>{previewItem.Description}</p>
+                            </div>
+                        </div>
+                    {/if}
+                    {#if previewItem.multiple}
+                        <div class="preview">
+                            <div class="levelToolbar">
+                                <button
+                                    class="btn btn-primary btn-sm"
+                                    on:click|preventDefault={() =>
+                                        addSelectedItems()}
+                                    >{_t("add selected items")}</button
+                                >
                             </div>
                         </div>
                     {/if}
@@ -427,7 +481,7 @@
     .contentItem.inPath {
         background-color: rgba(var(--bs-primary-rgb), 0.15);
     }
-    .contentItem.currentItem {
+    .contentItem.selectedItem {
         background-color: var(--bs-primary);
         color: var(--bs-body-bg);
     }
@@ -435,6 +489,7 @@
         padding: 0.5rem;
         white-space: nowrap;
         max-width: 100%;
+        user-select: none;
     }
 
     .contentItem .grid-preview > img {
