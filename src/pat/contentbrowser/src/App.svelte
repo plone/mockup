@@ -63,7 +63,7 @@
         selection: selection,
         query: query,
         fieldId: fieldId,
-        uploadEnabled: mode == "browse" && upload,
+        uploadEnabled: upload,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,
         base_url: base_url,
