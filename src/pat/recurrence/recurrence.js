@@ -690,6 +690,8 @@ const RecurrenceInput = function (conf, textarea) {
     function occurrenceAdd(event) {
         event.preventDefault();
         var datevalue = self.$modalForm.find(".riaddoccurrence input#adddate").val();
+        var date_parts = datevalue.split("-");
+        datevalue += datevalue.length === 10 ? "T000000" : "";
         var errorarea = self.$modalForm.find(".riaddoccurrence div.alert");
         errorarea.text("");
         errorarea.hide();
@@ -697,7 +699,6 @@ const RecurrenceInput = function (conf, textarea) {
         // Add date only if it is not already in RDATE
         if (!textarea["ical"].RDATE.includes(datevalue)) {
             textarea["ical"].RDATE.push(datevalue);
-            var date_parts = datevalue.split("-");
             var $newdate =
                 $(`<div class="d-flex justify-content-between occurrence rdate">
                 <span class="rdate">
@@ -772,6 +773,7 @@ const RecurrenceInput = function (conf, textarea) {
                     y = parseInt(date.substring(0, 4), 10);
                     m = parseInt(date.substring(4, 6), 10) - 1; // jan=0
                     d = parseInt(date.substring(6, 8), 10);
+                    occurrence.date = `${y}-${zeropad(m+1)}-${zeropad(d)}T000000`;
                     occurrence.formattedDate = format(
                         new Date(y, m, d),
                         conf.localization.longDateFormat,
