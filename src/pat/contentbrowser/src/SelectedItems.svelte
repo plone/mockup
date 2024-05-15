@@ -1,8 +1,7 @@
 <script>
     import { getContext, onMount } from "svelte";
     import { flip } from "svelte/animate";
-    import { get_items_from_uids } from "./api.js";
-    import { resolveIcon } from "./resolveIcon.js";
+    import { get_items_from_uids, resolveIcon } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
 
