@@ -3,11 +3,12 @@
     import { getContext } from "svelte";
     import * as animateScroll from "svelte-scrollto";
     import { fly } from "svelte/transition";
+    import _t from "../../../core/i18n-wrapper";
+    import Upload from "../../upload/upload";
     import contentStore from "./ContentStore";
+    import { get_items_from_uids } from "./api";
     import { clickOutside } from "./clickOutside";
     import { resolveIcon } from "./resolveIcon.js";
-    import Upload from "../../upload/upload";
-    import _t from "../../../core/i18n-wrapper";
 
     // import Keydown from "svelte-keydown";
 
@@ -24,17 +25,39 @@
     const showContentBrowser = getContext("showContentBrowser");
     const selectedItems = getContext("selectedItems");
     const selectedUids = getContext("selectedUids");
+    const previewUids = getContext("previewUids");
 
     // initialize content browser store
     const contentItems = contentStore($config, pathCache);
 
     let showUpload = false;
-    let previewItem = { UID: "" };
+    let previewItem = {};
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
+    function updatePreview({ data = null, uuid = null, action = "show" }) {
+        if (data && action == "show") {
+            previewItem = data;
+            $previewUids = [data.UID];
+        } else if (uuid && action == "add" && $previewUids.indexOf(uuid) === -1) {
+            if($config.maximumSelectionSize > 0 && $previewUids.length >= $config.maximumSelectionSize) {
+                // respect maximumSelectionSize
+                return;
+            }
+            $previewUids = [...$previewUids, uuid]; // NOTE: $previewUids.push() is not a reactive change
+        } else if (uuid && action == "remove" && $previewUids.indexOf(uuid) !== -1) {
+            previewUids.update((n) => {
+                n.splice(n.indexOf(uuid), 1);
+                return n;
+            });
+        } else if (action == "clear") {
+            previewItem = {};
+            $previewUids = [];
+        }
+    }
+
     async function upload() {
-        previewItem = { UID: "" };
+        updatePreview({ action: "clear" });
         showUpload = true;
         await utils.timeout(1);
         const uploadEl = document.querySelector(".upload-wrapper");
@@ -54,53 +77,71 @@
     function showPreview(item) {
         if ($config.mode == "search") {
             // one level search mode
-            previewItem = item;
+            updatePreview({ data: item });
         } else if (item.is_folderish) {
             currentPath.set(item.path);
-            previewItem = { UID: "" };
+            updatePreview({ action: "clear" });
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
             currentPath.set(folderPath || "/");
-            previewItem = item;
+            updatePreview({ data: item });
         }
         scrollToRight();
     }
 
-    function selectItems(selectedNode) {
-        // iter through the wrapper nodes and select all
-        // inbetween current selection and last selection
-        let select = false;
-        for(const el of selectedNode.closest(".levelItems").children) {
-            if (el.classList.contains("selectedItem")) {
-                console.log(el);
-                select = !select;
-            }
-            el.classList.toggle("selectedItem", select);
-        };
-    }
-
     function changePath(item, e) {
         showUpload = false;
+
         if (item === "/") {
             currentPath.set(item);
-            previewItem = { UID: "" };
+            updatePreview({ action: "clear" });
             return;
-        } else if (e?.shiftKey) {
-            // check for previously selected items in the same level
-            // and select all items inbetween
-            const levelWrapper = e.target.closest(".levelItems");
-            if (levelWrapper.querySelector(".selectedItem")) {
-                e.target.classList.add("selectedItem");
-                previewItem = { UID: "", multiple: true };
-                selectItems(e.target);
+        }
+
+        const levelWrapper = e.currentTarget.closest(".levelItems");
+        const prevSelection = levelWrapper.querySelectorAll(".selectedItem");
+
+        if (prevSelection.length) {
+            // check for pressed shift or ctrl/meta key for multiselection
+
+            if (e?.shiftKey) {
+                // iter through the wrapper children and select all
+                // inbetween current selection and last preview
+                let select = false;
+                for (const el of levelWrapper.children) {
+                    if ([item.UID, previewItem.UID].indexOf(el.dataset.uuid) !== -1) {
+                        if (select) {
+                            // stop selecting but make sure the last item is selected too
+                            updatePreview({
+                                uuid: el.dataset.uuid,
+                                action: "add",
+                            });
+                            select = false;
+                            continue;
+                        }
+                        // start selecting
+                        select = true;
+                    }
+                    updatePreview({
+                        uuid: el.dataset.uuid,
+                        action: select ? "add" : "remove",
+                    });
+                }
+                return;
+            } else if ((e?.metaKey || e?.ctrlKey)) {
+                // de/select multiple single items
+                updatePreview({
+                    uuid: item.UID,
+                    action: $previewUids.indexOf(item.UID) == -1 ? "add" : "remove",
+                });
                 return;
             }
         }
+
         // clear previous selection
-        e.target.closest(".levelItems").querySelectorAll(".contentItem").forEach((el) => {
-            el.classList.remove("selectedItem");
-        })
+        updatePreview({ action: "clear" });
+        // and show clicked item
         showPreview(item);
     }
 
@@ -112,18 +153,27 @@
     async function addItem(item) {
         selectedItems.update((n) => [...n, item]);
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        updatePreview({ action: "clear" });
         $showContentBrowser = false;
-        previewItem = { UID: "" };
     }
 
     async function addSelectedItems() {
-        // TODO
-        return;
+        const previewItems = await get_items_from_uids($previewUids, $config);
+        selectedItems.update((n) => {
+            for(const it of previewItems) {
+                if($selectedUids.indexOf(it.UID) != -1) continue;
+                n.push(it);
+            }
+            return n;
+        });
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        updatePreview({ action: "clear" });
+        $showContentBrowser = false;
     }
 
     function cancelSelection() {
         $showContentBrowser = false;
-        previewItem = { UID: "" };
+        updatePreview({ action: "clear" });
     }
 
     function isSelectable(item) {
@@ -185,6 +235,10 @@
     $: {
         $contentItems;
         scrollToRight();
+    }
+
+    $: {
+        $previewUids;
     }
 </script>
 
@@ -285,13 +339,14 @@
                                             ? ' odd'
                                             : ' even'}{itemInPath(item)
                                             ? ' inPath'
-                                            : ''}{previewItem.UID === item.UID
+                                            : ''}{$previewUids.indexOf(item.UID) != -1
                                             ? ' selectedItem'
                                             : ''}{!isSelectable(item)
                                             ? ' text-muted'
                                             : ''}"
                                         role="button"
                                         tabindex="0"
+                                        data-uuid={item.UID}
                                         on:keydown={(e) => keyboardNavigation(item, e)}
                                         on:click={(e) => changePath(item, e)}
                                     >
@@ -348,14 +403,13 @@
                             </div>
                         </div>
                     {/each}
-                    {#if previewItem.UID}
+                    {#if previewItem?.UID && $previewUids.length == 1}
                         <div class="preview">
                             <div class="levelToolbar">
                                 <button
                                     class="btn btn-primary btn-sm"
                                     disabled={!isSelectable(previewItem)}
-                                    on:click|preventDefault={() =>
-                                        addItem(previewItem)}
+                                    on:click|preventDefault={() => addItem(previewItem)}
                                     >{_t("select ${preview_path}", {
                                         preview_path: previewItem.path.split("/").pop(),
                                     })}</button
@@ -375,13 +429,12 @@
                             </div>
                         </div>
                     {/if}
-                    {#if previewItem.multiple}
+                    {#if $previewUids.length > 1}
                         <div class="preview">
                             <div class="levelToolbar">
                                 <button
                                     class="btn btn-primary btn-sm"
-                                    on:click|preventDefault={() =>
-                                        addSelectedItems()}
+                                    on:click|preventDefault={addSelectedItems}
                                     >{_t("add selected items")}</button
                                 >
                             </div>

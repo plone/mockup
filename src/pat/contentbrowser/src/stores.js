@@ -33,3 +33,8 @@ export function setSelectedUids() {
     let selUids = writable([]);
     setContext("selectedUids", selUids);
 }
+
+export function setPreviewUids() {
+    let prevUids = writable([]);
+    setContext("previewUids", prevUids);
+}

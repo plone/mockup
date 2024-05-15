@@ -126,3 +126,20 @@ export async function request({
         };
     }
 }
+
+export async function get_items_from_uids(uids, config) {
+    if (!uids) {
+        return [];
+    }
+    const selectedItemsFromUids = await request({
+        vocabularyUrl: config.vocabularyUrl,
+        attributes: config.attributes,
+        uids: uids,
+    });
+    let results = (await selectedItemsFromUids?.results) || [];
+    // resort the results based on the order of uids
+    results.sort((a, b) => {
+        return uids.indexOf(a.UID) - uids.indexOf(b.UID);
+    })
+    return results;
+}

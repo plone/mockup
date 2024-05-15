@@ -9,6 +9,7 @@
         setPathCache,
         setSelectedItems,
         setSelectedUids,
+        setPreviewUids,
         setShowContentBrowser,
     } from "./stores";
 
@@ -38,6 +39,7 @@
     setSelectedItems();
     setShowContentBrowser();
     setSelectedUids();
+    setPreviewUids();
 
     // initially set current path
     const currentPath = getContext("currentPath");
