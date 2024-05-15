@@ -1,7 +1,7 @@
 <script>
     import { getContext, onMount } from "svelte";
     import { flip } from "svelte/animate";
-    import { request } from "./api.js";
+    import { get_items_from_uids } from "./api.js";
     import { resolveIcon } from "./resolveIcon.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
@@ -45,23 +45,6 @@
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
-    async function getSelectedItemsUids(uids) {
-        if (!uids) {
-            return [];
-        }
-        const selectedItemsFromUids = await request({
-            vocabularyUrl: $config.vocabularyUrl,
-            attributes: $config.attributes,
-            uids: uids,
-        });
-        let results = (await selectedItemsFromUids?.results) || [];
-        // resort the results based on the order of uids
-        results.sort((a, b) => {
-            return uids.indexOf(a.UID) - uids.indexOf(b.UID);
-        })
-        return results;
-    }
-
     async function initializeSelectedItemsStore() {
         const initialValue = $config.selection.length
             ? $config.selection
@@ -73,7 +56,7 @@
             return;
         }
 
-        const selectedItemsUids = await getSelectedItemsUids(initialValue);
+        const selectedItemsUids = await get_items_from_uids(initialValue, $config);
         $selectedItems = selectedItemsUids;
         selectedUids.update(() => selectedItemsUids.map((x) => x.UID));
     }
