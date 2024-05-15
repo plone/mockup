@@ -6,9 +6,7 @@
     import _t from "../../../core/i18n-wrapper";
     import Upload from "../../upload/upload";
     import contentStore from "./ContentStore";
-    import { get_items_from_uids } from "./api";
-    import { clickOutside } from "./clickOutside";
-    import { resolveIcon } from "./resolveIcon.js";
+    import { clickOutside, get_items_from_uids, resolveIcon } from "./utils";
 
     // import Keydown from "svelte-keydown";
 
@@ -40,7 +38,10 @@
             previewItem = data;
             $previewUids = [data.UID];
         } else if (uuid && action == "add" && $previewUids.indexOf(uuid) === -1) {
-            if($config.maximumSelectionSize > 0 && $previewUids.length >= $config.maximumSelectionSize) {
+            if (
+                $config.maximumSelectionSize > 0 &&
+                $previewUids.length >= $config.maximumSelectionSize
+            ) {
                 // respect maximumSelectionSize
                 return;
             }
@@ -129,7 +130,7 @@
                     });
                 }
                 return;
-            } else if ((e?.metaKey || e?.ctrlKey)) {
+            } else if (e?.metaKey || e?.ctrlKey) {
                 // de/select multiple single items
                 updatePreview({
                     uuid: item.UID,
@@ -160,8 +161,8 @@
     async function addSelectedItems() {
         const previewItems = await get_items_from_uids($previewUids, $config);
         selectedItems.update((n) => {
-            for(const it of previewItems) {
-                if($selectedUids.indexOf(it.UID) != -1) continue;
+            for (const it of previewItems) {
+                if ($selectedUids.indexOf(it.UID) != -1) continue;
                 n.push(it);
             }
             return n;
@@ -416,11 +417,19 @@
                                 >
                             </div>
                             <div class="info">
-                                {#if previewItem.portal_type === "Image"}
-                                    <div>
+                                {#if previewItem.getIcon}
+                                    <div class="previewImage">
                                         <img
                                             src="{previewItem.getURL}/@@images/image/preview"
                                             alt={previewItem.Title}
+                                        />
+                                    </div>
+                                {:else}
+                                    <div class="previewIcon">
+                                        <svg
+                                            use:resolveIcon={{
+                                                iconName: `contenttype/${previewItem.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                            }}
                                         />
                                     </div>
                                 {/if}
@@ -437,6 +446,13 @@
                                     on:click|preventDefault={addSelectedItems}
                                     >{_t("add selected items")}</button
                                 >
+                            </div>
+                            <div class="info">
+                                <svg
+                                    use:resolveIcon={{
+                                        iconName: "files",
+                                    }}
+                                />
                             </div>
                         </div>
                     {/if}
@@ -563,6 +579,13 @@
     .preview .info {
         padding: 0.5rem;
         width: 100%;
+    }
+    .preview .info .previewIcon {
+        margin: 0 auto 1rem auto;
+    }
+    .preview .info .previewIcon svg {
+        width: 50px !important;
+        height: 50px !important;
     }
     .preview h4 {
         font-size: 1.2 rem;

@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { request } from "./api.js";
+import { request } from "./utils.js";
 
 export default function (config, pathCache) {
     const store = writable([]);
