@@ -1,3 +1,4 @@
+import utils from "../../../core/utils.js";
 
 export async function request({
     method = "GET",
@@ -142,4 +143,36 @@ export async function get_items_from_uids(uids, config) {
         return uids.indexOf(a.UID) - uids.indexOf(b.UID);
     })
     return results;
+}
+
+
+/** use Plone resolveIcon to load a SVG icon and replace node with icon code */
+export async function resolveIcon(node, { iconName }) {
+
+    async function getIcon(iconName) {
+        const icon = await utils.resolveIcon(iconName)
+        return icon;
+    }
+    const iconCode = await getIcon(iconName);
+    node.outerHTML = iconCode;
+    return {
+        destroy() {},
+    };
+}
+
+/** Dispatch event on click outside of node */
+export function clickOutside(node) {
+    const handleClick = (event) => {
+        if (node && !node.contains(event.target)) {
+            node.dispatchEvent(new CustomEvent("click_outside", node));
+        }
+    };
+
+    document.addEventListener("click", handleClick, true);
+
+    return {
+        destroy() {
+            document.removeEventListener("click", handleClick, true);
+        },
+    };
 }
