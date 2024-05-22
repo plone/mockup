@@ -103,7 +103,7 @@ export async function request({
     const json = await response.json();
 
     if (response.ok) {
-        if (!searchPath && selectableTypes.length) {
+        if (!searchPath && !levelInfoPath && selectableTypes.length) {
             // we iter through response and filter out non-selectable
             // types but keep folderish types to maintain browsing
             // the content structure.
