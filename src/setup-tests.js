@@ -23,3 +23,6 @@ dom.is_visible = (el) => {
 
 // Attach datatables to jQuery, as in tests it is not done by just importing.
 window.dt = require("datatables.net")();
+
+// Import the css.escape polyfill for jsdom.
+import "css.escape";
