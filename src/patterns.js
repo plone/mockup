@@ -16,9 +16,6 @@ import "@patternslib/pat-code-editor/src/code-editor";
 import "@patternslib/patternslib/src/pat/inject/inject";
 import "@patternslib/patternslib/src/pat/depends/depends";
 
-//import "@patternslib/pat-content-browser/src/content-browser";
-//import "@patternslib/pat-tinymce/src/tinymce";
-
 // Import all used patterns for the bundle to be generated
 import "./pat/autotoc/autotoc";
 import "./pat/backdrop/backdrop";
