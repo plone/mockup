@@ -4,7 +4,7 @@ import _ from "underscore";
 import Backdrop from "../backdrop/backdrop";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
-import _t from "../../core/i18n";
+import _t from "../../core/i18n-wrapper";
 
 import "jquery-form";
 
@@ -58,7 +58,7 @@ export default Base.extend({
                 '    <div class="<%= options.classModal %>" role="document">' +
                 '      <div class="<%= options.classHeaderName %>">' +
                 '        <% if (title) { %><h5 class="modal-title" id="modal-title" tabindex="0"><%= title %></h5><% } %>' +
-                '        <button type="button" class="btn-close modal-close" aria-label="Close"></button>' +
+                '        <button type="button" class="btn-close modal-close" aria-label="<%= closeButtonLabel %>"></button>' +
                 "      </div>" +
                 '      <div class="<%= options.classBodyName %>">' +
                 '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
@@ -396,6 +396,7 @@ export default Base.extend({
                 modalSizeClass: options.modalSizeClass,
                 buttons: '<div class="pattern-modal-buttons"></div>',
                 options: options.templateOptions,
+                closeButtonLabel: _t("Close"),
             };
 
             // setup the Title
