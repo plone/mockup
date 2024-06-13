@@ -157,6 +157,12 @@ export default class TinyMCE {
             if (plugin == "plonelink" || plugin == "ploneimage") {
                 valid_plugins.push(plugin);
                 continue;
+            } else if (plugin == "template") {
+                // load backported template plugin
+                const TemplatePlugin = (await import("./js/template")).default;
+                TemplatePlugin();
+                valid_plugins.push(plugin);
+                continue;
             }
             try {
                 await import("tinymce/plugins/" + plugin);
