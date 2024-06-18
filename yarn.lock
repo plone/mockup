@@ -9823,7 +9823,7 @@ svelte-keydown@^0.7.0:
   resolved "https://registry.yarnpkg.com/svelte-keydown/-/svelte-keydown-0.7.0.tgz#4960d1dc1c115db2fd8857e9e4d4eb2a4657174f"
   integrity sha512-AKl3o0M9eHqpH6H4xA9VPFqp/0P/suBj3jUR19ZnqewQrqq5opd7Vvo06SLg3onpXyqfm8pWbDl2m/yF4pVgMw==
 
-svelte-loader@^3.1.9:
+svelte-loader@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/svelte-loader/-/svelte-loader-3.2.3.tgz#d452ac982c6652edcfe438628b0e72ac9e24d65a"
   integrity sha512-ntitVuO0EneIlw5Zsn/GNnxu8+KkqbfrsjEGvk7qrd67IA24OBVqY9p0NjUGlpewPxGL3iD4z/8VA+hM9AsZxA==
@@ -9844,7 +9844,7 @@ svelte@3.x:
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.59.2.tgz#a137b28e025a181292b2ae2e3dca90bf8ec73aec"
   integrity sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==
 
-svelte@^4.0.5:
+svelte@^4.2.18:
   version "4.2.18"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.2.18.tgz#33dbce74e83eb6dcc54dbea25f9758b1d8e8bb78"
   integrity sha512-d0FdzYIiAePqRJEb90WlJDkjUEx42xhivxN8muUBmfZnP+tzUgz12DJ2hRJi8sIHCME7jeK1PTMgKPSfTd8JrA==
@@ -9959,10 +9959,10 @@ timezone-mock@^1.3.6:
   resolved "https://registry.yarnpkg.com/timezone-mock/-/timezone-mock-1.3.6.tgz#44e4c5aeb57e6c07ae630a05c528fc4d9aab86f4"
   integrity sha512-YcloWmZfLD9Li5m2VcobkCDNVaLMx8ohAb/97l/wYS3m+0TIEK5PFNMZZfRcusc6sFjIfxu8qcJT0CNnOdpqmg==
 
-tinymce-i18n@24.6.10:
-  version "24.6.10"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-24.6.10.tgz#3dc5eef09438121b6582c7150b898b6c7832d889"
-  integrity sha512-ep/G6gOwldM6IQQLwofUY7k0sxohYCv9ssjxyJuOtWXSegvgqkL05bHUqP/TEOYqfXZovBEm5AsAXuJ2lKhmoQ==
+tinymce-i18n@24.6.17:
+  version "24.6.17"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-24.6.17.tgz#88d24feb9e0614977da464519f539ceca5ce6afd"
+  integrity sha512-t18Qs3+zI95r62lOC4P8uslVnHhYXlwrI/4psS3EHK3j0DaY/ZDQ/cQJ+v9WiDKeHFatWqByTb3gz81oPlrN9Q==
 
 tinymce@^7.1.2:
   version "7.1.2"
