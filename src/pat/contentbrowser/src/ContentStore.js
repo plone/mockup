@@ -65,6 +65,7 @@ export default function (config, pathCache) {
                 level.searchTerm = searchTerm;
                 level.page = 1;
                 level.path = p;
+                level.absPath = p.replace(portalPath, "");
 
                 // do not update cache when searching
                 if (!searchTerm) {
