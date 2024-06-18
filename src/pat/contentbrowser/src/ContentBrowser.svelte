@@ -8,7 +8,7 @@
     import contentStore from "./ContentStore";
     import { clickOutside, get_items_from_uids, resolveIcon } from "./utils";
 
-    // import Keydown from "svelte-keydown";
+    import Keydown from "svelte-keydown";
 
     animateScroll.setGlobalOptions({
         scrollX: true,
@@ -243,7 +243,7 @@
     }
 </script>
 
-<!-- <Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} /> -->
+<Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} />
 
 {#if $showContentBrowser}
     <div class="content-browser-position-wrapper">
