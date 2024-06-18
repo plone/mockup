@@ -288,10 +288,10 @@
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
-                                {#if i == 0 && level.selectable}
+                                {#if i == 0 }
                                     <button
                                         type="button"
-                                        class="btn btn-link btn-sm"
+                                        class="btn btn-link btn-xs ps-0"
                                         tabindex="0"
                                         on:keydown={() => changePath("/")}
                                         on:click={() => changePath("/")}
@@ -300,21 +300,21 @@
                                         /></button
                                     >
                                 {/if}
-                                {#if i > 0 && level.selectable}
+                                {#if level.selectable}
                                     <button
-                                        class="btn btn-primary btn-sm"
+                                        class="btn btn-primary btn-xs"
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => addItem(level)}
                                     >
                                         {_t("select ${level_path}", {
-                                            level_path: level.path,
+                                            level_path: level.absPath || "/",
                                         })}
                                     </button>
                                 {/if}
                                 <div class="levelActions">
                                     {#if !level.gridView}
                                         <button
-                                            class="btn btn-link btn-sm grid-view"
+                                            class="btn btn-link btn-xs grid-view"
                                             on:click={() => (level.gridView = true)}
                                         >
                                             <svg
@@ -323,7 +323,7 @@
                                         </button>
                                     {:else}
                                         <button
-                                            class="btn btn-link btn-sm grid-view"
+                                            class="btn btn-link btn-xs grid-view"
                                             on:click={() => (level.gridView = false)}
                                         >
                                             <svg
@@ -408,7 +408,7 @@
                         <div class="preview">
                             <div class="levelToolbar">
                                 <button
-                                    class="btn btn-primary btn-sm"
+                                    class="btn btn-primary btn-xs"
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() => addItem(previewItem)}
                                     >{_t("select ${preview_path}", {
@@ -442,7 +442,7 @@
                         <div class="preview">
                             <div class="levelToolbar">
                                 <button
-                                    class="btn btn-primary btn-sm"
+                                    class="btn btn-primary btn-xs"
                                     on:click|preventDefault={addSelectedItems}
                                     >{_t("add selected items")}</button
                                 >
@@ -478,6 +478,11 @@
         width: 100%;
         height: 100vh;
         background-color: rgba(0, 0, 0, 0.25);
+    }
+    .btn-xs {
+        --bs-btn-padding-y: .15rem;
+        --bs-btn-padding-x: .5rem;
+        --bs-btn-font-size: .75rem;
     }
     .content-browser {
         height: 100vh;
@@ -521,7 +526,7 @@
 
     .levelToolbar {
         width: 100%;
-        height: 2.8rem;
+        height: 2.5rem;
         display: flex;
         justify-content: space-between;
         padding: 0.375rem;
