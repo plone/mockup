@@ -13,6 +13,30 @@ msgstr ""
 "Preferred-Encodings: utf-8\n"
 "Domain: widgets\n"
 
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "loading content items"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "select ${level_path}"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "no results found"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "select ${preview_path}"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/SelectedItems.svelte
+msgid "loading selected items"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/SelectedItems.svelte
+msgid "Select"
+msgstr ""
+
 #: ./src/pat/formunloadalert/formunloadalert.js
 msgid "Discard changes? If you click OK, any changes you have made will be lost."
 msgstr ""
@@ -31,10 +55,6 @@ msgstr ""
 
 #: ./src/pat/livesearch/livesearch.js
 msgid "enter search phrase"
-msgstr ""
-
-#: ./src/pat/livesearch/livesearch.js
-msgid "no results found"
 msgstr ""
 
 #: ./src/pat/livesearch/livesearch.js
@@ -346,10 +366,6 @@ msgid "Title"
 msgstr ""
 
 #: ./src/pat/structure/templates/tablerow.xml
-msgid "Select"
-msgstr ""
-
-#: ./src/pat/structure/templates/tablerow.xml
 msgid "Excluded from navigation"
 msgstr ""
 
@@ -367,6 +383,10 @@ msgstr ""
 
 #: ./src/pat/tinymce/tinymce--implementation.js
 msgid "Insert Image"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce--implementation.js
+msgid "Insert table with header row"
 msgstr ""
 
 #: ./src/pat/tinymce/tinymce.js
