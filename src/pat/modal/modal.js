@@ -37,7 +37,7 @@ export default Base.extend({
         content: "#content",
         automaticallyAddButtonActions: true,
         loadLinksWithinModal: true,
-        prependContent: ".portalMessage, #global_statusmessage",
+        prependContent: ".portalMessage",
         onRender: null,
         templateOptions: {
             className: "modal fade",
