@@ -107,7 +107,7 @@ export default Base.extend({
                 "contextmenu",
                 "paste",
                 "plonelink",
-                "ploneimage",
+                "ploneimage"
             ],
             menubar: "edit table format tools view insert",
             toolbar:
