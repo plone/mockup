@@ -368,7 +368,7 @@
                                                 {item.Title}
                                             </div>
                                         {:else}
-                                            <div title={item.portal_type}>
+                                            <div class="item-title" title="{item.portal_type}: {item.Title}">
                                                 <svg
                                                     use:resolveIcon={{
                                                         iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
@@ -562,8 +562,10 @@
     .contentItem > * {
         padding: 0.5rem;
         white-space: nowrap;
-        max-width: 100%;
         user-select: none;
+        max-width: 450px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .contentItem .grid-preview > img {
