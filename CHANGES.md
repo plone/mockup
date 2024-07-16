@@ -2,6 +2,27 @@
 
 
 
+## [5.2.0-alpha.8](https://github.com/plone/mockup/compare/5.2.0-alpha.7...5.2.0-alpha.8) (2024-07-16)
+
+
+### Bug Fixes
+
+
+* **pat modal:** Translated close button label. ([7080868](https://github.com/plone/mockup/commit/7080868c8b1767ee484e6b3f0ca72ee88a1a76c6))
+
+
+* **pat tinymce:** Backport open source `template` plugin from TinyMCE 6.x ([0211093](https://github.com/plone/mockup/commit/02110933143fd651f1c48adddad7d6279b773773))
+
+
+
+### Maintenance
+
+
+* dependency upgrades ([8ef97dd](https://github.com/plone/mockup/commit/8ef97ddb44a65749010ff84b4d09b932bfe76693))
+
+
+* **pat tinymce:** upgrade to TinyMCE 7.1 and latest language pack ([279d4ea](https://github.com/plone/mockup/commit/279d4ea26c8811e7f8bc6aa999a64de4ed3d4268))
+
 ## [5.2.0-alpha.7](https://github.com/plone/mockup/compare/5.2.0-alpha.6...5.2.0-alpha.7) (2024-04-25)
 
 
