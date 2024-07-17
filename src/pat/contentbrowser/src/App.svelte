@@ -26,6 +26,7 @@
     export let query = {};
     export let fieldId;
     export let upload;
+    export let favorites;
     export let recentlyUsed;
     export let recentlyUsedKey;
     export let bSize = 20;
@@ -66,6 +67,7 @@
         query: query,
         fieldId: fieldId,
         uploadEnabled: upload,
+        favorites: favorites,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,
         base_url: base_url,

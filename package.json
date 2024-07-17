@@ -14,6 +14,7 @@
         "@11ty/eleventy-upgrade-help": "2",
         "@patternslib/pat-code-editor": "4.0.1",
         "@patternslib/patternslib": "9.9.14",
+        "@plone/registry": "^1.7.0",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "5.3.3",
