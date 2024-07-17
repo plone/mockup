@@ -30,6 +30,7 @@ parser.addArgument("selectable-types");
 parser.addArgument("separator");
 parser.addArgument("selection");
 parser.addArgument("selection-template");
+parser.addArgument("favorites");
 parser.addArgument("recently-used");
 parser.addArgument("recently-used-key");
 parser.addArgument("b-size");
