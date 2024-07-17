@@ -9731,11 +9731,6 @@ svelte-jester@^3.0.0:
   resolved "https://registry.yarnpkg.com/svelte-jester/-/svelte-jester-3.0.0.tgz#7872beb559bce3c66f134d6f016f2626cf8f1d1c"
   integrity sha512-V279cL906++hn00hkL1xAr/y5OjjxPYWic1g0yTJFmqdbdWKthdcuP3XBvmmwP9AzFBT51DlPgXz56HItle1Ug==
 
-svelte-keydown@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/svelte-keydown/-/svelte-keydown-0.7.0.tgz#4960d1dc1c115db2fd8857e9e4d4eb2a4657174f"
-  integrity sha512-AKl3o0M9eHqpH6H4xA9VPFqp/0P/suBj3jUR19ZnqewQrqq5opd7Vvo06SLg3onpXyqfm8pWbDl2m/yF4pVgMw==
-
 svelte-loader@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/svelte-loader/-/svelte-loader-3.2.3.tgz#d452ac982c6652edcfe438628b0e72ac9e24d65a"

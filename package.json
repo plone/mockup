@@ -58,7 +58,6 @@
         "sinon": "^15.2.0",
         "svelte": "^4.2.18",
         "svelte-jester": "^3.0.0",
-        "svelte-keydown": "^0.7.0",
         "svelte-loader": "^3.2.3",
         "svelte-scrollto": "^0.2.0",
         "svg-inline-loader": "^0.8.2"
