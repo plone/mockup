@@ -8,8 +8,6 @@
     import contentStore from "./ContentStore";
     import { clickOutside, get_items_from_uids, resolveIcon } from "./utils";
 
-    import Keydown from "svelte-keydown";
-
     animateScroll.setGlobalOptions({
         scrollX: true,
         container: ".levelColumns",
@@ -30,6 +28,8 @@
 
     let showUpload = false;
     let previewItem = {};
+    let keyboardNavInitialized = false;
+    let shiftKey = false;
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
@@ -81,7 +81,6 @@
             updatePreview({ data: item });
         } else if (item.is_folderish) {
             currentPath.set(item.path);
-            updatePreview({ action: "clear" });
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
@@ -94,19 +93,34 @@
     function changePath(item, e) {
         showUpload = false;
 
+        // clear previous selection
+        updatePreview({ action: "clear" });
+
         if (item === "/") {
+            // clicked "home" button
             currentPath.set(item);
-            updatePreview({ action: "clear" });
             return;
         }
 
+        // show clicked item
+        showPreview(item);
+    }
+
+    function clickItem(item, e) {
+        if (!keyboardNavInitialized) {
+            // if we've already clicked an element with the mouse
+            // do not start over keyboardnav
+            keyboardNavInitialized = true;
+        }
+
+        // check for multiselection
         const levelWrapper = e.currentTarget.closest(".levelItems");
         const prevSelection = levelWrapper.querySelectorAll(".selectedItem");
 
         if (prevSelection.length) {
             // check for pressed shift or ctrl/meta key for multiselection
 
-            if (e?.shiftKey) {
+            if (shiftKey || e?.shiftKey) {
                 // iter through the wrapper children and select all
                 // inbetween current selection and last preview
                 let select = false;
@@ -129,26 +143,86 @@
                         action: select ? "add" : "remove",
                     });
                 }
-                return;
-            } else if (e?.metaKey || e?.ctrlKey) {
+            } else if (e?.metaKey || e?.ctrlKey) {
                 // de/select multiple single items
+                // NOTE: only for mouse click event
                 updatePreview({
                     uuid: item.UID,
                     action: $previewUids.indexOf(item.UID) == -1 ? "add" : "remove",
                 });
-                return;
+            } else {
+                // unselect
+                [...prevSelection].map((el) => el.classList.remove("selectedItem"));
+                changePath(item, e);
             }
+
+        } else {
+            changePath(item, e);
         }
 
-        // clear previous selection
-        updatePreview({ action: "clear" });
-        // and show clicked item
-        showPreview(item);
+        e.currentTarget.focus();  // needed for keyboard navigation
+        e.currentTarget.classList.add("selectedItem");
+    }
+
+    function initKeyboardNav() {
+        // focus first element when showing contentbrowser
+        if (keyboardNavInitialized) {
+            return;
+        }
+        const possibleFocusEls = [
+            ...document.querySelectorAll(".levelColumn .inPath"),  // previously selected folder
+            ...document.querySelectorAll(".levelColumn .selectedItem"),  // previously selected item
+            document.querySelector(".levelColumn .contentItem"),  // default first item
+        ]
+        if (possibleFocusEls.length) {
+            keyboardNavInitialized = true;
+            possibleFocusEls[0].focus();
+        }
     }
 
     function keyboardNavigation(item, e) {
-        // TODO
-        return;
+        const node = e.currentTarget;
+        shiftKey = e.shiftKey;
+        if (e.key == "Escape") {
+            cancelSelection();
+        }
+        if (
+            e.key == "ArrowDown" &&
+            node?.nextElementSibling?.classList.contains("contentItem")
+        ) {
+            node.nextElementSibling.click();
+        }
+        if (
+            e.key == "ArrowUp" &&
+            node?.previousElementSibling?.classList.contains("contentItem")
+        ) {
+            node.previousElementSibling.click();
+        }
+        if (e.key == "ArrowRight") {
+            const currCol = e.target.closest(".levelColumn");
+            const nxtCol = currCol?.nextElementSibling;
+            if (!nxtCol || !nxtCol.classList.contains("levelColumn")) {
+                return;
+            }
+            nxtCol.querySelector(".contentItem")?.click();
+        }
+        if (e.key == "ArrowLeft") {
+            const currCol = e.target.closest(".levelColumn");
+            const prevCol = currCol?.previousElementSibling;
+            if (!prevCol || !prevCol.classList.contains("levelColumn")) {
+                return;
+            }
+            prevCol.querySelector(".inPath").click();
+        }
+        if (e.key == "Space") {
+            // add item to selection (like metaKey + click)
+            clickItem(item, e, true);
+        }
+        if (e.key == "Enter") {
+            if (isSelectable(item)) {
+                addSelectedItems(item);
+            }
+        }
     }
 
     async function addItem(item) {
@@ -156,6 +230,7 @@
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
+        keyboardNavInitialized = false;
     }
 
     async function addSelectedItems() {
@@ -170,10 +245,12 @@
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
+        keyboardNavInitialized = false;
     }
 
     function cancelSelection() {
         $showContentBrowser = false;
+        keyboardNavInitialized = false;
         updatePreview({ action: "clear" });
     }
 
@@ -243,14 +320,12 @@
     }
 </script>
 
-<Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} />
-
 {#if $showContentBrowser}
     <div class="content-browser-position-wrapper">
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
-            on:introend={() => scrollToRight()}
+            on:introend={() => { scrollToRight(); initKeyboardNav() }}
             use:clickOutside
             on:click_outside={cancelSelection}
         >
@@ -268,7 +343,10 @@
                         tabindex="0"
                         on:keydown={upload}
                         on:click={upload}
-                        ><svg use:resolveIcon={{ iconName: "upload" }} /> upload files to {$currentPath}</button
+                        ><svg use:resolveIcon={{ iconName: "upload" }} />
+                        {_t("upload to ${current_path}", {
+                            current_path: $currentPath,
+                        })}</button
                     >
                 {/if}
                 <button
@@ -288,7 +366,7 @@
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
-                                {#if i == 0 }
+                                {#if i == 0}
                                     <button
                                         type="button"
                                         class="btn btn-link btn-xs ps-0"
@@ -307,7 +385,7 @@
                                         on:click|preventDefault={() => addItem(level)}
                                     >
                                         {_t("select ${level_path}", {
-                                            level_path: level.absPath || "/",
+                                            level_path: level.absPath || "/",
                                         })}
                                     </button>
                                 {/if}
@@ -335,6 +413,7 @@
                             </div>
                             <div class="levelItems">
                                 {#each level.results || [] as item, n}
+                                    <!-- svelte-ignore missing-declaration -->
                                     <div
                                         class="contentItem{n % 2 == 0
                                             ? ' odd'
@@ -346,10 +425,10 @@
                                             ? ' text-muted'
                                             : ''}"
                                         role="button"
-                                        tabindex="0"
+                                        tabindex={n}
                                         data-uuid={item.UID}
-                                        on:keydown={(e) => keyboardNavigation(item, e)}
-                                        on:click={(e) => changePath(item, e)}
+                                        on:keydown|preventDefault={(e) => keyboardNavigation(item, e)}
+                                        on:click={(e) => clickItem(item, e)}
                                     >
                                         {#if level.gridView}
                                             <div class="grid-preview">
@@ -368,7 +447,10 @@
                                                 {item.Title}
                                             </div>
                                         {:else}
-                                            <div class="item-title" title="{item.portal_type}: {item.Title}">
+                                            <div
+                                                class="item-title"
+                                                title="{item.portal_type}: {item.Title}"
+                                            >
                                                 <svg
                                                     use:resolveIcon={{
                                                         iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
@@ -378,11 +460,13 @@
                                             </div>
                                         {/if}
                                         {#if item.is_folderish && $config.mode == "browse"}
-                                            <svg
-                                                use:resolveIcon={{
-                                                    iconName: "arrow-right-circle",
-                                                }}
-                                            />
+                                            <div class="browseSub">
+                                                <svg
+                                                    use:resolveIcon={{
+                                                        iconName: "arrow-right-circle",
+                                                    }}
+                                                />
+                                            </div>
                                         {/if}
                                     </div>
                                 {/each}
@@ -480,9 +564,9 @@
         background-color: rgba(0, 0, 0, 0.25);
     }
     .btn-xs {
-        --bs-btn-padding-y: .15rem;
-        --bs-btn-padding-x: .5rem;
-        --bs-btn-font-size: .75rem;
+        --bs-btn-padding-y: 0.15rem;
+        --bs-btn-padding-x: 0.5rem;
+        --bs-btn-font-size: 0.75rem;
     }
     .content-browser {
         height: 100vh;
@@ -514,10 +598,11 @@
         overflow: hidden;
         flex-grow: 3;
         border-left: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
+        user-select: none;
     }
 
     .levelColumn {
-        min-width: 320px;
+        width: 320px;
         border-right: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
         display: flex;
@@ -547,12 +632,15 @@
         justify-content: space-between;
         font-size: 90%;
         min-height: 2rem;
-        padding-right: 0.375rem;
+    }
+    .contentItem:focus-visible {
+        outline:none;
     }
     .contentItem.even {
         background-color: var(--bs-secondary-bg);
     }
-    .contentItem.inPath {
+    .contentItem.inPath,
+    .contentItem:focus {
         background-color: rgba(var(--bs-primary-rgb), 0.15);
     }
     .contentItem.selectedItem {
@@ -562,10 +650,12 @@
     .contentItem > * {
         padding: 0.5rem;
         white-space: nowrap;
-        user-select: none;
         max-width: 450px;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+    .contentItem > .browseSub {
+        flex-shrink: 0;
     }
 
     .contentItem .grid-preview > img {
@@ -576,8 +666,7 @@
         margin-right: 1rem;
     }
     .preview {
-        min-width: 320px;
-        max-width: 500px;
+        width: 320px;
         min-height: 300px;
         display: flex;
         flex-direction: column;
@@ -586,6 +675,7 @@
     .preview .info {
         padding: 0.5rem;
         width: 100%;
+        word-wrap: anywhere;
     }
     .preview .info .previewIcon {
         margin: 0 auto 1rem auto;
