@@ -1,7 +1,7 @@
 <div>
-  <div class="linkModal">
+  <div class="linkModal22">
     <h1><%- uploadHeading %></h1>
-    <input type="text" name="upload" style="display:none" />
-    <div class="uploadify-me"></div>
+    <input type="text" name="upload22" style="display:none" />
+    <div class="uploadify-me22"></div>
   </div>
 </div>
