@@ -2,6 +2,27 @@
 
 
 
+## [5.2.0-alpha.9](https://github.com/plone/mockup/compare/5.2.0-alpha.8...5.2.0-alpha.9) (2024-08-20)
+
+
+### Bug Fixes
+
+
+* **pat modal:** Update `prependContent` selector to avoid duplicated messages in modal. ([020a943](https://github.com/plone/mockup/commit/020a94379a1219cb7ffbd7ea0a6ff56014df3f44))
+
+
+* **pat structure:** Fix Sass compiler warnings ([9bbcf00](https://github.com/plone/mockup/commit/9bbcf00487eaaf67c8dc75d362ec406c49ab0dce))
+
+
+
+### Maintenance
+
+
+* dependency updates ([08fc178](https://github.com/plone/mockup/commit/08fc178ab29e2d9c2caee003ed8f650c3d9ab82d))
+
+
+* upgrade dependencies and add tinymce 7.3.0 note (use 7.2.1 for now) ([05100b0](https://github.com/plone/mockup/commit/05100b05a7856940f37a4aef993f0c02b7e93600))
+
 ## [5.2.0-alpha.8](https://github.com/plone/mockup/compare/5.2.0-alpha.7...5.2.0-alpha.8) (2024-07-16)
 
 
