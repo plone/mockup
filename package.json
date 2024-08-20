@@ -7,12 +7,13 @@
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
         "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "nwsapi": "Since version 2.2.3 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
+        "nwsapi": "Since version 2.2.3 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83",
+        "tinymce": "In version 7.3.0 there are style errors when compiling. See https://github.com/tinymce/tinymce/issues/9829"
     },
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "2",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.9.10",
+        "@patternslib/patternslib": "9.9.14",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "5.3.3",
@@ -33,22 +34,22 @@
         "datatables.net-select": "1.4.0",
         "datatables.net-select-bs5": "1.4.0",
         "dropzone": "4.3.0",
-        "jqtree": "1.7.4",
+        "jqtree": "1.8.4",
         "jquery": "^3.7.1",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
         "js-cookie": "^3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.2",
-        "tinymce": "^7.1.2",
-        "tinymce-i18n": "24.6.24",
-        "underscore": "^1.13.6"
+        "tinymce": "7.2.1",
+        "tinymce-i18n": "24.7.29",
+        "underscore": "^1.13.7"
     },
     "devDependencies": {
         "@11ty/eleventy": "^2.0.1",
         "@11ty/eleventy-navigation": "^0.3.5",
         "@11ty/eleventy-plugin-syntaxhighlight": "^4.2.0",
-        "@patternslib/dev": "^3.5.3",
+        "@patternslib/dev": "^3.6.1",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",
         "npm-run-all": "^4.1.5",
@@ -56,7 +57,7 @@
         "sinon": "^15.2.0"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.9.10",
+        "@patternslib/patternslib": "9.9.14",
         "backbone": "1.4.1",
         "datatables.net": "<1.13",
         "datatables.net-bs5": "<1.13",
@@ -73,8 +74,8 @@
         "datatables.net-select": "<1.5",
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
-        "nwsapi": "2.2.2",
-        "underscore": "1.13.6"
+        "nwsapi": "2.2.12",
+        "underscore": "1.13.7"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
