@@ -104,11 +104,11 @@
 
         th,
         td {
+            padding: 8px;
+
             &:first-child {
                 border-left-width: 1px;
             }
-
-            padding: 8px;
         }
 
         .fc-breadcrumbs-container {
@@ -199,12 +199,12 @@
     .popover {
         overflow: hidden;
 
+        /* quickfix for Bootstrap 5.2.0-beta */
+        position: absolute !important;
+
         &:not(.active) {
             display: none;
         }
-
-        /* quickfix for Bootstrap 5.2.0-beta */
-        position: absolute !important;
 
         .popover-title {
             font-weight:bold;
@@ -358,30 +358,30 @@
             width:100%;
             display: block;
         }
-        
+
         >.popover-content{
             display:flex;
             flex-direction: column;
             align-items: flex-start;
             padding:0 1rem;
-            
+
             > label{
                 order:1;
                 margin-bottom:0.5rem;
             }
-            
+
             > ul{
                 column-count: 2;
                 order:3;
                 margin-bottom:0.5rem;
             }
-          
+
             > button{
                 order:2;
                 margin-bottom:0.5rem;
             }
         }
-        
+
         ul {
             list-style: none;
             margin: 0 0 1ex 0;
