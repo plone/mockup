@@ -2,6 +2,30 @@
 
 
 
+## [5.1.13](https://github.com/plone/mockup/compare/5.1.12...5.1.13) (2024-08-20)
+
+
+### Bug Fixes
+
+
+* **pat modal:** Update `prependContent` selector to avoid duplicated messages in modal. ([58aa398](https://github.com/plone/mockup/commit/58aa398813375e10e8aa573ad200e041d7354bfb))
+
+
+* **pat structure:** add test for order-support ([e6e2569](https://github.com/plone/mockup/commit/e6e256994222d135af69d332998ccae33d460153))
+
+
+* **pat structure:** enable and fix skiped tests ([e638143](https://github.com/plone/mockup/commit/e638143f594c3fb50ea8a494e5c596ca78b5553e))
+
+
+* **pat structure:** Fix Sass compiler warnings ([dc6d3cb](https://github.com/plone/mockup/commit/dc6d3cbd11d2d1525ba642eee5a42fbfeaca7876))
+
+
+
+### Maintenance
+
+
+* update dependencies ([08cd105](https://github.com/plone/mockup/commit/08cd105d23f961692af9a6f6f02ff2914906b9ce))
+
 ## [5.1.12](https://github.com/plone/mockup/compare/5.1.11...5.1.12) (2024-02-28)
 
 
