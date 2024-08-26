@@ -1,5 +1,6 @@
 import $ from "jquery";
 import I18n from "../../core/i18n";
+import events from "@patternslib/patternslib/src/core/events";
 import logger from "@patternslib/patternslib/src/core/logging";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
@@ -10,6 +11,7 @@ let LinkModal = null;
 
 export default class TinyMCE {
     constructor(el, options) {
+        this.el = el;
         this.$el = $(el);
         this.options = options;
     }
@@ -145,8 +147,8 @@ export default class TinyMCE {
         if (theme && theme == 'dark') {
             css = 'oxide-dark';
         }
-        import (`tinymce/skins/ui/${css}/content.css`);
-        import (`tinymce/skins/ui/${css}/skin.css`);
+        import(`tinymce/skins/ui/${css}/content.css`);
+        import(`tinymce/skins/ui/${css}/skin.css`);
 
         const tinymce = (await import("tinymce/tinymce")).default;
         await import("tinymce/models/dom");
@@ -210,6 +212,7 @@ export default class TinyMCE {
             if (self.tiny === undefined || self.tiny === null) {
                 self.tiny = editor;
             }
+
         };
         tinyOptions["setup"] = (editor) => {
             editor.ui.registry.addMenuButton("inserttable", {
@@ -231,6 +234,14 @@ export default class TinyMCE {
                         },
                     ]);
                 },
+            });
+            // handle 'change' event to ensure correct validation (eg. required textfield)
+            // eslint-disable-next-line no-unused-vars
+            editor.on("change", (e) => {
+                // setting tiny content manually
+                this.el.value = editor.getContent();
+                // dispatch "change" event for pat-validation
+                this.el.dispatchEvent(events.change_event());
             });
         };
 
@@ -305,33 +316,21 @@ export default class TinyMCE {
             return url;
         }
 
-        // BBB: TinyMCE 6 has renamed toolbar and menuitem plugins.
+        // BBB: TinyMCE 6+ has renamed toolbar and menuitem plugins.
         // map them here until they are updated in Plone's configuration:
         // menu: "formats" -> "styles"
-        if(tinyOptions?.menu?.format) {
+        if (tinyOptions?.menu?.format) {
             tinyOptions.menu.format.items = tinyOptions.menu.format.items.replace('formats', 'styles');
         }
         // toolbar: "styleselect" -> "styles"
-        if(tinyOptions?.toolbar) {
+        if (tinyOptions?.toolbar) {
             tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
         }
 
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
-
-        /* tiny really should be doing this by default
-         * but this fixes overlays not saving data */
-        var $form = self.$el.parents("form");
-        $form.on("submit", function () {
-            if (self.options.inline === true) {
-                // save back from contenteditable to textarea
-                self.$el.val(self.tiny.getContent());
-            } else {
-                // normal case
-                self.tiny.save();
-            }
-        });
     }
+
     destroy() {
         if (this.tiny) {
             if (this.options.inline === true) {
