@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-alpha.10](https://github.com/plone/mockup/compare/5.2.0-alpha.9...5.2.0-alpha.10) (2024-08-26)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** Save value on 'change' event to fix validation. ([1a4bc14](https://github.com/plone/mockup/commit/1a4bc145926f0d56014460621fd83bcf85fbcf82))
+
 ## [5.2.0-alpha.9](https://github.com/plone/mockup/compare/5.2.0-alpha.8...5.2.0-alpha.9) (2024-08-20)
 
 
