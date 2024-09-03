@@ -2,6 +2,14 @@
 
 
 
+## [5.1.14](https://github.com/plone/mockup/compare/5.1.13...5.1.14) (2024-09-03)
+
+
+### Maintenance
+
+
+* update development packages ([de01072](https://github.com/plone/mockup/commit/de01072966f457e116ab34c0040164c235bf147c))
+
 ## [5.1.13](https://github.com/plone/mockup/compare/5.1.12...5.1.13) (2024-08-20)
 
 
