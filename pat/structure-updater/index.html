@@ -365,6 +365,18 @@
 <h2>How to customize the Structure Updater pattern</h2>
 <p>The <code>mockup-pattern-structureupdater</code> updates the title and description on the page - if available - when a folder is changed in the structure pattern. It's triggered by the class <code>template-folder_contents</code>, which is available on the body tag when the folder contents page is opened. The pattern listens on the <code>context-info-loaded</code> event, which is triggered by the structure pattern.</p>
 <p>Often you will have customized layouts, where you need to update also other parts of the site when the user changes to another folder.</p>
+<h3>Pattern configuration</h3>
+<p>For simple cases, you can customize the CSS selector for the title and description via the options <code>titleSelector</code> and <code>descriptionSelector</code> for the pattern.
+This can be done by adding options for that pattern via the resource registry control panel under the &quot;Pattern options&quot; tab or via the <code>registry.xml</code> profile like so:</p>
+  <record name="plone.patternoptions">
+    <value purge="False">
+      <element key="structureupdater">{"titleSelector": "h1.documentFirstHeading", "descriptionSelector": "footer"}</element>
+    </value>
+  </record>
+<blockquote>
+<p>For the <code>titleSelector</code> and <code>descriptionSelector</code> you have to provide valid CSS selectors.
+Like with any CSS selector you can also specify mutliple selectors by seperating them via a comma sign.</p>
+</blockquote>
 
       </main>
     </div>
