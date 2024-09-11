@@ -11,20 +11,17 @@ export default Base.extend({
     },
 
     init: function () {
-        $("body").on(
-            "context-info-loaded",
-            function (e, data) {
-                if (this.options.titleSelector) {
-                    $(this.options.titleSelector, this.$el).html(
-                        (data.object && data.object.Title) || "&nbsp;"
-                    );
-                }
-                if (this.options.descriptionSelector) {
-                    $(this.options.descriptionSelector, this.$el).html(
-                        (data.object && data.object.Description) || "&nbsp;"
-                    );
-                }
-            }.bind(this)
-        );
+        $("body").on("context-info-loaded", (e, data) => {
+            if (this.options.titleSelector) {
+                $(this.options.titleSelector, this.$el).html(
+                    (data.object && data.object.Title) || "&nbsp;"
+                );
+            }
+            if (this.options.descriptionSelector) {
+                $(this.options.descriptionSelector, this.$el).html(
+                    (data.object && data.object.Description) || "&nbsp;"
+                );
+            }
+        });
     },
 });

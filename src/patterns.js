@@ -41,6 +41,7 @@ import "./pat/search/search";
 import "./pat/select2/select2";
 import "./pat/sortable/sortable";
 import "./pat/structure/structure";
+import "./pat/structure-updater/structure-updater";
 import "./pat/textareamimetypeselector/textareamimetypeselector";
 import "./pat/tinymce/tinymce";
 import "./pat/toggle/toggle";
