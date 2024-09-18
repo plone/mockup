@@ -338,9 +338,85 @@
       </nav>
 
       <main id="content">
-        <h1>Content Browser</h1>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-content-browser<span class="token punctuation">"</span></span> <span class="token attr-name">data-pat-content-browser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>max-depth:1; vocabulary-url:src/test-relateditems.json<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
-<div class="pat-content-browser" data-pat-content-browser="max-depth:1; vocabulary-url:src/test-relateditems.json"></div>
+        <h1>Contentbrowser</h1>
+<p>Show a widget to select items in an offcanvas miller-column browser.</p>
+<h2>Configuration</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Default</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">attributes</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">['UID', 'Title', 'portal_type', 'path']</td>
+<td style="text-align:center">This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.</td>
+</tr>
+<tr>
+<td style="text-align:center">basePath</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">set to rootPath.</td>
+<td style="text-align:center">Start browse/search in this path.</td>
+</tr>
+<tr>
+<td style="text-align:center">contextPath</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Path of the object, which is currently edited. If this path is given, this object will not be selectable.</td>
+</tr>
+<tr>
+<td style="text-align:center">favorites</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">[]</td>
+<td style="text-align:center">Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes &quot;title&quot; and &quot;path&quot;.</td>
+</tr>
+<tr>
+<td style="text-align:center">maximumSelectionSize</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited.</td>
+</tr>
+<tr>
+<td style="text-align:center">bSize</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">Batch size to break down big result sets into multiple pages.</td>
+</tr>
+<tr>
+<td style="text-align:center">separator</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">','</td>
+<td style="text-align:center">Select2 option. String which separates multiple items.</td>
+</tr>
+<tr>
+<td style="text-align:center">upload</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Allow file and image uploads from within the related items widget.</td>
+</tr>
+<tr>
+<td style="text-align:center">vocabularyUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">This is a URL to a JSON-formatted file used to populate the list</td>
+</tr>
+</tbody>
+</table>
+<h2>Default</h2>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Document"], "vocabularyUrl": "contentbrowser-test.json"}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Existing values, some bad</h2>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width:30em; vocabularyUrl:contentbrowser-test.json<span class="token punctuation">"</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Selectable Types</h2>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Document"], "vocabularyUrl": "contentbrowser-test-selectable.json"}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Select a single item</h2>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Document"], "vocabularyUrl": "contentbrowser-test.json", "maximumSelectionSize": 1}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<h2>Mode &quot;browse&quot;, Upload</h2>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Image", "File"], "vocabularyUrl": "contentbrowser-test.json", "upload": true}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
 
       </main>
     </div>
