@@ -64,7 +64,7 @@
         "svg-inline-loader": "^0.8.2"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.9.14",
+        "@patternslib/patternslib": "9.9.16",
         "backbone": "1.4.1",
         "datatables.net": "<1.13",
         "datatables.net-bs5": "<1.13",
