@@ -1,16 +1,14 @@
-import $ from "jquery";
-import _ from "underscore";
 import Base from "@patternslib/patternslib/src/core/base";
 import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
+import $ from "jquery";
+import _ from "underscore";
 
 import tinymce from "tinymce/tinymce";
-import LinkTemplate from "../templates/link.xml";
-import ImageTemplate from "../templates/image.xml";
-import RelatedItems from "../../relateditems/relateditems";
 import "../../autotoc/autotoc";
 import "../../modal/modal";
-import PatternUpload from "../../upload/upload";
+import ImageTemplate from "../templates/image.xml";
+import LinkTemplate from "../templates/link.xml";
 
 var LinkType = Base.extend({
     name: "linktype",
@@ -27,11 +25,11 @@ var LinkType = Base.extend({
     },
 
     getEl: function () {
-        return this.$el.find("input");
+        return this.el.querySelector("input");
     },
 
     value: function () {
-        return this.getEl().val().trim();
+        return this.getEl().value.trim();
     },
 
     toUrl: function () {
@@ -40,13 +38,11 @@ var LinkType = Base.extend({
 
     load: function (element) {
         let val = this.tiny.dom.getAttrib(element, "data-val");
-        this.getEl().attr("value", val);
+        this.set(val);
     },
 
     set: function (val) {
-        var $el = this.getEl();
-        $el.attr("value", val);
-        $el.val(val);
+        this.getEl().setAttribute("value", val);
     },
 
     attributes: function () {
@@ -54,7 +50,7 @@ var LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
-    updateRelatedItems: function () {},
+    updateRelatedItems: function () { },
 });
 
 var ExternalLink = LinkType.extend({
@@ -62,7 +58,8 @@ var ExternalLink = LinkType.extend({
     trigger: ".pat-externallinktype-dummy",
     init: function () {
         LinkType.prototype.init.call(this);
-        this.getEl().on("change", function () {
+        // selectedItemsNode.addEventListener("change", readSelectedItemsFromInput);
+        this.getEl().addEventListener("change", function () {
             // check here if we should automatically add in http:// to url
             var val = $(this).val();
             if (new RegExp("https?://").test(val)) {
@@ -75,48 +72,45 @@ var ExternalLink = LinkType.extend({
             }
         });
     },
+    load: function (element) {
+        let val = this.tiny.dom.getAttrib(element, "data-val");
+        this.set(val);
+    },
 });
 
 var InternalLink = LinkType.extend({
     name: "internallinktype",
     trigger: ".pat-internallinktype-dummy",
     init: async function () {
-        if (!this.getEl().length) {
+        const linkEl = this.getEl();
+        if (!linkEl) {
             return;
         }
         LinkType.prototype.init.call(this);
-        this.getEl().addClass("pat-relateditems");
-        await this.createRelatedItems();
+        await this.createContentBrowser();
     },
 
     getEl: function () {
-        return this.$el.find("input:not(.select2-input)");
+        return this.el.querySelector("input");
     },
 
-    createRelatedItems: async function () {
-        if (!this.getEl().length) {
-            return;
+    createContentBrowser: async function () {
+        var options = {
+            "selection": [],
+            ...this.linkModal.options?.relatedItems,
+        };
+        options["maximum-selection-size"] = 1;
+        // enable upload in ContentBrowser instead of separate tab
+        options["upload"] = 1;
+        const inputEl = this.getEl();
+        const element = this.tiny.selection.getNode();
+        const linkType = this.tiny.dom.getAttrib(element, "data-linktype");
+        if (linkType === "internal" || linkType === "image") {
+            options.selection.push(this.tiny.dom.getAttrib(element, "data-val"));
         }
-        var options = this.linkModal.options.relatedItems;
-        options.upload = false; // ensure that related items upload is off.
-        this.relatedItems = new RelatedItems(this.getEl(), options);
-        await events.await_pattern_init(this.relatedItems)
-    },
-
-    updateRelatedItems: async function (val) {
-        if (!this.relatedItems) {
-            // prevent toolbar from being rendered twice
-            await this.createRelatedItems();
-        }
-        this.relatedItems.selectItem(val);
-    },
-
-    value: function () {
-        var val = this.getEl().select2("data");
-        if (val && typeof val === "object") {
-            val = val[0];
-        }
-        return val;
+        const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
+            .default;
+        this.contentBrowserPattern = new ContentBrowser(inputEl, options);
     },
 
     toUrl: function () {
@@ -126,28 +120,7 @@ var InternalLink = LinkType.extend({
         }
         return null;
     },
-    load: function (element) {
-        var val = this.tiny.dom.getAttrib(element, "data-val");
-        if (val) {
-            this.set(val);
-        }
-    },
 
-    set: function (val) {
-        var $el = this.getEl();
-        $el.val(val).trigger("change");
-        this.updateRelatedItems(val);
-    },
-
-    attributes: function () {
-        var val = this.value();
-        if (val) {
-            return {
-                "data-val": val.UID,
-            };
-        }
-        return {};
-    },
 });
 
 var UploadLink = LinkType.extend({
@@ -566,6 +539,7 @@ export default Base.extend({
         self.$alt = $('input[name="alt"]', self.modal.$modal);
         self.$align = $('select[name="align"]', self.modal.$modal);
         self.$scale = $('select[name="scale"]', self.modal.$modal);
+        self.$selectedItems = $("input.pat-contentbrowser", self.modal.$modal);
         self.$enableImageZoom = $('input[name="enableImageZoom"]', self.modal.$modal);
         self.$captionFromDescription = $(
             'input[name="captionFromDescription"]',
@@ -578,7 +552,7 @@ export default Base.extend({
             var type = self.options.linkTypes[index];
             var $container = $(".linkType." + type + " .main", self.modal.$modal);
             if ($container.length) {
-                var instance  = new self.options.linkTypeClassMapping[type](
+                var instance = new self.options.linkTypeClassMapping[type](
                     $container,
                     {
                         linkModal: self,
@@ -681,6 +655,7 @@ export default Base.extend({
     },
 
     updateImage: function (src) {
+        console.log(`updateImage: ${src}`);
         var self = this;
         var title = self.$title.val();
         var captionFromDescription = self.$captionFromDescription.prop("checked");
@@ -692,10 +667,10 @@ export default Base.extend({
         var cssclasses = [
             "image-richtext",
         ];
-        if(self.$align.val()) {
+        if (self.$align.val()) {
             cssclasses.push(self.$align.val());
         }
-        if(self.linkType !== "externalImage"){
+        if (self.linkType !== "externalImage") {
             cssclasses.push("picture-variant-" + self.$scale.val())
         }
         if (captionFromDescription || caption) {
@@ -714,7 +689,7 @@ export default Base.extend({
             ...self.linkTypes[self.linkType].attributes()
         };
 
-        if(self.linkType !== "externalImage"){
+        if (self.linkType !== "externalImage") {
             data["data-picturevariant"] = self.$scale.val();
         }
 
@@ -743,7 +718,7 @@ export default Base.extend({
 
         var newImgElm = self.dom.create("img", data);
 
-        if(self.imgElm && self.imgElm.tagName.toLowerCase() == "img") {
+        if (self.imgElm && self.imgElm.tagName.toLowerCase() == "img") {
             self.imgElm.replaceWith(newImgElm);
         } else {
             self.rng.insertNode(newImgElm);
@@ -762,66 +737,66 @@ export default Base.extend({
         await self.initElements();
         self.initData();
         // upload init
-        if (self.options.upload) {
-            self.$upload = $(".uploadify-me", self.modal.$modal);
-            self.options.upload.relatedItems = $.extend(
-                true,
-                {},
-                self.options.relatedItems
-            );
-            self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
-            self.$upload.addClass("pat-upload");
-            new PatternUpload(self.$upload, self.options.upload);
-            self.$upload.on(
-                "uploadAllCompleted",
-                function (evt, data) {
-                    if (self.linkTypes.image) {
-                        self.linkTypes.image.set(data.data.UID);
-                        $(
-                            "#" + $("#tinylink-image", self.modal.$modal).data("navref")
-                        ).trigger("click");
-                    } else {
-                        self.linkTypes.internal.set(data.data.UID);
-                        $(
-                            "#" +
-                                $("#tinylink-internal", self.modal.$modal).data("navref")
-                        ).trigger("click");
-                    }
-                }.bind(self)
-            );
-        }
+        // if (self.options.upload) {
+        //     self.$upload = $(".uploadify-me", self.modal.$modal);
+        //     self.options.upload.relatedItems = $.extend(
+        //         true,
+        //         {},
+        //         self.options.relatedItems
+        //     );
+        //     self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
+        //     self.$upload.addClass("pat-upload");
+        //     new PatternUpload(self.$upload, self.options.upload);
+        //     self.$upload.on(
+        //         "uploadAllCompleted",
+        //         function (evt, data) {
+        //             if (self.linkTypes.image) {
+        //                 self.linkTypes.image.set(data.data.UID);
+        //                 $(
+        //                     "#" + $("#tinylink-image", self.modal.$modal).data("navref")
+        //                 ).trigger("click");
+        //             } else {
+        //                 self.linkTypes.internal.set(data.data.UID);
+        //                 $(
+        //                     "#" +
+        //                         $("#tinylink-internal", self.modal.$modal).data("navref")
+        //                 ).trigger("click");
+        //             }
+        //         }.bind(self)
+        //     );
+        // }
 
         self.$button.off("click").on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
             self.linkType = self.modal.$modal.find("fieldset.active").data("linktype");
-
-            if (self.linkType === "uploadImage" || self.linkType === "upload") {
-                var patUpload = self.$upload.data().patternUpload;
-                if (patUpload.dropzone.files.length > 0) {
-                    patUpload.processUpload();
-                    // eslint-disable-next-line no-unused-vars
-                    self.$upload.on("uploadAllCompleted", function (evt, data) {
-                        var counter = 0;
-                        var checkUpload = function () {
-                            if (counter < 5 && !self.linkTypes[self.linkType].value()) {
-                                counter += 1;
-                                setTimeout(checkUpload, 100);
-                                return;
-                            } else {
-                                var href = self.getLinkUrl();
-                                self.updateImage(href);
-                                self.hide();
-                            }
-                        };
-                        checkUpload();
-                    });
-                }
-            }
+            // if (self.linkType === "uploadImage" || self.linkType === "upload") {
+            //     var patUpload = self.$upload.data().patternUpload;
+            //     if (patUpload.dropzone.files.length > 0) {
+            //         patUpload.processUpload();
+            //         // eslint-disable-next-line no-unused-vars
+            //         self.$upload.on("uploadAllCompleted", function (evt, data) {
+            //             var counter = 0;
+            //             var checkUpload = function () {
+            //                 if (counter < 5 && !self.linkTypes[self.linkType].value()) {
+            //                     counter += 1;
+            //                     setTimeout(checkUpload, 100);
+            //                     return;
+            //                 } else {
+            //                     var href = self.getLinkUrl();
+            //                     self.updateImage(href);
+            //                     self.hide();
+            //                 }
+            //             };
+            //             checkUpload();
+            //         });
+            //     }
+            // }
             var href;
             try {
                 href = self.getLinkUrl();
             } catch (error) {
+                console.log(error);
                 return; // just cut out if no url
             }
             if (!href) {
@@ -835,10 +810,13 @@ export default Base.extend({
             }
             self.hide();
         });
-        $('.modal-footer input[name="cancel"]', self.modal.$modal).on("click", function (e) {
-            e.preventDefault();
-            self.hide();
-        });
+        $('.modal-footer input[name="cancel"]', self.modal.$modal).on(
+            "click",
+            function (e) {
+                e.preventDefault();
+                self.hide();
+            }
+        );
     },
 
     show: function () {
@@ -851,7 +829,6 @@ export default Base.extend({
 
     initData: function () {
         var self = this;
-
         self.data = {};
         // get selection BEFORE..
         // This is pulled from TinyMCE link plugin
@@ -920,12 +897,20 @@ export default Base.extend({
             if (linkType && linkType in self.linkTypes) {
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
+
                 // set scale selection in link modal:
                 var pictureVariant = self.dom.getAttrib(
                     self.imgElm,
                     "data-picturevariant"
                 );
                 self.$scale.val(pictureVariant);
+
+                // var selectedImageUid = self.dom.getAttrib(
+                //     self.imgElm,
+                //     "data-val"
+                // );
+                // self.$selectedItems.val()
+
                 $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
             } else if (src) {
                 self.guessImageLink(src);
@@ -974,6 +959,7 @@ export default Base.extend({
     },
 
     guessAnchorLink: function (href) {
+        console.log("href: " + href);
         if (
             this.options.prependToUrl &&
             href.indexOf(this.options.prependToUrl) !== -1
@@ -999,13 +985,13 @@ export default Base.extend({
         }
     },
 
-    setSelectElement: function ($el, val) {
-        $el.find("option:selected").prop("selected", false);
-        if (val) {
-            // update
-            $el.find('option[value="' + val + '"]').prop("selected", true);
-        }
-    },
+    // setSelectElement: function ($el, val) {
+    //     $el.find("option:selected").prop("selected", false);
+    //     if (val) {
+    //         // update
+    //         $el.find('option[value="' + val + '"]').prop("selected", true);
+    //     }
+    // },
 
     reinitialize: function () {
         /*

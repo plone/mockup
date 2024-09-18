@@ -40,7 +40,7 @@
         margin: 0 0 0.5em;
         background-color: var(--bs-body-bg);
 
-        & > a.btn:last-of-type,
+        &>a.btn:last-of-type,
         .btn-group {
             margin-right: 1em;
         }
@@ -73,6 +73,7 @@
 
             th.sorting_disabled {
                 padding-right: $table-cell-padding-x !important;
+
                 &:after,
                 &:before {
                     content: none;
@@ -109,6 +110,7 @@
             &:first-child {
                 border-left-width: 1px;
             }
+
         }
 
         .fc-breadcrumbs-container {
@@ -166,9 +168,11 @@
             float: none;
             width: 100%;
         }
+
         #btn-attribute-columns {
             display: none;
         }
+
         table {
             thead {
                 th {
@@ -198,8 +202,6 @@
 
     .popover {
         overflow: hidden;
-
-        /* quickfix for Bootstrap 5.2.0-beta */
         position: absolute !important;
 
         &:not(.active) {
@@ -207,7 +209,7 @@
         }
 
         .popover-title {
-            font-weight:bold;
+            font-weight: bold;
             padding: 8px 14px;
             background-color: var(--bs-secondary-bg);
 
@@ -235,8 +237,7 @@
                 max-height: 500px;
                 overflow-y: auto;
                 overflow-x: hidden;
-                margin: $popover-body-padding-y * -1 $popover-body-padding-x * -1
-                    $popover-body-padding-y;
+                margin: $popover-body-padding-y * -1 $popover-body-padding-x * -1 $popover-body-padding-y;
             }
         }
 
@@ -255,10 +256,12 @@
 
     .itemRow {
         .title {
+
             /* lead image positioning */
-            > div {
+            >div {
                 display: flex;
                 justify-content: space-between;
+
                 .lead-img {
                     flex-shrink: 0;
                     margin-left: $spacer;
@@ -274,7 +277,7 @@
             color: var(--bs-link-color);
         }
 
-        &.default-page .title > div > *:first-child:before {
+        &.default-page .title>div>*:first-child:before {
             color: $danger;
             content: "•";
             font-size: $font-size-lg;
@@ -354,31 +357,31 @@
     .popover.attribute-columns {
         min-width: 600px;
 
-        > .popover-title{
-            width:100%;
+        >.popover-title {
+            width: 100%;
             display: block;
         }
 
-        >.popover-content{
-            display:flex;
+        >.popover-content {
+            display: flex;
             flex-direction: column;
             align-items: flex-start;
-            padding:0 1rem;
+            padding: 0 1rem;
 
-            > label{
-                order:1;
-                margin-bottom:0.5rem;
+            >label {
+                order: 1;
+                margin-bottom: 0.5rem;
             }
 
-            > ul{
+            >ul {
                 column-count: 2;
-                order:3;
-                margin-bottom:0.5rem;
+                order: 3;
+                margin-bottom: 0.5rem;
             }
 
-            > button{
-                order:2;
-                margin-bottom:0.5rem;
+            >button {
+                order: 2;
+                margin-bottom: 0.5rem;
             }
         }
 
@@ -427,5 +430,5 @@
 }
 
 body.plone-toolbar-top .pat-structure .navbar {
-    top:var(--plone-toolbar-top-height);
+    top: var(--plone-toolbar-top-height);
 }

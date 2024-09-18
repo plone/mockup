@@ -90,6 +90,34 @@ module.exports = () => {
 
     config.output.path = path.resolve(__dirname, "dist/");
 
+    config.module.rules.push({
+        test: /\.svelte$/,
+        // exclude: /node_modules/,
+        use: {
+            loader: "svelte-loader",
+            options: {
+                compilerOptions: {
+                    dev: process.env.NODE_ENV === "development",
+                },
+                emitCss: process.env.NODE_ENV !== "development",
+                hotReload: process.env.NODE_ENV === "development",
+            },
+        },
+    });
+
+    config.module.rules.push({
+        test: /node_modules\/svelte\/.*\.mjs$/,
+        resolve: {
+            fullySpecified: false,
+        },
+    });
+
+    config.resolve.alias.svelte = path.resolve('node_modules', 'svelte/src/runtime')
+    config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
+    config.resolve.mainFields = ["browser", "module", "main", "svelte"];
+    // config.resolve.conditionNames = ["svelte", "browser", "import"];
+    // config.resolve.conditionNames = ["svelte", "module", "browser", "import"];
+
     config.plugins.push(
         mf_config({
             name: package_json.name,
@@ -117,6 +145,7 @@ module.exports = () => {
     if (process.env.NODE_ENV === "development") {
         // Note: ``publicPath`` is set to "auto" in Patternslib,
         //        so for the devServer the public path set to "/".
+        config.devServer.allowedHosts = ['localhost', 'plone.lan'];
         config.devServer.port = "8000";
         config.devServer.static.directory = path.resolve(__dirname, "./_site/");
     }
@@ -134,7 +163,7 @@ module.exports = () => {
         );
     }
 
-    //console.log(JSON.stringify(config, null, 4));
+    console.log(JSON.stringify(config, null, 4));
 
     return config;
 };

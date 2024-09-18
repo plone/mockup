@@ -29,13 +29,6 @@
       </fieldset>
         <% } %>
 
-      <% if(_.contains(linkTypes, 'uploadImage')){ %>
-      <fieldset class="linkType uploadImage" data-linkType="uploadImage">
-        <legend id="tinylink-uploadImage"><%- uploadText %></legend>
-        <div class="uploadify-me"></div>
-      </fieldset>
-      <% } %>
-
       <% if(_.contains(linkTypes, 'externalImage')){ %>
       <fieldset class="linkType externalImage" data-linkType="externalImage">
         <legend id="tinylink-externalImage"><%- externalImage %></legend>
