@@ -83,6 +83,7 @@ But to resemble the CSS syntax, new patterns should instead separate each word w
 ## Mockup Patterns
 
 - [pat-autotoc](src/pat/autotoc/README.md): Automatically create a table of contents.
+- [pat-contentbrowser](src/pat/contenbrowser/README.md): Show an offcanvas miller-column browser to select items.
 - [pat-cookietrigger](src/pat/cookietrigger/README.md): Show a DOM element if browser cookies are disabled.
 - [pat-datatables](src/pat/datatables/README.md): This pattern provides the functionality from https://datatables.net/
 - [pat-formautofocus](src/pat/formautofocus/README.md): Automatically set the focus on a form input field.
@@ -96,7 +97,7 @@ But to resemble the CSS syntax, new patterns should instead separate each word w
 - [pat-preventdoublesubmit](src/pat/preventdoublesubmit/README.md): Prevent multiple submissions of the same forn.
 - [pat-querystring](src/pat/querystring/README.md): Show the querystring selection app.
 - [pat-recurrence](src/pat/recurrence/README.md): Show the recurrence widget.
-- [pat-relateditems](src/pat/relateditems/README.md): Show a widget to select related items.
+- [pat-relateditems](src/pat/relateditems/README.md): Show a widget to select related items. (deprecated: use `pat-contentbrowser` instead)
 - [pat-select2](src/pat/select2/README.md): Show a widget which enhances dropdown selections with automatic suggestions, search and tagging functionality.
 - [pat-sortable](src/pat/sortable/README.md): A pattern to make listings sortable.
 - [pat-structure](src/pat/structure/README.md): Plone's folder contents app.
