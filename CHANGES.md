@@ -2,6 +2,51 @@
 
 
 
+## [5.2.0-alpha.11](https://github.com/plone/mockup/compare/5.2.0-alpha.10...5.2.0-alpha.11) (2024-09-18)
+
+
+### Features
+
+
+* add filter to contentbrowser ([5c1fd44](https://github.com/plone/mockup/commit/5c1fd44e79649ecbf2956936a19a734c7af4827d))
+
+
+* add icon resolver/ resolveIcon action ([aa5097c](https://github.com/plone/mockup/commit/aa5097cae99ecb5a196b41c94317d2f26fa5e6b8))
+
+
+* add upload pattern WIP ([3fe361b](https://github.com/plone/mockup/commit/3fe361bb53edfdea274b1c9eecc7252c40fb5d1e))
+
+
+* **pat contentbrowser:** extend features and polishing. ([aa78589](https://github.com/plone/mockup/commit/aa785897b14b0318bb9b0bfaa5702581789dd8d4))
+
+
+* WIP svelte content-browser ([da73b82](https://github.com/plone/mockup/commit/da73b821d18ad9b25e6b04821b450cabf798a359))
+
+
+
+### Bug Fixes
+
+
+* back to svelte3, fix selector in tinymce init of ContentBrwser ([c03f086](https://github.com/plone/mockup/commit/c03f0869563ea5ab5b9e31f1d84fb1de02ca60c4))
+
+
+* clean up ([17a45c6](https://github.com/plone/mockup/commit/17a45c66087e83a3ccc8a09bddf7ed73e5b0421e))
+
+
+* make inserting images working ([949644c](https://github.com/plone/mockup/commit/949644c970623ce396f78a14937636a04ed9dd06))
+
+
+* **pat structureupdater:** re-enable pattern and cleanup README ([a3f3720](https://github.com/plone/mockup/commit/a3f3720d755ea01066de5726463bd2eae12ea3cc))
+
+
+* pat-tinymce after rebase and svelte update 4.x ([fcb978c](https://github.com/plone/mockup/commit/fcb978c8452add2ba7c581e9ba96da475c609585))
+
+
+* working image and link in Tinymce ([bcff710](https://github.com/plone/mockup/commit/bcff710e3b3317da8deabaefcdf106863fcf5404))
+
+
+* working internal/external link ([0fa744c](https://github.com/plone/mockup/commit/0fa744c68900e2ca17362b8a73f44943b0b52b36))
+
 ## [5.2.0-alpha.10](https://github.com/plone/mockup/compare/5.2.0-alpha.9...5.2.0-alpha.10) (2024-08-26)
 
 
