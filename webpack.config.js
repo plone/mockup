@@ -163,25 +163,6 @@ module.exports = () => {
         );
     }
 
-
-    // Fix for sass-loader to silence deprecation warnings, mainly from BootstrapJS.
-    // TODO: Remove this when BootstrapJS is updated.
-    // See: https://github.com/twbs/bootstrap/pull/40864
-
-    const css_loader_rule = config.module.rules.filter(it=>it?.use?.includes?.("sass-loader"));
-    if (css_loader_rule.length > 0) {
-        const sass_loader_index = css_loader_rule[0].use.indexOf("sass-loader");
-        css_loader_rule[0].use[sass_loader_index] = {
-            loader: "sass-loader",
-            options: {
-                sassOptions: {
-                    quietDeps: true,
-                    //silenceDeprecations: ['legacy-js-api'],
-                },
-            },
-        };
-    }
-
     console.log(JSON.stringify(config, null, 4));
 
     return config;
