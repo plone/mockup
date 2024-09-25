@@ -20,16 +20,6 @@
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
 
-    function event_dispatch(name, detail) {
-        const event = new CustomEvent(name, {
-            detail: {
-                content: detail,
-            },
-            bubbles: true,
-        });
-        document.dispatchEvent(event);
-    }
-
     onMount(async () => {
         await initializeSelectedItemsStore();
         initializeSorting();
@@ -99,7 +89,6 @@
         if ($selectedItems.length || !initializing) {
             setNodeValue(selectedUidsFromSelectedItems());
             initializeSorting();
-            event_dispatch("updateSelection", selectedUids);
         }
     }
 </script>
