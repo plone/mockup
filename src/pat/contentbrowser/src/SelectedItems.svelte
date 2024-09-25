@@ -4,6 +4,7 @@
     import { get_items_from_uids, resolveIcon } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
+    import events from "@patternslib/patternslib/src/core/events";
 
     let ref;
     let initializing = true;
@@ -82,6 +83,7 @@
     function setNodeValue(selectedUids) {
         const node_val = selectedUids.join($config.separator);
         selectedItemsNode.value = node_val;
+        selectedItemsNode.dispatchEvent(events.change_event());
     }
 
     $: {
