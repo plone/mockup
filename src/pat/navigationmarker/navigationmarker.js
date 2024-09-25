@@ -80,6 +80,8 @@ class Pattern extends BasePattern {
                 parent.classList.add("current");
             }
         }
+
+        this.el.dispatchEvent(events.generic_event(`${this.name}.scanned`));
     }
 
     clear(element) {
