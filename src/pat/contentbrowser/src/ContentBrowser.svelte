@@ -117,7 +117,7 @@
         const levelWrapper = e.currentTarget.closest(".levelItems");
         const prevSelection = levelWrapper.querySelectorAll(".selectedItem");
 
-        if (prevSelection.length) {
+        if (prevSelection.length && $config.maximumSelectionSize != 1) {
             // check for pressed shift or ctrl/meta key for multiselection
 
             if (shiftKey || e?.shiftKey) {
@@ -143,7 +143,7 @@
                         action: select ? "add" : "remove",
                     });
                 }
-            } else if (e?.metaKey || e?.ctrlKey) {
+            } else if (e?.metaKey || e?.ctrlKey) {
                 // de/select multiple single items
                 // NOTE: only for mouse click event
                 updatePreview({
@@ -155,12 +155,11 @@
                 [...prevSelection].map((el) => el.classList.remove("selectedItem"));
                 changePath(item, e);
             }
-
         } else {
             changePath(item, e);
         }
 
-        e.currentTarget.focus();  // needed for keyboard navigation
+        e.currentTarget.focus(); // needed for keyboard navigation
         e.currentTarget.classList.add("selectedItem");
     }
 
@@ -170,10 +169,10 @@
             return;
         }
         const possibleFocusEls = [
-            ...document.querySelectorAll(".levelColumn .inPath"),  // previously selected folder
-            ...document.querySelectorAll(".levelColumn .selectedItem"),  // previously selected item
-            document.querySelector(".levelColumn .contentItem"),  // default first item
-        ]
+            ...document.querySelectorAll(".levelColumn .inPath"), // previously selected folder
+            ...document.querySelectorAll(".levelColumn .selectedItem"), // previously selected item
+            document.querySelector(".levelColumn .contentItem"), // default first item
+        ];
         if (possibleFocusEls.length) {
             keyboardNavInitialized = true;
             possibleFocusEls[0].focus();
@@ -220,14 +219,23 @@
         }
         if (e.key == "Enter") {
             if (isSelectable(item)) {
-                addSelectedItems(item);
+                if ($config.maximumSelectionSize == 1) {
+                    addItem(item);
+                } else {
+                    addSelectedItems();
+                }
             }
         }
     }
 
     async function addItem(item) {
-        selectedItems.update((n) => [...n, item]);
-        selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        if ($config.maximumSelectionSize == 1) {
+            selectedItems.set([item]);
+            selectedUids.set([item.UID]);
+        } else {
+            selectedItems.update((n) => [...n, item]);
+            selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        }
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
         keyboardNavInitialized = false;
@@ -325,7 +333,10 @@
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
-            on:introend={() => { scrollToRight(); initKeyboardNav() }}
+            on:introend={() => {
+                scrollToRight();
+                initKeyboardNav();
+            }}
             use:clickOutside
             on:click_outside={cancelSelection}
         >
@@ -427,7 +438,8 @@
                                         role="button"
                                         tabindex={n}
                                         data-uuid={item.UID}
-                                        on:keydown|preventDefault={(e) => keyboardNavigation(item, e)}
+                                        on:keydown|preventDefault={(e) =>
+                                            keyboardNavigation(item, e)}
                                         on:click={(e) => clickItem(item, e)}
                                     >
                                         {#if level.gridView}
@@ -634,7 +646,7 @@
         min-height: 2rem;
     }
     .contentItem:focus-visible {
-        outline:none;
+        outline: none;
     }
     .contentItem.even {
         background-color: var(--bs-secondary-bg);
