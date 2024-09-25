@@ -1,4 +1,5 @@
 import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
+import events from "@patternslib/patternslib/src/core/events";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 
@@ -12,6 +13,15 @@ class Pattern extends BasePattern {
 
     async init() {
         this.portal_url = this.options.portalUrl || document.body.dataset.portalUrl;
+
+        events.add_event_listener(
+            window.navigation,
+            "navigate",
+            "pat-navigationmarker--history-changed",
+            () => {
+                this.scan_navigation();
+            }
+        );
 
         this.scan_navigation();
     }
