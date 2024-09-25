@@ -104,7 +104,11 @@
     }
 </script>
 
-<div class="content-browser-selected-items-wrapper" bind:this={ref}>
+<div
+    class="content-browser-selected-items-wrapper"
+    style="width: {$config.width || 'auto'}"
+    bind:this={ref}
+>
     <!-- {maxSelectionsize} -->
     <div class="content-browser-selected-items">
         {#if $selectedItems}
@@ -140,8 +144,6 @@
     <button
         class="btn btn-primary"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        disabled={$config.maximumSelectionSize > 0 &&
-            ($selectedItems.length || 0) >= $config.maximumSelectionSize}
         on:click|preventDefault={() => ($showContentBrowser = true)}
         >{_t("Select")}</button
     >

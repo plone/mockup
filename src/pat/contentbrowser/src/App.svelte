@@ -14,6 +14,7 @@
     } from "./stores";
 
     export let maxDepth;
+    export let width;
     export let attributes;
     export let contextPath;
     export let vocabularyUrl;
@@ -58,6 +59,7 @@
         attributes: attributes,
         contextPath: contextPath,
         vocabularyUrl: vocabularyUrl,
+        width: width,
         maxDepth: maxDepth,
         basePath: basePath,
         selectableTypes: selectableTypes,
