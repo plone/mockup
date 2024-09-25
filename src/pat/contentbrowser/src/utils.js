@@ -85,7 +85,6 @@ export async function request({
             total: 0,
         }
     };
-    console.log(vocabQuery);
     let url = `${vocabularyUrl}&query=${JSON.stringify(
         vocabQuery
     )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
