@@ -97,7 +97,6 @@ But to resemble the CSS syntax, new patterns should instead separate each word w
 - [pat-preventdoublesubmit](src/pat/preventdoublesubmit/README.md): Prevent multiple submissions of the same forn.
 - [pat-querystring](src/pat/querystring/README.md): Show the querystring selection app.
 - [pat-recurrence](src/pat/recurrence/README.md): Show the recurrence widget.
-- [pat-relateditems](src/pat/relateditems/README.md): Show a widget to select related items. (deprecated: use `pat-contentbrowser` instead)
 - [pat-select2](src/pat/select2/README.md): Show a widget which enhances dropdown selections with automatic suggestions, search and tagging functionality.
 - [pat-sortable](src/pat/sortable/README.md): A pattern to make listings sortable.
 - [pat-structure](src/pat/structure/README.md): Plone's folder contents app.
@@ -111,6 +110,7 @@ But to resemble the CSS syntax, new patterns should instead separate each word w
 
 Deprecated patterns:
 
+- [pat-relateditems](src/pat/relateditems/README.md) (_deprecated_): Show a widget to select related items. (use `pat-contentbrowser` instead)
 - [pat-backdrop](src/pat/backdrop/README.md) (_deprecated_): Renders a dark background.
 - [pat-contentloader](src/pat/contentloader/README.md) (_deprecated_): Load remote or local content into a target.
 - [pat-texteditor](src/pat/texteditor/README.md) (_deprecated_): Show a code editor.
