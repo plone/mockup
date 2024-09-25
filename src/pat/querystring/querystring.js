@@ -644,6 +644,8 @@ export default Base.extend({
         showPreviews: true,
     },
     init: async function () {
+        await import("../select2/select2");
+
         import("./querystring.scss");
 
         var self = this;
@@ -705,10 +707,10 @@ export default Base.extend({
         self.criterias = [];
 
         // create populated criterias
-        if (self.$el.val()) {
-            $.each(JSON.parse(self.$el.val()), function (i, item) {
+        if (self.el.value) {
+            for (const item of JSON.parse(self.el.value)) {
                 self.createCriteria(item.i, item.o, item.v);
-            });
+            }
         }
 
         // add empty criteria which enables users to create new cr
@@ -910,12 +912,12 @@ export default Base.extend({
         var self = this;
 
         var criteriastrs = [];
-        $.each(self.criterias, function (i, criteria) {
+        for (const criteria of self.criterias) {
             var jsonstr = criteria.getJSONListStr();
             if (jsonstr !== "") {
                 criteriastrs.push(jsonstr);
             }
-        });
+        }
         var val = "[" + criteriastrs.join(",") + "]";
         self.$el.val(val);
         self.$el.trigger("change");
