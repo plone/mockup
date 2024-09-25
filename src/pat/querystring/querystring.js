@@ -398,7 +398,7 @@ Criteria.prototype = {
                     .appendTo($wrapper)
                     .val(pathAndDepth[0])
                 const pat = new ContentbrowserPattern(self.$value[0], self.patternRelateditemsOptions);
-                pat.el.addEventListener("change", (e) => {
+                pat.el.addEventListener("change", () => {
                     self.trigger("value-changed");
                 })
                 self.$value.after(createDepthSelect(pathAndDepth[1]));
