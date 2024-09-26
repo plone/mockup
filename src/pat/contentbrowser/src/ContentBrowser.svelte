@@ -276,12 +276,12 @@
             attributes: $config.attributes,
             levelInfoPath: path,
         });
-        if(!response.total) {
+        if (!response.total) {
             alert(`${path} not found!`);
             return;
         }
         const item = response.results[0];
-        if(!item.path) {
+        if (!item.path) {
             // fix for Plone Site
             item.path = "/";
         }
@@ -379,21 +379,23 @@
                         ><svg use:resolveIcon={{ iconName: "search" }} /></label
                     >
                 </div>
-                {#if $config.uploadEnabled}
-                    <button
-                        type="button"
-                        class="upload btn btn-secondary btn-sm"
-                        tabindex="0"
-                        on:keydown={upload}
-                        on:click={upload}
-                        ><svg use:resolveIcon={{ iconName: "upload" }} />
-                        {_t("upload to ${current_path}", {
-                            current_path: $currentPath,
-                        })}</button
-                    >
-                {/if}
                 <RecentlyUsed on:selectItem={selectRecentlyUsed} />
                 <Favorites on:selectItem={selectFavorite} />
+                {#if $config.uploadEnabled}
+                    <div class="ms-2">
+                        <button
+                            type="button"
+                            class="upload btn btn-outline-light btn-sm"
+                            tabindex="0"
+                            on:keydown={upload}
+                            on:click={upload}
+                            ><svg use:resolveIcon={{ iconName: "upload" }} />
+                            {_t("upload to ${current_path}", {
+                                current_path: $currentPath,
+                            })}</button
+                        >
+                    </div>
+                {/if}
                 <button
                     class="btn btn-link text-white ms-auto"
                     tabindex="0"
@@ -630,9 +632,6 @@
         width: 100%;
         display: flex;
         justify-content: start;
-    }
-    .toolBar > .upload {
-        margin: 0 1rem 0 auto;
     }
     .toolBar :global(svg) {
         vertical-align: -0.125em;
