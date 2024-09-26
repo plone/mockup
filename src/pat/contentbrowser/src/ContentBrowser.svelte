@@ -373,7 +373,7 @@
             on:click_outside={cancelSelection}
         >
             <div class="toolBar navbar">
-                <div class="filter">
+                <div class="filter me-3">
                     <input type="text" name="filter" on:input={filterItems} />
                     <label for="filter"
                         ><svg use:resolveIcon={{ iconName: "search" }} /></label
