@@ -6,7 +6,13 @@
     import _t from "../../../core/i18n-wrapper";
     import Upload from "../../upload/upload";
     import contentStore from "./ContentStore";
-    import { clickOutside, get_items_from_uids, resolveIcon } from "./utils";
+    import {
+        clickOutside,
+        get_items_from_uids,
+        resolveIcon,
+        updateRecentlyUsed,
+    } from "./utils";
+    import RecentlyUsed from "./RecentlyUsed.svelte";
 
     animateScroll.setGlobalOptions({
         scrollX: true,
@@ -236,6 +242,7 @@
             selectedItems.update((n) => [...n, item]);
             selectedUids.update(() => $selectedItems.map((x) => x.UID));
         }
+        updateRecentlyUsed(item, $config);
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
         keyboardNavInitialized = false;
@@ -254,6 +261,10 @@
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
         keyboardNavInitialized = false;
+    }
+
+    function selectRecentlyUsed(event) {
+        addItem(event.detail.item);
     }
 
     function cancelSelection() {
@@ -360,8 +371,9 @@
                         })}</button
                     >
                 {/if}
+                <RecentlyUsed on:selectItem={selectRecentlyUsed} />
                 <button
-                    class="btn btn-link text-white"
+                    class="btn btn-link text-white ms-auto"
                     tabindex="0"
                     on:click|preventDefault={() => cancelSelection()}
                     ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
@@ -595,7 +607,7 @@
         color: var(--bs-light);
         width: 100%;
         display: flex;
-        justify-content: space-between;
+        justify-content: start;
     }
     .toolBar > .upload {
         margin: 0 1rem 0 auto;

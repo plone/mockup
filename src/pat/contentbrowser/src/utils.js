@@ -51,7 +51,7 @@ export async function request({
                 },
             ],
         };
-        if(selectableTypes) {
+        if (selectableTypes) {
             vocabQuery.criteria.push({
                 i: "portal_type",
                 o: "plone.app.querystring.operation.list.contains",
@@ -79,7 +79,7 @@ export async function request({
         })
     }
 
-    if(!vocabQuery.criteria.length) {
+    if (!vocabQuery.criteria.length) {
         return {
             results: [],
             total: 0,
@@ -155,7 +155,7 @@ export async function resolveIcon(node, { iconName }) {
     const iconCode = await getIcon(iconName);
     node.outerHTML = iconCode;
     return {
-        destroy() {},
+        destroy() { },
     };
 }
 
@@ -174,4 +174,38 @@ export function clickOutside(node) {
             document.removeEventListener("click", handleClick, true);
         },
     };
+}
+
+export function recentlyUsedItems(filterItems, config) {
+    let ret = utils.storage.get(config.recentlyUsedKey) || [];
+    // hard-limit to 1000 entries
+    ret = ret.slice(ret.length - 1000, ret.length);
+    if (filterItems && config?.selectableTypes.length) {
+        ret = ret.filter((it) => {
+            return config.selectableTypes.indexOf(it.portal_type) != -1;
+        });
+    }
+    // max is applied AFTER filtering selectable items.
+    const max = parseInt(config.recentlyUsedMaxItems, 10);
+    if (max) {
+        // return the slice from the end, as we want to display newest items first.
+        ret = ret.slice(ret.length - max, ret.length);
+    }
+    return ret;
+}
+
+export function updateRecentlyUsed(item, config) {
+    if (!config.recentlyUsed) {
+        return;
+    }
+    // add to recently added items
+    const recentlyUsed = recentlyUsedItems(false, config); // do not filter for selectable but get all. append to that list the new item.
+    const alreadyPresent = recentlyUsed.filter((it) => {
+        return it.UID === item.UID;
+    });
+    if (alreadyPresent.length > 0) {
+        recentlyUsed.splice(recentlyUsed.indexOf(alreadyPresent[0]), 1);
+    }
+    recentlyUsed.push(item);
+    utils.storage.set(config.recentlyUsedKey, recentlyUsed);
 }

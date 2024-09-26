@@ -30,6 +30,7 @@
     export let favorites;
     export let recentlyUsed;
     export let recentlyUsedKey;
+    export let recentlyUsedMaxItems;
     export let bSize = 20;
 
     const log = logger.getLogger("pat-contentbrowser");
@@ -72,6 +73,7 @@
         favorites: favorites,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,
+        recentlyUsedMaxItems: recentlyUsedMaxItems,
         base_url: base_url,
         pageSize: bSize,
     };
