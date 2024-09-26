@@ -9,9 +9,11 @@
     import {
         clickOutside,
         get_items_from_uids,
+        request,
         resolveIcon,
         updateRecentlyUsed,
     } from "./utils";
+    import Favorites from "./Favorites.svelte";
     import RecentlyUsed from "./RecentlyUsed.svelte";
 
     animateScroll.setGlobalOptions({
@@ -267,6 +269,25 @@
         addItem(event.detail.item);
     }
 
+    async function selectFavorite(event) {
+        const path = event.detail.item.path;
+        const response = await request({
+            vocabularyUrl: $config.vocabularyUrl,
+            attributes: $config.attributes,
+            levelInfoPath: path,
+        });
+        if(!response.total) {
+            alert(`${path} not found!`);
+            return;
+        }
+        const item = response.results[0];
+        if(!item.path) {
+            // fix for Plone Site
+            item.path = "/";
+        }
+        changePath(item);
+    }
+
     function cancelSelection() {
         $showContentBrowser = false;
         keyboardNavInitialized = false;
@@ -372,6 +393,7 @@
                     >
                 {/if}
                 <RecentlyUsed on:selectItem={selectRecentlyUsed} />
+                <Favorites on:selectItem={selectFavorite} />
                 <button
                     class="btn btn-link text-white ms-auto"
                     tabindex="0"

@@ -18,7 +18,7 @@
     <div class="recentlyUsed dropdown ms-2">
         <button
             type="button"
-            class="recentlyUsed dropdown-toggle btn btn-primary btn-sm"
+            class="recentlyUsed dropdown-toggle btn btn-outline-light btn-sm"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
