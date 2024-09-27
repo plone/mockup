@@ -5,6 +5,7 @@ import registry from "@patternslib/patternslib/src/core/registry";
 
 export const parser = new Parser("navigationmarker");
 parser.addArgument("portal-url", undefined);
+parser.addArgument("parent-selector", undefined);
 
 class Pattern extends BasePattern {
     static name = "navigationmarker";
@@ -35,7 +36,8 @@ class Pattern extends BasePattern {
 
         for (const anchor of anchors) {
 
-            const parent = anchor.parentElement;
+            //const parent = anchor.parentElement;
+            const parent = this.options.parentSelector ? anchor.closest(this.options.parentSelector) : anchor.parentElement;
             const navlink = anchor.href.replace("/view", "");
 
             // We can exit early, if the navlink is not part of the current URL.
@@ -44,12 +46,12 @@ class Pattern extends BasePattern {
                 continue;
             }
 
-            // BBB
-            // check the input-openers within the path
-            const check = parent.querySelector(":scope > input");
-            if (check) {
-                check.checked = true;
-            }
+            //// BBB
+            //// check the input-openers within the path
+            //const check = parent.querySelector(":scope > input");
+            //if (check) {
+            //    check.checked = true;
+            //}
 
             // set "inPath" to all nav items which are within the current path
             // check if parts of navlink are in canonical url parts
@@ -72,7 +74,12 @@ class Pattern extends BasePattern {
 
             // Set the class
             if (inPath) {
+                // inPath is set along with current | TODO: OR NOT, verify.
                 parent.classList.add("inPath");
+                if (parent.tagName === "DETAILS") {
+                    parent.open = true;
+                }
+
             }
 
             // set "current" to the current selected nav item, if it is in the navigation structure.
@@ -91,6 +98,9 @@ class Pattern extends BasePattern {
         }
         if (element.classList.contains("current")) {
             element.classList.remove("current");
+        }
+        if (element.tagName === "DETAILS") {
+            element.open = false;
         }
     }
 }
