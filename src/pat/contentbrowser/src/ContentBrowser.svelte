@@ -6,7 +6,15 @@
     import _t from "../../../core/i18n-wrapper";
     import Upload from "../../upload/upload";
     import contentStore from "./ContentStore";
-    import { clickOutside, get_items_from_uids, resolveIcon } from "./utils";
+    import {
+        clickOutside,
+        get_items_from_uids,
+        request,
+        resolveIcon,
+        updateRecentlyUsed,
+    } from "./utils";
+    import Favorites from "./Favorites.svelte";
+    import RecentlyUsed from "./RecentlyUsed.svelte";
 
     animateScroll.setGlobalOptions({
         scrollX: true,
@@ -117,7 +125,7 @@
         const levelWrapper = e.currentTarget.closest(".levelItems");
         const prevSelection = levelWrapper.querySelectorAll(".selectedItem");
 
-        if (prevSelection.length) {
+        if (prevSelection.length && $config.maximumSelectionSize != 1) {
             // check for pressed shift or ctrl/meta key for multiselection
 
             if (shiftKey || e?.shiftKey) {
@@ -143,7 +151,7 @@
                         action: select ? "add" : "remove",
                     });
                 }
-            } else if (e?.metaKey || e?.ctrlKey) {
+            } else if (e?.metaKey || e?.ctrlKey) {
                 // de/select multiple single items
                 // NOTE: only for mouse click event
                 updatePreview({
@@ -155,12 +163,11 @@
                 [...prevSelection].map((el) => el.classList.remove("selectedItem"));
                 changePath(item, e);
             }
-
         } else {
             changePath(item, e);
         }
 
-        e.currentTarget.focus();  // needed for keyboard navigation
+        e.currentTarget.focus(); // needed for keyboard navigation
         e.currentTarget.classList.add("selectedItem");
     }
 
@@ -170,10 +177,10 @@
             return;
         }
         const possibleFocusEls = [
-            ...document.querySelectorAll(".levelColumn .inPath"),  // previously selected folder
-            ...document.querySelectorAll(".levelColumn .selectedItem"),  // previously selected item
-            document.querySelector(".levelColumn .contentItem"),  // default first item
-        ]
+            ...document.querySelectorAll(".levelColumn .inPath"), // previously selected folder
+            ...document.querySelectorAll(".levelColumn .selectedItem"), // previously selected item
+            document.querySelector(".levelColumn .contentItem"), // default first item
+        ];
         if (possibleFocusEls.length) {
             keyboardNavInitialized = true;
             possibleFocusEls[0].focus();
@@ -220,14 +227,24 @@
         }
         if (e.key == "Enter") {
             if (isSelectable(item)) {
-                addSelectedItems(item);
+                if ($config.maximumSelectionSize == 1) {
+                    addItem(item);
+                } else {
+                    addSelectedItems();
+                }
             }
         }
     }
 
     async function addItem(item) {
-        selectedItems.update((n) => [...n, item]);
-        selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        if ($config.maximumSelectionSize == 1) {
+            selectedItems.set([item]);
+            selectedUids.set([item.UID]);
+        } else {
+            selectedItems.update((n) => [...n, item]);
+            selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        }
+        updateRecentlyUsed(item, $config);
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
         keyboardNavInitialized = false;
@@ -246,6 +263,29 @@
         updatePreview({ action: "clear" });
         $showContentBrowser = false;
         keyboardNavInitialized = false;
+    }
+
+    function selectRecentlyUsed(event) {
+        addItem(event.detail.item);
+    }
+
+    async function selectFavorite(event) {
+        const path = event.detail.item.path;
+        const response = await request({
+            vocabularyUrl: $config.vocabularyUrl,
+            attributes: $config.attributes,
+            levelInfoPath: path,
+        });
+        if (!response.total) {
+            alert(`${path} not found!`);
+            return;
+        }
+        const item = response.results[0];
+        if (!item.path) {
+            // fix for Plone Site
+            item.path = "/";
+        }
+        changePath(item);
     }
 
     function cancelSelection() {
@@ -325,32 +365,39 @@
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
-            on:introend={() => { scrollToRight(); initKeyboardNav() }}
+            on:introend={() => {
+                scrollToRight();
+                initKeyboardNav();
+            }}
             use:clickOutside
             on:click_outside={cancelSelection}
         >
             <div class="toolBar navbar">
-                <div class="filter">
+                <div class="filter me-3">
                     <input type="text" name="filter" on:input={filterItems} />
                     <label for="filter"
                         ><svg use:resolveIcon={{ iconName: "search" }} /></label
                     >
                 </div>
+                <RecentlyUsed on:selectItem={selectRecentlyUsed} />
+                <Favorites on:selectItem={selectFavorite} />
                 {#if $config.uploadEnabled}
-                    <button
-                        type="button"
-                        class="upload btn btn-secondary btn-sm"
-                        tabindex="0"
-                        on:keydown={upload}
-                        on:click={upload}
-                        ><svg use:resolveIcon={{ iconName: "upload" }} />
-                        {_t("upload to ${current_path}", {
-                            current_path: $currentPath,
-                        })}</button
-                    >
+                    <div class="ms-2">
+                        <button
+                            type="button"
+                            class="upload btn btn-outline-light btn-sm"
+                            tabindex="0"
+                            on:keydown={upload}
+                            on:click={upload}
+                            ><svg use:resolveIcon={{ iconName: "upload" }} />
+                            {_t("upload to ${current_path}", {
+                                current_path: $currentPath,
+                            })}</button
+                        >
+                    </div>
                 {/if}
                 <button
-                    class="btn btn-link text-white"
+                    class="btn btn-link text-white ms-auto"
                     tabindex="0"
                     on:click|preventDefault={() => cancelSelection()}
                     ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
@@ -427,7 +474,8 @@
                                         role="button"
                                         tabindex={n}
                                         data-uuid={item.UID}
-                                        on:keydown|preventDefault={(e) => keyboardNavigation(item, e)}
+                                        on:keydown|preventDefault={(e) =>
+                                            keyboardNavigation(item, e)}
                                         on:click={(e) => clickItem(item, e)}
                                     >
                                         {#if level.gridView}
@@ -583,10 +631,7 @@
         color: var(--bs-light);
         width: 100%;
         display: flex;
-        justify-content: space-between;
-    }
-    .toolBar > .upload {
-        margin: 0 1rem 0 auto;
+        justify-content: start;
     }
     .toolBar :global(svg) {
         vertical-align: -0.125em;
@@ -634,10 +679,10 @@
         min-height: 2rem;
     }
     .contentItem:focus-visible {
-        outline:none;
+        outline: none;
     }
     .contentItem.even {
-        background-color: var(--bs-secondary-bg);
+        background-color: rgba(var(--bs-secondary-bg-rgb), .4);
     }
     .contentItem.inPath,
     .contentItem:focus {

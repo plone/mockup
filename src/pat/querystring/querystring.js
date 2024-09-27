@@ -3,6 +3,7 @@ import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
 import Base from "@patternslib/patternslib/src/core/base";
+import { Pattern as ContentbrowserPattern } from "../contentbrowser/contentbrowser";
 
 var Criteria = function () {
     this.init.apply(this, arguments);
@@ -37,7 +38,10 @@ Criteria.prototype = {
         var self = this;
         self.app = app;
 
-        self.options = $.extend(true, {}, self.defaults, options);
+        self.options = {
+            ...self.defaults,
+            ...options,
+        };
         self.indexes = indexes;
         self.indexGroups = {};
         self.baseUrl = baseUrl;
@@ -53,19 +57,17 @@ Criteria.prototype = {
         self.patternAjaxSelectOptions = patternAjaxSelectOptions || {};
         self.patternRelateditemsOptions = patternRelateditemsOptions || {};
         // Defaults
-        self.patternAjaxSelectOptions = $.extend(
-            { width: "250px" },
-            self.patternAjaxSelectOptions
-        );
-        self.patternRelateditemsOptions = $.extend(
-            {
-                vocabularyUrl:
-                    self.baseUrl +
-                    "@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems",
-                width: "400px",
-            },
-            self.patternRelateditemsOptions
-        );
+        self.patternAjaxSelectOptions = {
+            width: "250px",
+            ...self.patternAjaxSelectOptions,
+        };
+        self.patternRelateditemsOptions = {
+            vocabularyUrl:
+                self.baseUrl +
+                "@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems",
+            width: "20rem",
+            ...self.patternRelateditemsOptions,
+        };
         // Force set
         self.patternRelateditemsOptions["maximumSelectionSize"] = 1;
 
@@ -85,7 +87,8 @@ Criteria.prototype = {
         );
 
         // list of indexes
-        $.each(self.indexes, function (value, options) {
+        for (const value in self.indexes) {
+            let options = self.indexes[value];
             if (options.enabled) {
                 if (!self.indexGroups[options.group]) {
                     self.indexGroups[options.group] = $("<optgroup/>")
@@ -96,7 +99,7 @@ Criteria.prototype = {
                     $("<option/>").attr("value", value).html(options.title)
                 );
             }
-        });
+        }
 
         // attach index select to DOM
         self.$wrapper.append(
@@ -180,8 +183,8 @@ Criteria.prototype = {
             };
         }
 
-        $.each(self.indexes.path.operators, function (key, value) {
-            var options = value;
+        for (const key in self.indexes.path.operators) {
+            var options = self.indexes.path.operators[key];
             if (key.indexOf("absolute") > 0) {
                 options.title = "Custom";
             } else if (key.indexOf("relative") > 0) {
@@ -192,12 +195,12 @@ Criteria.prototype = {
                 options.title = "Current (./)";
                 options.widget = "RelativePathWidget";
             }
-        });
+        };
     },
     resetPathOperators: function () {
         var self = this;
-        $.each(self.indexes.path.operators, function (key, value) {
-            var options = value;
+        for (const key in self.indexes.path.operators) {
+            var options = self.indexes.path.operators[key];
             if (key.indexOf("absolute") > 0) {
                 options.title = "Absolute Path";
             } else if (key.indexOf("relative") > 0) {
@@ -208,7 +211,7 @@ Criteria.prototype = {
                 options.title = "Navigation Path";
                 options.widget = "ReferenceWidget";
             }
-        });
+        };
 
         return;
     },
@@ -351,9 +354,8 @@ Criteria.prototype = {
                         self.trigger("value-changed");
                     });
             } else {
-                console.log(value);
                 var pathAndDepth = [".", "1"];
-                if (typeof value !== "undefined") {
+                if (typeof value !== "undefined" && value.indexOf("::") != -1) {
                     pathAndDepth = value.split("::");
                     if (pathAndDepth[0] === ".") {
                         self.$operator.val(
@@ -395,11 +397,10 @@ Criteria.prototype = {
                     .addClass(self.options.classValueName + "-" + widget)
                     .appendTo($wrapper)
                     .val(pathAndDepth[0])
-                    .patternRelateditems(self.patternRelateditemsOptions)
-                    .on("change", function () {
-                        self.trigger("value-changed");
-                    });
-                $wrapper.addClass("break-line");
+                const pat = new ContentbrowserPattern(self.$value[0], self.patternRelateditemsOptions);
+                pat.el.addEventListener("change", () => {
+                    self.trigger("value-changed");
+                })
                 self.$value.after(createDepthSelect(pathAndDepth[1]));
             }
         } else if (widget === "MultipleSelectionWidget") {
@@ -411,12 +412,13 @@ Criteria.prototype = {
                     self.trigger("value-changed");
                 });
             if (self.indexes[index]) {
-                $.each(self.indexes[index].values, function (value, options) {
+                for (const value in self.indexes[index].values) {
+                    const options = self.indexes[index].values[value];
                     $("<option/>")
                         .attr("value", value)
                         .html(options.title)
                         .appendTo(self.$value);
-                });
+                };
             }
             self.$value.patternSelect2(self.patternAjaxSelectOptions);
         }
@@ -643,7 +645,6 @@ export default Base.extend({
     },
     init: async function () {
         await import("../select2/select2");
-        await import("../relateditems/relateditems");
 
         import("./querystring.scss");
 
@@ -706,10 +707,10 @@ export default Base.extend({
         self.criterias = [];
 
         // create populated criterias
-        if (self.$el.val()) {
-            $.each(JSON.parse(self.$el.val()), function (i, item) {
+        if (self.el.value) {
+            for (const item of JSON.parse(self.el.value)) {
                 self.createCriteria(item.i, item.o, item.v);
-            });
+            }
         }
 
         // add empty criteria which enables users to create new cr
@@ -801,7 +802,7 @@ export default Base.extend({
             .attr("name", "sort_on")
             .appendTo(self.$sortWrapper)
             .on("change", function () {
-                self.refreshPreviewEvent.call(self);
+                self.refreshPreviewEvent();
                 $('[id$="sort_on"]', existingSortOn).val($(this).val());
             });
 
@@ -816,7 +817,7 @@ export default Base.extend({
         self.$sortOrder = $('<input type="checkbox" />')
             .attr("name", "sort_reversed:boolean")
             .on("change", function () {
-                self.refreshPreviewEvent.call(self);
+                self.refreshPreviewEvent();
                 if ($(this).prop("checked")) {
                     $('input[type="checkbox"]', existingSortOrder).prop("checked", true);
                 } else {
@@ -868,12 +869,12 @@ export default Base.extend({
         }
 
         var query = [];
-        $.each(self.criterias, function (i, criteria) {
+        for (const criteria of self.criterias) {
             var querypart = criteria.buildQueryPart();
             if (querypart !== "") {
                 query.push(querypart);
             }
-        });
+        };
 
         self.$previewPane = $("<div/>")
             .addClass(self.options.classPreviewName)
@@ -892,14 +893,15 @@ export default Base.extend({
             query.push("sort_order=reverse");
         }
 
-        self._previewXhr = $.get(self.options.previewURL + "?" + query.join("&")).done(
-            function (data) {
+        self._previewXhr = $.ajax({
+            url: self.options.previewURL + "?" + query.join("&"),
+            success: (data) => {
                 $("<div/>")
                     .addClass(self.options.classPreviewResultsWrapperName)
-                    .html(data)
+                    .html(utils.parseBodyTag(data))
                     .appendTo(self.$previewPane);
-            }
-        );
+            },
+        });
     },
     updateValue: function () {
         // updating the original input with json data in the form:
@@ -910,12 +912,12 @@ export default Base.extend({
         var self = this;
 
         var criteriastrs = [];
-        $.each(self.criterias, function (i, criteria) {
+        for (const criteria of self.criterias) {
             var jsonstr = criteria.getJSONListStr();
             if (jsonstr !== "") {
                 criteriastrs.push(jsonstr);
             }
-        });
+        }
         var val = "[" + criteriastrs.join(",") + "]";
         self.$el.val(val);
         self.$el.trigger("change");

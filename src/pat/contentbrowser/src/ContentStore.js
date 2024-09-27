@@ -75,6 +75,8 @@ export default function (config, pathCache) {
                     if (levelInfo.total) {
                         level.UID = levelInfo.results[0].UID;
                         level.Title = levelInfo.results[0].Title;
+                        level.portal_type = levelInfo.results[0].portal_type;
+                        level.getIcon = levelInfo.results[0].getIcon;
                         // check if level is selectable (config.selectableTypes)
                         level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.results[0].portal_type) != -1);
                     }

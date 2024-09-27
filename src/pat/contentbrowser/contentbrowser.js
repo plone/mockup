@@ -22,6 +22,7 @@ parser.addArgument(
         "review_state",
     ], null, true
 );
+parser.addArgument("width");
 parser.addArgument("max-depth");
 parser.addArgument("base-path");
 parser.addArgument("context-path");
@@ -33,6 +34,7 @@ parser.addArgument("selection-template");
 parser.addArgument("favorites");
 parser.addArgument("recently-used");
 parser.addArgument("recently-used-key");
+parser.addArgument("recently-used-max-items", 20);
 parser.addArgument("b-size");
 
 class Pattern extends BasePattern {
@@ -43,7 +45,7 @@ class Pattern extends BasePattern {
     async init() {
         this.el.setAttribute('style', 'display: none');
 
-        // ensure an id on our elemen (TinyMCE doesn't have one)
+        // ensure an id on our element (TinyMCE doesn't have one)
         let nodeId = this.el.getAttribute("id");
         if (!nodeId) {
             nodeId = utils.generateId();

@@ -14,6 +14,7 @@
     } from "./stores";
 
     export let maxDepth;
+    export let width;
     export let attributes;
     export let contextPath;
     export let vocabularyUrl;
@@ -29,6 +30,7 @@
     export let favorites;
     export let recentlyUsed;
     export let recentlyUsedKey;
+    export let recentlyUsedMaxItems;
     export let bSize = 20;
 
     const log = logger.getLogger("pat-contentbrowser");
@@ -58,6 +60,7 @@
         attributes: attributes,
         contextPath: contextPath,
         vocabularyUrl: vocabularyUrl,
+        width: width,
         maxDepth: maxDepth,
         basePath: basePath,
         selectableTypes: selectableTypes,
@@ -70,6 +73,7 @@
         favorites: favorites,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,
+        recentlyUsedMaxItems: recentlyUsedMaxItems,
         base_url: base_url,
         pageSize: bSize,
     };

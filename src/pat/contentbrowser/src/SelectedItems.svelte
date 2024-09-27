@@ -4,6 +4,7 @@
     import { get_items_from_uids, resolveIcon } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
+    import events from "@patternslib/patternslib/src/core/events";
 
     let ref;
     let initializing = true;
@@ -19,16 +20,6 @@
 
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
-
-    function event_dispatch(name, detail) {
-        const event = new CustomEvent(name, {
-            detail: {
-                content: detail,
-            },
-            bubbles: true,
-        });
-        document.dispatchEvent(event);
-    }
 
     onMount(async () => {
         await initializeSelectedItemsStore();
@@ -92,6 +83,7 @@
     function setNodeValue(selectedUids) {
         const node_val = selectedUids.join($config.separator);
         selectedItemsNode.value = node_val;
+        selectedItemsNode.dispatchEvent(events.change_event());
     }
 
     $: {
@@ -99,12 +91,15 @@
         if ($selectedItems.length || !initializing) {
             setNodeValue(selectedUidsFromSelectedItems());
             initializeSorting();
-            event_dispatch("updateSelection", selectedUids);
         }
     }
 </script>
 
-<div class="content-browser-selected-items-wrapper" bind:this={ref}>
+<div
+    class="content-browser-selected-items-wrapper"
+    style="width: {$config.width || 'auto'}"
+    bind:this={ref}
+>
     <!-- {maxSelectionsize} -->
     <div class="content-browser-selected-items">
         {#if $selectedItems}
@@ -140,8 +135,6 @@
     <button
         class="btn btn-primary"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        disabled={$config.maximumSelectionSize > 0 &&
-            ($selectedItems.length || 0) >= $config.maximumSelectionSize}
         on:click|preventDefault={() => ($showContentBrowser = true)}
         >{_t("Select")}</button
     >
