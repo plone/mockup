@@ -682,7 +682,7 @@
         outline: none;
     }
     .contentItem.even {
-        background-color: var(--bs-secondary-bg);
+        background-color: rgba(var(--bs-secondary-bg-rgb), .4);
     }
     .contentItem.inPath,
     .contentItem:focus {
