@@ -30,6 +30,7 @@ class Pattern extends BasePattern {
             // We can exit early, if the nav_url is not part of the current URL.
             if (current_url.indexOf(nav_url) === -1) {
                 this.clear(parent);
+                this.clear(nav_item);
                 continue;
             }
 
@@ -62,11 +63,16 @@ class Pattern extends BasePattern {
             // Set the class
             if (in_path) {
                 parent.classList.add("inPath");
+                // Don't mark the nav_item as inPath:
+                // - An <a>nchor element cannot have sub-items, so this is not needed anyways.
+                // - Having a parent nav_item marked as inPath and thus multiple
+                //   nav items in a kind-of-active style looks confusing.
             }
 
             // set "current" to the current selected nav item, if it is in the navigation structure.
             if (current_url === nav_url) {
                 parent.classList.add("current");
+                nav_item.classList.add("current");
             }
         }
     }

@@ -61,11 +61,21 @@ describe("Navigation Marker", function () {
         const current_link = this.nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
+        expect(current_link.classList.contains("current")).toBe(true);
+    });
+
+    it("marks current navigation wrapper item with 'current' class", async function () {
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const current_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
         const current_item = current_link.parentElement;
         expect(current_item.classList.contains("current")).toBe(true);
     });
 
-    it("marks items in path with 'inPath' class", async function () {
+    it("marks in-path link parents but not the link itself with the 'inPath' class", async function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
@@ -73,6 +83,7 @@ describe("Navigation Marker", function () {
             "a[href='http://example.com/news']",
         );
         const news_item = news_link.parentElement;
+        expect(news_link.classList.contains("inPath")).toBe(false);
         expect(news_item.classList.contains("inPath")).toBe(true);
     });
 
@@ -81,9 +92,8 @@ describe("Navigation Marker", function () {
         await utils.timeout(1);
 
         const home_link = this.nav_element.querySelector("a[href='http://example.com']");
-        const home_item = home_link.parentElement;
-        expect(home_item.classList.contains("inPath")).toBe(false);
-        expect(home_item.classList.contains("current")).toBe(false);
+        expect(home_link.classList.contains("inPath")).toBe(false);
+        expect(home_link.classList.contains("current")).toBe(false);
     });
 
     it("checks input checkboxes for items in path", async function () {
@@ -118,8 +128,7 @@ describe("Navigation Marker", function () {
         const view_link = this.nav_element.querySelector(
             "a[href='http://example.com/test-page/view']",
         );
-        const view_item = view_link.parentElement;
-        expect(view_item.classList.contains("current")).toBe(true);
+        expect(view_link.classList.contains("current")).toBe(true);
     });
 
     it("falls back to window.location.href when no canonical link", async function () {
@@ -145,8 +154,7 @@ describe("Navigation Marker", function () {
         const about_link = this.nav_element.querySelector(
             "a[href='http://example.com/about']",
         );
-        const about_item = about_link.parentElement;
-        expect(about_item.classList.contains("current")).toBe(true);
+        expect(about_link.classList.contains("current")).toBe(true);
 
         // Restore original location
         Object.defineProperty(window, "location", {
@@ -169,9 +177,9 @@ describe("Navigation Marker", function () {
         const contact_item = contact_link.parentElement;
 
         expect(about_item.classList.contains("current")).toBe(false);
-        expect(about_item.classList.contains("inPath")).toBe(false);
+        expect(about_link.classList.contains("inPath")).toBe(false);
         expect(contact_item.classList.contains("current")).toBe(false);
-        expect(contact_item.classList.contains("inPath")).toBe(false);
+        expect(contact_link.classList.contains("inPath")).toBe(false);
     });
 
     it("handles exact path matching correctly", async function () {
@@ -185,15 +193,13 @@ describe("Navigation Marker", function () {
         const news_link = this.nav_element.querySelector(
             "a[href='http://example.com/news']",
         );
-        const news_item = news_link.parentElement;
         const article_link = this.nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
-        const article_item = article_link.parentElement;
 
-        expect(news_item.classList.contains("current")).toBe(true);
+        expect(news_link.classList.contains("current")).toBe(true);
         // Article should not be marked as current when we're on the news page
-        expect(article_item.classList.contains("current")).toBe(false);
+        expect(article_link.classList.contains("current")).toBe(false);
     });
 
     it("works with different navigation structures", async function () {
@@ -214,7 +220,7 @@ describe("Navigation Marker", function () {
         const current_link = this.nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
-        expect(current_link.parentElement.classList.contains("current")).toBe(true);
+        expect(current_link.classList.contains("current")).toBe(true);
     });
 
     it("handles case when navigation item has no parent li element", async function () {
@@ -232,7 +238,7 @@ describe("Navigation Marker", function () {
         const current_link = this.nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
-        expect(current_link.parentElement.classList.contains("current")).toBe(true);
+        expect(current_link.classList.contains("current")).toBe(true);
     });
 });
 
@@ -273,7 +279,7 @@ describe("Navigation Marker - Portal URL Edge Cases", function () {
 
         const home_link = nav_element.querySelector("a[href='http://example.com']");
         const home_item = home_link.parentElement;
-        expect(home_item.classList.contains("current")).toBe(true);
+        expect(home_link.classList.contains("current")).toBe(true);
         // When on home page, home can be marked as inPath too since it matches exactly
         expect(home_item.classList.contains("inPath")).toBe(true);
     });
@@ -303,7 +309,7 @@ describe("Navigation Marker - Portal URL Edge Cases", function () {
 
         // Home should not be marked as inPath even though the URL contains the home URL
         expect(home_item.classList.contains("inPath")).toBe(false);
-        expect(home_item.classList.contains("current")).toBe(false);
+        expect(home_link.classList.contains("current")).toBe(false);
 
         // The actual parent should be marked as inPath
         expect(some_item.classList.contains("inPath")).toBe(true);
