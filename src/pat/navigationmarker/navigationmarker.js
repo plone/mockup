@@ -43,6 +43,7 @@ class Pattern extends BasePattern {
             // We can exit early, if the navlink is not part of the current URL.
             if (href.indexOf(navlink) === -1) {
                 this.clear(parent);
+                this.clear(anchor);
                 continue;
             }
 
@@ -85,6 +86,7 @@ class Pattern extends BasePattern {
             // set "current" to the current selected nav item, if it is in the navigation structure.
             if (href === navlink) {
                 parent.classList.add("current");
+                anchor.classList.add("current");
             }
         }
 
