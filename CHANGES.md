@@ -2,6 +2,49 @@
 
 
 
+## [5.2.0-alpha.12](https://github.com/plone/mockup/compare/5.2.0-alpha.11...5.2.0-alpha.12) (2024-09-30)
+
+
+### Features
+
+
+* **pat contentbrowser:** favorites as component ([4e5a393](https://github.com/plone/mockup/commit/4e5a39325aa3e979a6f85ae2800aecef56e43ec8))
+
+
+* **pat contentbrowser:** recently used items as component. ([a52337d](https://github.com/plone/mockup/commit/a52337da8a79da75bc97223828a6891655c5b741))
+
+
+
+### Bug Fixes
+
+
+* **Build:** Silence SASS 1.79 deprecation warnings, until this is solved in Bootstrap upstream. ([6bc653a](https://github.com/plone/mockup/commit/6bc653a99c029a0183146681b672cd9b026a66de))
+
+
+* Fix SASS 1.79 deprecation warnings. ([bbccb0c](https://github.com/plone/mockup/commit/bbccb0c0b93e9ddf1e721f961d9cd7f9c85efd85))
+
+
+* **pat contentbrowser:** Add width parameter. ([f9af8a8](https://github.com/plone/mockup/commit/f9af8a896246c7891380a95692735158b521b5d7))
+
+
+* **pat contentbrowser:** dispatch "change" event. ([596bc39](https://github.com/plone/mockup/commit/596bc39a86e8796677b21b6f869eb54c7a099f1b))
+
+
+* **pat contentbrowser:** Skip multiselection when "maximumSelectionSize" is 1 ([85f2dc6](https://github.com/plone/mockup/commit/85f2dc627249ede983fe28084c71b2d6da1fe505))
+
+
+* **pat querystring:** use contentbrowser for internal path selection. ([8ba6adc](https://github.com/plone/mockup/commit/8ba6adc10a9438225d30f86f831846d5414438e6))
+
+
+* **pat structure:** Refactor  -> do not import bootstrap resources but use css variables ([4d89dca](https://github.com/plone/mockup/commit/4d89dcad929332c4477d34759cc62a85389a3bab))
+
+
+
+### Maintenance
+
+
+* **build:** Update README, move pat-relateditems to deprecated patterns. ([d88c73d](https://github.com/plone/mockup/commit/d88c73de66f435039bc30fe3e73bd2626cc10fef))
+
 ## [5.2.0-alpha.11](https://github.com/plone/mockup/compare/5.2.0-alpha.10...5.2.0-alpha.11) (2024-09-18)
 
 
