@@ -23,7 +23,10 @@ parser.addArgument(
     ], null, true
 );
 parser.addArgument("width");
+parser.addArgument("mode");
 parser.addArgument("max-depth");
+parser.addArgument("root-path");
+parser.addArgument("root-url");
 parser.addArgument("base-path");
 parser.addArgument("context-path");
 parser.addArgument("maximum-selection-size");
@@ -34,7 +37,7 @@ parser.addArgument("selection-template");
 parser.addArgument("favorites");
 parser.addArgument("recently-used");
 parser.addArgument("recently-used-key");
-parser.addArgument("recently-used-max-items", 20);
+parser.addArgument("recently-used-max-items");
 parser.addArgument("b-size");
 
 class Pattern extends BasePattern {
@@ -43,7 +46,7 @@ class Pattern extends BasePattern {
     static parser = parser;
 
     async init() {
-        this.el.setAttribute('style', 'display: none');
+        this.el.style.display = "none";
 
         // ensure an id on our element (TinyMCE doesn't have one)
         let nodeId = this.el.getAttribute("id");

@@ -72,7 +72,7 @@
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
         const patUpload = new Upload(uploadEl, {
-            baseUrl: $config.base_url,
+            baseUrl: $config.rootUrl,
             currentPath: $currentPath,
             relativePath: "@@fileUpload",
             allowPathSelection: false,
@@ -92,21 +92,22 @@
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
-            currentPath.set(folderPath || "/");
+            currentPath.set(folderPath || $config.rootPath);
             updatePreview({ data: item });
         }
         scrollToRight();
     }
 
     function changePath(item, e) {
+        // always hide upload when changing path
         showUpload = false;
 
         // clear previous selection
         updatePreview({ action: "clear" });
 
-        if (item === "/") {
+        if (item === "/" || item === $config.rootPath) {
             // clicked "home" button
-            currentPath.set(item);
+            currentPath.set($config.rootPath);
             return;
         }
 
@@ -282,8 +283,8 @@
         }
         const item = response.results[0];
         if (!item.path) {
-            // fix for Plone Site
-            item.path = "/";
+            // fix for root
+            item.path = $config.rootPath;
         }
         changePath(item);
     }
@@ -413,13 +414,13 @@
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
-                                {#if i == 0}
+                                {#if i == 0 && $config.mode == "browse"}
                                     <button
                                         type="button"
                                         class="btn btn-link btn-xs ps-0"
                                         tabindex="0"
-                                        on:keydown={() => changePath("/")}
-                                        on:click={() => changePath("/")}
+                                        on:keydown={() => changePath($config.rootPath)}
+                                        on:click={() => changePath($config.rootPath)}
                                         ><svg
                                             use:resolveIcon={{ iconName: "house" }}
                                         /></button
@@ -432,7 +433,7 @@
                                         on:click|preventDefault={() => addItem(level)}
                                     >
                                         {_t("select ${level_path}", {
-                                            level_path: level.absPath || "/",
+                                            level_path: level.displayPath,
                                         })}
                                     </button>
                                 {/if}

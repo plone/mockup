@@ -35,7 +35,6 @@
                         class="dropdown-item"
                     >
                         <svg
-                            on:error={console.log(recentlyUsed)}
                             use:resolveIcon={{
                                 iconName: `contenttype/${recentlyUsed?.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
                             }}

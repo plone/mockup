@@ -17,6 +17,7 @@ export async function request({
         criteria: [],
     };
     if (path) {
+        // query sublevel of path
         vocabQuery = {
             criteria: [
                 {
@@ -30,6 +31,7 @@ export async function request({
         };
     }
     if (levelInfoPath) {
+        // query exact path
         vocabQuery = {
             criteria: [
                 {
@@ -85,6 +87,7 @@ export async function request({
             total: 0,
         }
     };
+
     let url = `${vocabularyUrl}&query=${JSON.stringify(
         vocabQuery
     )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
@@ -99,32 +102,33 @@ export async function request({
         method: method,
         headers: headers,
     });
-    const json = await response.json();
 
-    if (response.ok) {
-        if (!searchPath && !levelInfoPath && selectableTypes.length) {
-            // we iter through response and filter out non-selectable
-            // types but keep folderish types to maintain browsing
-            // the content structure.
-            const filtered_response = {
-                results: [],
-                total: json.total,
-            }
-            for (const it of json.results) {
-                if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
-                    filtered_response.results.push(it);
-                }
-            }
-            return filtered_response;
-        }
-        return json;
-    } else {
+    if (!response.ok) {
         return {
             results: [],
             total: 0,
             errors: json.errors,
         };
     }
+
+    const json = await response.json();
+
+    if (!searchPath && !levelInfoPath && selectableTypes.length) {
+        // we iter through response and filter out non-selectable
+        // types but keep folderish types to maintain browsing
+        // the content structure.
+        const filtered_response = {
+            results: [],
+            total: json.total,
+        }
+        for (const it of json.results) {
+            if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
+                filtered_response.results.push(it);
+            }
+        }
+        return filtered_response;
+    }
+    return json;
 }
 
 export async function get_items_from_uids(uids, config) {
@@ -147,7 +151,6 @@ export async function get_items_from_uids(uids, config) {
 
 /** use Plone resolveIcon to load a SVG icon and replace node with icon code */
 export async function resolveIcon(node, { iconName }) {
-
     async function getIcon(iconName) {
         const icon = await utils.resolveIcon(iconName)
         return icon;
@@ -186,7 +189,7 @@ export function recentlyUsedItems(filterItems, config) {
         });
     }
     // max is applied AFTER filtering selectable items.
-    const max = parseInt(config.recentlyUsedMaxItems, 10);
+    const max = parseInt(config.recentlyUsedMaxItems, 20);
     if (max) {
         // return the slice from the end, as we want to display newest items first.
         ret = ret.slice(ret.length - max, ret.length);

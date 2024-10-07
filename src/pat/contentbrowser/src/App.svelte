@@ -19,6 +19,8 @@
     export let contextPath;
     export let vocabularyUrl;
     export let mode = "browse";
+    export let rootPath = "";
+    export let rootUrl = "";
     export let basePath = "";
     export let selectableTypes = [];
     export let maximumSelectionSize = -1;
@@ -48,11 +50,9 @@
     const currentPath = getContext("currentPath");
 
     if (!$currentPath) {
-        $currentPath = basePath || "/";
+        // if root path is not above base path we start at rootPath
+        $currentPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
     }
-
-    // base_url information
-    const base_url = document.body.getAttribute("data-portal-url");
 
     let config = getContext("config");
     $config = {
@@ -62,6 +62,8 @@
         vocabularyUrl: vocabularyUrl,
         width: width,
         maxDepth: maxDepth,
+        rootPath: rootPath,
+        rootUrl: rootUrl,
         basePath: basePath,
         selectableTypes: selectableTypes,
         maximumSelectionSize: maximumSelectionSize,
@@ -74,7 +76,6 @@
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,
         recentlyUsedMaxItems: recentlyUsedMaxItems,
-        base_url: base_url,
         pageSize: bSize,
     };
 
