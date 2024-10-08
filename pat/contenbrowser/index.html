@@ -352,6 +352,12 @@
 </thead>
 <tbody>
 <tr>
+<td style="text-align:center">vocabularyUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">null</td>
+<td style="text-align:center">This is a URL to a JSON-formatted file used to populate the list</td>
+</tr>
+<tr>
 <td style="text-align:center">attributes</td>
 <td style="text-align:center">array</td>
 <td style="text-align:center">['UID', 'Title', 'portal_type', 'path']</td>
@@ -362,6 +368,12 @@
 <td style="text-align:center">string</td>
 <td style="text-align:center">&quot;/&quot;</td>
 <td style="text-align:center">Browsing/searching root path. You will not get beneath this path</td>
+</tr>
+<tr>
+<td style="text-align:center">rootUrl</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Browsing/searching root url.</td>
 </tr>
 <tr>
 <td style="text-align:center">basePath</td>
@@ -391,13 +403,25 @@
 <td style="text-align:center">mode</td>
 <td style="text-align:center">string</td>
 <td style="text-align:center">&quot;browse&quot;</td>
-<td style="text-align:center">The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited.</td>
+<td style="text-align:center">Toggle between &quot;browse&quot; and &quot;search&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">width</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Override the width of the selected items field</td>
 </tr>
 <tr>
 <td style="text-align:center">bSize</td>
 <td style="text-align:center">integer</td>
 <td style="text-align:center">10</td>
-<td style="text-align:center">Toggle between &quot;browse&quot; and &quot;search&quot;</td>
+<td style="text-align:center">Batch size of the items listed in levels</td>
+</tr>
+<tr>
+<td style="text-align:center">maxDepth</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Maximum level depth for &quot;browse&quot; mode</td>
 </tr>
 <tr>
 <td style="text-align:center">separator</td>
@@ -412,10 +436,22 @@
 <td style="text-align:center">Allow file and image uploads from within the related items widget.</td>
 </tr>
 <tr>
-<td style="text-align:center">vocabularyUrl</td>
-<td style="text-align:center">string</td>
-<td style="text-align:center">null</td>
-<td style="text-align:center">This is a URL to a JSON-formatted file used to populate the list</td>
+<td style="text-align:center">recentlyUsed</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">false</td>
+<td style="text-align:center">Show the recently used items dropdown.</td>
+</tr>
+<tr>
+<td style="text-align:center">recentlyUsedKey</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Storage key for saving the recently used items. This is generated with fieldname and username in the patternoptions.</td>
+</tr>
+<tr>
+<td style="text-align:center">recentlyUsedMaxItems</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">Maximum items to keep in recently used list. 0: no restriction.</td>
 </tr>
 </tbody>
 </table>
