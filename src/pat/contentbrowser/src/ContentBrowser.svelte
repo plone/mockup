@@ -180,8 +180,10 @@
         const possibleFocusEls = [
             ...document.querySelectorAll(".levelColumn .inPath"), // previously selected folder
             ...document.querySelectorAll(".levelColumn .selectedItem"), // previously selected item
-            document.querySelector(".levelColumn .contentItem"), // default first item
         ];
+        if(!possibleFocusEls.length && document.querySelector(".levelColumn .contentItem")) {
+            possibleFocusEls.push(document.querySelector(".levelColumn .contentItem"));
+        }
         if (possibleFocusEls.length) {
             keyboardNavInitialized = true;
             possibleFocusEls[0].focus();
@@ -310,18 +312,12 @@
     }
 
     function itemInPath(item) {
-        return $currentPath.indexOf(item.path) != -1;
+        return $config.mode == "browse" && $currentPath.indexOf(item.path) != -1;
     }
 
-    function filterItems() {
-        let timeoutId;
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
-        timeoutId = setTimeout(() => {
-            contentItems.get({ path: $currentPath, searchTerm: this.value });
-        }, 300);
-    }
+    const filterItems = utils.debounce((e) => {
+        contentItems.get({ path: $currentPath, searchTerm: e.target.value });
+    }, 300);
 
     function loadMore(node) {
         const observer = new IntersectionObserver(
@@ -506,6 +502,9 @@
                                                     }}
                                                 />
                                                 {item.Title}
+                                                {#if $config.mode == "search"}
+                                                <br><span class="small">{item.path}</span>
+                                                {/if}
                                             </div>
                                         {/if}
                                         {#if item.is_folderish && $config.mode == "browse"}

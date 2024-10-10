@@ -53,7 +53,7 @@ export async function request({
                 },
             ],
         };
-        if (selectableTypes) {
+        if (selectableTypes.length) {
             vocabQuery.criteria.push({
                 i: "portal_type",
                 o: "plone.app.querystring.operation.list.contains",

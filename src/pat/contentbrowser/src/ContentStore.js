@@ -133,7 +133,7 @@ export default function (config, pathCache) {
             page: page,
         };
         if (searchTerm) {
-            if (searchTerm.length < 3) {
+            if (searchTerm.length < 2) {
                 // minimum length of search term
                 return;
             }
@@ -205,7 +205,7 @@ export default function (config, pathCache) {
         page = 1,
     }) => {
         if (config.mode === "search") {
-            await search(searchTerm, page)
+            await search(searchTerm, page);
         } else if (loadMorePath) {
             const pC = get(pathCache);
             if (!(loadMorePath in pC)) {
