@@ -72,7 +72,7 @@
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
         const patUpload = new Upload(uploadEl, {
-            baseUrl: $config.base_url,
+            baseUrl: $config.rootUrl,
             currentPath: $currentPath,
             relativePath: "@@fileUpload",
             allowPathSelection: false,
@@ -92,21 +92,22 @@
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
-            currentPath.set(folderPath || "/");
+            currentPath.set(folderPath || $config.rootPath);
             updatePreview({ data: item });
         }
         scrollToRight();
     }
 
     function changePath(item, e) {
+        // always hide upload when changing path
         showUpload = false;
 
         // clear previous selection
         updatePreview({ action: "clear" });
 
-        if (item === "/") {
+        if (item === "/" || item === $config.rootPath) {
             // clicked "home" button
-            currentPath.set(item);
+            currentPath.set($config.rootPath);
             return;
         }
 
@@ -179,8 +180,10 @@
         const possibleFocusEls = [
             ...document.querySelectorAll(".levelColumn .inPath"), // previously selected folder
             ...document.querySelectorAll(".levelColumn .selectedItem"), // previously selected item
-            document.querySelector(".levelColumn .contentItem"), // default first item
         ];
+        if(!possibleFocusEls.length && document.querySelector(".levelColumn .contentItem")) {
+            possibleFocusEls.push(document.querySelector(".levelColumn .contentItem"));
+        }
         if (possibleFocusEls.length) {
             keyboardNavInitialized = true;
             possibleFocusEls[0].focus();
@@ -282,8 +285,8 @@
         }
         const item = response.results[0];
         if (!item.path) {
-            // fix for Plone Site
-            item.path = "/";
+            // fix for root
+            item.path = $config.rootPath;
         }
         changePath(item);
     }
@@ -309,18 +312,12 @@
     }
 
     function itemInPath(item) {
-        return $currentPath.indexOf(item.path) != -1;
+        return $config.mode == "browse" && $currentPath.indexOf(item.path) != -1;
     }
 
-    function filterItems() {
-        let timeoutId;
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
-        timeoutId = setTimeout(() => {
-            contentItems.get({ path: $currentPath, searchTerm: this.value });
-        }, 300);
-    }
+    const filterItems = utils.debounce((e) => {
+        contentItems.get({ path: $currentPath, searchTerm: e.target.value });
+    }, 300);
 
     function loadMore(node) {
         const observer = new IntersectionObserver(
@@ -413,13 +410,13 @@
                             in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelToolbar">
-                                {#if i == 0}
+                                {#if i == 0 && $config.mode == "browse"}
                                     <button
                                         type="button"
                                         class="btn btn-link btn-xs ps-0"
                                         tabindex="0"
-                                        on:keydown={() => changePath("/")}
-                                        on:click={() => changePath("/")}
+                                        on:keydown={() => changePath($config.rootPath)}
+                                        on:click={() => changePath($config.rootPath)}
                                         ><svg
                                             use:resolveIcon={{ iconName: "house" }}
                                         /></button
@@ -432,7 +429,7 @@
                                         on:click|preventDefault={() => addItem(level)}
                                     >
                                         {_t("select ${level_path}", {
-                                            level_path: level.absPath || "/",
+                                            level_path: level.displayPath,
                                         })}
                                     </button>
                                 {/if}
@@ -505,6 +502,9 @@
                                                     }}
                                                 />
                                                 {item.Title}
+                                                {#if $config.mode == "search"}
+                                                <br><span class="small">{item.path}</span>
+                                                {/if}
                                             </div>
                                         {/if}
                                         {#if item.is_folderish && $config.mode == "browse"}

@@ -46,9 +46,8 @@
             return;
         }
 
-        const selectedItemsUids = await get_items_from_uids(initialValue, $config);
-        $selectedItems = selectedItemsUids;
-        selectedUids.update(() => selectedItemsUids.map((x) => x.UID));
+        $selectedItems = await get_items_from_uids(initialValue, $config);
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
     function initializeSorting() {
