@@ -30,7 +30,7 @@
             {#each items.reverse() as recentlyUsed}
                 <li>
                     <a
-                        href={recentlyUsed.getURL}
+                        href={recentlyUsed.getURL || "#"}
                         on:click|preventDefault={() => select(recentlyUsed)}
                         class="dropdown-item"
                     >
