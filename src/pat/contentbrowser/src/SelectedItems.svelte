@@ -99,8 +99,10 @@
     style="width: {$config.width || 'auto'}"
     bind:this={ref}
 >
-    <!-- {maxSelectionsize} -->
-    <div class="content-browser-selected-items">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="content-browser-selected-items"
+         on:click={() => $showContentBrowser = $selectedItems.length ? false : true }>
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
                 <div
@@ -109,10 +111,9 @@
                     data-uuid={selItem.UID}
                 >
                     <div class="item-info">
-                        <!-- svelte-ignore a11y-missing-attribute -->
                         <button
                             class="btn btn-link btn-sm link-secondary"
-                            on:click={() => unselectItem(i)}
+                            on:click|stopPropagation={() => unselectItem(i)}
                             ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                         >
                         <div>
