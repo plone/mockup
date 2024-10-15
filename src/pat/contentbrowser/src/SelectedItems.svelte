@@ -132,11 +132,12 @@
             <p>{_t("loading selected items")}</p>
         {/if}
     </div>
-    <button
-        class="btn btn-primary"
+    <!-- svelte-ignore a11y-invalid-attribute -->
+    <a
+        class="btn btn-primary" href="#"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
         on:click|preventDefault={() => ($showContentBrowser = true)}
-        >{_t("Select")}</button
+        >{_t("Select")}</a
     >
 </div>
 
