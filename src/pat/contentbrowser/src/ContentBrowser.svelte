@@ -88,6 +88,7 @@
             // one level search mode
             updatePreview({ data: item });
         } else if (item.is_folderish) {
+            $previewUids = [item.UID];
             currentPath.set(item.path);
         } else {
             const pathParts = item.path.split("/");
