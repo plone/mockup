@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-alpha.15](https://github.com/plone/mockup/compare/5.2.0-alpha.13...5.2.0-alpha.15) (2024-10-23)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** fix when no path (root, context) provided. ([b5dea84](https://github.com/plone/mockup/commit/b5dea84b11ab6c1230980cc8e2c1b3cfd63266a9))
+
 ## [5.2.0-alpha.13](https://github.com/plone/mockup/compare/5.2.0-alpha.12...5.2.0-alpha.13) (2024-10-23)
 
 
