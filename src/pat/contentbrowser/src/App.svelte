@@ -50,8 +50,14 @@
     const currentPath = getContext("currentPath");
 
     if (!$currentPath) {
-        // if root path is not above base path we start at rootPath
-        $currentPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
+        if(basePath || rootPath) {
+            // if root path is not above base path we start at rootPath
+            $currentPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
+        } else {
+            // no path available. try to determine path from vocabularyUrl
+            const vocabPath = new URL(vocabularyUrl).pathname.split("/");
+            $currentPath = vocabPath.slice(0, vocabPath.length - 1).join("/");
+        }
     }
 
     let config = getContext("config");
