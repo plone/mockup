@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-alpha.16](https://github.com/plone/mockup/compare/5.2.0-alpha.15...5.2.0-alpha.16) (2024-10-23)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Followup for path fix: set the rootPath if nothing is given. ([91a1a03](https://github.com/plone/mockup/commit/91a1a0314557c0c2791067532eacaa29803ae44e))
+
 ## [5.2.0-alpha.15](https://github.com/plone/mockup/compare/5.2.0-alpha.13...5.2.0-alpha.15) (2024-10-23)
 
 
