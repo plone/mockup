@@ -2,6 +2,34 @@
 
 
 
+## [5.2.0-alpha.13](https://github.com/plone/mockup/compare/5.2.0-alpha.12...5.2.0-alpha.13) (2024-10-23)
+
+
+### Features
+
+
+* **pat contentbrowser:** Implement rootPath option to restrict access to a subfolder of a site structure ([8d8c110](https://github.com/plone/mockup/commit/8d8c11050f364be0e2fa3e107f5d35b86e75564f))
+
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Click on empty selecteditems field opens contentbrowser. ([bc0330e](https://github.com/plone/mockup/commit/bc0330ea74da10a48866ff42bcdbf25de6807ec3))
+
+
+* **pat contentbrowser:** Consistent active state of selected folderish item. ([d086d78](https://github.com/plone/mockup/commit/d086d78bf343422699e8c64498b41dbfc49fc982))
+
+
+* **pat contentbrowser:** Fix saving form with ENTER key. ([5835ee4](https://github.com/plone/mockup/commit/5835ee45279d211b41b26cdea983eac58af40cd3))
+
+
+
+### Maintenance
+
+
+* **build:** add sass version resolution ([5677d05](https://github.com/plone/mockup/commit/5677d055487d609008dac10da4d295bf4be6a2e2))
+
 ## [5.2.0-alpha.12](https://github.com/plone/mockup/compare/5.2.0-alpha.11...5.2.0-alpha.12) (2024-09-30)
 
 
