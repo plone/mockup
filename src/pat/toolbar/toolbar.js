@@ -3,6 +3,7 @@ import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import events from "@patternslib/patternslib/src/core/events";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
 import Cookies from "js-cookie";
 
 export const parser = new Parser("toolbar");
@@ -34,7 +35,12 @@ class Pattern extends BasePattern {
             "navigate",
             "pat-toolbar--history-changed",
             async () => {
+                // Wait a tick to let other Patterns set the baseUrl.
+                await utils.timeout(1);
+                console.log("reload toolbar after a tick timeout");
                 const url = `${document.body.dataset.baseUrl}/${this.options["render-url"]}`;
+                console.log("TOOLBAR");
+                console.log("history changed, reload toolbar after a tick timeout: " + url);
                 await this.reload_toolbar(url);
             }
         );
@@ -72,6 +78,23 @@ class Pattern extends BasePattern {
     }
 
     async reload_toolbar(url) {
+        console.log("TOOLBAR");
+        console.log("reloading...");
+
+        // Don't reload on content views but on their parent if so.
+        const split_words = [
+            // NOTE: order matters.
+            "@@",
+            "folder_contents",
+        ];
+        for (const word of split_words) {
+            if (url.includes(word)) {
+                url = url.split(word)[0];
+                console.log("splitting word: " + word + " -> " + url);
+            }
+        }
+        console.log("HO HO HO");
+        console.log(url);
         // fetch toolbar
         const response = await fetch(url);
         const data = await response.text();
