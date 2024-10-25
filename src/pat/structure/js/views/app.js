@@ -60,7 +60,11 @@ export default BaseView.extend({
                 // ignore this, fake event trigger to element that is not visible
                 return;
             }
-            if ($el.is("a") || $el.parent().is("a") || $el.hasClass("popover-structure-query-active")) {
+            if (
+                $el.is("a") ||
+                $el.parent().is("a") ||
+                $el.hasClass("popover-structure-query-active")
+            ) {
                 // elements that should not close
                 // NOTE: "popover-structure-query-active" is set on body when
                 // select2 elements are clicked inside the structure filter
@@ -167,15 +171,15 @@ export default BaseView.extend({
                     "{path}"
                 );
                 url = pushStateUrl.replace("{path}", path);
-                window.history.pushState(null, null, url);
             } else if (this.options.urlStructure) {
                 // fallback to urlStructure specification
                 url =
                     this.options.urlStructure.base +
                     path +
                     this.options.urlStructure.appended;
-                window.history.pushState(null, null, url);
             }
+            console.log("a1");
+            window.history.pushState(null, null, url);
 
             if (this.options.traverseView) {
                 // flag specifies that the context view implements a traverse
@@ -183,8 +187,9 @@ export default BaseView.extend({
                 // of some kind - use the base object instead for that by not
                 // specifying a path.
                 path = "";
-                // TODO figure out whether the following event after this is
-                // needed at all.
+            }
+            if (path !== "") {
+                document.body.dataset.baseUrl = url;
             }
             $("body").trigger("structure-url-changed", [path]);
 
@@ -224,6 +229,8 @@ export default BaseView.extend({
                     path = "/";
                 }
                 this.setCurrentPath(path);
+                console.log("a2");
+                document.body.dataset.baseUrl = `${document.body.dataset.portalUrl}${path}`;
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
                 this.doNotPushState = true;
