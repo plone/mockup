@@ -1,9 +1,13 @@
 import $ from "jquery";
 import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import events from "@patternslib/patternslib/src/core/events";
+import logging from "@patternslib/patternslib/src/core/logging";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
 import Cookies from "js-cookie";
+
+const log = logging.getLogger("pat-toolbar");
 
 export const parser = new Parser("toolbar");
 parser.addArgument("update-trigger", "structure-url-changed");
@@ -15,6 +19,8 @@ class Pattern extends BasePattern {
     static parser = parser;
 
     parser_group_options = false;
+
+    previous_toolbar_url = null;
 
     async init() {
         if (window.__patternslib_import_styles) {
@@ -34,8 +40,9 @@ class Pattern extends BasePattern {
             "navigate",
             "pat-toolbar--history-changed",
             async () => {
-                const url = `${document.body.dataset.baseUrl}/${this.options["render-url"]}`;
-                await this.reload_toolbar(url);
+                // Wait a tick to let other Patterns set the baseUrl.
+                await utils.timeout(1);
+                await this.reload_toolbar();
             }
         );
 
@@ -71,10 +78,36 @@ class Pattern extends BasePattern {
         this.el.classList.add("initialized");
     }
 
-    async reload_toolbar(url) {
+    async reload_toolbar() {
+        // Don't reload on content views but on their parent if so.
+        const split_words = [
+            // NOTE: order matters.
+            "@@", // also catches @@folder_contents and @@edit
+            "folder_contents",
+            "edit",
+            "#",
+            "?",
+        ];
+        let url = document.body.dataset.baseUrl;
+        log.debug("URL before cleanup: ", url);
+        // Split all split words out of url
+        url = split_words.reduce((url_, split_) => url_.split(split_)[0], url);
+        // Ensure a trailing slash in the URL.
+        url = url[url.length - 1] === "/" ? url : `${url}/`
+        url = `${url}${this.options["render-url"]}`;
+        log.debug("URL after cleanup: ", url);
+
+        if (this.previous_toolbar_url === url) {
+            // no need to reload same url
+            log.debug("No URL change, no reload.");
+            return;
+        }
+
         // fetch toolbar
         const response = await fetch(url);
         const data = await response.text();
+
+        this.previous_toolbar_url = url;
 
         // Find toolbar nodes
         const div = document.createElement("div");
@@ -87,9 +120,11 @@ class Pattern extends BasePattern {
         registry.scan(personal_tools);
         document.querySelector(".plone-toolbar-main")?.replaceWith(main_toolbar);
         document.querySelector("#collapse-personaltools")?.replaceWith(personal_tools);
+        log.debug("Re-scanned.");
 
         // Notify others that the toolbar has been reloaded.
         this.el.dispatchEvent(events.generic_event("pat-toolbar--reloaded"));
+        log.debug("Event pat-toolbar--reloaded dispatched.");
     }
 }
 registry.register(Pattern);
