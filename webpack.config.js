@@ -147,14 +147,13 @@ module.exports = () => {
         //        so for the devServer the public path set to "/".
         config.devServer.allowedHosts = ['localhost', 'plone.lan'];
         config.devServer.port = "8000";
-        config.devServer.static.directory = path.resolve(__dirname, "./_site/");
+        config.devServer.static.directory = path.resolve(__dirname, "_site/");
+        config.devServer.watchFiles = ["src/"]; // TODO: path.resolve? relative to static directory?
+        config.devServer.liveReload = false;
     }
 
     if (process.env.DEPLOYMENT === "docs") {
-        config.output.path = path.resolve(
-            __dirname,
-            "./_site/dist/mockup/"
-        );
+        config.output.path = path.resolve(__dirname, "./_site/dist/mockup/");
     }
     if (process.env.DEPLOYMENT === "plone") {
         config.output.path = path.resolve(
