@@ -35,7 +35,7 @@
         "datatables.net-select": "1.4.0",
         "datatables.net-select-bs5": "1.4.0",
         "dropzone": "5.9.3",
-        "jqtree": "1.8.5",
+        "jqtree": "1.8.6",
         "jquery": "^3.7.1",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
