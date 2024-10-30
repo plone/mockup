@@ -6265,7 +6265,12 @@ jiti@^1.21.6:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.6.tgz#6c7f7398dd4b3142767f9a168af2f317a428d268"
   integrity sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==
 
-jqtree@1.8.5, jqtree@>=0.16:
+jqtree@1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.8.6.tgz#06ecb4f9ac20dc4ded082cb9ce3b70ab4fe9095b"
+  integrity sha512-XGEDZ94o614eshF329RETCjPbBfTML09HGqkq/pftD4XdX7CS/eoss0etjE7wcP3XuRUqEaeX/BS+jTdLEXzsQ==
+
+jqtree@>=0.16:
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.8.5.tgz#cc519ddcecf4e7ca01cea00b2f0ac61d697625b3"
   integrity sha512-qR9+it1cJ/uUzXu5ikE9qSRVlNLuj/rkJAsgDahLyuckVJdub8r+/ZsrFVVvBwntEuwvG3p76ceDC4oDBpSkbg==
