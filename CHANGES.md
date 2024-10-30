@@ -2,6 +2,16 @@
 
 
 
+## [5.2.0-beta.0](https://github.com/plone/mockup/compare/5.2.0-alpha.16...5.2.0-beta.0) (2024-10-30)
+
+
+### Bug Fixes
+
+
+* **build:** Fix bug with npm-run-all and npx ([6d7d824](https://github.com/plone/mockup/commit/6d7d824cc0cafe0edd13f9dc74c2bdf43c6c4ffc))
+
+  See https://github.com/mysticatea/npm-run-all/issues/209
+
 ## [5.2.0-alpha.16](https://github.com/plone/mockup/compare/5.2.0-alpha.15...5.2.0-alpha.16) (2024-10-23)
 
 
