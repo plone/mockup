@@ -56,7 +56,7 @@
         } else {
             // no path available. try to determine path from vocabularyUrl
             const vocabPath = new URL(vocabularyUrl).pathname.split("/");
-            rootPath = contextPath = $currentPath = vocabPath.slice(0, vocabPath.length - 1).join("/");
+            rootPath = contextPath = $currentPath = vocabPath.slice(0, vocabPath.length - 1).join("/") || "/";
         }
     }
 
