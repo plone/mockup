@@ -88,7 +88,7 @@ export async function request({
         }
     };
 
-    let url = `${vocabularyUrl}&query=${JSON.stringify(
+    let url = `${vocabularyUrl}${vocabularyUrl.indexOf("?") !== -1 ? "&" : "?"}query=${JSON.stringify(
         vocabQuery
     )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
         page: page,
