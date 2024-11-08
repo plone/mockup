@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-beta.1](https://github.com/plone/mockup/compare/5.2.0-beta.0...5.2.0-beta.1) (2024-11-08)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** fix wrong vocabularyUrl lookup when `@[@get](https://github.com/get)Source` view is used. ([c0d30d0](https://github.com/plone/mockup/commit/c0d30d0964b8f67d7732c046dc5895d94d21b702))
+
 ## [5.2.0-beta.0](https://github.com/plone/mockup/compare/5.2.0-alpha.16...5.2.0-beta.0) (2024-10-30)
 
 
