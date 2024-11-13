@@ -213,10 +213,10 @@ export default Base.extend({
                     $form.append(
                         $(
                             '<input type="hidden" name="' +
-                                $action.attr("name") +
-                                '" value="' +
-                                $action.attr("value") +
-                                '" />'
+                            $action.attr("name") +
+                            '" value="' +
+                            $action.attr("value") +
+                            '" />'
                         )
                     );
                 }
@@ -381,12 +381,6 @@ export default Base.extend({
                 return;
             }
             var $raw = self.$raw.clone();
-            // fix for IE9 bug (see http://bugs.jquery.com/ticket/10550)
-            $("input:checked", $raw).each(function () {
-                if (this.setAttribute) {
-                    this.setAttribute("checked", "checked");
-                }
-            });
 
             // Object that will be passed to the template
             var tplObject = {
@@ -442,7 +436,7 @@ export default Base.extend({
             // The following code will work around this issue:
             $("form", self.$modal).on("keydown", function (event) {
                 // ignore keys which are not enter, and ignore enter inside a textarea.
-                if (event.keyCode !== 13 || event.target.nodeName === "TEXTAREA") {
+                if (event.key !== "Enter" || event.target.nodeName === "TEXTAREA") {
                     return;
                 }
                 event.preventDefault();
@@ -543,7 +537,7 @@ export default Base.extend({
         if (self.options.backdropOptions.closeOnEsc === true) {
             $(document).on("keydown", function (e) {
                 if (self.$el.is("." + self.options.templateOptions.classActiveName)) {
-                    if (e.keyCode === 27) {
+                    if (e.key === "Esc") {
                         // ESC key pressed
                         self.hide();
                     }
@@ -661,12 +655,12 @@ export default Base.extend({
         // XXX aria?
         self.$raw = $(
             "<div><h1>" +
-                title +
-                '</h1><div id="content"><div class="modal-image"><img src="' +
-                src +
-                '" srcset="' +
-                srcset +
-                '" /></div></div></div>'
+            title +
+            '</h1><div id="content"><div class="modal-image"><img src="' +
+            src +
+            '" srcset="' +
+            srcset +
+            '" /></div></div></div>'
         );
         self._show();
     },
@@ -767,41 +761,37 @@ export default Base.extend({
 
     activateFocusTrap: function () {
         var self = this;
-        var inputsBody = self.$modal
-            .find("." + self.options.templateOptions.classBodyName)
-            .first()
-            .find("select, input[type!=hidden], textarea, button, a");
-        var inputsFooter = self.$modal
-            .find("." + self.options.templateOptions.classFooterName)
-            .first()
-            .find("select, input[type!=hidden], textarea, button, a");
+        const modal_el = self.$modal[0];
+        var inputsBody = modal_el
+            .querySelector(`.${self.options.templateOptions.classBodyName}`)
+            .querySelectorAll(`select, input:not([type="hidden"]), textarea, button, a`);
+        var inputsFooter = modal_el
+            .querySelector(`.${self.options.templateOptions.classFooterName}`)
+            .querySelectorAll(`select, input:not([type="hidden"]), textarea, button, a`);
         var inputs = [];
-        for (var i = 0; i < inputsBody.length; i++) {
-            if ($(inputsBody[i]).is(":visible")) {
-                inputs.push(inputsBody[i]);
-            }
-        }
-        for (var j = 0; j < inputsFooter.length; j++) {
-            if ($(inputsFooter[j]).is(":visible")) {
-                inputs.push(inputsFooter[j]);
+
+        for (const el of [...inputsBody, ...inputsFooter]) {
+            const style = window.getComputedStyle(el);
+            if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+                inputs.push(el);
             }
         }
 
         if (inputs.length === 0) {
-            inputs = self.$modal.find(".modal-title");
+            inputs = modal_el.querySelectorAll(".modal-title");
         }
-        var firstInput = inputs[0];
-        var lastInput = inputs[inputs.length - 1];
-        var closeInput = self.$modal.find(".modal-close").first();
-        $(document).on(
+        var firstInput = inputs.length !== 0 ? inputs[0] : null;
+        var lastInput = inputs.length !== 0 ? inputs[inputs.length - 1] : null;
+        var closeInput = modal_el.querySelector(".modal-close");
+
+        modal_el.addEventListener(
             "keydown",
-            "." + self.options.templateOptions.classDialog,
-            function (e) {
-                if (e.which === 9) {
+            (e) => {
+                if (e.key === "Tab") {
                     e.preventDefault();
 
-                    var $target = $(e.target);
-                    var currentIndex = $.inArray($target[0], inputs);
+                    var target = e.target;
+                    var currentIndex = inputs.indexOf(target);
                     if (currentIndex >= 0 && currentIndex < inputs.length) {
                         var nextIndex = currentIndex + (e.shiftKey ? -1 : 1);
                         if (nextIndex < 0 || nextIndex >= inputs.length) {
@@ -809,26 +799,26 @@ export default Base.extend({
                         } else {
                             inputs[nextIndex].focus();
                         }
-                    } else if (e.shiftKey) {
+                    } else if (e.shiftKey && lastInput) {
                         lastInput.focus();
-                    } else {
+                    } else if (firstInput) {
                         firstInput.focus();
                     }
                 }
             }
         );
         if (self.options.backdropOptions.closeOnClick === true) {
-            self.$modal.on("click", function (e) {
-                if (
-                    !$(e.target).closest("." + self.options.templateOptions.classModal)
-                        .length
-                ) {
+            modal_el.addEventListener("click", (e) => {
+                if (!e.target.closest(`.${self.options.templateOptions.classModal}`)) {
                     self.hide();
                 }
             });
         }
 
-        self.$modal.find(".modal-title").focus();
+        if (firstInput && ["INPUT", "SELECT"].includes(firstInput.nodeName)) {
+            // autofocus first element when opening a modal with a form
+            firstInput.focus();
+        }
     },
 
     positionModal: function () {
@@ -1023,5 +1013,6 @@ export default Base.extend({
         self.positionModal();
         registry.scan(self.$modal);
         self.emit("afterDraw");
+        self.activateFocusTrap();
     },
 });
