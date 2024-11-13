@@ -3,6 +3,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 import _ from "underscore";
 import Backdrop from "../backdrop/backdrop";
 import registry from "@patternslib/patternslib/src/core/registry";
+import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
 
@@ -771,8 +772,7 @@ export default Base.extend({
         var inputs = [];
 
         for (const el of [...inputsBody, ...inputsFooter]) {
-            const style = window.getComputedStyle(el);
-            if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+            if (dom.is_visible(el)) {
                 inputs.push(el);
             }
         }
@@ -815,7 +815,7 @@ export default Base.extend({
             });
         }
 
-        if (firstInput && ["INPUT", "SELECT"].includes(firstInput.nodeName)) {
+        if (firstInput && ["INPUT", "SELECT", "TEXTAREA"].includes(firstInput.nodeName)) {
             // autofocus first element when opening a modal with a form
             firstInput.focus();
         }
