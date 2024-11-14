@@ -27,7 +27,7 @@ msgstr ""
         }
         console.log("reading file: " + filepath);
         const file = fs.readFileSync(filepath, { encoding: "utf-8" });
-        const re = /_t\((("[^"]+")|('[^']+'))(,\W{.*})?\)?\)/g;
+        const re = /_t\((("[^"]+")|('[^']+'))(,\W{[^}]*})?\)/g;
         let match = re.exec(file);
         while (match) {
             if (match) {
