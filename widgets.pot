@@ -14,6 +14,10 @@ msgstr ""
 "Domain: widgets\n"
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "upload to ${current_path}"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "loading content items"
 msgstr ""
 
@@ -27,6 +31,18 @@ msgstr ""
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "select ${preview_path}"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "add selected items"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/Favorites.svelte
+msgid "Favorites"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/RecentlyUsed.svelte
+msgid "Recently Used"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/SelectedItems.svelte
@@ -93,6 +109,10 @@ msgstr ""
 msgid "There was an error loading modal."
 msgstr ""
 
+#: ./src/pat/modal/modal.js
+msgid "Close"
+msgstr ""
+
 #: ./src/pat/preventdoublesubmit/preventdoublesubmit.js
 msgid "You already clicked the submit button. Do you really want to submit this form again?"
 msgstr ""
@@ -146,10 +166,6 @@ msgid "One level up"
 msgstr ""
 
 #: ./src/pat/relateditems/relateditems.js
-msgid "Favorites"
-msgstr ""
-
-#: ./src/pat/relateditems/relateditems.js
 msgid "Current path:"
 msgstr ""
 
@@ -159,10 +175,6 @@ msgstr ""
 
 #: ./src/pat/relateditems/relateditems.js
 msgid "Browse"
-msgstr ""
-
-#: ./src/pat/relateditems/relateditems.js
-msgid "Recently Used"
 msgstr ""
 
 #: ./src/pat/relateditems/relateditems.js
