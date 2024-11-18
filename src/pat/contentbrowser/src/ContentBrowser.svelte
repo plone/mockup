@@ -342,6 +342,13 @@
         }, 500);
     }
 
+    function initToolTips(){
+        // init the tooltips for select buttons in contentbrowser
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        console.log(tooltipTriggerList, tooltipList)
+    }
+
     $: {
         if ($showContentBrowser) {
             contentItems.get({ path: $currentPath });
@@ -409,6 +416,7 @@
                         <div
                             class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
                             in:fly|local={{ duration: 300 }}
+                            use:initToolTips
                         >
                             <div class="levelToolbar">
                                 {#if i == 0 && $config.mode == "browse"}
@@ -426,11 +434,15 @@
                                 {#if level.selectable}
                                     <button
                                         class="btn btn-primary btn-xs"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="{level.displayPath}"
+                                        data-bs-placement="top"
+                                        data-bs-custom-class="contentbrowser-tooltip"
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => addItem(level)}
                                     >
                                         {_t("select ${level_path}", {
-                                            level_path: level.displayPath,
+                                            level_path: level.Title,
                                         })}
                                     </button>
                                 {/if}
@@ -752,5 +764,11 @@
     .loadmore {
         text-align: center;
         padding: 0.25rem 0;
+    }
+
+    /* override the default tooltip z-index, because contentbrowser is on a higher level */
+    :global(div.tooltip.contentbrowser-tooltip){
+        --bs-tooltip-zindex: 2000;
+        z-index: var(--bs-tooltip-zindex);
     }
 </style>
