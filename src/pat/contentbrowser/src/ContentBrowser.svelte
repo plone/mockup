@@ -667,6 +667,11 @@
     .levelToolbar > .levelActions {
         margin-left: auto;
     }
+    .levelToolbar > button{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     .levelItems {
         overflow-x: auto;
