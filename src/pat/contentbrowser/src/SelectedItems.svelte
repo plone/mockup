@@ -23,7 +23,6 @@
 
     // get selectedItem component from registry
     const RegisteredSelectedItem = plone_registry.getComponent("pat-contentbrowser.SelectedItem");
-    console.log(RegisteredSelectedItem);
 
     onMount(async () => {
         await initializeSelectedItemsStore();
@@ -93,6 +92,10 @@
         selectedItemsNode.dispatchEvent(events.change_event());
     }
 
+    function LoadSelectedItemComponent(node, props) {
+        const component = new RegisteredSelectedItem.component({target: node, props: props});
+    }
+
     $: {
         $selectedItems;
         if ($selectedItems.length || !initializing) {
@@ -113,7 +116,7 @@
          on:click={() => $showContentBrowser = $selectedItems.length ? false : true }>
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
-                <svelte:component this={RegisteredSelectedItem.component} idx={i} item={selItem}  />
+                <div use:LoadSelectedItemComponent={{idx:i, item:selItem}} />
             {/each}
         {/if}
         {#if !$selectedItems}
