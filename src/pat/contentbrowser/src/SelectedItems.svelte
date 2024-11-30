@@ -1,6 +1,6 @@
 <script>
     import { getContext, onMount, setContext } from "svelte";
-    import { get_items_from_uids, resolveIcon } from "./utils.js";
+    import { get_items_from_uids } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
     import events from "@patternslib/patternslib/src/core/events";
@@ -8,10 +8,6 @@
 
     let ref;
     let initializing = true;
-
-    // get registered SelectedItem component
-    const SelectedItemComponent = plone_registry.getComponent("SelectedItem");
-    console.log(SelectedItemComponent);
 
     // get reactive context config
     const config = getContext("config");
@@ -24,6 +20,10 @@
 
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
+
+    // get selectedItem component from registry
+    const RegisteredSelectedItem = plone_registry.getComponent("pat-contentbrowser.SelectedItem");
+    console.log(RegisteredSelectedItem);
 
     onMount(async () => {
         await initializeSelectedItemsStore();
@@ -113,7 +113,7 @@
          on:click={() => $showContentBrowser = $selectedItems.length ? false : true }>
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
-                <svelte:component this={SelectedItemComponent.component} idx={i} item={selItem} />
+                <svelte:component this={RegisteredSelectedItem.component} idx={i} item={selItem}  />
             {/each}
         {/if}
         {#if !$selectedItems}

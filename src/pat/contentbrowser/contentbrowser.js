@@ -4,27 +4,21 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import plone_registry from "@plone/registry";
 
-async function init_component_registry() {
-    // bug? set the component registry as empty dict the first time
-    // otherwise you get the error: "this._data.components is undefined"
-    if (plone_registry["components"] === undefined) {
-        // see @plone/registry
-        plone_registry["components"] = {};
-    }
-
-    if (plone_registry.getComponent("SelectedItem").component === undefined) {
+async function setup_default_component_registry() {
+    if (plone_registry.getComponent("pat-contentbrowser.SelectedItem").component === undefined) {
         const SelectedItem = (await import("./src/SelectedItem.svelte")).default;
         plone_registry.registerComponent({
-            name: "SelectedItem",
+            name: "pat-contentbrowser.SelectedItem",
             component: SelectedItem,
         });
+        console.log("Loaded default 'SelectedItem' Component");
     }
 }
 
 // register default components in @plone/registry
 // here outside the pattern init() so that addons can override this
 // when their bundle depends on the "plone" bundle
-init_component_registry()
+setup_default_component_registry()
 
 // Contentbrowser pattern
 
