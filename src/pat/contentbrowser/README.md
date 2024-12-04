@@ -29,6 +29,7 @@ Show a widget to select items in an offcanvas miller-column browser.
 |       recentlyUsed         | boolean |                  false                  |                                                           Show the recently used items dropdown.                                                          |
 |      recentlyUsedKey       | integer |                                         |                     Storage key for saving the recently used items. This is generated with fieldname and username in the patternoptions.                  |
 |    recentlyUsedMaxItems    | integer |                    20                   |                                              Maximum items to keep in recently used list. 0: no restriction.                                              |
+|     customComponentKeys    |  dict   |                    {}                   |                                           Register custom components. Currently only "SelectedItem" implemented                                           |
 
 
 ## Default
@@ -81,3 +82,44 @@ Show a widget to select items in an offcanvas miller-column browser.
     data-pat-contentbrowser='{"selectableTypes": ["Image", "File"], "vocabularyUrl": "contentbrowser-test.json", "upload": true}'
 />
 ```
+
+## Register custom component
+
+Currently only for `SelectedItem` component available.
+
+```html
+<input
+    type="text"
+    class="pat-contentbrowser"
+    data-pat-contentbrowser='{
+        "customComponentKeys": {
+            "SelectedItem": "pat-contentbrowser.myfield.MySelectedItemComponent",
+        },
+    }'
+/>
+```
+
+Copy the existing component `src/SelectedItem.svelte` to your addon, customize it and register it in your JS bundle as follows:
+
+```javascript
+...
+import plone_registry from "@plone/registry";
+...
+
+async function register_selecteditem_component() {
+    // we register our component to a custom keyname,
+    // which later can be used for pattern_options
+    const SelectedImages = (await import("./MySelectedItemComponent.svelte")).default;
+    plone_registry.registerComponent({
+        name: "pat-contentbrowser.myfield.MySelectedItemComponent",
+        component: SelectedImages,
+    });
+}
+register_selecteditem_component();
+
+...
+
+```
+
+Note: this needs the `svelte-loader` plugin in your webpack.config.js ... see mockups webpack config for info.
+
