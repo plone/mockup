@@ -21,8 +21,12 @@
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
 
-    // get selectedItem component from registry
-    const RegisteredSelectedItem = plone_registry.getComponent("pat-contentbrowser.SelectedItem");
+    // get selectedItem component from registry.
+    // the registry key can be customized with pattern_options
+    // if an addon registers a custom component to a custom key
+    const RegisteredSelectedItem = plone_registry.getComponent(
+        $config.componentRegistryKeys?.selectedItem || "pat-contentbrowser.SelectedItem"
+    );
 
     onMount(async () => {
         await initializeSelectedItemsStore();
