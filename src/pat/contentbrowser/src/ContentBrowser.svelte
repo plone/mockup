@@ -429,7 +429,7 @@
                                         title="{level.displayPath}"
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => addItem(level)}
-                                                                            >
+                                    >
                                         {_t("select ${level_path}", {
                                             level_path: level.Title,
                                         })}
