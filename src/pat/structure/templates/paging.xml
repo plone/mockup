@@ -44,8 +44,10 @@
   </ul>
 
   <div class="pagination-info">
+    <% if(totalPages){ %>
     <%- _t("Page:") %> <span class="current"><%- currentPage %></span>
     <%- _t("of") %>
     <span class="total"><%- totalPages %></span>
           <%- _t("shown") %>
+    <% } %>
   </div>
