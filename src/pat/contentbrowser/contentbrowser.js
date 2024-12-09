@@ -2,6 +2,23 @@ import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
+import plone_registry from "@plone/registry";
+
+async function setup_default_component_registry() {
+    if (plone_registry.getComponent("pat-contentbrowser.SelectedItem").component === undefined) {
+        const SelectedItem = (await import("./src/SelectedItem.svelte")).default;
+        plone_registry.registerComponent({
+            name: "pat-contentbrowser.SelectedItem",
+            component: SelectedItem,
+        });
+        console.log("Loaded default 'SelectedItem' Component");
+    }
+}
+
+// register default components in @plone/registry
+// here outside the pattern init() so that addons can override this
+// when their bundle depends on the "plone" bundle
+setup_default_component_registry()
 
 // Contentbrowser pattern
 
