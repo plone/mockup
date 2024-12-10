@@ -10,7 +10,6 @@ import Cookies from "js-cookie";
 const log = logging.getLogger("pat-toolbar");
 
 export const parser = new Parser("toolbar");
-parser.addArgument("update-trigger", "structure-url-changed");
 parser.addArgument("render-url", "@@render-toolbar");
 
 class Pattern extends BasePattern {
@@ -27,13 +26,6 @@ class Pattern extends BasePattern {
             //import("./toolbar.scss");
         }
 
-        //// Reload on context change in folder content browser.
-        //$("body").on(this.options["update-trigger"], async (e, path) => {
-        //    await this.reload_toolbar(
-        //        `${document.body.dataset.portalUrl}${path}/${this.options["render-url"]}`
-        //    );
-        //});
-
         // Reload the toolbar on history change.
         events.add_event_listener(
             window.navigation,
@@ -45,17 +37,6 @@ class Pattern extends BasePattern {
                 await this.reload_toolbar();
             }
         );
-
-        //events.add_event_listener(
-        //    document.body,
-        //    "pat-inject-history-changed",
-        //    "pat-toolbar--history-changed",
-        //    async (e) => {
-        //        await this.reload_toolbar(
-        //            `${e.detail.url}/${this.options["render-url"]}`
-        //        );
-        //    }
-        //);
 
         const $el = $(this.el);
 
