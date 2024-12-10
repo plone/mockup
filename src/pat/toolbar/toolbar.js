@@ -17,6 +17,8 @@ class Pattern extends BasePattern {
 
     parser_group_options = false;
 
+    previous_toolbar_url = null;
+
     async init() {
         if (window.__patternslib_import_styles) {
             //import("./toolbar.scss");
@@ -37,11 +39,8 @@ class Pattern extends BasePattern {
             async () => {
                 // Wait a tick to let other Patterns set the baseUrl.
                 await utils.timeout(1);
-                console.log("reload toolbar after a tick timeout");
-                const url = `${document.body.dataset.baseUrl}/${this.options["render-url"]}`;
-                console.log("TOOLBAR");
-                console.log("history changed, reload toolbar after a tick timeout: " + url);
-                await this.reload_toolbar(url);
+                console.log("TOOLBAR: reload after a tick timeout");
+                await this.reload_toolbar();
             }
         );
 
@@ -77,27 +76,37 @@ class Pattern extends BasePattern {
         this.el.classList.add("initialized");
     }
 
-    async reload_toolbar(url) {
-        console.log("TOOLBAR");
-        console.log("reloading...");
+    async reload_toolbar() {
+        console.log("TOOLBAR: reload_toolbar");
 
         // Don't reload on content views but on their parent if so.
         const split_words = [
             // NOTE: order matters.
-            "@@",
+            "@@", // also catches @@folder_contents and @@edit
             "folder_contents",
+            "edit",
+            "#",
+            "?",
         ];
-        for (const word of split_words) {
-            if (url.includes(word)) {
-                url = url.split(word)[0];
-                console.log("splitting word: " + word + " -> " + url);
-            }
+        let url = document.body.dataset.baseUrl;
+        console.log("TOOLBAR: url before splitting", url);
+        // Split all split words out of url
+        url = split_words.reduce((url_, split_) => url_.split(split_)[0], url);
+        // Ensure a trailing slash in the URL.
+        url = url[url.length - 1] === "/" ? url : `${url}/`
+        url = `${url}${this.options["render-url"]}`;
+        console.log("TOOLBAR: url after splitting", url);
+
+        if (this.previous_toolbar_url === url) {
+            // no need to reload same url
+            return;
         }
-        console.log("HO HO HO");
-        console.log(url);
+
         // fetch toolbar
         const response = await fetch(url);
         const data = await response.text();
+
+        this.previous_toolbar_url = url;
 
         // Find toolbar nodes
         const div = document.createElement("div");
