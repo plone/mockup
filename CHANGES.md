@@ -2,6 +2,45 @@
 
 
 
+## [5.2.0-beta.2](https://github.com/plone/mockup/compare/5.2.0-beta.1...5.2.0-beta.2) (2024-12-18)
+
+
+### Features
+
+
+* **pat contentbrowser:** Register components with "@plone/registry" ([572ccff](https://github.com/plone/mockup/commit/572ccff33bdd2a9e86fd4b4f477fefb506598b5e))
+
+
+* **pat contentbrowser:** use title attribute of select button to display path info of selected object ([d2538d2](https://github.com/plone/mockup/commit/d2538d2a0f14aaa890b700494375f7763f02ee28))
+
+
+
+### Bug Fixes
+
+
+* **build:** Fix `i18n` script to find msgids inside `_t` methods with multiline mapping dictionaries as second parameter. ([9b67923](https://github.com/plone/mockup/commit/9b67923662ba1f0dd7db3f58ab9e5d585e859593))
+
+
+* **pat contentbrowser:** fix text overflow of select buttons in toolbar ([8dd0e5c](https://github.com/plone/mockup/commit/8dd0e5c4d9828ed75d3505698a13ee0bf50824a5))
+
+
+* **pat modal:** fix focus trap when form is reloaded with validation errors. ([d9bc32e](https://github.com/plone/mockup/commit/d9bc32ec9cdf3b49885c8096735059a66286a0ee))
+
+  Code modernisation
+
+
+* **pat-structure:** If there are no search results, do not show pagination text. ([826bafe](https://github.com/plone/mockup/commit/826bafe13880fcfedc2f6f894fa385273c4ef310))
+
+  Fixes: plone/mockup#1412
+Fixes: plone/Products.CMFPlone#3591
+closes [plone/mockup#1412](https://github.com/plone/mockup/issues/1412) [plone/Products.CMFPlone#3591](https://github.com/plone/Products.CMFPlone/issues/3591)
+
+
+### Maintenance
+
+
+* upgrade dependencies ([f8501bd](https://github.com/plone/mockup/commit/f8501bd7a35aa53c3e1c00f05d6325927e57a394))
+
 ## [5.2.0-beta.1](https://github.com/plone/mockup/compare/5.2.0-beta.0...5.2.0-beta.1) (2024-11-08)
 
 
