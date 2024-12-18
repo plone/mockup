@@ -2,6 +2,7 @@ import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
+import plone_registry from "@plone/registry";
 
 // Contentbrowser pattern
 
@@ -47,6 +48,14 @@ class Pattern extends BasePattern {
 
     async init() {
         this.el.style.display = "none";
+
+        // register default components in @plone/registry
+        const SelectedItem = (await import("./src/SelectedItem.svelte")).default;
+
+        plone_registry.registerComponent({
+            name: "pat-contentbrowser.SelectedItem",
+            component: SelectedItem,
+        });
 
         // ensure an id on our element (TinyMCE doesn't have one)
         let nodeId = this.el.getAttribute("id");

@@ -1,10 +1,10 @@
 <script>
-    import { getContext, onMount } from "svelte";
-    import { flip } from "svelte/animate";
-    import { get_items_from_uids, resolveIcon } from "./utils.js";
+    import { getContext, onMount, setContext } from "svelte";
+    import { get_items_from_uids } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
     import events from "@patternslib/patternslib/src/core/events";
+    import plone_registry from "@plone/registry";
 
     let ref;
     let initializing = true;
@@ -21,6 +21,13 @@
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
 
+    // get selectedItem component from registry.
+    // the registry key can be customized with pattern_options
+    // if an addon registers a custom component to a custom key
+    const RegisteredSelectedItem = plone_registry.getComponent(
+        $config.componentRegistryKeys?.selectedItem || "pat-contentbrowser.SelectedItem"
+    );
+
     onMount(async () => {
         await initializeSelectedItemsStore();
         initializeSorting();
@@ -34,6 +41,10 @@
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
+
+    // use this function in "SelectedItem" component with
+    // const unselectItem = getContext("unselectItem")
+    setContext("unselectItem", unselectItem);
 
     async function initializeSelectedItemsStore() {
         const initialValue = $config.selection.length
@@ -85,6 +96,10 @@
         selectedItemsNode.dispatchEvent(events.change_event());
     }
 
+    function LoadSelectedItemComponent(node, props) {
+        const component = new RegisteredSelectedItem.component({target: node, props: props});
+    }
+
     $: {
         $selectedItems;
         if ($selectedItems.length || !initializing) {
@@ -105,27 +120,7 @@
          on:click={() => $showContentBrowser = $selectedItems.length ? false : true }>
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
-                <div
-                    class="selected-item"
-                    animate:flip={{ duration: 500 }}
-                    data-uuid={selItem.UID}
-                >
-                    <div class="item-info">
-                        <button
-                            class="btn btn-link btn-sm link-secondary"
-                            on:click|stopPropagation={() => unselectItem(i)}
-                            ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
-                        >
-                        <div>
-                            <span class="item-title">{selItem.Title}</span><br />
-                            <span class="small">{selItem.path}</span>
-                        </div>
-                    </div>
-                    {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img
-                            src="{selItem.getURL}/@@images/image/mini"
-                            alt={selItem.Title}
-                        />{/if}
-                </div>
+                <div use:LoadSelectedItemComponent={{idx:i, item:selItem}} />
             {/each}
         {/if}
         {#if !$selectedItems}
@@ -154,34 +149,5 @@
         min-height: 2.4rem;
         padding: 0.5rem 0.5rem 0 0.5rem;
         flex: 1 1 auto;
-    }
-    .content-browser-selected-items .selected-item {
-        border-radius: var(--bs-border-radius);
-        background-color: var(--bs-tertiary-bg);
-        border: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
-        padding: 0.5rem;
-        margin-bottom: 0.5rem;
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: start;
-        justify-content: space-between;
-        cursor: move;
-    }
-    .content-browser-selected-items .selected-item > * {
-        margin-right: 0.5rem;
-        display: block;
-    }
-    .content-browser-selected-items .selected-item button {
-        cursor: pointer;
-        padding: 0 0.375rem 0.374rem 0;
-    }
-    .content-browser-selected-items .selected-item .item-info {
-        display: flex;
-        align-items: start;
-    }
-    .content-browser-selected-items .selected-item > img {
-        object-fit: cover;
-        width: 95px;
-        height: 95px;
     }
 </style>

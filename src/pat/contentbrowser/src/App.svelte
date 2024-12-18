@@ -34,6 +34,7 @@
     export let recentlyUsedKey;
     export let recentlyUsedMaxItems;
     export let bSize = 20;
+    export let componentRegistryKeys = {};
 
     const log = logger.getLogger("pat-contentbrowser");
 
@@ -83,6 +84,7 @@
         recentlyUsedKey: recentlyUsedKey,
         recentlyUsedMaxItems: recentlyUsedMaxItems,
         pageSize: bSize,
+        componentRegistryKeys: componentRegistryKeys,
     };
 
     log.debug(`Initialized App<${fieldId}> with config ${JSON.stringify($config)}`);
