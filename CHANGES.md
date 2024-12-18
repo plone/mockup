@@ -10,6 +10,14 @@
 
 * **build:** update dependencies ([595fb52](https://github.com/plone/mockup/commit/595fb520e5d9e24c8cea6484aff4b5ffaac72afe))
 
+## [5.1.15](https://github.com/plone/mockup/compare/5.1.14...5.1.15) (2024-12-18)
+
+
+### Maintenance
+
+
+* **build:** update dependencies ([595fb52](https://github.com/plone/mockup/commit/595fb520e5d9e24c8cea6484aff4b5ffaac72afe))
+
 ## [5.1.14](https://github.com/plone/mockup/compare/5.1.13...5.1.14) (2024-09-03)
 
 
