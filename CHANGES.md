@@ -2,6 +2,14 @@
 
 
 
+## [5.2.0-beta.3](https://github.com/plone/mockup/compare/5.2.0-beta.2...5.2.0-beta.3) (2024-12-27)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** Fix Link/Image modal when inline mode is activated. ([a69f890](https://github.com/plone/mockup/commit/a69f8905644453c38787cb20bfbcf6c677dca1f8))
+
 ## [5.2.0-beta.2](https://github.com/plone/mockup/compare/5.2.0-beta.1...5.2.0-beta.2) (2024-12-18)
 
 
