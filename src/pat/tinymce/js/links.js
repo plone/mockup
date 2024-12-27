@@ -318,12 +318,14 @@ var AnchorLink = LinkType.extend({
 });
 
 const add_image = (editor) => {
-    var pattern_inst = document.getElementById(editor.id)["pattern-tinymce"].instance;
+    // in case of inline mode we need the node where the pattern is instantinated
+    // not the tinymce editable div ("-editable")
+    var pattern_inst = document.getElementById(editor.id.replace("-editable", ""))["pattern-tinymce"].instance;
     pattern_inst.addImageClicked();
 }
 
 const add_link = (editor) => {
-    var pattern_inst = document.getElementById(editor.id)["pattern-tinymce"].instance;
+    var pattern_inst = document.getElementById(editor.id.replace("-editable", ""))["pattern-tinymce"].instance;
     pattern_inst.addLinkClicked();
 }
 
