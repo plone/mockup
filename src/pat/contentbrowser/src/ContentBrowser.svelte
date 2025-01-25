@@ -642,7 +642,8 @@
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        overflow: hidden;
+        overflow-y: hidden;
+        overflow-x: auto;
         flex-grow: 3;
         border-left: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
         user-select: none;
@@ -654,6 +655,8 @@
             var(--bs-border-color);
         display: flex;
         flex-direction: column;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .levelToolbar {
