@@ -543,10 +543,11 @@
                             <div class="levelToolbar">
                                 <button
                                     class="btn btn-primary btn-xs"
+                                    title={previewItem.path.split("/").pop()}
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() => addItem(previewItem)}
                                     >{_t("select ${preview_path}", {
-                                        preview_path: previewItem.path.split("/").pop(),
+                                        preview_path: previewItem.Title,
                                     })}</button
                                 >
                             </div>
