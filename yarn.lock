@@ -6240,7 +6240,12 @@ jiti@^2.4.1:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-2.4.2.tgz#d19b7732ebb6116b06e2038da74a55366faef560"
   integrity sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==
 
-jqtree@1.8.8, jqtree@>=0.16:
+jqtree@1.8.10:
+  version "1.8.10"
+  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.8.10.tgz#e335e08d014f9568d9d088425516b8ee5d04bf8b"
+  integrity sha512-uzNyD4MfBzU0qCpTOrzEtufwX6/lOHc+QTWkonFT1iDWNx+cBJN/0kbrWKHkrgLIKztE05Y1fIWEbdAGOH8F5g==
+
+jqtree@>=0.16:
   version "1.8.8"
   resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.8.8.tgz#fffebdb6c641f94e6ecd7091143b5abb02c07bba"
   integrity sha512-7+thZtw8FmRGUXPOrXxp4OwpGxNyF7jnY7Pc7u0+C4sfQEdaSISwz/2CiGdSnVbnS8Oxs5XIHSZ4wWD6pSkSBA==
@@ -9146,15 +9151,15 @@ tinyexec@^0.3.0:
   resolved "https://registry.yarnpkg.com/tinyexec/-/tinyexec-0.3.1.tgz#0ab0daf93b43e2c211212396bdb836b468c97c98"
   integrity sha512-WiCJLEECkO18gwqIp6+hJg0//p23HXp4S+gGtAKu3mI2F2/sXC4FvHvXvB0zJVVaTPhx1/tOwdbRsa1sOBIKqQ==
 
-tinymce-i18n@24.12.9:
-  version "24.12.9"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-24.12.9.tgz#1303caffa9c151073dfb628c9a3c224da781b29b"
-  integrity sha512-G4FTRiyrHLL+YSGAWuuxGsEYvx4WONFpgRkOnVgB2AQbPpJcqyu4IabC2OWLqe9vAmcZs/kE1PJu32aj7qawSg==
+tinymce-i18n@24.12.30:
+  version "24.12.30"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-24.12.30.tgz#33b9d78f10a834d19b373504a2bf13b98e6a8ba2"
+  integrity sha512-OOtJfr9plrXT5fuvCEXJ56QFKyFPCaaVcalj0UgJGv2AK8PNWhDVqzPef6MPlBkvVA1qgrZb7ZvfJC63wmkWjg==
 
-tinymce@7.6.0:
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.6.0.tgz#476069a3e98f46f3f6e7875ca878313d6b3345b9"
-  integrity sha512-kUrklnD7H8JbpSDEGRh51GKK6Mrf+pR9neSDzUHvXKV+2oRtMB7sqfAtEOnM0/WKdstwaX0qoNCZNo2H1Y0EFA==
+tinymce@7.6.1:
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.6.1.tgz#f35990f6e9c2f90220939f545ac032e3d9301b05"
+  integrity sha512-5cHhaAoyyTHfAVTInNfoSp0KkUHmeVUbGSu37QKQbOFIPqxYPhqBiaLm1WVLgoNBYOHRProVc3xzxnNTeWHyoQ==
 
 tippy.js@^6.3.7:
   version "6.3.7"

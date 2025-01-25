@@ -34,15 +34,15 @@
         "datatables.net-select": "1.4.0",
         "datatables.net-select-bs5": "1.4.0",
         "dropzone": "5.9.3",
-        "jqtree": "1.8.8",
+        "jqtree": "1.8.10",
         "jquery": "^3.7.1",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
         "js-cookie": "^3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.6",
-        "tinymce": "7.6.0",
-        "tinymce-i18n": "24.12.9",
+        "tinymce": "7.6.1",
+        "tinymce-i18n": "24.12.30",
         "underscore": "^1.13.7"
     },
     "devDependencies": {
