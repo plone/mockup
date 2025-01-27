@@ -2,6 +2,20 @@
 
 
 
+## [5.2.0-beta.4](https://github.com/plone/mockup/compare/5.2.0-beta.3...5.2.0-beta.4) (2025-01-27)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** scroll columns horizontally when deeply nested folders. ([0e77a7d](https://github.com/plone/mockup/commit/0e77a7dec3637ba87663aff5a875f00df9e95d62))
+
+
+* **pat contentbrowser:** use previewItem Titel for select button label and ID for tooltip ([77ad7d3](https://github.com/plone/mockup/commit/77ad7d347012b4ff09f155f71d4e2f241e4e3783))
+
+
+* **pat tinymce:** latest version 7.6.1 ([ea329e2](https://github.com/plone/mockup/commit/ea329e2043aa47d55cc9da9a62bc47e7f6fa954d))
+
 ## [5.2.0-beta.3](https://github.com/plone/mockup/compare/5.2.0-beta.2...5.2.0-beta.3) (2024-12-27)
 
 
