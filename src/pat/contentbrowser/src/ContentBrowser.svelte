@@ -543,10 +543,11 @@
                             <div class="levelToolbar">
                                 <button
                                     class="btn btn-primary btn-xs"
+                                    title={previewItem.path.split("/").pop()}
                                     disabled={!isSelectable(previewItem)}
                                     on:click|preventDefault={() => addItem(previewItem)}
                                     >{_t("select ${preview_path}", {
-                                        preview_path: previewItem.path.split("/").pop(),
+                                        preview_path: previewItem.Title,
                                     })}</button
                                 >
                             </div>
@@ -642,7 +643,8 @@
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        overflow: hidden;
+        overflow-y: hidden;
+        overflow-x: auto;
         flex-grow: 3;
         border-left: var(--bs-border-style) var(--bs-border-color) var(--bs-border-width);
         user-select: none;
@@ -654,6 +656,8 @@
             var(--bs-border-color);
         display: flex;
         flex-direction: column;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .levelToolbar {
