@@ -1,4 +1,5 @@
 import utils from "../../../core/utils.js";
+import I18n from "../../../core/i18n.js";
 
 export async function request({
     method = "GET",
@@ -211,4 +212,11 @@ export function updateRecentlyUsed(item, config) {
     }
     recentlyUsed.push(item);
     utils.storage.set(config.recentlyUsedKey, recentlyUsed);
+}
+
+
+export function formatDate(dateval) {
+    const d = Date.parse(dateval);
+    const i18n = new I18n();
+    return new Date(d).toLocaleString(i18n.currentLanguage);
 }

@@ -21,6 +21,8 @@ parser.addArgument(
         "getIcon",
         "is_folderish",
         "review_state",
+        "created",
+        "modified",
     ], null, true
 );
 parser.addArgument("width");
