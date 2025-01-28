@@ -2,6 +2,17 @@
 
 
 
+## [5.2.0-beta.5](https://github.com/plone/mockup/compare/5.2.0-beta.4...5.2.0-beta.5) (2025-01-28)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** do not shrink preview and upload column width. Add more metadata to preview item. ([d413842](https://github.com/plone/mockup/commit/d4138420ff5de68c927204d9198f23fac274f77d))
+
+
+* **pat select2:** sanitize select2 CSS to match Bootstrap form controls. ([eb65930](https://github.com/plone/mockup/commit/eb65930f4841439a288ae02957ff592cdff5eba3))
+
 ## [5.2.0-beta.4](https://github.com/plone/mockup/compare/5.2.0-beta.3...5.2.0-beta.4) (2025-01-27)
 
 
