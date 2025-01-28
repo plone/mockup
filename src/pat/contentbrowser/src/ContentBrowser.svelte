@@ -8,6 +8,7 @@
     import contentStore from "./ContentStore";
     import {
         clickOutside,
+        formatDate,
         get_items_from_uids,
         request,
         resolveIcon,
@@ -67,6 +68,7 @@
 
     async function upload() {
         updatePreview({ action: "clear" });
+        scrollToRight();
         showUpload = true;
         await utils.timeout(1);
         const uploadEl = document.querySelector(".upload-wrapper");
@@ -182,7 +184,10 @@
             ...document.querySelectorAll(".levelColumn .inPath"), // previously selected folder
             ...document.querySelectorAll(".levelColumn .selectedItem"), // previously selected item
         ];
-        if(!possibleFocusEls.length && document.querySelector(".levelColumn .contentItem")) {
+        if (
+            !possibleFocusEls.length &&
+            document.querySelector(".levelColumn .contentItem")
+        ) {
             possibleFocusEls.push(document.querySelector(".levelColumn .contentItem"));
         }
         if (possibleFocusEls.length) {
@@ -426,7 +431,7 @@
                                 {#if level.selectable}
                                     <button
                                         class="btn btn-primary btn-xs"
-                                        title="{level.displayPath}"
+                                        title={level.displayPath}
                                         disabled={!isSelectable(level)}
                                         on:click|preventDefault={() => addItem(level)}
                                     >
@@ -505,7 +510,9 @@
                                                 />
                                                 {item.Title}
                                                 {#if $config.mode == "search"}
-                                                <br><span class="small">{item.path}</span>
+                                                    <br /><span class="small"
+                                                        >{item.path}</span
+                                                    >
                                                 {/if}
                                             </div>
                                         {/if}
@@ -568,8 +575,39 @@
                                         />
                                     </div>
                                 {/if}
-                                <h4>{previewItem.Title}</h4>
-                                <p>{previewItem.Description}</p>
+                                <dl>
+                                    <dt>{_t("Title")}</dt>
+                                    <dd>{previewItem.Title}</dd>
+                                    {#if previewItem.Description}
+                                        <dt>{_t("Description")}</dt>
+                                        <dd
+                                            class="text-truncate"
+                                            title={previewItem.Description}
+                                        >
+                                            {previewItem.Description}
+                                        </dd>
+                                    {/if}
+                                    {#if previewItem.created}
+                                        <dt>{_t("created")}</dt>
+                                        <dd>
+                                            <time datetime={previewItem.created}
+                                                >{formatDate(previewItem.created)}</time
+                                            >
+                                        </dd>
+                                    {/if}
+                                    {#if previewItem.modified}
+                                        <dt>{_t("modified")}</dt>
+                                        <dd>
+                                            <time datetime={previewItem.modified}
+                                                >{formatDate(previewItem.modified)}</time
+                                            >
+                                        </dd>
+                                    {/if}
+                                    {#if previewItem.review_state}
+                                        <dt>{_t("review_state")}</dt>
+                                        <dd>{previewItem.review_state}</dd>
+                                    {/if}
+                                </dl>
                             </div>
                         </div>
                     {/if}
@@ -672,7 +710,7 @@
     .levelToolbar > .levelActions {
         margin-left: auto;
     }
-    .levelToolbar > button{
+    .levelToolbar > button {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -693,7 +731,7 @@
         outline: none;
     }
     .contentItem.even {
-        background-color: rgba(var(--bs-secondary-bg-rgb), .4);
+        background-color: rgba(var(--bs-secondary-bg-rgb), 0.4);
     }
     .contentItem.inPath,
     .contentItem:focus {
@@ -726,6 +764,7 @@
         min-height: 300px;
         display: flex;
         flex-direction: column;
+        flex-shrink: 0;
         align-items: center;
     }
     .preview .info {
@@ -740,9 +779,6 @@
         width: 50px !important;
         height: 50px !important;
     }
-    .preview h4 {
-        font-size: 1.2 rem;
-    }
     .preview img {
         max-width: 100%;
         max-width: 100%;
@@ -751,8 +787,9 @@
 
     .upload-wrapper {
         padding: 1rem;
-        width: 590px;
+        width: 540px;
         overflow-x: auto;
+        flex-shrink: 0;
     }
     .loadmore {
         text-align: center;
