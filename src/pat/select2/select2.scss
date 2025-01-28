@@ -1,41 +1,41 @@
 .select2-container {
-    margin-bottom: 1em;
+    display: block;
     background: var(--bs-body-bg);
     color: var(--bs-body-color);
-    border-radius: 4px;
 
-    .select2-choice, .select2-choices {
+    .select2-choice,
+    .select2-choices {
         background-image: none;
         background-color: var(--bs-body-bg);
-        border-color: var(--bs-secondary)!important;
+        border-color: var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
         color: var(--bs-body-color);
-        box-shadow: none!important;
+        box-shadow: none !important;
 
         .select2-arrow {
-            border-left: none!important;
+            border-left: none !important;
 
             b {
-                background-color: var(--bs-secondary-bg-subtle)!important;
+                background-color: var(--bs-secondary-bg-subtle) !important;
             }
         }
     }
 
     .select2-search {
-        background-color: var(--bs-secondary-bg-subtle)!important;
-        color: var(--bs-secondary-text)!important;
+        background-color: var(--bs-secondary-bg-subtle) !important;
+        color: var(--bs-secondary-text) !important;
     }
 }
 
 .select2-container-multi {
-    background: #fff!important;
-    color: #000!important;
+    background: #fff !important;
+    color: #000 !important;
 
     .select2-choices {
-        border-color: var(--bs-secondary)!important;
-
         .select2-choice-dragging {
             border-color: #ff0000;
         }
+
         .select2-search-field {
             input {
                 height: inherit;
@@ -46,11 +46,20 @@
 
     .select2-orderable {
         .select2-search-choice {
+
             &,
             & span {
                 cursor: move;
             }
         }
+    }
+}
+
+.select2-dropdown-open {
+
+    .select2-choice,
+    .select2-choices {
+        border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
     }
 }
 
@@ -85,11 +94,11 @@
     }
 
     .select2-no-results {
-        background: transparent!important;
+        background: transparent !important;
     }
 
-    > * {
-        background: transparent!important;
+    >* {
+        background: transparent !important;
     }
 
     .select2-selected {
