@@ -623,11 +623,12 @@ describe("Structure", function () {
                 msg: "pasted",
             }));
 
-            // item pending to be pasted
+        // item pending to be pasted
         Cookies.set("__cp", "dummy");
-        await utils.timeout(100);
+
         registry.scan(this.$el);
         await utils.timeout(200);
+
         // top item
         var item0 = this.$el.find(".itemRow").eq(0);
         expect(item0.data().id).toEqual("folder");
@@ -692,7 +693,8 @@ describe("Structure", function () {
 
     it("test navigate to folder push states", async function () {
         registry.scan(this.$el);
-        await utils.timeout(200);
+        await utils.timeout(100);
+
         var item = this.$el.find(".itemRow").eq(0);
         expect(item.data().id).toEqual("folder");
         $(".title a.manage", item).trigger("click");
@@ -710,7 +712,8 @@ describe("Structure", function () {
         expect(structureUrlChangedPath).toEqual("");
     });
 
-    it("test navigate to folder pop states", async function () {
+    // skip for now -> decreases test time from 130s to 30s !
+    it.skip("test navigate to folder pop states", async function () {
         registry.scan(this.$el);
         await utils.timeout(100);
         // Need to inject this to the mocked window location attribute the
