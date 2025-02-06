@@ -14,7 +14,7 @@
         "@patternslib/pat-code-editor": "4.0.1",
         "@patternslib/patternslib": "9.9.16",
         "@plone/registry": "^2.1.0",
-        "backbone": "1.4.1",
+        "backbone": "1.6.0",
         "backbone.paginator": "2.0.8",
         "bootstrap": "5.3.3",
         "bootstrap-icons": "1.11.3",
@@ -64,7 +64,7 @@
     },
     "resolutions": {
         "@patternslib/patternslib": "9.9.16",
-        "backbone": "1.4.1",
+        "backbone": "1.6.0",
         "datatables.net": "<1.13",
         "datatables.net-bs5": "<1.13",
         "datatables.net-buttons": "<2.3",
