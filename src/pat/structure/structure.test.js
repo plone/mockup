@@ -124,12 +124,6 @@ TEST: Structure
 ========================== */
 describe("Structure", function () {
     beforeEach(async function () {
-        // clear cookie setting
-        Cookies.remove("__cp");
-        Cookies.remove("_fc_pageSize");
-        Cookies.remove("_fc_activeColumns");
-        Cookies.remove("_fc_activeColumnsCustom");
-
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
         this.server.autoRespondAfter = 0;
@@ -305,17 +299,19 @@ describe("Structure", function () {
     });
 
     afterEach(function () {
-        // XXX QueryHelper behaves like a singleton as it pins self
-        // reference to the singleton instance of Utils within the
-        // requirejs framework, so its variables such as currentPath are
-        // persisted.  Reset that here like so:
-        // utils.QueryHelper({}).currentPath = "/";
         extraDataJsonItem = null;
         this.server.restore();
         sinon.restore();
         document.body.innerHTML = "";
         structureUrlChangedPath = "";
         delete global.confirm;
+
+        // clear cookie setting
+        Cookies.remove("__cp");
+        Cookies.remove("_fc_pageSize");
+        Cookies.remove("_fc_activeColumns");
+        Cookies.remove("_fc_activeColumnsCustom");
+
     });
 
     it("initialize", async function () {
@@ -710,7 +706,7 @@ describe("Structure", function () {
             "http://localhost:9876/folder_contents"
         );
         expect(structureUrlChangedPath).toEqual("");
-    });
+    }, 10000);
 
     // skip for now -> decreases test time from 130s to 30s !
     it.skip("test navigate to folder pop states", async function () {
