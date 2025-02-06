@@ -293,29 +293,35 @@
     }
 
     .popover.selected-items {
+        --bs-popover-max-width: 350px;
+
         .items {
             max-height: 300px;
             overflow-y: auto;
 
             .selected-item {
-                display: block;
+                display: flex;
                 margin: 0 8px 3px 0;
                 border-radius: 6px;
                 padding: 4px 6px;
-
+                word-break: break-all;
                 &:hover {
                     background-color: var(--bs-light);
                 }
 
-                a:hover {
-                    text-decoration: none;
-                }
-
-                a:before {
-                    color: var(--bs-gray);
+                a {
+                    padding-right:.5rem;
 
                     &:hover {
-                        color: var(--bs-gray-dark);
+                        text-decoration: none;
+                    }
+
+                    &:before {
+                        color: var(--bs-gray);
+
+                        &:hover {
+                            color: var(--bs-gray-dark);
+                        }
                     }
                 }
             }
