@@ -2,6 +2,33 @@
 
 
 
+## [5.2.0](https://github.com/plone/mockup/compare/5.2.0-beta.5...5.2.0) (2025-02-07)
+
+
+### Bug Fixes
+
+
+* **pat datatables:** provide simple intitialization test ([addbacf](https://github.com/plone/mockup/commit/addbacf0fb6eb5be2ecea7929c2ace5538f404d2))
+
+
+* **pat structure:** Minor popover styling fixes. ([653766d](https://github.com/plone/mockup/commit/653766d89bc6fee6fa67161e3d095e2d9a4f6768))
+
+
+
+### Maintenance
+
+
+* **bundle:** downgrade patternslib. ([78c4163](https://github.com/plone/mockup/commit/78c41639a34adff20b2e958be052ff4600f573cd))
+
+
+* **bundle:** upgrade packages ([154bf8b](https://github.com/plone/mockup/commit/154bf8b98c9e08c3b904bafccffc2cde249623d7))
+
+
+* **bundle:** Use latest backbone. ([c4deddb](https://github.com/plone/mockup/commit/c4deddb5e2e9f059cb32aad08041d3e60230b219))
+
+
+* **pat structure:** skip one very long lasting test for now. ([e3f7c0d](https://github.com/plone/mockup/commit/e3f7c0d3f3a2b843902a4dd7dcfe4fc98e6d98cd))
+
 ## [5.2.0-beta.5](https://github.com/plone/mockup/compare/5.2.0-beta.4...5.2.0-beta.5) (2025-01-28)
 
 
