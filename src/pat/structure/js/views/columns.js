@@ -15,10 +15,10 @@ export default PopoverView.extend({
         <button class="btn btn-block btn-primary btn-sm"><%- _t("Save") %></button>`),
     itemTemplate: _.template(`
         <li>
-            <label>
-                <input type="checkbox" value="<%- id %>"/>
-                <%- title %>
-            </label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="columnswitch-<%- id %>" value="<%- id %>"/>
+                <label class="form-check-label" for="columnswitch-<%- id %>"><%- title %></label>
+            </div>
         </li>`),
     events: {
         "click button": "applyButtonClicked",

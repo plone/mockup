@@ -10,5 +10,5 @@ config.transformIgnorePatterns = [
 // add svelte-jester
 config.transform["^.+\\.svelte$"] = "svelte-jester";
 
-console.log(JSON.stringify(config, null, 4));
+// console.log(JSON.stringify(config, null, 4));
 module.exports = config;

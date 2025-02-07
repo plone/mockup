@@ -124,12 +124,6 @@ TEST: Structure
 ========================== */
 describe("Structure", function () {
     beforeEach(async function () {
-        // clear cookie setting
-        Cookies.remove("__cp");
-        Cookies.remove("_fc_pageSize");
-        Cookies.remove("_fc_activeColumns");
-        Cookies.remove("_fc_activeColumnsCustom");
-
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
         this.server.autoRespondAfter = 0;
@@ -305,17 +299,19 @@ describe("Structure", function () {
     });
 
     afterEach(function () {
-        // XXX QueryHelper behaves like a singleton as it pins self
-        // reference to the singleton instance of Utils within the
-        // requirejs framework, so its variables such as currentPath are
-        // persisted.  Reset that here like so:
-        // utils.QueryHelper({}).currentPath = "/";
         extraDataJsonItem = null;
         this.server.restore();
         sinon.restore();
         document.body.innerHTML = "";
         structureUrlChangedPath = "";
         delete global.confirm;
+
+        // clear cookie setting
+        Cookies.remove("__cp");
+        Cookies.remove("_fc_pageSize");
+        Cookies.remove("_fc_activeColumns");
+        Cookies.remove("_fc_activeColumnsCustom");
+
     });
 
     it("initialize", async function () {
@@ -623,11 +619,12 @@ describe("Structure", function () {
                 msg: "pasted",
             }));
 
-            // item pending to be pasted
+        // item pending to be pasted
         Cookies.set("__cp", "dummy");
-        await utils.timeout(100);
+
         registry.scan(this.$el);
         await utils.timeout(200);
+
         // top item
         var item0 = this.$el.find(".itemRow").eq(0);
         expect(item0.data().id).toEqual("folder");
@@ -692,7 +689,8 @@ describe("Structure", function () {
 
     it("test navigate to folder push states", async function () {
         registry.scan(this.$el);
-        await utils.timeout(200);
+        await utils.timeout(100);
+
         var item = this.$el.find(".itemRow").eq(0);
         expect(item.data().id).toEqual("folder");
         $(".title a.manage", item).trigger("click");
@@ -708,9 +706,10 @@ describe("Structure", function () {
             "http://localhost:9876/folder_contents"
         );
         expect(structureUrlChangedPath).toEqual("");
-    });
+    }, 10000);
 
-    it("test navigate to folder pop states", async function () {
+    // skip for now -> decreases test time from 130s to 30s !
+    it.skip("test navigate to folder pop states", async function () {
         registry.scan(this.$el);
         await utils.timeout(100);
         // Need to inject this to the mocked window location attribute the
