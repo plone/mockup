@@ -46,3 +46,11 @@ bundle-pre:
 	-$(YARN) unlink @patternslib/pat-code-editor
 	-$(YARN) unlink @patternslib/patternslib
 	$(YARN) install --force
+
+.PHONY: storybook
+storybook: ## Run Storybook in dev mode
+	$(YARN) run storybook
+
+.PHONY: build-storybook
+build-storybook: ## Build Storybook as static files
+	$(YARN) build-storybook
