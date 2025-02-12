@@ -359,11 +359,21 @@
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
 </li>
 </ol>
+<h2>Prerequisites</h2>
+<p>Prepare your system by installing prerequisites.</p>
+<h3>pre-commit</h3>
+<p><code>mockup</code> uses <a href="https://pre-commit.com/">pre-commit</a> to automate code quality checks before every commit.</p>
+<p>Install pre-commit either with your system package manager.
+Alternatively you can install pre-commit into your Python user.</p>
+<pre class="language-shell"><code class="language-shell">python <span class="token parameter variable">-m</span> pip <span class="token function">install</span> <span class="token parameter variable">--user</span> pre-commit</code></pre>
+<p>Once installed, set up the git hook scripts to run on every commit.</p>
+<pre class="language-shell"><code class="language-shell">pre-commit <span class="token function">install</span></code></pre>
+<h3>Node.js</h3>
+<ul>
+<li>Have a current version of Node.js installed.</li>
+</ul>
 <h2>Install</h2>
 <ul>
-<li>
-<p>Have a current version of Node.js installed.</p>
-</li>
 <li>
 <p>To install, run: <code>make install</code>.</p>
 </li>
