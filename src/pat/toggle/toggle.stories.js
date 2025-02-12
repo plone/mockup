@@ -1,6 +1,6 @@
 import $ from "jquery";
-import registry from "@patternslib/patternslib/src/core/registry";
-import Toggle from "../../src/pat/toggle/toggle.js";
+import { RenderHTML } from "../../../.storybook/setup.js";
+import Toggle from "./toggle.js";
 
 export default {
     title: "Patterns/Toggle",
@@ -24,18 +24,6 @@ export default {
             },
         },
     },
-};
-
-const RenderHTML = (args, getStoryHtml) => {
-    const wrapper = document.createElement("div");
-    wrapper.innerHTML = getStoryHtml(args);
-
-    // Ensure PatternsLib initializes after render
-    setTimeout(() => {
-        registry.scan(wrapper);
-    }, 300);
-
-    return wrapper;
 };
 
 // Toggle itself
