@@ -20,10 +20,31 @@ There are several options to integrate Mockup.
     <script src="https://cdn.jsdelivr.net/npm/@plone/mockup@latest/dist/bundle.min.js"></script>
     ```
 
+## Prerequisites
 
-## Install
+Prepare your system by installing prerequisites.
+
+### pre-commit
+
+`mockup` uses [pre-commit](https://pre-commit.com/) to automate code quality checks before every commit.
+
+Install pre-commit either with your system package manager.
+Alternatively you can install pre-commit into your Python user.
+
+```shell
+python -m pip install --user pre-commit
+```
+
+Once installed, set up the git hook scripts to run on every commit.
+
+```shell
+pre-commit install
+```
+### Node.js
 
 -   Have a current version of Node.js installed.
+
+## Install
 
 -   To install, run: `make install`.
 
