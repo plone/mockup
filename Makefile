@@ -48,7 +48,7 @@ bundle-pre:
 	$(YARN) install --force
 
 .PHONY: storybook
-storybook: ## Run Storybook in dev mode
+storybook: install ## Run Storybook in dev mode
 	$(YARN) run storybook
 
 .PHONY: build-storybook
