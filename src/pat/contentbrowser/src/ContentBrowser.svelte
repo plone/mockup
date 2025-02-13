@@ -95,7 +95,6 @@
         } else {
             const pathParts = item.path.split("/");
             const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
-            currentPath.set(folderPath || $config.rootPath);
             updatePreview({ data: item });
         }
         scrollToRight();
@@ -166,7 +165,7 @@
             } else {
                 // unselect
                 [...prevSelection].map((el) => el.classList.remove("selectedItem"));
-                changePath(item, e);
+                changePath(item, e);                
             }
         } else {
             changePath(item, e);
@@ -174,7 +173,7 @@
         
         e.currentTarget.focus(); // needed for keyboard navigation
         e.currentTarget.classList.add("selectedItem");
-    }
+    } 
 
     function initKeyboardNav() {
         // focus first element when showing contentbrowser
