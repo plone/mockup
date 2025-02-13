@@ -170,7 +170,7 @@
         } else {
             changePath(item, e);
         }
-        
+
         e.currentTarget.focus(); // needed for keyboard navigation
         e.currentTarget.classList.add("selectedItem");
     } 
@@ -454,181 +454,195 @@
             {:then levels}
                 <div class="levelColumns">
                     {#each levels as level, i (level.path)}
-                        <div
-                            class="levelColumn{i % 2 == 0 ? ' odd' : ' even'} {i ===
-                            levels.length - 1
-                                ? 'active'
-                                : ''}"
-                            in:fly|local={{ duration: 500 }}
-                        >
-                            <div class="levelToolbar">
-                                {#if i == 0 && $config.mode == "browse"}
-                                    <button
-                                        type="button"
-                                        class="btn btn-link btn-xs ps-0"
-                                        tabindex="0"
-                                        on:keydown={() => changePath($config.rootPath)}
-                                        on:click={() => changePath($config.rootPath)}
-                                        ><svg
-                                            use:resolveIcon={{ iconName: "house" }}
-                                        /></button
-                                    >
-                                {/if}
-                                {#if i == levels.length - 1}
-                                    {#if level.selectable && !level.showFilter && !previewItem.UID}
+                        {#if $previewUids.length < 2 || !$previewUids.includes(level.UID)}
+                            <div
+                                class="levelColumn{i % 2 == 0 ? ' odd' : ' even'} {i ===
+                                levels.length - 1
+                                    ? 'active'
+                                    : ''}"
+                                in:fly|local={{ duration: 500 }}
+                            >
+                                <div class="levelToolbar">
+                                    {#if i == 0 && $config.mode == "browse"}
                                         <button
-                                            class="btn btn-xs btn-outline-primary d-flex align-items-center"
-                                            title={_t("select ${level_path}", {
-                                                level_path: level.Title,
-                                            })}
-                                            disabled={!isSelectable(level)}
-                                            on:click|preventDefault={() =>
-                                                addItem(level)}
+                                            type="button"
+                                            class="btn btn-link btn-xs ps-0"
+                                            tabindex="0"
+                                            on:keydown={() =>
+                                                changePath($config.rootPath)}
+                                            on:click={() => changePath($config.rootPath)}
                                             ><svg
-                                                use:resolveIcon={{ iconName: "plus" }}
-                                            /> <span class="select-button-ellipsis">{level.Title}</span></button
+                                                use:resolveIcon={{ iconName: "house" }}
+                                            /></button
                                         >
                                     {/if}
-                                    <div class="levelActions">
-                                        {#if $config.mode !== "search"}
-                                            {#if level.searchTerm || level.showFilter}
-                                                <input
-                                                    type="text"
-                                                    name="levelFilter"
-                                                    class="form-control form-control-sm"
-                                                    value={level.searchTerm}
-                                                    on:input={filterLevelKeyup}
-                                                />
-                                                <button
-                                                    class="btn btn-link btn-xs level-filter"
-                                                    title={_t("clear filter")}
-                                                    on:click|preventDefault={() => {
-                                                        filterLevel("");
-                                                        level.showFilter = false;
+                                    {#if i == levels.length - 1}
+                                        {#if level.selectable && !level.showFilter && !previewItem.UID}
+                                            <button
+                                                class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                                title={_t("select ${level_path}", {
+                                                    level_path: level.Title,
+                                                })}
+                                                disabled={!isSelectable(level)}
+                                                on:click|preventDefault={() =>
+                                                    addItem(level)}
+                                                ><svg
+                                                    use:resolveIcon={{
+                                                        iconName: "plus",
                                                     }}
+                                                />
+                                                <span class="select-button-ellipsis"
+                                                    >{level.Title}</span
+                                                ></button
+                                            >
+                                        {/if}
+                                        <div class="levelActions">
+                                            {#if $config.mode !== "search"}
+                                                {#if level.searchTerm || level.showFilter}
+                                                    <input
+                                                        type="text"
+                                                        name="levelFilter"
+                                                        class="form-control form-control-sm"
+                                                        value={level.searchTerm}
+                                                        on:input={filterLevelKeyup}
+                                                    />
+                                                    <button
+                                                        class="btn btn-link btn-xs level-filter"
+                                                        title={_t("clear filter")}
+                                                        on:click|preventDefault={() => {
+                                                            filterLevel("");
+                                                            level.showFilter = false;
+                                                        }}
+                                                    >
+                                                        <svg
+                                                            use:resolveIcon={{
+                                                                iconName: "x",
+                                                            }}
+                                                        /></button
+                                                    >
+                                                {:else}
+                                                    <button
+                                                        class="btn btn-link btn-xs level-filter"
+                                                        title={_t("level filter")}
+                                                        on:click|preventDefault={() =>
+                                                            (level.showFilter = true)}
+                                                    >
+                                                        <svg
+                                                            use:resolveIcon={{
+                                                                iconName: "filter",
+                                                            }}
+                                                        /></button
+                                                    >
+                                                {/if}
+                                            {/if}
+                                            {#if !gridView}
+                                                <button
+                                                    class="btn btn-link btn-xs grid-view"
+                                                    title={_t("grid view")}
+                                                    on:click={() => (gridView = true)}
                                                 >
                                                     <svg
                                                         use:resolveIcon={{
-                                                            iconName: "x",
+                                                            iconName: "grid",
                                                         }}
-                                                    /></button
-                                                >
+                                                    />
+                                                </button>
                                             {:else}
                                                 <button
-                                                    class="btn btn-link btn-xs level-filter"
-                                                    title={_t("level filter")}
-                                                    on:click|preventDefault={() =>
-                                                        (level.showFilter = true)}
+                                                    class="btn btn-link btn-xs grid-view"
+                                                    title={_t("list view")}
+                                                    on:click={() => (gridView = false)}
                                                 >
                                                     <svg
                                                         use:resolveIcon={{
-                                                            iconName: "filter",
+                                                            iconName: "list",
                                                         }}
-                                                    /></button
-                                                >
-                                            {/if}
-                                        {/if}
-                                        {#if !gridView}
-                                            <button
-                                                class="btn btn-link btn-xs grid-view"
-                                                title={_t("grid view")}
-                                                on:click={() => (gridView = true)}
-                                            >
-                                                <svg
-                                                    use:resolveIcon={{
-                                                        iconName: "grid",
-                                                    }}
-                                                />
-                                            </button>
-                                        {:else}
-                                            <button
-                                                class="btn btn-link btn-xs grid-view"
-                                                title={_t("list view")}
-                                                on:click={() => (gridView = false)}
-                                            >
-                                                <svg
-                                                    use:resolveIcon={{
-                                                        iconName: "list",
-                                                    }}
-                                                />
-                                            </button>
-                                        {/if}
-                                    </div>
-                                {/if}
-                            </div>
-                            <div class="levelItems">
-                                {#each level.results || [] as item, n}
-                                    <!-- svelte-ignore missing-declaration -->
-                                    <div
-                                        class="contentItem{n % 2 == 0
-                                            ? ' odd'
-                                            : ' even'}{itemInPath(item)
-                                            ? ' inPath'
-                                            : ''}{$previewUids.indexOf(item.UID) != -1
-                                            ? ' selectedItem'
-                                            : ''}{!isSelectable(item)
-                                            ? ' text-body-tertiary'
-                                            : ''}"
-                                        role="button"
-                                        tabindex={n}
-                                        data-uuid={item.UID}
-                                        on:keydown|preventDefault={(e) =>
-                                            keyboardNavigation(item, e)}
-                                        on:click={(e) => clickItem(item, e)}
-                                    >
-                                        <div
-                                            class={gridView
-                                                ? "grid-preview"
-                                                : "item-title"}
-                                            title="{item.portal_type}: {item.Title}"
-                                        >
-                                            {#if gridView && item.getIcon}
-                                                <img
-                                                    src={`${item.getURL}/@@images/image/thumb`}
-                                                    alt={item.Title}
-                                                />
-                                            {:else}
-                                                <svg
-                                                    use:resolveIcon={{
-                                                        iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                                    }}
-                                                />
-                                            {/if}
-                                            {item.Title}
-                                            {#if $config.mode == "search"}
-                                                <br /><span class="small"
-                                                    >{item.path}</span
-                                                >
+                                                    />
+                                                </button>
                                             {/if}
                                         </div>
-                                        {#if item.is_folderish && $config.mode == "browse"}
-                                            <div class="browseSub">
-                                                <svg
-                                                    use:resolveIcon={{
-                                                        iconName: "arrow-right-circle",
-                                                    }}
-                                                />
+                                    {/if}
+                                </div>
+                                <div class="levelItems">
+                                    {#each level.results || [] as item, n}
+                                        <!-- svelte-ignore missing-declaration -->
+                                        <div
+                                            class="contentItem{n % 2 == 0
+                                                ? ' odd'
+                                                : ' even'}{itemInPath(item)
+                                                ? ' inPath'
+                                                : ''}{$previewUids.indexOf(item.UID) !=
+                                            -1
+                                                ? ' selectedItem'
+                                                : ''}{!isSelectable(item)
+                                                ? ' text-body-tertiary'
+                                                : ''}"
+                                            role="button"
+                                            tabindex={n}
+                                            data-uuid={item.UID}
+                                            on:keydown|preventDefault={(e) =>
+                                                keyboardNavigation(item, e)}
+                                            on:click={(e) => clickItem(item, e)}
+                                        >
+                                            <div
+                                                class={gridView
+                                                    ? "grid-preview"
+                                                    : "item-title"}
+                                                title="{item.portal_type}: {item.Title}"
+                                            >
+                                                {#if gridView && item.getIcon}
+                                                    <img
+                                                        src={`${item.getURL}/@@images/image/thumb`}
+                                                        alt={item.Title}
+                                                    />
+                                                {:else}
+                                                    <svg
+                                                        use:resolveIcon={{
+                                                            iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                        }}
+                                                    />
+                                                {/if}
+                                                {item.Title}
+                                                {#if $config.mode == "search"}
+                                                    <br /><span class="small"
+                                                        >{item.path}</span
+                                                    >
+                                                {/if}
                                             </div>
-                                        {/if}
-                                    </div>
-                                {/each}
-                                {#if level.more}
-                                    <div
-                                        class="loadmore"
-                                        data-level-path={level.path}
-                                        data-level-next-page={parseInt(level.page) + 1}
-                                        use:loadMore
-                                    >
-                                        <div class="spinner-border" role="status"></div>
-                                    </div>
-                                {/if}
-                                {#if level.total == 0}
-                                    <div class="contentItem">
-                                        <p>{_t("no results found")}</p>
-                                    </div>
-                                {/if}
+                                            {#if item.is_folderish && $config.mode == "browse"}
+                                                <div class="browseSub">
+                                                    <svg
+                                                        use:resolveIcon={{
+                                                            iconName:
+                                                                "arrow-right-circle",
+                                                        }}
+                                                    />
+                                                </div>
+                                            {/if}
+                                        </div>
+                                    {/each}
+                                    {#if level.more}
+                                        <div
+                                            class="loadmore"
+                                            data-level-path={level.path}
+                                            data-level-next-page={parseInt(level.page) +
+                                                1}
+                                            use:loadMore
+                                        >
+                                            <div
+                                                class="spinner-border"
+                                                role="status"
+                                            ></div>
+                                        </div>
+                                    {/if}
+                                    {#if level.total == 0}
+                                        <div class="contentItem">
+                                            <p>{_t("no results found")}</p>
+                                        </div>
+                                    {/if}
+                                </div>
                             </div>
-                        </div>
+                        {/if}
                     {/each}
                     {#if previewItem?.UID && $previewUids.length == 1}
                         <div class="preview" in:fly|local={{ duration: 500 }}>
@@ -644,8 +658,11 @@
                                                 addItem(previewItem)}
                                             ><svg
                                                 use:resolveIcon={{ iconName: "plus" }}
-                                            /> <span class="select-button-ellipsis">{previewItem.Title}</span> </button
-                                        >
+                                            />
+                                            <span class="select-button-ellipsis"
+                                                >{previewItem.Title}</span
+                                            >
+                                        </button>
                                     {/if}
                                 </div>
                             </div>
@@ -709,9 +726,10 @@
                                     class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                     title={_t("add selected items")}
                                     on:click|preventDefault={addSelectedItems}
-                                    ><svg
-                                        use:resolveIcon={{ iconName: "plus" }}
-                                    /> <span class="select-button-ellipsis">{_t("add selected items")}</span>
+                                    ><svg use:resolveIcon={{ iconName: "plus" }} />
+                                    <span class="select-button-ellipsis"
+                                        >{_t("add selected items")}</span
+                                    >
                                 </button>
                             </div>
                             <div class="info">
@@ -898,7 +916,7 @@
         padding: 0.25rem 0;
     }
 
-    .select-button-ellipsis{
+    .select-button-ellipsis {
         white-space: nowrap;
         max-width: 150px;
         text-overflow: ellipsis;
