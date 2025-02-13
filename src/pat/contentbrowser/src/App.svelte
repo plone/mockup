@@ -1,4 +1,6 @@
 <script>
+    console.log("Using App:", import.meta.url);
+
     import logger from "@patternslib/patternslib/src/core/logging";
     import { getContext } from "svelte";
     import ContentBrowser from "./ContentBrowser.svelte";

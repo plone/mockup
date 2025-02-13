@@ -101,6 +101,16 @@
         "sass": "~1.77.8",
         "underscore": "1.13.7"
     },
+    "imports": {
+        "#pat/contentbrowser/src/App": {
+            "storybook": "./src/pat/contentbrowser/src/App.mock.js",
+            "default": "./src/pat/contentbrowser/src/App.svelte"
+        },
+        "#pat/contentbrowser/src/SelectedItem": {
+            "storybook": "./src/pat/contentbrowser/src/SelectedItem.mock.js",
+            "default": "./src/pat/contentbrowser/src/SelectedItem.svelte"
+        }
+    },
     "scripts": {
         "clean": "rimraf docs/_site",
         "build:webpack": "NODE_ENV=production webpack --config webpack.config.js",

@@ -4,6 +4,11 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import plone_registry from "@plone/registry";
 
+// TODO: make SB mock work ?
+// Subpath imports from package.json (so Storybook can mock them)
+import SelectedItem from "#pat/contentbrowser/src/SelectedItem";
+import ContentBrowserApp from "#pat/contentbrowser/src/App";
+
 // Contentbrowser pattern
 
 export const parser = new Parser("contentbrowser");

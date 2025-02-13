@@ -38,6 +38,40 @@ module.exports = {
             use: ["@svgr/webpack"],
         });
 
+        // Support Svelte
+        config.module.rules.push({
+            test: /\.svelte$/,
+            use: [
+                {
+                    loader: "svelte-loader",
+                    options: {
+                        compilerOptions: {
+                            dev: true,
+                        },
+                        emitCss: true,
+                        hotReload: true,
+                    },
+                },
+            ],
+        });
+
+        // TODO: make the mock work
+        // Force Storybook to always use the mock instead of the real component ?
+        config.resolve.alias["./src/pat/contentbrowser/src/App.svelte"] = path.resolve(
+            __dirname,
+            "../src/pat/contentbrowser/src/App.mock.js"
+        );
+        config.resolve.alias["#pat/contentbrowser/src/App"] = path.resolve(
+            __dirname,
+            "../src/pat/contentbrowser/src/App.mock.js"
+        );
+        config.resolve.alias["./src/pat/contentbrowser/src/SelectedItem.svelte"] =
+            path.resolve(__dirname, "../src/pat/contentbrowser/src/App.mock.js");
+        config.resolve.alias["#pat/contentbrowser/src/App"] = path.resolve(
+            __dirname,
+            "../src/pat/contentbrowser/src/SelectedItem.mock.js"
+        );
+
         return config;
     },
 };
