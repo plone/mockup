@@ -171,7 +171,7 @@
         } else {
             changePath(item, e);
         }
-
+        
         e.currentTarget.focus(); // needed for keyboard navigation
         e.currentTarget.classList.add("selectedItem");
     }
@@ -477,11 +477,8 @@
                                 {/if}
                                 {#if i == levels.length - 1}
                                     {#if level.selectable && !level.showFilter && !previewItem.UID}
-                                        <span class="selectLevel me-3"
-                                            >{level.Title}</span
-                                        >
                                         <button
-                                            class="btn btn-success btn-xs"
+                                            class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                             title={_t("select ${level_path}", {
                                                 level_path: level.Title,
                                             })}
@@ -489,8 +486,8 @@
                                             on:click|preventDefault={() =>
                                                 addItem(level)}
                                             ><svg
-                                                use:resolveIcon={{ iconName: "check" }}
-                                            /></button
+                                                use:resolveIcon={{ iconName: "plus" }}
+                                            /> <span class="select-button-ellipsis">{level.Title}</span></button
                                         >
                                     {/if}
                                     <div class="levelActions">
@@ -638,19 +635,17 @@
                         <div class="preview" in:fly|local={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <div class="selectLevel me-3">
-                                    <span class="me-3">{previewItem.Title}</span>
-
                                     {#if isSelectable(previewItem)}
                                         <button
-                                            class="btn btn-success btn-xs"
+                                            class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                             title={_t("select ${preview_path}", {
                                                 preview_path: previewItem.Title,
                                             })}
                                             on:click|preventDefault={() =>
                                                 addItem(previewItem)}
                                             ><svg
-                                                use:resolveIcon={{ iconName: "check" }}
-                                            /></button
+                                                use:resolveIcon={{ iconName: "plus" }}
+                                            /> <span class="select-button-ellipsis">{previewItem.Title}</span> </button
                                         >
                                     {/if}
                                 </div>
@@ -712,13 +707,13 @@
                         <div class="preview" in:fly|local={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <button
-                                    class="btn btn-success btn-xs"
+                                    class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                     title={_t("add selected items")}
                                     on:click|preventDefault={addSelectedItems}
                                     ><svg
-                                        use:resolveIcon={{ iconName: "check" }}
-                                    /></button
-                                >
+                                        use:resolveIcon={{ iconName: "plus" }}
+                                    /> <span class="select-button-ellipsis">{_t("add selected items")}</span>
+                                </button>
                             </div>
                             <div class="info">
                                 <svg
@@ -902,5 +897,12 @@
     .loadmore {
         text-align: center;
         padding: 0.25rem 0;
+    }
+
+    .select-button-ellipsis{
+        white-space: nowrap;
+        max-width: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 </style>
