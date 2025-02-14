@@ -17,7 +17,14 @@ export default function (config, pathCache) {
         if (config.selectableTypes.length) {
             query["selectableTypes"] = config.selectableTypes;
         }
-        return await request(query);
+        try {
+            return await request(query);
+        }
+        catch {
+            return {
+                "error": "Could load data from backend."
+            };
+        }
     }
 
     const browse = async (path, searchTerm, updateCache) => {
@@ -113,7 +120,7 @@ export default function (config, pathCache) {
                         // check if level is selectable (config.selectableTypes)
                         level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.results[0].portal_type) != -1);
                     }
-                    level.gridView = false;
+                    level.showFilter = false;
                     pathCache.update((n) => {
                         n[p] = level;
                         return n;
@@ -150,7 +157,6 @@ export default function (config, pathCache) {
             if (levels.length == 0 || levels[0].searchTerm != searchTerm) {
                 level.more = has_more;
                 level.selectable = false;
-                level.gridView = false;
                 return [level,];
             }
 
@@ -203,8 +209,12 @@ export default function (config, pathCache) {
         updateCache = false,
         loadMorePath = "",
         page = 1,
+        mode = null,
     }) => {
-        if (config.mode === "search") {
+        if(mode == null) {
+            mode = config.mode;
+        }
+        if (mode === "search") {
             await search(searchTerm, page);
         } else if (loadMorePath) {
             const pC = get(pathCache);

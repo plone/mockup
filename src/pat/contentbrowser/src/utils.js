@@ -216,7 +216,11 @@ export function updateRecentlyUsed(item, config) {
 
 
 export function formatDate(dateval) {
+    // fix underscore replacement by /mockup/src/core/i18n.js
+    // the "wrong" fix in i18n.js exists for use by select2 and tinymce
+    // this fix should be moved to the mockup modules of tinymce and select
+    // see: https://github.com/plone/mockup/issues/1429
     const d = Date.parse(dateval);
     const i18n = new I18n();
-    return new Date(d).toLocaleString(i18n.currentLanguage);
+    return new Date(d).toLocaleString(i18n.currentLanguage.replace("_", "-"));    
 }

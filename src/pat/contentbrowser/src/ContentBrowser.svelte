@@ -39,6 +39,9 @@
     let previewItem = {};
     let keyboardNavInitialized = false;
     let shiftKey = false;
+    let searchTerm = null;
+    let gridView = false;
+    let defaultConfigMode = $config.mode;
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
@@ -86,16 +89,20 @@
     }
 
     function showPreview(item) {
-        if ($config.mode == "search") {
-            // one level search mode
-            updatePreview({ data: item });
-        } else if (item.is_folderish) {
+        if ($config.mode == "browse") {
             $previewUids = [item.UID];
-            currentPath.set(item.path);
+
+            if (item.is_folderish) {
+                // show folder
+                currentPath.set(item.path);
+            } else {
+                // show non folderish preview
+                const pathParts = item.path.split("/");
+                const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
+                currentPath.set(folderPath || "/");
+                updatePreview({ data: item });
+            }
         } else {
-            const pathParts = item.path.split("/");
-            const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
-            currentPath.set(folderPath || $config.rootPath);
             updatePreview({ data: item });
         }
         scrollToRight();
@@ -127,17 +134,16 @@
 
         // check for multiselection
         const levelWrapper = e.currentTarget.closest(".levelItems");
-        const prevSelection = levelWrapper.querySelectorAll(".selectedItem");
+        let prevSelection = levelWrapper.querySelectorAll(".selectedItem");
 
         if (prevSelection.length && $config.maximumSelectionSize != 1) {
             // check for pressed shift or ctrl/meta key for multiselection
-
             if (shiftKey || e?.shiftKey) {
                 // iter through the wrapper children and select all
                 // inbetween current selection and last preview
                 let select = false;
                 for (const el of levelWrapper.children) {
-                    if ([item.UID, previewItem.UID].indexOf(el.dataset.uuid) !== -1) {
+                    if ([item.UID, $previewUids[0]].indexOf(el.dataset.uuid) !== -1) {
                         if (select) {
                             // stop selecting but make sure the last item is selected too
                             updatePreview({
@@ -155,6 +161,7 @@
                         action: select ? "add" : "remove",
                     });
                 }
+                shiftKey = false;
             } else if (e?.metaKey || e?.ctrlKey) {
                 // de/select multiple single items
                 // NOTE: only for mouse click event
@@ -200,7 +207,7 @@
         const node = e.currentTarget;
         shiftKey = e.shiftKey;
         if (e.key == "Escape") {
-            cancelSelection();
+            closeBrowser();
         }
         if (
             e.key == "ArrowDown" &&
@@ -254,9 +261,7 @@
             selectedUids.update(() => $selectedItems.map((x) => x.UID));
         }
         updateRecentlyUsed(item, $config);
-        updatePreview({ action: "clear" });
-        $showContentBrowser = false;
-        keyboardNavInitialized = false;
+        closeBrowser();
     }
 
     async function addSelectedItems() {
@@ -269,9 +274,7 @@
             return n;
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
-        updatePreview({ action: "clear" });
-        $showContentBrowser = false;
-        keyboardNavInitialized = false;
+        closeBrowser();
     }
 
     function selectRecentlyUsed(event) {
@@ -297,7 +300,9 @@
         changePath(item);
     }
 
-    function cancelSelection() {
+    function closeBrowser() {
+        searchTerm = null;
+        $config.mode = defaultConfigMode;
         $showContentBrowser = false;
         keyboardNavInitialized = false;
         updatePreview({ action: "clear" });
@@ -321,9 +326,39 @@
         return $config.mode == "browse" && $currentPath.indexOf(item.path) != -1;
     }
 
-    const filterItems = utils.debounce((e) => {
-        contentItems.get({ path: $currentPath, searchTerm: e.target.value });
+    const searchItemsKeyup = utils.debounce(async (e) => {
+        await searchItems(e.target.value);
     }, 300);
+
+    async function searchItems(val) {
+        searchTerm = val;
+        if (defaultConfigMode === "browse") {
+            // switching to search mode in global search if configured as "browse" mode
+            $config.mode = searchTerm !== "" ? "search" : "browse";
+        }
+        await contentItems.get({
+            path: $currentPath,
+            searchTerm: searchTerm,
+            mode: $config.mode,
+        });
+        updatePreview({ action: "clear" });
+        if(!val) {
+            scrollToRight();
+        }
+    }
+
+    const filterLevelKeyup = utils.debounce(async (e) => {
+        await filterLevel(e.target.value);
+    }, 300);
+
+    const filterLevel = async (val) => {
+        if (val !== "") {
+            updatePreview({ action: "clear" });
+        } else {
+            scrollToRight();
+        }
+        await contentItems.get({ path: $currentPath, searchTerm: val });
+    };
 
     function loadMore(node) {
         const observer = new IntersectionObserver(
@@ -373,14 +408,25 @@
                 initKeyboardNav();
             }}
             use:clickOutside
-            on:click_outside={cancelSelection}
+            on:click_outside={closeBrowser}
         >
             <div class="toolBar navbar">
-                <div class="filter me-3">
-                    <input type="text" name="filter" on:input={filterItems} />
-                    <label for="filter"
-                        ><svg use:resolveIcon={{ iconName: "search" }} /></label
-                    >
+                <div class="input-group w-auto">
+                    <input
+                        type="text"
+                        name="filter"
+                        class="form-control form-control-sm"
+                        value={searchTerm}
+                        on:input={searchItemsKeyup}
+                    />
+                    {#if searchTerm}
+                        <button
+                            class="btn btn-light btn-sm"
+                            type="button"
+                            on:click|preventDefault={() => searchItems("")}
+                            ><svg use:resolveIcon={{ iconName: "x" }} /></button
+                        >
+                    {/if}
                 </div>
                 <RecentlyUsed on:selectItem={selectRecentlyUsed} />
                 <Favorites on:selectItem={selectFavorite} />
@@ -402,7 +448,7 @@
                 <button
                     class="btn btn-link text-white ms-auto"
                     tabindex="0"
-                    on:click|preventDefault={() => cancelSelection()}
+                    on:click|preventDefault={() => closeBrowser()}
                     ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                 >
             </div>
@@ -411,103 +457,156 @@
             {:then levels}
                 <div class="levelColumns">
                     {#each levels as level, i (level.path)}
-                        <div
-                            class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
-                            in:fly|local={{ duration: 300 }}
-                        >
-                            <div class="levelToolbar">
-                                {#if i == 0 && $config.mode == "browse"}
-                                    <button
-                                        type="button"
-                                        class="btn btn-link btn-xs ps-0"
-                                        tabindex="0"
-                                        on:keydown={() => changePath($config.rootPath)}
-                                        on:click={() => changePath($config.rootPath)}
-                                        ><svg
-                                            use:resolveIcon={{ iconName: "house" }}
-                                        /></button
-                                    >
-                                {/if}
-                                {#if level.selectable}
-                                    <button
-                                        class="btn btn-primary btn-xs"
-                                        title={level.displayPath}
-                                        disabled={!isSelectable(level)}
-                                        on:click|preventDefault={() => addItem(level)}
-                                    >
-                                        {_t("select ${level_path}", {
-                                            level_path: level.Title,
-                                        })}
-                                    </button>
-                                {/if}
-                                <div class="levelActions">
-                                    {#if !level.gridView}
+                        {#if $previewUids.length < 2 || !$previewUids.includes(level.UID)}
+                            <div
+                                class="levelColumn{i % 2 == 0 ? ' odd' : ' even'} {i ===
+                                levels.length - 1
+                                    ? 'active'
+                                    : ''}"
+                                in:fly|local={{ duration: 500 }}
+                            >
+                                <div class="levelToolbar">
+                                    {#if i == 0 && $config.mode == "browse"}
                                         <button
-                                            class="btn btn-link btn-xs grid-view"
-                                            on:click={() => (level.gridView = true)}
+                                            type="button"
+                                            class="btn btn-link btn-xs ps-0"
+                                            tabindex="0"
+                                            on:keydown={() =>
+                                                changePath($config.rootPath)}
+                                            on:click={() => changePath($config.rootPath)}
+                                            ><svg
+                                                use:resolveIcon={{ iconName: "house" }}
+                                            /></button
                                         >
-                                            <svg
-                                                use:resolveIcon={{ iconName: "grid" }}
-                                            />
-                                        </button>
-                                    {:else}
-                                        <button
-                                            class="btn btn-link btn-xs grid-view"
-                                            on:click={() => (level.gridView = false)}
-                                        >
-                                            <svg
-                                                use:resolveIcon={{ iconName: "list" }}
-                                            />
-                                        </button>
+                                    {/if}
+                                    {#if i == levels.length - 1}
+                                        {#if level.selectable && !level.showFilter && !previewItem.UID}
+                                            <button
+                                                class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                                title={_t("select ${level_path}", {
+                                                    level_path: level.Title,
+                                                })}
+                                                disabled={!isSelectable(level)}
+                                                on:click|preventDefault={() =>
+                                                    addItem(level)}
+                                                ><svg
+                                                    use:resolveIcon={{
+                                                        iconName: "plus",
+                                                    }}
+                                                />
+                                                <span class="select-button-ellipsis"
+                                                    >{level.Title}</span
+                                                ></button
+                                            >
+                                        {/if}
+                                        <div class="levelActions">
+                                            {#if $config.mode !== "search"}
+                                                {#if level.searchTerm || level.showFilter}
+                                                    <input
+                                                        type="text"
+                                                        name="levelFilter"
+                                                        class="form-control form-control-sm"
+                                                        value={level.searchTerm}
+                                                        on:input={filterLevelKeyup}
+                                                    />
+                                                    <button
+                                                        class="btn btn-link btn-xs level-filter"
+                                                        title={_t("clear filter")}
+                                                        on:click|preventDefault={() => {
+                                                            filterLevel("");
+                                                            level.showFilter = false;
+                                                        }}
+                                                    >
+                                                        <svg
+                                                            use:resolveIcon={{
+                                                                iconName: "x",
+                                                            }}
+                                                        /></button
+                                                    >
+                                                {:else}
+                                                    <button
+                                                        class="btn btn-link btn-xs level-filter"
+                                                        title={_t("level filter")}
+                                                        on:click|preventDefault={() =>
+                                                            (level.showFilter = true)}
+                                                    >
+                                                        <svg
+                                                            use:resolveIcon={{
+                                                                iconName: "filter",
+                                                            }}
+                                                        /></button
+                                                    >
+                                                {/if}
+                                            {/if}
+                                            {#if !gridView}
+                                                <button
+                                                    class="btn btn-link btn-xs grid-view"
+                                                    title={_t("grid view")}
+                                                    on:click={() => (gridView = true)}
+                                                >
+                                                    <svg
+                                                        use:resolveIcon={{
+                                                            iconName: "grid",
+                                                        }}
+                                                    />
+                                                </button>
+                                            {:else}
+                                                <button
+                                                    class="btn btn-link btn-xs grid-view"
+                                                    title={_t("list view")}
+                                                    on:click={() => (gridView = false)}
+                                                >
+                                                    <svg
+                                                        use:resolveIcon={{
+                                                            iconName: "list",
+                                                        }}
+                                                    />
+                                                </button>
+                                            {/if}
+                                        </div>
                                     {/if}
                                 </div>
-                            </div>
-                            <div class="levelItems">
-                                {#each level.results || [] as item, n}
-                                    <!-- svelte-ignore missing-declaration -->
-                                    <div
-                                        class="contentItem{n % 2 == 0
-                                            ? ' odd'
-                                            : ' even'}{itemInPath(item)
-                                            ? ' inPath'
-                                            : ''}{$previewUids.indexOf(item.UID) != -1
-                                            ? ' selectedItem'
-                                            : ''}{!isSelectable(item)
-                                            ? ' text-muted'
-                                            : ''}"
-                                        role="button"
-                                        tabindex={n}
-                                        data-uuid={item.UID}
-                                        on:keydown|preventDefault={(e) =>
-                                            keyboardNavigation(item, e)}
-                                        on:click={(e) => clickItem(item, e)}
-                                    >
-                                        {#if level.gridView}
-                                            <div class="grid-preview">
-                                                {#if item.getIcon}
+                                <div class="levelItems">
+                                    {#each level.results || [] as item, n}
+                                        <!-- svelte-ignore missing-declaration -->
+                                        <div
+                                            class="contentItem{n % 2 == 0
+                                                ? ' odd'
+                                                : ' even'}{itemInPath(item)
+                                                ? ' inPath'
+                                                : ''}{$previewUids.indexOf(item.UID) !=
+                                            -1
+                                                ? ' selectedItem'
+                                                : ''}{!isSelectable(item)
+                                                ? ' text-body-tertiary'
+                                                : ''}"
+                                            role="button"
+                                            tabindex={n}
+                                            data-uuid={item.UID}
+                                            on:keydown|preventDefault={(e) =>
+                                                keyboardNavigation(item, e)}
+                                            on:click={(e) => clickItem(item, e)}
+                                        >
+                                            <div
+                                                class={gridView
+                                                    ? "grid-preview"
+                                                    : "item-title"}
+                                                title="{item.portal_type}: {item.Title}"
+                                            >
+                                                {#if gridView && item.getIcon}
                                                     <img
                                                         src={`${item.getURL}/@@images/image/thumb`}
                                                         alt={item.Title}
                                                     />
                                                 {:else}
-                                                    <svg
-                                                        use:resolveIcon={{
-                                                            iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                                        }}
-                                                    />
+                                                    <span class="plone-icon">
+                                                        <svg
+                                                            use:resolveIcon={{
+                                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                            }}
+                                                        />
+                                                    </span>
                                                 {/if}
-                                                {item.Title}
-                                            </div>
-                                        {:else}
-                                            <div
-                                                class="item-title"
-                                                title="{item.portal_type}: {item.Title}"
-                                            >
-                                                <svg
-                                                    use:resolveIcon={{
-                                                        iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                                    }}
-                                                />
                                                 {item.Title}
                                                 {#if $config.mode == "search"}
                                                     <br /><span class="small"
@@ -515,48 +614,62 @@
                                                     >
                                                 {/if}
                                             </div>
-                                        {/if}
-                                        {#if item.is_folderish && $config.mode == "browse"}
-                                            <div class="browseSub">
-                                                <svg
-                                                    use:resolveIcon={{
-                                                        iconName: "arrow-right-circle",
-                                                    }}
-                                                />
-                                            </div>
-                                        {/if}
-                                    </div>
-                                {/each}
-                                {#if level.more}
-                                    <div
-                                        class="loadmore"
-                                        data-level-path={level.path}
-                                        data-level-next-page={parseInt(level.page) + 1}
-                                        use:loadMore
-                                    >
-                                        <div class="spinner-border" role="status"></div>
-                                    </div>
-                                {/if}
-                                {#if level.total == 0}
-                                    <div class="contentItem">
-                                        <p>{_t("no results found")}</p>
-                                    </div>
-                                {/if}
+                                            {#if item.is_folderish && $config.mode == "browse"}
+                                                <div class="browseSub">
+                                                    <svg
+                                                        use:resolveIcon={{
+                                                            iconName:
+                                                                "arrow-right-circle",
+                                                        }}
+                                                    />
+                                                </div>
+                                            {/if}
+                                        </div>
+                                    {/each}
+                                    {#if level.more}
+                                        <div
+                                            class="loadmore"
+                                            data-level-path={level.path}
+                                            data-level-next-page={parseInt(level.page) +
+                                                1}
+                                            use:loadMore
+                                        >
+                                            <div
+                                                class="spinner-border"
+                                                role="status"
+                                            ></div>
+                                        </div>
+                                    {/if}
+                                    {#if level.total == 0}
+                                        <div class="contentItem">
+                                            <p>{_t("no results found")}</p>
+                                        </div>
+                                    {/if}
+                                </div>
                             </div>
-                        </div>
+                        {/if}
                     {/each}
                     {#if previewItem?.UID && $previewUids.length == 1}
-                        <div class="preview">
+                        <div class="preview" in:fly|local={{ duration: 500 }}>
                             <div class="levelToolbar">
-                                <button
-                                    class="btn btn-primary btn-xs"
-                                    title={previewItem.path.split("/").pop()}
-                                    disabled={!isSelectable(previewItem)}
-                                    on:click|preventDefault={() => addItem(previewItem)}
-                                    >{_t("select ${preview_path}", {
-                                        preview_path: previewItem.Title,
-                                    })}</button
-                                >
+                                <div class="selectLevel me-3">
+                                    {#if isSelectable(previewItem)}
+                                        <button
+                                            class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                            title={_t("select ${preview_path}", {
+                                                preview_path: previewItem.Title,
+                                            })}
+                                            on:click|preventDefault={() =>
+                                                addItem(previewItem)}
+                                            ><svg
+                                                use:resolveIcon={{ iconName: "plus" }}
+                                            />
+                                            <span class="select-button-ellipsis"
+                                                >{previewItem.Title}</span
+                                            >
+                                        </button>
+                                    {/if}
+                                </div>
                             </div>
                             <div class="info">
                                 {#if previewItem.getIcon}
@@ -612,13 +725,17 @@
                         </div>
                     {/if}
                     {#if $previewUids.length > 1}
-                        <div class="preview">
+                        <div class="preview" in:fly|local={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <button
-                                    class="btn btn-primary btn-xs"
+                                    class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                    title={_t("add selected items")}
                                     on:click|preventDefault={addSelectedItems}
-                                    >{_t("add selected items")}</button
-                                >
+                                    ><svg use:resolveIcon={{ iconName: "plus" }} />
+                                    <span class="select-button-ellipsis"
+                                        >{_t("add selected items")}</span
+                                    >
+                                </button>
                             </div>
                             <div class="info">
                                 <svg
@@ -626,6 +743,11 @@
                                         iconName: "files",
                                     }}
                                 />
+                                <span class=""
+                                    >{_t("${item_count} items selected", {
+                                        item_count: $previewUids.length,
+                                    })}</span
+                                >
                             </div>
                         </div>
                     {/if}
@@ -659,7 +781,7 @@
     }
     .content-browser {
         height: 100vh;
-        min-width: 550px;
+        min-width: 450px;
         background-color: var(--bs-light-bg-subtle);
         border-left: var(--bs-border-style) var(--bs-border-width) #fff;
         z-index: 1500;
@@ -690,6 +812,7 @@
 
     .levelColumn {
         width: 320px;
+        background: rgba(var(--bs-secondary-bg-rgb), 0.55);
         border-right: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
         display: flex;
@@ -697,18 +820,24 @@
         flex-grow: 0;
         flex-shrink: 0;
     }
-
+    .levelColumn.active {
+        background: var(--bs-body-bg);
+        border-left: var(--bs-border-style) var(--bs-border-width) var(--bs-primary);
+        margin-left: -1px;
+    }
     .levelToolbar {
         width: 100%;
         height: 2.5rem;
         display: flex;
         justify-content: space-between;
+        white-space: nowrap;
         padding: 0.375rem;
         border-bottom: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
     }
     .levelToolbar > .levelActions {
         margin-left: auto;
+        display: flex;
     }
     .levelToolbar > button {
         white-space: nowrap;
@@ -734,12 +863,8 @@
         background-color: rgba(var(--bs-secondary-bg-rgb), 0.4);
     }
     .contentItem.inPath,
-    .contentItem:focus {
-        background-color: rgba(var(--bs-primary-rgb), 0.15);
-    }
     .contentItem.selectedItem {
-        background-color: var(--bs-primary);
-        color: var(--bs-body-bg);
+        background-color: rgba(var(--bs-primary-rgb), 0.15);
     }
     .contentItem > * {
         padding: 0.5rem;
@@ -751,7 +876,9 @@
     .contentItem > .browseSub {
         flex-shrink: 0;
     }
-
+    .contentItem .plone-icon {
+        display: inline-block;
+    }
     .contentItem .grid-preview > img {
         width: 95px;
         height: 95px;
@@ -761,11 +888,8 @@
     }
     .preview {
         width: 320px;
-        min-height: 300px;
-        display: flex;
-        flex-direction: column;
         flex-shrink: 0;
-        align-items: center;
+        min-height: 300px;
     }
     .preview .info {
         padding: 0.5rem;
@@ -781,7 +905,7 @@
     }
     .preview img {
         max-width: 100%;
-        max-width: 100%;
+        height: auto;
         margin-bottom: 0.5rem;
     }
 
@@ -794,5 +918,12 @@
     .loadmore {
         text-align: center;
         padding: 0.25rem 0;
+    }
+
+    .select-button-ellipsis {
+        white-space: nowrap;
+        max-width: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 </style>

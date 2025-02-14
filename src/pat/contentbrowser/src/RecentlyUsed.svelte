@@ -26,7 +26,7 @@
             <svg use:resolveIcon={{ iconName: "grid-fill" }} />
             {_t("Recently Used")}
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu dropdown-menu-end">
             {#each items.reverse() as recentlyUsed}
                 <li>
                     <a
