@@ -76,7 +76,7 @@ export default Base.extend({
             let link_url;
             try {
                 link_url = new URL(link.getAttribute("href"));
-            } catch (e) {
+            } catch {
                 // Not a valid URL.
                 // Ignore and continue.
                 continue;

@@ -261,7 +261,7 @@ describe("Related Items", function () {
                 if (pair[0] === variable) {
                     try {
                         return JSON.parse(pair[1]);
-                    } catch (e) {
+                    } catch {
                         return pair[1];
                     }
                 }
