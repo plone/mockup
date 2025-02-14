@@ -14,14 +14,6 @@ const i18n = function () {
     self.baseUrl = $("body").attr("data-i18ncatalogurl");
     self.currentLanguage = $("html").attr("lang") || "en";
 
-    // Fix for country specific languages
-    if (self.currentLanguage.split("-").length > 1) {
-        self.currentLanguage =
-            self.currentLanguage.split("-")[0] +
-            "_" +
-            self.currentLanguage.split("-")[1].toUpperCase();
-    }
-
     self.storage = null;
     self.catalogs = {};
     self.ttl = 24 * 3600 * 1000;
