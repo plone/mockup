@@ -115,7 +115,7 @@ export default Base.extend({
                 if (lang.split("-").length > 1) {
                     lang =
                         lang.split("-")[0] +
-                        "_" +
+                        "-" +
                         lang.split("-")[1].toUpperCase();
                 }         
                 await import(`select2/select2_locale_${lang}`);
