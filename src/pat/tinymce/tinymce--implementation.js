@@ -124,7 +124,7 @@ export default class TinyMCE {
         var lang = i18n.currentLanguage;
         if (lang !== "en" && self.options.tiny.language !== "en") {
             try {
-                await import(`tinymce-i18n/langs6/${lang}`);
+                await import(`tinymce-i18n/langs7/${lang}`);
             } catch {
                 log.debug("Could not load TinyMCE language: ", lang);
                 try {
@@ -135,7 +135,7 @@ export default class TinyMCE {
                         lang = lang + "_" + lang.toUpperCase();
                     }
                     log.debug("Trying with: ", lang);
-                    await import(`tinymce-i18n/langs6/${lang}`);
+                    await import(`tinymce-i18n/langs7/${lang}`);
                     self.options.tiny.language = lang;
                 } catch {
                     log.debug("Could not load TinyMCE language. Fallback to English");
