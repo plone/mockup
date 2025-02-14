@@ -89,12 +89,20 @@
     }
 
     function showPreview(item) {
-        if ($config.mode == "browse" && item.is_folderish) {
+        if ($config.mode == "browse") {
             $previewUids = [item.UID];
-            currentPath.set(item.path);
+
+            if (item.is_folderish) {
+                // show folder
+                currentPath.set(item.path);
+            } else {
+                // show non folderish preview
+                const pathParts = item.path.split("/");
+                const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
+                currentPath.set(folderPath || "/");
+                updatePreview({ data: item });
+            }
         } else {
-            const pathParts = item.path.split("/");
-            const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
             updatePreview({ data: item });
         }
         scrollToRight();
@@ -126,17 +134,16 @@
 
         // check for multiselection
         const levelWrapper = e.currentTarget.closest(".levelItems");
-        const prevSelection = levelWrapper.querySelectorAll(".selectedItem");
+        let prevSelection = levelWrapper.querySelectorAll(".selectedItem");
 
         if (prevSelection.length && $config.maximumSelectionSize != 1) {
             // check for pressed shift or ctrl/meta key for multiselection
-
             if (shiftKey || e?.shiftKey) {
                 // iter through the wrapper children and select all
                 // inbetween current selection and last preview
                 let select = false;
                 for (const el of levelWrapper.children) {
-                    if ([item.UID, previewItem.UID].indexOf(el.dataset.uuid) !== -1) {
+                    if ([item.UID, $previewUids[0]].indexOf(el.dataset.uuid) !== -1) {
                         if (select) {
                             // stop selecting but make sure the last item is selected too
                             updatePreview({
@@ -165,7 +172,7 @@
             } else {
                 // unselect
                 [...prevSelection].map((el) => el.classList.remove("selectedItem"));
-                changePath(item, e);                
+                changePath(item, e);
             }
         } else {
             changePath(item, e);
@@ -173,7 +180,7 @@
 
         e.currentTarget.focus(); // needed for keyboard navigation
         e.currentTarget.classList.add("selectedItem");
-    } 
+    }
 
     function initKeyboardNav() {
         // focus first element when showing contentbrowser
@@ -200,7 +207,7 @@
         const node = e.currentTarget;
         shiftKey = e.shiftKey;
         if (e.key == "Escape") {
-            cancelSelection();
+            closeBrowser();
         }
         if (
             e.key == "ArrowDown" &&
@@ -254,9 +261,7 @@
             selectedUids.update(() => $selectedItems.map((x) => x.UID));
         }
         updateRecentlyUsed(item, $config);
-        updatePreview({ action: "clear" });
-        $showContentBrowser = false;
-        keyboardNavInitialized = false;
+        closeBrowser();
     }
 
     async function addSelectedItems() {
@@ -269,9 +274,7 @@
             return n;
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
-        updatePreview({ action: "clear" });
-        $showContentBrowser = false;
-        keyboardNavInitialized = false;
+        closeBrowser();
     }
 
     function selectRecentlyUsed(event) {
@@ -297,7 +300,9 @@
         changePath(item);
     }
 
-    function cancelSelection() {
+    function closeBrowser() {
+        searchTerm = null;
+        $config.mode = defaultConfigMode;
         $showContentBrowser = false;
         keyboardNavInitialized = false;
         updatePreview({ action: "clear" });
@@ -327,7 +332,7 @@
 
     async function searchItems(val) {
         searchTerm = val;
-        if (defaultConfigMode !== "search") {
+        if (defaultConfigMode === "browse") {
             // switching to search mode in global search if configured as "browse" mode
             $config.mode = searchTerm !== "" ? "search" : "browse";
         }
@@ -336,10 +341,8 @@
             searchTerm: searchTerm,
             mode: $config.mode,
         });
-        if (searchTerm) {
-            updatePreview({ action: "clear" });
-        } else {
-            await utils.timeout(1);
+        updatePreview({ action: "clear" });
+        if(!val) {
             scrollToRight();
         }
     }
@@ -405,7 +408,7 @@
                 initKeyboardNav();
             }}
             use:clickOutside
-            on:click_outside={cancelSelection}
+            on:click_outside={closeBrowser}
         >
             <div class="toolBar navbar">
                 <div class="input-group w-auto">
@@ -445,7 +448,7 @@
                 <button
                     class="btn btn-link text-white ms-auto"
                     tabindex="0"
-                    on:click|preventDefault={() => cancelSelection()}
+                    on:click|preventDefault={() => closeBrowser()}
                     ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                 >
             </div>
@@ -596,11 +599,13 @@
                                                         alt={item.Title}
                                                     />
                                                 {:else}
-                                                    <svg
-                                                        use:resolveIcon={{
-                                                            iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                                        }}
-                                                    />
+                                                    <span class="plone-icon">
+                                                        <svg
+                                                            use:resolveIcon={{
+                                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
+                                                            }}
+                                                        />
+                                                    </span>
                                                 {/if}
                                                 {item.Title}
                                                 {#if $config.mode == "search"}
@@ -871,16 +876,15 @@
     .contentItem > .browseSub {
         flex-shrink: 0;
     }
+    .contentItem .plone-icon {
+        display: inline-block;
+    }
     .contentItem .grid-preview > img {
         width: 95px;
         height: 95px;
         object-fit: cover;
         float: left;
         margin-right: 1rem;
-    }
-    .contentItem .grid-preview > svg {
-        width: 95px;
-        height: 95px;
     }
     .preview {
         width: 320px;
