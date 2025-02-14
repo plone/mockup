@@ -302,6 +302,9 @@ export default BaseView.extend({
         this.collection.setCurrentPath(path);
         // this.textfilter.clearTerm();
         this.clearStatus();
+
+        // remove the selection the user made
+        this.selectedCollection.reset();
     },
 
     getAjaxUrl: function (url) {
