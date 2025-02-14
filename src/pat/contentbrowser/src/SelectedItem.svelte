@@ -2,8 +2,6 @@
     import { getContext } from "svelte";
     import { resolveIcon } from "./utils";
 
-    // current item index of parent iteration
-    export let idx;
     // item data
     export let item;
 
@@ -17,7 +15,7 @@
         <!-- svelte-ignore a11y-missing-attribute -->
         <button
             class="btn btn-link btn-sm link-secondary"
-            on:click={() => unselectItem(idx)}
+            on:click|preventDefault={() => unselectItem(item.UID)}
             ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
         >
         <div>

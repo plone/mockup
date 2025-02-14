@@ -26,6 +26,22 @@ msgid "select ${level_path}"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "clear filter"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "level filter"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "grid view"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "list view"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "no results found"
 msgstr ""
 
@@ -34,7 +50,31 @@ msgid "select ${preview_path}"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "Title"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "Description"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "created"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "modified"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "review_state"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "add selected items"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "${item_count} items selected"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/Favorites.svelte
@@ -371,10 +411,6 @@ msgstr ""
 
 #: ./src/pat/structure/templates/table.xml
 msgid "Select all"
-msgstr ""
-
-#: ./src/pat/structure/templates/table.xml
-msgid "Title"
 msgstr ""
 
 #: ./src/pat/structure/templates/tablerow.xml

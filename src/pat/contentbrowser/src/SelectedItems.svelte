@@ -25,7 +25,7 @@
     // the registry key can be customized with pattern_options
     // if an addon registers a custom component to a custom key
     const RegisteredSelectedItem = plone_registry.getComponent(
-        $config.componentRegistryKeys?.selectedItem || "pat-contentbrowser.SelectedItem"
+        $config.componentRegistryKeys?.selectedItem || "pat-contentbrowser.SelectedItem",
     );
 
     onMount(async () => {
@@ -34,10 +34,9 @@
         initializing = false;
     });
 
-    function unselectItem(i) {
+    function unselectItem(uid) {
         selectedItems.update((n) => {
-            n.splice(i, 1);
-            return n;
+            return n.filter((x) => x.UID !== uid);
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
@@ -68,13 +67,13 @@
                     ".content-browser-selected-items",
                 ),
                 {
-                    draggable: ".selected-item",
+                    draggable: "> div",
                     animation: 200,
                     onUpdate: (e) => {
                         let sortedUuids = [];
-                        for (const el of e.target.children) {
+                        e.target.querySelectorAll(".selected-item").forEach((el) => {
                             sortedUuids.push(el.dataset["uuid"]);
-                        }
+                        });
                         setNodeValue(sortedUuids);
                     },
                 },
@@ -97,7 +96,10 @@
     }
 
     function LoadSelectedItemComponent(node, props) {
-        const component = new RegisteredSelectedItem.component({target: node, props: props});
+        const component = new RegisteredSelectedItem.component({
+            target: node,
+            props: props,
+        });
     }
 
     $: {
@@ -116,11 +118,13 @@
 >
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="content-browser-selected-items"
-         on:click={() => $showContentBrowser = $selectedItems.length ? false : true }>
+    <div
+        class="content-browser-selected-items"
+        on:click={() => ($showContentBrowser = $selectedItems.length ? false : true)}
+    >
         {#if $selectedItems}
             {#each $selectedItems as selItem, i (selItem.UID)}
-                <div use:LoadSelectedItemComponent={{idx:i, item:selItem}} />
+                <div use:LoadSelectedItemComponent={{ item: selItem }} />
             {/each}
         {/if}
         {#if !$selectedItems}
@@ -129,10 +133,10 @@
     </div>
     <!-- svelte-ignore a11y-invalid-attribute -->
     <a
-        class="btn btn-primary" href="#"
+        class="btn btn-primary"
+        href="#"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        on:click|preventDefault={() => ($showContentBrowser = true)}
-        >{_t("Select")}</a
+        on:click|preventDefault={() => ($showContentBrowser = true)}>{_t("Select")}</a
     >
 </div>
 
