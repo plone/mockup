@@ -48,6 +48,52 @@
 
 * Upgrade to @patternslib/dev which fixes a broken changelog layout. ([61f76d4](https://github.com/plone/mockup/commit/61f76d468597c538af2cf448fef6b5b79847f8da))
 
+## [5.3.0](https://github.com/plone/mockup/compare/5.2.0...5.3.0) (2025-02-14)
+
+
+### Features
+
+
+* **pat contentbrowser:** global search, level filtering, focused column. ([d645c10](https://github.com/plone/mockup/commit/d645c104f1ed6be811d7901a897e8bf97c00a78f))
+
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Fix sorting and removing selected items. ([91419b3](https://github.com/plone/mockup/commit/91419b386749dbe5a8c26bad7e424d4671c81634))
+
+
+* **pat select2:** add improvements from review ([84a5a1f](https://github.com/plone/mockup/commit/84a5a1f923e93706e17557cda68eb854cc890550))
+
+
+* **pat select2:** fix language identifier for select2 language files ([f2631a7](https://github.com/plone/mockup/commit/f2631a7ee9e4de122d65d6724a6a4afb1413155f))
+
+
+
+### Maintenance
+
+
+* @patternslib/dev upgrade - Adapt Makefile. ([2efdb94](https://github.com/plone/mockup/commit/2efdb94d14b2ad018b5761dc52b6ebcbcb9a5e7d))
+
+
+* @patternslib/dev upgrade - create eslint.config.js. ([5882f82](https://github.com/plone/mockup/commit/5882f82f16c1dccd7365bac7f24277d8a123576d))
+
+
+* @patternslib/dev upgrade - remove .husky directory in favor of git hooks. ([d67a618](https://github.com/plone/mockup/commit/d67a61806636ea0e97bce7cba2469fdabe8a0c39))
+
+
+* @patternslib/dev upgrade - remove old .eslintrc.js. ([15741f7](https://github.com/plone/mockup/commit/15741f72a32503491adfe08efd4a3c48635b08d0))
+
+
+* Fix eslint errors. ([dcca49d](https://github.com/plone/mockup/commit/dcca49d47fa00aee5314cbbdc971957b8f60ea8f))
+
+
+* Upgrade @patternslib/dev. ([863c255](https://github.com/plone/mockup/commit/863c255c006b07418dbbdf8f4c01c5401dc01f71))
+
+
+* Upgrade to @patternslib/dev which fixes a broken changelog layout. ([61f76d4](https://github.com/plone/mockup/commit/61f76d468597c538af2cf448fef6b5b79847f8da))
+
 ## [5.2.0](https://github.com/plone/mockup/compare/5.2.0-beta.5...5.2.0) (2025-02-07)
 
 
