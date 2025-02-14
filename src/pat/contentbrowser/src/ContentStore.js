@@ -20,7 +20,7 @@ export default function (config, pathCache) {
         try {
             return await request(query);
         }
-        catch (err) {
+        catch {
             return {
                 "error": "Could load data from backend."
             };
