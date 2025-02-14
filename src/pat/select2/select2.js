@@ -110,14 +110,9 @@ export default Base.extend({
         try {
             // Don't load "en" which is the default where no separate language file exists.
             if (this.options.language && this.options.language !== "en" && !this.options.language.startsWith("en")) {
-                var lang = this.options.language;
+                let lang = this.options.language.split("-");
                 // Fix for country specific languages
-                if (lang.split("-").length > 1) {
-                    lang =
-                        lang.split("-")[0] +
-                        "-" +
-                        lang.split("-")[1].toUpperCase();
-                }         
+                lang = (lang.length > 1) ? `${lang[0]}-${lang[1]}` : lang[0];        
                 await import(`select2/select2_locale_${lang}`);
             }
         } catch {
