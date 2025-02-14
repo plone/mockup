@@ -109,8 +109,11 @@ export default Base.extend({
         await import("select2");
         try {
             // Don't load "en" which is the default where no separate language file exists.
-            if (this.options.language && this.options.language !== "en") {
-                await import(`select2/select2_locale_${this.options.language}`);
+            if (this.options.language && this.options.language !== "en" && !this.options.language.startsWith("en")) {
+                let lang = this.options.language.split("-");
+                // Fix for country specific languages
+                lang = (lang.length > 1) ? `${lang[0]}-${lang[1]}` : lang[0];        
+                await import(`select2/select2_locale_${lang}`);
             }
         } catch {
             console.warn("Language file could not be loaded", this.options.language);
