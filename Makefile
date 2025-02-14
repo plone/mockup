@@ -3,7 +3,7 @@
 ##############
 
 # First, run ``make install``.
-# After that you have through Makefile extension all the other base targets available.
+# After that you have all the targets from @patternslib/dev available.
 
 # If you want to release on GitHub, make sure to have a .env file with a GITHUB_TOKEN.
 # Also see:
@@ -20,14 +20,9 @@ export
 
 YARN   ?= npx yarn
 
-.PHONY: install
-stamp-yarn install:
+
+yarn.lock install:
 	$(YARN) install
-	# Install pre commit hook
-	$(YARN) husky install
-	@# We have checked in the .husky files, so no need to add the commitlint hook again.
-	@# $(YARN) husky add .husky/commit-msg "npx yarn commitlint --edit $1"
-	touch stamp-yarn
 
 
 .PHONY:
@@ -41,7 +36,7 @@ bundle-plone:
 
 
 .PHONY: bundle
-bundle: stamp-yarn
+bundle: install
 	$(YARN) run build:webpack
 
 

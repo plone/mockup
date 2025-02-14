@@ -64,7 +64,7 @@ export default Base.extend({
                     }
                     try {
                         $el = $(_.template(that.options.template)(data));
-                    } catch (e) {
+                    } catch {
                         that.$el.removeClass("loading-content");
                         that.$el.addClass("content-load-error");
                         log.warn(

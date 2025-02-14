@@ -11,7 +11,6 @@ export default class Contentrules {
         /**********************************************************************
          * Delete a single comment.
          **********************************************************************/
-        // eslint-disable-next-line no-unused-vars
         $("button[name='form.button.moderation.DeleteComment']").on("click", function (e) {
             e.preventDefault();
             var row = $(this).closest("tr");

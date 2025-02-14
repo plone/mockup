@@ -105,7 +105,7 @@ export default BaseView.extend({
                 query_string = JSON.stringify(query);
                 query_obj = query;
             }
-        } catch (e) {
+        } catch {
             query_obj = [];
             query_string = "[]";
         }

@@ -670,7 +670,7 @@ export default Base.extend({
                 self.options.indexes = data.indexes;
                 self.options["sortable_indexes"] = data["sortable_indexes"];
                 self._init();
-            } catch (e) {
+            } catch {
                 // XXX handle this...
             }
         }

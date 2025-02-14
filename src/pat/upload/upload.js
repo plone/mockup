@@ -178,7 +178,7 @@ export default Base.extend({
             var data;
             try {
                 data = $.parseJSON(response);
-            } catch (ex) {
+            } catch {
                 data = response;
             }
             self.$el.trigger("uploadAllCompleted", {
