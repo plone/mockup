@@ -2,6 +2,27 @@
 
 
 
+## [5.3.1](https://github.com/plone/mockup/compare/5.3.0...5.3.1) (2025-02-19)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Fix 'inPath' check when path ids started with the same string ([fc88196](https://github.com/plone/mockup/commit/fc88196bae88821133a20b526030199d58d7fe02))
+
+
+* **pat contentbrowser:** Fix browsing large folders with selectableTypes constraint activated ([da7f5f5](https://github.com/plone/mockup/commit/da7f5f5cdfe35f8b3c5a78b246d40e8cdac71bf8))
+
+
+
+### Maintenance
+
+
+* **bundle:** update dependencies ([9fe9527](https://github.com/plone/mockup/commit/9fe9527108c272ae6bf4f43de1d29b995bdabcc6))
+
+
+* Upgrade to @patternslb/dev 3.7.2. ([#1434](https://github.com/plone/mockup/issues/1434)) ([afd8870](https://github.com/plone/mockup/commit/afd88700cdd02ce9e27cc1f8cad1fdf9ce14f688))
+
 ## [5.3.0](https://github.com/plone/mockup/compare/5.2.0...5.3.0) (2025-02-14)
 
 
