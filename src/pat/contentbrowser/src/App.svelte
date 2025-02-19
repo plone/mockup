@@ -23,6 +23,7 @@
     export let rootUrl = "";
     export let basePath = "";
     export let selectableTypes = [];
+    export let browseableTypes = ["Folder"];
     export let maximumSelectionSize = -1;
     export let separator;
     export let selection = [];
@@ -73,6 +74,7 @@
         rootUrl: rootUrl,
         basePath: basePath,
         selectableTypes: selectableTypes,
+        browseableTypes: browseableTypes,
         maximumSelectionSize: maximumSelectionSize,
         separator: separator,
         selection: selection,
