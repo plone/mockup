@@ -52,13 +52,24 @@
     const currentPath = getContext("currentPath");
 
     if (!$currentPath) {
-        if(basePath || rootPath) {
+        if (basePath || rootPath) {
             // if root path is not above base path we start at rootPath
             $currentPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
+            if (
+                rootPath &&
+                $currentPath != rootPath &&
+                $currentPath.indexOf(rootPath) == 0
+            ) {
+                // remove rootPath from $currentPath
+                $currentPath = $currentPath.replace(rootPath, "");
+            }
         } else {
             // no path available. try to determine path from vocabularyUrl
             const vocabPath = new URL(vocabularyUrl).pathname.split("/");
-            rootPath = contextPath = $currentPath = vocabPath.slice(0, vocabPath.length - 1).join("/") || "/";
+            rootPath =
+                contextPath =
+                $currentPath =
+                    vocabPath.slice(0, vocabPath.length - 1).join("/") || "/";
         }
     }
 
