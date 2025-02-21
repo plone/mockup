@@ -10,6 +10,14 @@
 
 * **pat contentbrowser:** Fix selecting current path when opening the contentbrowser initially ([5e45332](https://github.com/plone/mockup/commit/5e45332b1268db3a14e41e9b39f79c4afd18a4bf))
 
+## [5.3.2](https://github.com/plone/mockup/compare/5.3.1...5.3.2) (2025-02-21)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Fix selecting current path when opening the contentbrowser initially ([5e45332](https://github.com/plone/mockup/commit/5e45332b1268db3a14e41e9b39f79c4afd18a4bf))
+
 ## [5.3.1](https://github.com/plone/mockup/compare/5.3.0...5.3.1) (2025-02-19)
 
 
