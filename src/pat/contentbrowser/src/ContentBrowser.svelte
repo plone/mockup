@@ -598,7 +598,7 @@
                                                 class={gridView
                                                     ? "grid-preview"
                                                     : "item-title"}
-                                                title="{item.portal_type}: {item.Title}"
+                                                title="{item.path}: {item.Title}"
                                             >
                                                 {#if gridView && item.getIcon}
                                                     <img
@@ -834,7 +834,7 @@
     }
     .levelToolbar {
         width: 100%;
-        height: 2.5rem;
+        min-height: 2.5rem;
         display: flex;
         justify-content: space-between;
         white-space: nowrap;
