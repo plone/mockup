@@ -18,7 +18,7 @@
        data-pat-datatables="<%- datatables_options %>">
   <thead>
     <tr>
-      <th class="selection"><label for="selectAllInputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select all') %>"><%- _t('Select all') %></label><input id="selectAllInputCheckbox" type="checkbox" class="select-all form-check-input" /></th>
+      <th class="selection"><label for="selectAllInputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select all items on this page') %>"><%- _t('Select all items on this page') %></label><input id="selectAllInputCheckbox" type="checkbox" class="select-all form-check-input pat-tooltip" title="<%- _t('Select all items on this page') %>"/></th>
       <th class="title"><%- _t('Title') %></th>
       <% activeColumns.forEach((column, idx) => { %>
         <% if(column !== 'Description' && hasOwnProperty.call(availableColumns, column)) { %>

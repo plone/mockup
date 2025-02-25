@@ -105,12 +105,11 @@ export default BaseView.extend({
 
         this.wellView = new SelectionWellView({
             collection: this.selectedCollection,
-            triggerView: this.toolbar.get("selected-items"),
+            triggerView: this.toolbar.get("change-selection"),
             app: this,
-            id: "selected-items",
+            id: "change-selection",
         });
 
-        this.toolbar.get("selected-items").disable();
         this.buttons.disable();
 
         let timeout = 0;
@@ -241,10 +240,8 @@ export default BaseView.extend({
 
     updateButtons: function () {
         if (this.selectedCollection.length) {
-            this.toolbar.get("selected-items").enable();
             this.buttons.enable();
         } else {
-            this.toolbar.get("selected-items").disable();
             this.buttons.disable();
         }
 
@@ -409,10 +406,11 @@ export default BaseView.extend({
 
         items.push(
             new SelectionButtonView({
-                title: _t("Selected"),
-                id: "selected-items",
+                title: _t("${current} of ${total} selected", { current: 0, total: 0 }),
+                id: "change-selection",
                 tooltip: _t("Manage selection"),
                 collection: this.selectedCollection,
+                appCollection: this.collection,
                 icon: "plone-selection",
             })
         );
