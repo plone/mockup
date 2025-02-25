@@ -3,25 +3,26 @@ import _ from "underscore";
 import PopoverView from "../../../../core/ui/views/popover";
 import utils from "../../../../core/utils";
 import ItemTemplate from "../../templates/selection_item.xml";
+import Actions from "../actions";
+import _t from "../../../../core/i18n-wrapper";
 
 export default PopoverView.extend({
-    className: "popover selected-items",
+    className: "popover change-selection",
 
-    title: _.template(
-        '<input type="text" class="filter" placeholder="<%- _t("Filter") %>" />' +
-            '<a href="#" class=" remove-all">' +
-            '<%= removeIcon %> <%- _t("remove all") %></a>'
-    ),
+
+    title: _t("Change selection"),
 
     content: _.template(
-        "<% collection.each(function(item) { %>" +
-            "<%= item_template($.extend({'removeIcon': removeIcon}, item.toJSON())) %>" +
-            "<% }); %>"
+        '<div class="list-group">' +
+        '<a href="#" class="list-group-item list-group-item-action select-all"><%= selectAllIcon %> <%- _t("Select all items in the folder") %></a>' +
+        '<a href="#" class="list-group-item list-group-item-action select-all-visible"><%= selectPageIcon %> <%- _t("Select all items on this page") %></a>' +
+        '<a href="#" class="list-group-item list-group-item-action remove-all"><%= removeIcon %> <%- _t("Cancel selection") %></a>' +
+        '</div>'
     ),
 
     events: {
-        "click a.remove": "itemRemoved",
-        "keyup input.filter": "filterSelected",
+        "click .select-all": "selectAll",
+        "click .select-all-visible": "selectVisible",
         "click .remove-all": "removeAll",
     },
 
@@ -39,35 +40,33 @@ export default PopoverView.extend({
 
     render: async function () {
         this.options["removeIcon"] = await utils.resolveIcon("x-circle");
+        this.options["selectAllIcon"] = await utils.resolveIcon("check2-all");
+        this.options["selectPageIcon"] = await utils.resolveIcon("check2");
         PopoverView.prototype.render.call(this);
         if (this.collection.length === 0) {
             this.$el.removeClass("active");
         }
         return this;
     },
-
-    itemRemoved: function (e) {
+    selectAll: function (e) {
+        // use the actions module as it has a handy "selectAll" method
+        const actions = new Actions({
+            app: this.options.app,
+            model: {
+                attributes: this.options.app.options,
+            },
+            selectedCollection: this.options.collection,
+        });
+        actions.selectAll(e);
+        this.options.app.tableView.setContextInfo();
+        this.hide();
+    },
+    selectVisible: function (e) {
         e.preventDefault();
-        const uid = $(e.currentTarget).data("uid");
-        this.collection.removeByUID(uid);
-        if (this.collection.length !== 0) {
-            // re-rendering causes it to close, reopen
-            this.show();
-        }
+        this.collection.reset();
+        $('input[type="checkbox"]', this.app.tableView.$('tbody')).prop('checked', true).change();
+        this.hide();
     },
-
-    filterSelected: function (e) {
-        const val = $(e.target).val().toLowerCase();
-        for (const item of $(".selected-item", this.$el)) {
-            const $el = $(item);
-            if ($el.text().toLowerCase().indexOf(val) === -1) {
-                $el.hide();
-            } else {
-                $el.show();
-            }
-        }
-    },
-
     removeAll: function (e) {
         e.preventDefault();
         this.collection.reset();
