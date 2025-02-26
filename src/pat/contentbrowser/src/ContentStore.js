@@ -31,31 +31,12 @@ export default function (config, pathCache) {
     const browse = async (path, searchTerm, updateCache) => {
 
         let rootPath = config.rootPath;
-        let rootPathParts = rootPath.replace(/^\/+/, '').split("/");
         let physicalPath = path;
-        let hideRootPath = rootPath;
 
         if (!physicalPath.startsWith(rootPath)) {
             // The path from the returned items from "vocabularyUrl" are starting
-            // relative from the Plone Site. So we need to generate the phyiscalPath here.
-            if (rootPathParts.length === 1) {
-                physicalPath = rootPath + physicalPath;
-            } else {
-                // We also have to merge the rootPath and the clicked path correctly for example:
-                // rootPath: /Plone/media, clicked path: /media/subfolder
-                // has to become:
-                // /Plone/media/subfolder
-                let pathParts = physicalPath.replace(/^\/+/, '').split("/");
-                let overlapIdx = rootPathParts.length;
-                for (let idx = 0; idx < rootPathParts.length; idx++) {
-                    if (rootPathParts[idx] === pathParts[0]) {
-                        overlapIdx = idx;
-                        break;
-                    }
-                }
-                hideRootPath = "/" + (rootPathParts.filter(it => pathParts.includes(it))).join("/");
-                physicalPath = "/" + (rootPathParts.slice(1, overlapIdx).concat(pathParts)).join("/");
-            }
+            // relative from the rootPath. This is either the Plone site or the VirtualHosted navigation root path.
+            physicalPath = rootPath + physicalPath;
         }
 
         let paths = [];
@@ -106,7 +87,7 @@ export default function (config, pathCache) {
                 level.searchTerm = searchTerm;
                 level.page = 1;
                 level.path = p;
-                level.displayPath = p.replace(new RegExp(`^(${hideRootPath}|${rootPath})`), "") || "/"
+                level.displayPath = p.replace(rootPath, "") || "/"
 
                 // do not update cache when searching
                 if (!searchTerm) {
