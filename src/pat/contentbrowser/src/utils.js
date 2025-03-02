@@ -11,6 +11,7 @@ export async function request({
     searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
+    browseableTypes = [],
     pageSize = 100,
     page = 1,
 }) {
@@ -30,6 +31,15 @@ export async function request({
             sort_on: "getObjPositionInParent",
             sort_order: "ascending",
         };
+        if (selectableTypes.length) {
+            // we need to append browseableTypes here in order to
+            // preserve browsing subitems
+            vocabQuery.criteria.push({
+                i: "portal_type",
+                o: "plone.app.querystring.operation.list.contains",
+                v: selectableTypes.concat(browseableTypes),
+            })
+        }
     }
     if (levelInfoPath) {
         // query exact path
@@ -222,5 +232,5 @@ export function formatDate(dateval) {
     // see: https://github.com/plone/mockup/issues/1429
     const d = Date.parse(dateval);
     const i18n = new I18n();
-    return new Date(d).toLocaleString(i18n.currentLanguage.replace("_", "-"));    
+    return new Date(d).toLocaleString(i18n.currentLanguage.replace("_", "-"));
 }

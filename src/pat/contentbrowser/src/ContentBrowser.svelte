@@ -323,7 +323,14 @@
     }
 
     function itemInPath(item) {
-        return $config.mode == "browse" && $currentPath.indexOf(item.path) != -1;
+        const item_path = item.path.split("/");
+        const curr_path = $currentPath.split("/");
+        let in_path = true;
+        for(const idx in item_path) {
+            // check path parts to be equal
+            in_path = in_path && (item_path[idx] === curr_path[idx]);
+        }
+        return in_path;
     }
 
     const searchItemsKeyup = utils.debounce(async (e) => {
@@ -430,7 +437,7 @@
                 </div>
                 <RecentlyUsed on:selectItem={selectRecentlyUsed} />
                 <Favorites on:selectItem={selectFavorite} />
-                {#if $config.uploadEnabled}
+                {#if $config.uploadEnabled && $config.mode == "browse"}
                     <div class="ms-2">
                         <button
                             type="button"
@@ -591,7 +598,7 @@
                                                 class={gridView
                                                     ? "grid-preview"
                                                     : "item-title"}
-                                                title="{item.portal_type}: {item.Title}"
+                                                title="{item.path}: {item.Title}"
                                             >
                                                 {#if gridView && item.getIcon}
                                                     <img
@@ -827,7 +834,7 @@
     }
     .levelToolbar {
         width: 100%;
-        height: 2.5rem;
+        min-height: 2.5rem;
         display: flex;
         justify-content: space-between;
         white-space: nowrap;
