@@ -4,10 +4,7 @@
 
     // item data
     export let item;
-
-    // parent method to remove selected item from list
-    const unselectItem = getContext("unselectItem");
-
+    export let unselectItem;
 </script>
 
 <div class="selected-item border border-secondary-subtle rounded p-2 mb-1 bg-body-tertiary" data-uuid={item.UID}>
