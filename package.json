@@ -41,8 +41,8 @@
         "js-cookie": "^3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.6",
-        "tinymce": "7.6.1",
-        "tinymce-i18n": "24.12.30",
+        "tinymce": "7.7.0",
+        "tinymce-i18n": "25.2.3",
         "underscore": "^1.13.7"
     },
     "devDependencies": {
@@ -80,7 +80,7 @@
         "datatables.net-select": "<1.5",
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
-        "nwsapi": "2.2.12",
+        "nwsapi": "2.2.18",
         "sass": "~1.77.8",
         "underscore": "1.13.7"
     },

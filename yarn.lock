@@ -7422,10 +7422,10 @@ nunjucks@^3.2.3:
     asap "^2.0.3"
     commander "^5.1.0"
 
-nwsapi@2.2.12, nwsapi@^2.2.2:
-  version "2.2.12"
-  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.12.tgz#fb6af5c0ec35b27b4581eb3bbad34ec9e5c696f8"
-  integrity sha512-qXDmcVlZV4XRtKFzddidpfVP4oMSGhga+xdMc25mv8kaLUHtgzCDhUxkrN8exkGdTlLNaXj7CV3GtON7zuGZ+w==
+nwsapi@2.2.18, nwsapi@^2.2.2:
+  version "2.2.18"
+  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.18.tgz#3c4d7927e1ef4d042d319438ecfda6cd81b7ee41"
+  integrity sha512-p1TRH/edngVEHVbwqWnxUViEmq5znDvyB+Sik5cmuLpGOIfDf/39zLiq3swPF8Vakqn+gvNiOQAZu8djYlQILA==
 
 object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"
@@ -9402,15 +9402,15 @@ tinyexec@^0.3.0:
   resolved "https://registry.yarnpkg.com/tinyexec/-/tinyexec-0.3.2.tgz#941794e657a85e496577995c6eef66f53f42b3d2"
   integrity sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==
 
-tinymce-i18n@24.12.30:
-  version "24.12.30"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-24.12.30.tgz#33b9d78f10a834d19b373504a2bf13b98e6a8ba2"
-  integrity sha512-OOtJfr9plrXT5fuvCEXJ56QFKyFPCaaVcalj0UgJGv2AK8PNWhDVqzPef6MPlBkvVA1qgrZb7ZvfJC63wmkWjg==
+tinymce-i18n@25.2.3:
+  version "25.2.3"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-25.2.3.tgz#49a993c5c3a030bc373cb8fa2042e7b863cf6a2c"
+  integrity sha512-V6+WGEtntWqV2jjlqhnlS5R6yCcW75iH1cLxtodci35ugKZxrWIdno9r1543760Lv7LNmBdgcqYL113Haz8QyQ==
 
-tinymce@7.6.1:
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.6.1.tgz#f35990f6e9c2f90220939f545ac032e3d9301b05"
-  integrity sha512-5cHhaAoyyTHfAVTInNfoSp0KkUHmeVUbGSu37QKQbOFIPqxYPhqBiaLm1WVLgoNBYOHRProVc3xzxnNTeWHyoQ==
+tinymce@7.7.0:
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.7.0.tgz#4630c24d6696c58a43a9f5ba131ab331d6feb497"
+  integrity sha512-zDFPXeje5fQIxuYzv9fE6YmjFBQmeB9SU+85ofizIHqCCkbBnDdEWhD5R8rBu9MwdjIQP3aNohgGe9D6JOhNaw==
 
 tippy.js@^6.3.7:
   version "6.3.7"
