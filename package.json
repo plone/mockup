@@ -7,7 +7,7 @@
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
         "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "nwsapi": "Since version 2.2.3 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
+        "nwsapi": "Since version 2.2.14 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
     },
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "2",
@@ -80,7 +80,7 @@
         "datatables.net-select": "<1.5",
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
-        "nwsapi": "2.2.18",
+        "nwsapi": "2.2.13",
         "sass": "~1.77.8",
         "underscore": "1.13.7"
     },
