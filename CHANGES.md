@@ -2,6 +2,27 @@
 
 
 
+## [5.3.3](https://github.com/plone/mockup/compare/5.3.2...5.3.3) (2025-03-04)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** await custom registered SelectedItem components and fix unselect factory. ([0619eb6](https://github.com/plone/mockup/commit/0619eb6fabe1f8d34f937b1dc231a5265383d4c4))
+
+
+* **pat tinymce:** Update TinyMCE 7.7.0 ([fdf3e84](https://github.com/plone/mockup/commit/fdf3e847afca1e0f3f7595f59367909a1c361117))
+
+
+
+### Maintenance
+
+
+* **bundle:** update dependencies ([e746402](https://github.com/plone/mockup/commit/e7464025c58e47980535fabd3063495e4e4b35f1))
+
+
+* **documentation:** Fix "modal with buttons" example. ([e7a410d](https://github.com/plone/mockup/commit/e7a410df7e8e902d11e016834e2c0b646558039b))
+
 ## [5.3.2](https://github.com/plone/mockup/compare/5.3.1...5.3.2) (2025-02-21)
 
 
