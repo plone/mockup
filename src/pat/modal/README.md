@@ -48,11 +48,13 @@ Show content in a modal.
     href="#modal2"
     class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
     data-pat-plone-modal="{'width': '400', 'buttons': ['.plone-btn']}"
-    >Modal basic</a
+    >Modal with buttons</a
 >
 <div id="modal2" style="display: none">
-    <h1>Basic modal!</h1>
+    <h1>Modal with buttons!</h1>
     <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="Cancel" />
+    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="Submit" />
 </div>
 ```
 
