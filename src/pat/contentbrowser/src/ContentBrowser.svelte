@@ -82,8 +82,14 @@
             relativePath: "@@fileUpload",
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
-            success: (fileUpload, obj) => {
+            success: (fileupload, obj) => {
+                console.log(`success`);
+                $previewUids.push(obj.UID);
+            },
+            queuecomplete: (fileUpload, obj) => {
+                console.log(`queuecomplete`);
                 contentItems.get({ path: $currentPath, updateCache: true });
+                showUpload = false;
             },
         });
     }
