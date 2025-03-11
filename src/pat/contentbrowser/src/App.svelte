@@ -23,7 +23,7 @@
     export let rootUrl = "";
     export let basePath = "";
     export let selectableTypes = [];
-    export let browseableTypes = ["Folder"];
+    export let browseableTypes = ["Folder", "LIF", "LRF"];
     export let maximumSelectionSize = -1;
     export let separator;
     export let selection = [];
