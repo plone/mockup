@@ -15,19 +15,6 @@
 
   Change strategy to "upload and add immediately" in order to avoid too many clicks when "upload" is activated in the options ... see TinyMCE's "add Image" dialog where you can upload images.
 
-## [5.3.4](https://github.com/plone/mockup/compare/5.3.3...5.3.4) (2025-03-17)
-
-
-### Bug Fixes
-
-
-* **pat contentbrowser:** add multilanguage container types to browseableTypes. ([bc7c25a](https://github.com/plone/mockup/commit/bc7c25a141e64ead5e6344a1ce43ec1cfd79bbe1))
-
-
-* **pat contentbrowser:** improve upload experience ([22dffe8](https://github.com/plone/mockup/commit/22dffe8f11b0c2455be80b05395c0bd6ae8889f8))
-
-  Change strategy to "upload and add immediately" in order to avoid too many clicks when "upload" is activated in the options ... see TinyMCE's "add Image" dialog where you can upload images.
-
 ## [5.3.3](https://github.com/plone/mockup/compare/5.3.2...5.3.3) (2025-03-04)
 
 
