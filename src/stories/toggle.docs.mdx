@@ -1,0 +1,126 @@
+import { Meta, Story } from "@storybook/addon-docs";
+import {
+    ToggleItself,
+    ToggleTarget,
+    ToggleTargetScope,
+    ToggleTargetManyScope,
+} from "./toggle.stories.js";
+
+<Meta title="Patterns/Toggle" />
+
+# Toggle Pattern
+
+A pattern to toggle classes on HTML elements.
+
+# Migration note (Plone 6)
+
+This mockup pattern will probably replaced by patternslib/toggle. Some features are
+already broken like "Toggle an element by hover event".
+We decided to not migrate all examples and no tests.
+
+# Configuration
+
+```md
+| **Option**    | **Type** | **Default** | **Description**                                          |
+| ------------- | -------- | ----------- | -------------------------------------------------------- |
+| `target`      | `string` | `null`      | Selector of the target elements to toggle (`undefined`). |
+| `targetScope` | `null`   | `global`    | Selector of a target scope element in ancestors.         |
+| `attribute`   | `string` | `null`      | Element attribute which will be toggled (`class`).       |
+| `event`       | `string` | `null`      | Event that will trigger toggling (`click`).              |
+```
+
+# Examples
+
+## Toggle itself
+
+<br />
+<Story name="Toggle Itself" of={ToggleItself} />
+
+```html
+<button
+    type="button"
+    class="btn btn-primary pat-toggle mb-2"
+    data-pat-toggle="value:btn-lg;"
+>
+    This button goes bigger/smaller!
+</button>
+```
+
+## Toggle all targets (global scope)
+
+<br />
+<Story name="Toggle Taget" of={ToggleTarget} />
+
+```html
+<div class="wrapper">
+    <button
+        type="button"
+        class="btn btn-primary pat-toggle mb-2"
+        data-pat-toggle="value:badge-success;target:.targetElement"
+    >
+        This button is toggling the background of a element.</button
+    ><br />
+    <span class="targetElement badge bg-secondary">Hello World</span>
+</div>
+```
+
+## Toggle specific target inside a target scope
+
+<br />
+<Story name="Toggle Taget Scope" of={ToggleTargetScope} />
+
+```html
+<div class="wrapper">
+    <div class="myScope">
+        <button
+            type="button"
+            class="btn btn-primary pat-toggle mb-2"
+            data-pat-toggle="value:bg-success;target:.targetElement;targetScope:.myScope;"
+        >
+            toggle</button
+        ><br />
+        <span class="targetElement badge bg-secondary mb-4">Hello World</span>
+    </div>
+    <div class="myScope">
+        <button
+            type="button"
+            class="btn btn-primary pat-toggle mb-2"
+            data-pat-toggle="value:bg-success;target:.targetElement;targetScope:.myScope;"
+        >
+            toggle</button
+        ><br />
+        <span class="targetElement badge bg-secondary">Hello World</span>
+    </div>
+</div>
+```
+
+## Toggle more than one target inside a specific target scope
+
+<br />
+<Story name="Toggle Taget Many Scope" of={ToggleTargetManyScope} />
+
+```html
+<div class="wrapper">
+    <div class="myScope">
+        <button
+            type="button"
+            class="btn btn-primary pat-toggle mb-2"
+            data-pat-toggle="value:bg-success;target:.targetElement;targetScope:.myScope;"
+        >
+            toggle</button
+        ><br />
+        <span class="targetElement badge bg-secondary">Hello World</span>
+        <span class="targetElement badge bg-secondary mb-4">Hello again</span>
+    </div>
+    <div class="myScope">
+        <button
+            type="button"
+            class="btn btn-primary pat-toggle mb-2"
+            data-pat-toggle="value:bg-success;target:.targetElement;targetScope:.myScope;"
+        >
+            toggle</button
+        ><br />
+        <span class="targetElement badge bg-secondary">Hello World</span>
+    </div>
+</div>
+```
