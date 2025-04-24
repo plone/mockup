@@ -134,6 +134,7 @@ export default class TinyMCE {
         if (lang !== "en" && self.options.tiny.language !== "en") {
             try {
                 await import(`tinymce-i18n/langs7/${lang}`);
+                self.options.tiny.language = lang;
             } catch {
                 log.debug("Could not load TinyMCE language: ", lang);
                 try {
