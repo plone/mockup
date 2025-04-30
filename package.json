@@ -6,7 +6,7 @@
     "main": "./src/patterns.js",
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
+        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern. backbone==1.6.0 mandatory, otherwise tests fail!",
         "nwsapi": "Since version 2.2.14 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
     },
     "dependencies": {
@@ -16,7 +16,7 @@
         "@plone/registry": "^2.1.0",
         "backbone": "1.6.0",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "5.3.3",
+        "bootstrap": "5.3.5",
         "bootstrap-icons": "1.11.3",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
@@ -41,8 +41,8 @@
         "js-cookie": "^3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.6",
-        "tinymce": "7.7.0",
-        "tinymce-i18n": "25.2.3",
+        "tinymce": "7.8.0",
+        "tinymce-i18n": "25.3.17",
         "underscore": "^1.13.7"
     },
     "devDependencies": {
