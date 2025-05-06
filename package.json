@@ -12,7 +12,7 @@
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "2",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.9.16",
+        "@patternslib/patternslib": "9.10.1",
         "@plone/registry": "^2.1.0",
         "backbone": "1.6.0",
         "backbone.paginator": "2.0.8",
@@ -49,7 +49,7 @@
         "@11ty/eleventy": "^2.0.1",
         "@11ty/eleventy-navigation": "^0.3.5",
         "@11ty/eleventy-plugin-syntaxhighlight": "^4.2.0",
-        "@patternslib/dev": "^3.7.2",
+        "@patternslib/dev": "^3.7.4",
         "@testing-library/jest-dom": "^6.6.3",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",
