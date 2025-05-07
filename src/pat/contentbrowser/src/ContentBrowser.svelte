@@ -285,6 +285,10 @@
         addItem(event.detail.item);
     }
 
+    function itemId(item) {
+        return item.path?.split("/").pop() || "- no id -";
+    }
+
     async function selectFavorite(event) {
         const path = event.detail.item.path;
         const response = await request({
@@ -495,7 +499,7 @@
                                             <button
                                                 class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                                 title={_t("select ${level_path}", {
-                                                    level_path: level.Title,
+                                                    level_path: level.Title || itemId(level),
                                                 })}
                                                 disabled={!isSelectable(level)}
                                                 on:click|preventDefault={() =>
@@ -506,7 +510,7 @@
                                                     }}
                                                 />
                                                 <span class="select-button-ellipsis"
-                                                    >{level.Title}</span
+                                                    >{level.Title || itemId(level)}</span
                                                 ></button
                                             >
                                         {/if}
@@ -602,12 +606,12 @@
                                                 class={gridView
                                                     ? "grid-preview"
                                                     : "item-title"}
-                                                title="{item.path}: {item.Title}"
+                                                title="{item.path}: {item.Title || itemId(item)}"
                                             >
                                                 {#if gridView && item.getIcon}
                                                     <img
                                                         src={`${item.getURL}/@@images/image/thumb`}
-                                                        alt={item.Title}
+                                                        alt={item.Title || itemId(item)}
                                                     />
                                                 {:else}
                                                     <span class="plone-icon">
@@ -618,7 +622,7 @@
                                                         />
                                                     </span>
                                                 {/if}
-                                                {item.Title}
+                                                <span class="{!item.Title ? 'id-only' : ''}">{item.Title || itemId(item)}</span>
                                                 {#if $config.mode == "search"}
                                                     <br /><span class="small"
                                                         >{item.path}</span
@@ -700,6 +704,8 @@
                                     </div>
                                 {/if}
                                 <dl>
+                                    <dt>{_t("Id")}</dt>
+                                    <dd>{itemId(previewItem)}</dd>
                                     <dt>{_t("Title")}</dt>
                                     <dd>{previewItem.Title}</dd>
                                     {#if previewItem.Description}
@@ -896,6 +902,9 @@
         object-fit: cover;
         float: left;
         margin-right: 1rem;
+    }
+    .contentItem .id-only {
+        font-style: italic;
     }
     .preview {
         width: 320px;
