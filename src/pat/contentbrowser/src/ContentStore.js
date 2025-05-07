@@ -10,6 +10,7 @@ export default function (config, pathCache) {
             attributes: config.attributes,
             pageSize: config.pageSize,
             browseableTypes: config.browseableTypes,
+            searchIndex: config.searchIndex,
         };
         query = {
             ...defaults,

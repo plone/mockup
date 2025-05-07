@@ -24,6 +24,7 @@
     export let basePath = "";
     export let selectableTypes = [];
     export let browseableTypes = ["Folder", "LIF", "LRF"];
+    export let searchIndex = "SearchableText";
     export let maximumSelectionSize = -1;
     export let separator;
     export let selection = [];
@@ -86,6 +87,7 @@
         basePath: basePath,
         selectableTypes: selectableTypes,
         browseableTypes: browseableTypes,
+        searchIndex: searchIndex,
         maximumSelectionSize: maximumSelectionSize,
         separator: separator,
         selection: selection,
@@ -100,7 +102,7 @@
         componentRegistryKeys: componentRegistryKeys,
     };
 
-    log.debug(`Initialized App<${fieldId}> with config ${JSON.stringify($config)}`);
+    log.debug(`Initialized App<${fieldId}> with config`, $config);
 </script>
 
 <ContentBrowser />
