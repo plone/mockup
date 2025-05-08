@@ -1,9 +1,11 @@
+import { jest } from "@jest/globals";
 import "./autotoc";
 import $ from "jquery";
+import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
-describe("AutoTOC", function () {
+describe("1 - AutoTOC", function () {
     beforeEach(function () {
         document.body.innerHTML = `
             <div class="pat-autotoc">
@@ -137,4 +139,130 @@ describe("AutoTOC", function () {
     //     })
     //     .trigger("click");
     // });
+});
+
+describe("2 - AutoTOC with tabs", function () {
+    afterEach(() => {
+        document.body.innerHTML = "";
+    });
+
+    // NOTE: These tests pass individually but not together with the other tests.
+    //       This pattern has poor isolation and needs to be rewritten using
+    //       Patternslib BasePattern class.
+
+    it.skip("2.1 - integrates with pat-validation and marks tabs as required and/or invalid.", async function () {
+        // Use pat-validation to test the required and invalid classes
+        await import("@patternslib/patternslib/src/pat/validation/validation");
+
+        document.body.innerHTML = `
+            <form class="pat-validation pat-autotoc"
+                  data-pat-autotoc="
+                      levels: legend;
+                      section: fieldset;
+                      className: autotabs;
+                      validationDelay: 0;
+                  "
+                  data-pat-validation="
+                      delay: 0;
+                  "
+            >
+                <fieldset id="fieldset-1">
+                    <legend>Tab 1</legend>
+                    <input name="constraint-number" type="number" max="1000"/>
+                </fieldset>
+
+                <fieldset id="fieldset-2">
+                    <legend>Tab 2</legend>
+                    <input name="constraint-required" required />
+                </fieldset>
+
+                <fieldset id="fieldset-3">
+                    <legend>Tab 3</legend>
+                    <input name="constraint-none" />
+                </fieldset>
+            </form>
+        `;
+
+        const inp1 = document.querySelector("input[name=constraint-number]");
+        const inp2 = document.querySelector("input[name=constraint-required]");
+        const inp3 = document.querySelector("input[name=constraint-none]");
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const tabs = document.querySelectorAll(".autotoc-nav > a");
+        expect(tabs.length).toEqual(3);
+
+        expect(tabs[0].classList.contains("required")).toEqual(false);
+        expect(tabs[1].classList.contains("required")).toEqual(true);
+        expect(tabs[2].classList.contains("required")).toEqual(false);
+
+        inp1.dispatchEvent(events.change_event());
+        inp2.dispatchEvent(events.change_event());
+        inp3.dispatchEvent(events.change_event());
+        await utils.timeout(10);
+        expect(tabs[0].classList.contains("invalid")).toEqual(false);
+        expect(tabs[1].classList.contains("invalid")).toEqual(true);
+        expect(tabs[2].classList.contains("invalid")).toEqual(false);
+
+        inp1.value = "10000";
+        inp1.dispatchEvent(events.change_event());
+        inp2.dispatchEvent(events.change_event());
+        inp3.dispatchEvent(events.change_event());
+        await utils.timeout(10);
+        expect(tabs[0].classList.contains("invalid")).toEqual(true);
+        expect(tabs[1].classList.contains("invalid")).toEqual(true);
+        expect(tabs[2].classList.contains("invalid")).toEqual(false);
+
+        inp1.value = "123";
+        inp2.value = "okay";
+        inp1.dispatchEvent(events.change_event());
+        inp2.dispatchEvent(events.change_event());
+        inp3.dispatchEvent(events.change_event());
+        await utils.timeout(10);
+        expect(tabs[0].classList.contains("invalid")).toEqual(false);
+        expect(tabs[1].classList.contains("invalid")).toEqual(false);
+        expect(tabs[2].classList.contains("invalid")).toEqual(false);
+    });
+
+    it.skip("2.2 - the validation marker is called only once when a bunch of updates arrives.", async function () {
+        // Use pat-validation to test the required and invalid classes
+        await import("@patternslib/patternslib/src/pat/validation/validation");
+
+        document.body.innerHTML = `
+            <form class="pat-validation pat-autotoc"
+                  data-pat-autotoc="
+                      levels: legend;
+                      section: fieldset;
+                      className: autotabs;
+                      validationDelay: 0;
+                  "
+                  data-pat-validation="
+                      delay: 0;
+                  "
+            >
+                <fieldset id="fieldset-1">
+                    <legend>Tab 1</legend>
+                    <input name="inp1" />
+                    <input name="inp2" />
+                </fieldset>
+            </form>
+        `;
+
+        const form = document.querySelector(".pat-autotoc");
+        const inp1 = document.querySelector("input[name=inp1]");
+        const inp2 = document.querySelector("input[name=inp2]");
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const instance = form["pattern-autotoc"];
+        const spy_validation_marker = jest.spyOn(instance, "validation_marker");
+
+        inp1.dispatchEvent(events.change_event());
+        inp2.dispatchEvent(events.change_event());
+        await utils.timeout(10);
+        expect(spy_validation_marker).toHaveBeenCalledTimes(1);
+        jest.restoreAllMocks();
+    });
 });
