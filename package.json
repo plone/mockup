@@ -16,7 +16,7 @@
         "@plone/registry": "^2.5.3",
         "backbone": "1.6.0",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "5.3.3",
+        "bootstrap": "5.3.6",
         "bootstrap-icons": "1.11.3",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
