@@ -9402,10 +9402,10 @@ tinyexec@^0.3.0:
   resolved "https://registry.yarnpkg.com/tinyexec/-/tinyexec-0.3.2.tgz#941794e657a85e496577995c6eef66f53f42b3d2"
   integrity sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==
 
-tinymce-i18n@25.2.3:
-  version "25.2.3"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-25.2.3.tgz#49a993c5c3a030bc373cb8fa2042e7b863cf6a2c"
-  integrity sha512-V6+WGEtntWqV2jjlqhnlS5R6yCcW75iH1cLxtodci35ugKZxrWIdno9r1543760Lv7LNmBdgcqYL113Haz8QyQ==
+tinymce-i18n@25.3.17:
+  version "25.3.17"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-25.3.17.tgz#372786724d7625c52dc63750333fb463d113a9d3"
+  integrity sha512-96xa+rtxlvmjSj7EVIU67RJ4zhlFiMoGYz+Bob5NczzrT/jmZC3Yjbe0sqHvvQdJ4v85rXSITTN9rAoMzcoGdQ==
 
 tinymce@7.8.0:
   version "7.8.0"
