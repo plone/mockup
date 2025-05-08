@@ -162,7 +162,7 @@ describe("TinyMCE", function () {
         });
         $container.trigger("submit");
 
-        expect($el.val()).to.equal("<p>foobar</p>");
+        expect($el.val()).toEqual("<p>foobar</p>");
     });
 
     it("test create correct url from metadata", async function () {
@@ -303,7 +303,7 @@ describe("TinyMCE", function () {
         var modal = pattern.instance.linkModal;
         modal.linkType = "external";
         modal.linkTypes.external.getEl().attr("value", "http://foobar");
-        expect(modal.getLinkUrl()).to.equal("http://foobar");
+        expect(modal.getLinkUrl()).toEqual("http://foobar");
     });
 
     it.skip("test add email link", async function () {
@@ -312,7 +312,7 @@ describe("TinyMCE", function () {
         var modal = pattern.instance.linkModal;
         modal.linkType = "email";
         modal.linkTypes.email.getEl().attr("value", "foo@bar.com");
-        expect(modal.getLinkUrl()).to.equal("mailto:foo@bar.com");
+        expect(modal.getLinkUrl()).toEqual("mailto:foo@bar.com");
     });
 
     it.skip("test add image link", async function () {
@@ -332,9 +332,35 @@ describe("TinyMCE", function () {
 
         modal.linkType = "image";
         modal.$scale.find('[value="thumb"]')[0].selected = true;
-        expect(modal.getLinkUrl()).to.equal(
+        expect(modal.getLinkUrl()).toEqual(
             "resolveuid/foobar/@@images/image/thumb"
         );
+    });
+
+    it("test i18n language negotiation and translation loading", async () => {
+        document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
+        await registry_scan();
+        // there is a translated accessibility information for the resize handle in the dom
+        expect(document.body.innerHTML).toContain(
+            'aria-label="Press the Up and Down arrow keys to resize the editor."')
+
+        // mockup/core/i18n reads language from <html lang="">
+        document.documentElement.setAttribute("lang", "de");
+        document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
+        await registry_scan();
+        console.log(document.body.innerHTML);
+        expect(document.body.innerHTML).toContain(
+            'aria-label="Ändern Sie die Größe des Editors, indem Sie die Pfeiltasten „Abwärts“ und „Aufwärts“ drücken."')
+
+        // set combined ISO code for Portuguese (Brazil)
+        // this needs to be converted for tiny to pt_BR
+        document.documentElement.setAttribute("lang", "pt-br");
+        document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
+        await registry_scan();
+        console.log(document.body.innerHTML);
+        expect(document.body.innerHTML).toContain(
+            'aria-label="Use as teclas de seta acima e abaixo para redimensionar o editor."')
+
     });
 
     // it("test add image link upload", function () {
@@ -355,7 +381,7 @@ describe("TinyMCE", function () {
     //     var pattern = $el.data().patternTinymce;
     //     pattern.addImageClicked();
     //     $("#" + $("#tinylink-uploadImage").data().navref).trigger("click");
-    //     expect($("#tinylink-uploadImage").parent().hasClass("active")).to.equal(true);
+    //     expect($("#tinylink-uploadImage").parent().hasClass("active")).toEqual(true);
     //     var blob;
     //     try {
     //         blob = new Blob(["dummy data"], { type: "image/png" });
@@ -374,8 +400,8 @@ describe("TinyMCE", function () {
     //     $(".upload-all", pattern.imageModal.$upload).trigger("click");
     //     this.clock.tick(1000);
 
-    //     expect($("#tinylink-image").parent().hasClass("active")).to.equal(true);
-    //     expect(pattern.imageModal.getLinkUrl()).to.equal("/blah.png/imagescale/large");
+    //     expect($("#tinylink-image").parent().hasClass("active")).toEqual(true);
+    //     expect(pattern.imageModal.getLinkUrl()).toEqual("/blah.png/imagescale/large");
     // });
 
     // it("test add image with custom scale", function () {
@@ -397,7 +423,7 @@ describe("TinyMCE", function () {
     //         pattern.imageModal.$scale.html().indexOf("Custom Scale")
     //     ).to.be.greaterThan(-1);
     //     pattern.imageModal.$scale.find('[value="customscale"]')[0].selected = true;
-    //     expect(pattern.imageModal.getLinkUrl()).to.equal(
+    //     expect(pattern.imageModal.getLinkUrl()).toEqual(
     //         "resolveuid/foobar/@@images/image/customscale"
     //     );
     // });
@@ -493,7 +519,7 @@ describe("TinyMCE", function () {
     //     pattern.linkModal.linkTypes.internal.set("123sdfasdf");
     //     var val = pattern.linkModal.linkTypes.internal.getEl().select2("data");
     //     /* XXX ajax not loading quickly enough here...
-    //   expect(val.UID).to.equal('123sdfasdf');
+    //   expect(val.UID).toEqual('123sdfasdf');
     //   */
     // });
 
@@ -501,18 +527,18 @@ describe("TinyMCE", function () {
     //     var pattern = createTinymce();
     //     pattern.addLinkClicked();
     //     pattern.linkModal.hide();
-    //     expect(pattern.linkModal.modal.$modal.is(":visible")).to.equal(false);
+    //     expect(pattern.linkModal.modal.$modal.is(":visible")).toEqual(false);
     //     pattern.addLinkClicked();
-    //     expect(pattern.linkModal.modal.$modal.is(":visible")).to.equal(true);
+    //     expect(pattern.linkModal.modal.$modal.is(":visible")).toEqual(true);
     // });
 
     // it("test reopen add image modal", function () {
     //     var pattern = createTinymce();
     //     pattern.addImageClicked();
     //     pattern.imageModal.hide();
-    //     expect(pattern.imageModal.modal.$modal.is(":visible")).to.equal(false);
+    //     expect(pattern.imageModal.modal.$modal.is(":visible")).toEqual(false);
     //     pattern.addImageClicked();
-    //     expect(pattern.imageModal.modal.$modal.is(":visible")).to.equal(true);
+    //     expect(pattern.imageModal.modal.$modal.is(":visible")).toEqual(true);
     // });
 
     // it("test loads existing link external values", function () {
@@ -527,14 +553,14 @@ describe("TinyMCE", function () {
     //     );
     //     pattern.addLinkClicked();
 
-    //     expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal("foobar");
+    //     expect(pattern.linkModal.linkTypes.external.getEl().val()).toEqual("foobar");
     //     setTimeout(function () {
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).length
-    //         ).to.equal(1);
+    //         ).toEqual(1);
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).data("linktype")
-    //         ).to.equal("external");
+    //         ).toEqual("external");
     //     }, 100);
     // });
 
@@ -550,14 +576,14 @@ describe("TinyMCE", function () {
     //     );
     //     pattern.addLinkClicked();
 
-    //     expect(pattern.linkModal.linkTypes.email.getEl().val()).to.equal("foo@bar.com");
+    //     expect(pattern.linkModal.linkTypes.email.getEl().val()).toEqual("foo@bar.com");
     //     setTimeout(function () {
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).length
-    //         ).to.equal(1);
+    //         ).toEqual(1);
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).data("linktype")
-    //         ).to.equal("email");
+    //         ).toEqual("email");
     //     }, 100);
     // });
 
@@ -568,14 +594,14 @@ describe("TinyMCE", function () {
 
     //     pattern.instance.addLinkClicked();
 
-    //     expect(pattern.instance.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+    //     expect(pattern.instance.linkModal.linkTypes.anchor.anchorNodes.length).toEqual(1);
     //     setTimeout(function () {
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).length
-    //         ).to.equal(1);
+    //         ).toEqual(1);
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).data("linktype")
-    //         ).to.equal("anchor");
+    //         ).toEqual("anchor");
     //     }, 100);
     // });
 
@@ -586,7 +612,7 @@ describe("TinyMCE", function () {
 
     //     pattern.tiny.setContent("<h1>blah</h1>");
     //     pattern.addLinkClicked();
-    //     expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+    //     expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).toEqual(1);
     // });
 
     // it("test anchor get index", function () {
@@ -596,7 +622,7 @@ describe("TinyMCE", function () {
 
     //     pattern.tiny.setContent("<h1>blah</h1><h1>foobar</h1>");
     //     pattern.addLinkClicked();
-    //     expect(pattern.linkModal.linkTypes.anchor.getIndex("foobar")).to.equal(1);
+    //     expect(pattern.linkModal.linkTypes.anchor.getIndex("foobar")).toEqual(1);
     // });
 
     // it("test anchor get url", function () {
@@ -607,7 +633,7 @@ describe("TinyMCE", function () {
     //     pattern.tiny.setContent("<h1>blah</h1>");
     //     pattern.addLinkClicked();
     //     pattern.linkModal.linkTypes.anchor.$select.select2("data", "0");
-    //     expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal("#blah");
+    //     expect(pattern.linkModal.linkTypes.anchor.toUrl()).toEqual("#blah");
     // });
 
     // it("test tracks link type changes", function () {
@@ -617,7 +643,7 @@ describe("TinyMCE", function () {
 
     //     pattern.addLinkClicked();
     //     pattern.linkModal.modal.$modal.find(".autotoc-nav a").eq(1).trigger("click");
-    //     expect(pattern.linkModal.linkType).to.equal("upload");
+    //     expect(pattern.linkModal.linkType).toEqual("upload");
     // });
 
     // it("test guess link when no data- attribute present", function () {
@@ -630,14 +656,14 @@ describe("TinyMCE", function () {
     //     );
     //     pattern.addLinkClicked();
 
-    //     expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal("foobar");
+    //     expect(pattern.linkModal.linkTypes.external.getEl().val()).toEqual("foobar");
     //     setTimeout(function () {
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).length
-    //         ).to.equal(1);
+    //         ).toEqual(1);
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).data("linktype")
-    //         ).to.equal("external");
+    //         ).toEqual("external");
     //     }, 100);
     // });
 
@@ -653,14 +679,14 @@ describe("TinyMCE", function () {
     //     );
     //     pattern.addLinkClicked();
 
-    //     expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal("#foobar");
+    //     expect(pattern.linkModal.linkTypes.anchor.toUrl()).toEqual("#foobar");
     //     setTimeout(function () {
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).length
-    //         ).to.equal(1);
+    //         ).toEqual(1);
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).data("linktype")
-    //         ).to.equal("anchor");
+    //         ).toEqual("anchor");
     //     }, 100);
     // });
 
