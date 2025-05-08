@@ -405,8 +405,24 @@
 <td style="text-align:center">'section'</td>
 <td style="text-align:center">Tag type to use for TOC.</td>
 </tr>
+<tr>
+<td style="text-align:center">validationDelay</td>
+<td style="text-align:center">number</td>
+<td style="text-align:center">200</td>
+<td style="text-align:center">For tabbed forms: Delay time in ms after the validation marker gets active.</td>
+</tr>
 </tbody>
 </table>
+<h2>Validation support for tabbed forms</h2>
+<p>In case the autotoc pattern is used for tabbed forms together with
+pat-validation (a quite common case for z3c forms in Plone) the autotoc
+navigation items are marked with <code>required</code> and <code>invalid</code> classes, if
+applicable.</p>
+<p>This allows for a quick overview in which tabs required input fields or invalid
+data is present.</p>
+<p>The option <code>validationDelay</code> is set to twice the delay of pat-validation input
+check delay. The default is 200ms after which the form's tab-navigation is
+marked with the required and invalid CSS classes.</p>
 <h2>Examples</h2>
 <h3>Example 1</h3>
 <div class="pat-autotoc" data-pat-autotoc="scrollDuration:slow;levels:h4,h5,h6;">
