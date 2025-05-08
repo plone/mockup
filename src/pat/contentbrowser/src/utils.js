@@ -1,5 +1,8 @@
+import logger from "@patternslib/patternslib/src/core/logging";
 import utils from "../../../core/utils.js";
 import I18n from "../../../core/i18n.js";
+
+const log = logger.getLogger("pat-contentbrowser");
 
 export async function request({
     method = "GET",
@@ -8,6 +11,7 @@ export async function request({
     path = null,
     uids = null,
     searchTerm = null,
+    searchIndex = "SearchableText",
     searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
@@ -85,9 +89,9 @@ export async function request({
     }
     if (searchTerm) {
         vocabQuery.criteria.push({
-            i: "SearchableText",
+            i: searchIndex,
             o: "plone.app.querystring.operation.string.contains",
-            v: `${searchTerm}`,
+            v: searchTerm,
 
         })
     }
@@ -98,15 +102,17 @@ export async function request({
             total: 0,
         }
     };
-
-    let url = `${vocabularyUrl}${vocabularyUrl.indexOf("?") !== -1 ? "&" : "?"}query=${JSON.stringify(
-        vocabQuery
-    )}&attributes=${JSON.stringify(attributes)}&batch=${JSON.stringify({
+    const url_query = JSON.stringify(vocabQuery);
+    const url_parameters = JSON.stringify(attributes);
+    const url_batch = JSON.stringify({
         page: page,
         size: pageSize,
-    })}`;
+    });
 
-    let headers = new Headers();
+    const url = encodeURI(`${vocabularyUrl}${vocabularyUrl.indexOf("?") !== -1 ? "&" : "?"}query=${url_query}&attributes=${url_parameters}&batch=${url_batch}`);
+    log.debug(url);
+
+    const headers = new Headers();
     headers.set("Accept", "application/json");
 
     const response = await fetch(url, {

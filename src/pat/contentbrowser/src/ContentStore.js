@@ -10,6 +10,7 @@ export default function (config, pathCache) {
             attributes: config.attributes,
             pageSize: config.pageSize,
             browseableTypes: config.browseableTypes,
+            searchIndex: config.searchIndex,
         };
         query = {
             ...defaults,
@@ -88,7 +89,7 @@ export default function (config, pathCache) {
             if (
                 !(p in pC) ||  // new path not found in cache
                 (isFirstPath && searchTerm) ||  // filtering the level
-                updateCache  // manual cache update request
+                (isFirstPath && updateCache)  // manual cache update request
             ) {
                 let query = {
                     path: p,
@@ -101,15 +102,14 @@ export default function (config, pathCache) {
                 level = await load(query);
 
                 // check if there is more than the current batch
-                level.more = config.pageSize < level.total;
-                // save possible search filter for later batch loading
-                level.searchTerm = searchTerm;
+                level.load_more = config.pageSize < level.total;
                 level.page = 1;
                 level.path = p;
+                level.searchTerm = searchTerm;
                 level.displayPath = p.replace(new RegExp(`^(${hideRootPath}|${rootPath})`), "") || "/"
 
-                // do not update cache when searching
-                if (!searchTerm) {
+                if(searchTerm === "") {
+                    // get level info
                     const levelInfo = await load({
                         levelInfoPath: p,
                     });
@@ -121,12 +121,17 @@ export default function (config, pathCache) {
                         // check if level is selectable (config.selectableTypes)
                         level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.results[0].portal_type) != -1);
                     }
-                    level.showFilter = false;
-                    pathCache.update((n) => {
-                        n[p] = level;
-                        return n;
-                    });
                 }
+
+                // persist showFilter value from previously cached path
+                if (p in pC) {
+                    level.showFilter = pC[p].showFilter || level.showFilter;
+                }
+
+                pathCache.update((n) => {
+                    n[p] = level;
+                    return n;
+                });
             } else {
                 level = pC[p];
             }
@@ -141,29 +146,26 @@ export default function (config, pathCache) {
             page: page,
         };
         if (searchTerm) {
-            if (searchTerm.length < 2) {
-                // minimum length of search term
-                return;
-            }
             query["searchTerm"] = "*" + searchTerm + "*";
         }
+
         let level = await load(query);
-        level.page = page;
-        level.searchTerm = searchTerm;
+        level.searchTerm = searchTerm
+        const has_more = (page * config.pageSize) < level.total;
 
         store.update((levels) => {
-            const has_more = (page * config.pageSize) < level.total;
 
             // first time or new search
             if (levels.length == 0 || levels[0].searchTerm != searchTerm) {
-                level.more = has_more;
+                level.load_more = has_more;
                 level.selectable = false;
+                level.page = page
                 return [level,];
             }
 
             // has more ?
-            levels[0].more = has_more;
-            levels[0].page = level.page;
+            levels[0].load_more = has_more;
+            levels[0].page = page;
 
             // append new batch
             levels[0].results = [
@@ -185,16 +187,14 @@ export default function (config, pathCache) {
         }
 
         let level = await load(query);
-        level.more = (page * config.pageSize) < level.total;
-        level.page = page;
 
         store.update((levels) => {
             levels.forEach((l) => {
                 if (l.path != p) {
                     return l;
                 }
-                l.page = level.page;
-                l.more = level.more;
+                l.page = page;
+                l.load_more = (page * config.pageSize) < level.total;
                 l.results = [
                     ...l.results,
                     ...level.results,
@@ -212,19 +212,17 @@ export default function (config, pathCache) {
         page = 1,
         mode = null,
     }) => {
-        if(mode == null) {
+        if (mode == null) {
             mode = config.mode;
         }
         if (mode === "search") {
             await search(searchTerm, page);
         } else if (loadMorePath) {
             const pC = get(pathCache);
-            if (!(loadMorePath in pC)) {
-                return;
-            }
+            // get path from previously loaded cache
             let level = pC[loadMorePath];
             if (page > level.page) {
-                await nextBatch(loadMorePath, page, level.searchTerm);
+                await nextBatch(loadMorePath, page, searchTerm);
             }
         } else if (path) {
             await browse(path, searchTerm, updateCache);

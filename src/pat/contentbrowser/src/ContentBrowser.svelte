@@ -285,6 +285,10 @@
         addItem(event.detail.item);
     }
 
+    function itemId(item) {
+        return item.path?.split("/").pop() || "- no id -";
+    }
+
     async function selectFavorite(event) {
         const path = event.detail.item.path;
         const response = await request({
@@ -305,6 +309,9 @@
     }
 
     function closeBrowser() {
+        // hide levelfilter and clear all filters
+        filterLevel("");
+        // clear search
         searchTerm = null;
         $config.mode = defaultConfigMode;
         $showContentBrowser = false;
@@ -330,9 +337,9 @@
         const item_path = item.path.split("/");
         const curr_path = $currentPath.split("/");
         let in_path = true;
-        for(const idx in item_path) {
+        for (const idx in item_path) {
             // check path parts to be equal
-            in_path = in_path && (item_path[idx] === curr_path[idx]);
+            in_path = in_path && item_path[idx] === curr_path[idx];
         }
         return in_path;
     }
@@ -353,7 +360,7 @@
             mode: $config.mode,
         });
         updatePreview({ action: "clear" });
-        if(!val) {
+        if (!val) {
             scrollToRight();
         }
     }
@@ -368,7 +375,7 @@
         } else {
             scrollToRight();
         }
-        await contentItems.get({ path: $currentPath, searchTerm: val });
+        await contentItems.get({ path: $currentPath, searchTerm: val, updateCache: true });
     };
 
     function loadMore(node) {
@@ -376,11 +383,10 @@
             (entries) => {
                 for (const entry of entries) {
                     if (entry.isIntersecting) {
-                        const path = node.dataset.levelPath;
-                        const page = parseInt(node.dataset.levelNextPage);
                         contentItems.get({
-                            loadMorePath: path,
-                            page: page,
+                            loadMorePath: node.dataset.levelPath,
+                            page: +node.dataset.levelNextPage,
+                            searchTerm: node.dataset.searchTerm,
                         });
                     }
                 }
@@ -390,7 +396,7 @@
         // defer observing
         window.setTimeout(() => {
             observer.observe(node);
-        }, 500);
+        }, 300);
     }
 
     $: {
@@ -495,7 +501,8 @@
                                             <button
                                                 class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                                 title={_t("select ${level_path}", {
-                                                    level_path: level.Title,
+                                                    level_path:
+                                                        level.Title || itemId(level),
                                                 })}
                                                 disabled={!isSelectable(level)}
                                                 on:click|preventDefault={() =>
@@ -506,7 +513,7 @@
                                                     }}
                                                 />
                                                 <span class="select-button-ellipsis"
-                                                    >{level.Title}</span
+                                                    >{level.Title || itemId(level)}</span
                                                 ></button
                                             >
                                         {/if}
@@ -517,7 +524,7 @@
                                                         type="text"
                                                         name="levelFilter"
                                                         class="form-control form-control-sm"
-                                                        value={level.searchTerm}
+                                                        value={level.searchTerm || ""}
                                                         on:input={filterLevelKeyup}
                                                     />
                                                     <button
@@ -602,12 +609,13 @@
                                                 class={gridView
                                                     ? "grid-preview"
                                                     : "item-title"}
-                                                title="{item.path}: {item.Title}"
+                                                title="{item.path}: {item.Title ||
+                                                    itemId(item)}"
                                             >
                                                 {#if gridView && item.getIcon}
                                                     <img
                                                         src={`${item.getURL}/@@images/image/thumb`}
-                                                        alt={item.Title}
+                                                        alt={item.Title || itemId(item)}
                                                     />
                                                 {:else}
                                                     <span class="plone-icon">
@@ -618,7 +626,10 @@
                                                         />
                                                     </span>
                                                 {/if}
-                                                {item.Title}
+                                                <span
+                                                    class={!item.Title ? "id-only" : ""}
+                                                    >{item.Title || itemId(item)}</span
+                                                >
                                                 {#if $config.mode == "search"}
                                                     <br /><span class="small"
                                                         >{item.path}</span
@@ -637,12 +648,13 @@
                                             {/if}
                                         </div>
                                     {/each}
-                                    {#if level.more}
+                                    {#if level.load_more}
                                         <div
                                             class="loadmore"
                                             data-level-path={level.path}
-                                            data-level-next-page={parseInt(level.page) +
-                                                1}
+                                            data-search-term={searchTerm ||
+                                                level.searchTerm}
+                                            data-level-next-page={+level.page + 1}
                                             use:loadMore
                                         >
                                             <div
@@ -700,6 +712,8 @@
                                     </div>
                                 {/if}
                                 <dl>
+                                    <dt>{_t("Id")}</dt>
+                                    <dd>{itemId(previewItem)}</dd>
                                     <dt>{_t("Title")}</dt>
                                     <dd>{previewItem.Title}</dd>
                                     {#if previewItem.Description}
@@ -896,6 +910,9 @@
         object-fit: cover;
         float: left;
         margin-right: 1rem;
+    }
+    .contentItem .id-only {
+        font-style: italic;
     }
     .preview {
         width: 320px;
