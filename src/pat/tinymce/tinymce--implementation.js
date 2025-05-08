@@ -131,10 +131,12 @@ export default class TinyMCE {
                 lang.split("-")[1].toUpperCase();
         }
 
-        if (lang !== "en" && self.options.tiny.language !== "en") {
+        self.options.tiny.language = lang;
+
+        if (lang !== "en") {
+            // load translations from tinymce-i18n
             try {
                 await import(`tinymce-i18n/langs7/${lang}`);
-                self.options.tiny.language = lang;
             } catch {
                 log.debug("Could not load TinyMCE language: ", lang);
                 try {
