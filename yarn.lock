@@ -2028,10 +2028,10 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@plone/registry@^2.1.0":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@plone/registry/-/registry-2.4.1.tgz#8b08f5dc19c2ac95ced0759944a4ea5fca1dff23"
-  integrity sha512-U3d77FGkaywbhmKpywZdJEbrG2N0UgVjAwnobCjylYSZatXV4MfA4JZBFIVsRZ8Vdn8YClWHechoqAR4i1FD0Q==
+"@plone/registry@^2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@plone/registry/-/registry-2.5.3.tgz#5e8802e2ca44b6ca7bb68f642e7de71dbb25381b"
+  integrity sha512-+Dc/mEBe7iSin62OXXJErN4x1AUG0HI0aJ9g0doYlYcLdBRqwfHSxMcfyBD5SPQ5RsrAfu56jF2xCuBJUoBp5A==
   dependencies:
     auto-config-loader "^1.7.7"
     crypto-random-string "3.2.0"
