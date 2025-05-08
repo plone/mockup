@@ -344,6 +344,11 @@ export default class TinyMCE {
             tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
         }
 
+        // XXX: This is a quickfix for the wrong "menubar" type in "plone.base.interfaces.controlpanel.ITinyMCEPluginSchema"
+        if (tinyOptions.menubar && Array.isArray(tinyOptions.menubar)) {
+            tinyOptions.menubar = tinyOptions.menubar.join(" ").trim();
+        }
+
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
     }
