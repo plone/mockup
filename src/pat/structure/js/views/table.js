@@ -68,7 +68,12 @@ export default BaseView.extend({
         this.trigger("context-info:set");
     },
 
-    render: async function () {
+    /**
+     * Render method
+     * @param {any} triggerCollection – if render is called as callback for a Backbone collection, Backbone will
+     *                      pass the collection as first argument
+     */
+    render: async function (triggerCollection) {
         // By default do not start sorted by any column
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
@@ -156,6 +161,14 @@ export default BaseView.extend({
             await table_row_rendering_finished();
             events.remove_event_listener = (this.el, "table_row_rendering_finished__listener"); // prettier-ignore
             registry.scan(this.$el);
+
+            // Set the context (again) after rerendering. If render was called after a collection sync – which is the
+            // case if Backbone passed the collection as eventObject – do nothing, as collection syncs are always
+            // followed by a context sync followed by a 'context-info-loaded' event,
+            // which will trigger setContextInfo with the new context anyway.
+            if (this.contextInfo && triggerCollection !== this.collection) {
+                this.setContextInfo();
+            }
         }
 
         this.$el
@@ -231,6 +244,7 @@ export default BaseView.extend({
     },
 
     selectAll: function (e) {
+        // select all items on the *current* page
         if ($(e.target).is(":checked")) {
             $('input[type="checkbox"]', this.$("tbody")).prop("checked", true).trigger("change");
         } else {
@@ -241,12 +255,6 @@ export default BaseView.extend({
             this.selectedCollection.trigger("remove");
         }
         this.setContextInfo();
-    },
-    toggleSelectAll: function (e) {
-        const $el = $(e.target);
-        if (!$el.is(":checked")) {
-            this.$(".select-all").prop("checked", false);
-        }
     },
 
     addReordering: function () {

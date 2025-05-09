@@ -290,7 +290,7 @@ msgid "Configure displayed columns"
 msgstr ""
 
 #: ./src/pat/structure/js/views/app.js
-msgid "Selected"
+msgid "${current} of ${total} selected"
 msgstr ""
 
 #: ./src/pat/structure/js/views/app.js
@@ -358,11 +358,19 @@ msgid "Sorting the content on the base of the site could affect your navigation 
 msgstr ""
 
 #: ./src/pat/structure/js/views/selectionwell.js
-msgid "Filter"
+msgid "Change selection"
 msgstr ""
 
 #: ./src/pat/structure/js/views/selectionwell.js
-msgid "remove all"
+msgid "Select all items in the folder"
+msgstr ""
+
+#: ./src/pat/structure/js/views/selectionwell.js
+msgid "Select all items on this page"
+msgstr ""
+
+#: ./src/pat/structure/js/views/selectionwell.js
+msgid "Cancel selection"
 msgstr ""
 
 #: ./src/pat/structure/js/views/table.js
@@ -383,6 +391,10 @@ msgstr ""
 
 #: ./src/pat/structure/js/views/textfilter.js
 msgid "Drag and drop reordering is disabled while filters are applied."
+msgstr ""
+
+#: ./src/pat/structure/js/views/textfilter.js
+msgid "Filter"
 msgstr ""
 
 #: ./src/pat/structure/templates/actionmenu.xml
@@ -407,10 +419,6 @@ msgstr ""
 
 #: ./src/pat/structure/templates/table.xml
 msgid "Root"
-msgstr ""
-
-#: ./src/pat/structure/templates/table.xml
-msgid "Select all"
 msgstr ""
 
 #: ./src/pat/structure/templates/tablerow.xml
