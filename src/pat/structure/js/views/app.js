@@ -533,7 +533,7 @@ export default BaseView.extend({
             toBeRemoved.forEach(function (statusItem) {
                 try {
                     statusContainer.removeChild(statusItem.el);
-                } catch (e) {
+                } catch {
                     // just ignore.
                 }
             });
@@ -548,7 +548,7 @@ export default BaseView.extend({
                         try {
                             statusContainer.removeChild(statusItem.el);
                             toBeRemoved.push(statusItem);
-                        } catch (e) {
+                        } catch {
                             // just ignore.
                         }
                     }
@@ -656,7 +656,7 @@ export default BaseView.extend({
         try {
             val = Cookies.get(this.cookieSettingPrefix + name);
             val = JSON.parse(val).value;
-        } catch (e) {
+        } catch {
             /* error parsing json, load default here now */
             return _default;
         }

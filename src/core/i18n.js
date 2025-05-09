@@ -42,7 +42,7 @@ const i18n = function () {
         ) {
             self.storage = window.localStorage;
         }
-    } catch (e) {
+    } catch {
         console.log("Failed to set local storage");
     }
 
