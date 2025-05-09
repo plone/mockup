@@ -193,9 +193,15 @@ describe("2 - AutoTOC with tabs", function () {
         const tabs = document.querySelectorAll(".autotoc-nav > a");
         expect(tabs.length).toEqual(3);
 
+        // Reqwuired checks
         expect(tabs[0].classList.contains("required")).toEqual(false);
         expect(tabs[1].classList.contains("required")).toEqual(true);
         expect(tabs[2].classList.contains("required")).toEqual(false);
+
+        // Validation checks
+        expect(tabs[0].classList.contains("invalid")).toEqual(false);
+        expect(tabs[1].classList.contains("invalid")).toEqual(false);
+        expect(tabs[2].classList.contains("invalid")).toEqual(false);
 
         inp1.dispatchEvent(events.change_event());
         inp2.dispatchEvent(events.change_event());
