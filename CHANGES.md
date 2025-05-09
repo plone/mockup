@@ -2,6 +2,46 @@
 
 
 
+## [5.1.16](https://github.com/plone/mockup/compare/5.1.15...5.1.16) (2025-05-09)
+
+
+### Features
+
+
+* **pat-autotoc:** Set required and invalid classes on autotoc nav an… ([#1455](https://github.com/plone/mockup/issues/1455)) ([806a193](https://github.com/plone/mockup/commit/806a193375263c6fb64eaa9d74eb76ce9e00923f))
+
+  * pat-autotoc: Reformat docs and remove fancy table-text-centering, which makes extending the docs more difficult than it should be.
+
+* feat(pat-autotoc): Set required and invalid classes on form tabs if applicable.
+
+
+
+### Maintenance
+
+
+* @patternslib/dev upgrade - Adapt Makefile. ([3425b0d](https://github.com/plone/mockup/commit/3425b0dc484675805870e53679e274e06ea393ee))
+
+
+* @patternslib/dev upgrade - create eslint.config.js. ([4245032](https://github.com/plone/mockup/commit/42450326c9455e3df9248dac5379dbdf7854383e))
+
+
+* @patternslib/dev upgrade - remove .husky directory in favor of git hooks. ([cfc8e0a](https://github.com/plone/mockup/commit/cfc8e0af624464a7ee027af44ef13741707d8002))
+
+
+* @patternslib/dev upgrade - remove old .eslintrc.js. ([3b68fbe](https://github.com/plone/mockup/commit/3b68fbea59bbf97d9bf1aa63b126f8611802660a))
+
+
+* Fix eslint warnings. ([678696b](https://github.com/plone/mockup/commit/678696bd3e52422fa4117d7eaa3a588857fe4e17))
+
+
+* Upgrade @patternslib/dev to 3.8.1. ([333b2d7](https://github.com/plone/mockup/commit/333b2d70e1d4ca2beb7e241bd9224f5f427913eb))
+
+
+* Upgrade @patternslib/patternslib to 9.10.2. ([8a1f7c2](https://github.com/plone/mockup/commit/8a1f7c21fd6d3f8270d506ad8798b93a60de33fb))
+
+
+* Upgrade to latest LTS node version. ([c454a40](https://github.com/plone/mockup/commit/c454a4010f0b2aea6ae8c4a46f8b0472b17c719c))
+
 ## [5.1.15](https://github.com/plone/mockup/compare/5.1.14...5.1.15) (2024-12-18)
 
 
