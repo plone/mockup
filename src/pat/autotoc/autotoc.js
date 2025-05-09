@@ -139,8 +139,8 @@ export default Base.extend({
     initialize_validation: function ($el) {
         const el = $el[0];
 
-        // Initialize only on pat-validation forms.
-        const form = el.closest("form.pat-validation");
+        // Initialize only on forms
+        const form = el.closest("form");
         if (!form) {
             return;
         }
@@ -155,6 +155,11 @@ export default Base.extend({
             } else {
                 tab.nav.classList.remove("required");
             }
+        }
+
+        // Initialize the validation css class markings only for pat-validation forms.
+        if (!form.matches(".pat-validation")) {
+            return;
         }
 
         const debounced_validation_marker = utils.debounce(() => {

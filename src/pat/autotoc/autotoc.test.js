@@ -274,7 +274,7 @@ describe("2 - AutoTOC with tabs", function () {
 
     it.skip("2.3 - Also set required for checkboxes or radio buttons, where no required attribute might be set on the input itself but instead on or near the label.", async function () {
         document.body.innerHTML = `
-            <form class="pat-validation pat-autotoc"
+            <form class="pat-autotoc"
                   data-pat-autotoc="
                       levels: legend;
                       section: fieldset;
