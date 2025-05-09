@@ -139,18 +139,27 @@ export default Base.extend({
     initialize_validation: function ($el) {
         const el = $el[0];
 
-        // Initialize only on pat-validation forms.
-        const form = el.closest("form.pat-validation");
+        // Initialize only on forms
+        const form = el.closest("form");
         if (!form) {
             return;
         }
 
         for (const tab of this.tabs) {
-            if (tab.section.querySelectorAll("[required]").length > 0) {
+            if (
+                tab.section.querySelectorAll(
+                    "label.required, label .required, [required]",
+                ).length > 0
+            ) {
                 tab.nav.classList.add("required");
             } else {
                 tab.nav.classList.remove("required");
             }
+        }
+
+        // Initialize the validation css class markings only for pat-validation forms.
+        if (!form.matches(".pat-validation")) {
+            return;
         }
 
         const debounced_validation_marker = utils.debounce(() => {
