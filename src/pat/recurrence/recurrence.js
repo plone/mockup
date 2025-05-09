@@ -46,7 +46,6 @@ function format(date, fmt, conf) {
     return result;
 }
 
-// eslint-disable-next-line no-unused-vars
 function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
     var value = form.find("select[name=rirtemplate]").val();
     var rtemplate = conf.rtemplate[value];

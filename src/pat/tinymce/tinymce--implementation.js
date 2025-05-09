@@ -118,7 +118,7 @@ export default class TinyMCE {
         if (lang !== "en" && self.options.tiny.language !== "en") {
             try {
                 await import(`tinymce-i18n/langs5/${lang}`);
-            } catch (e) {
+            } catch {
                 log.debug("Could not load TinyMCE language: ", lang);
                 try {
                     // expected lang not available, let's fallback to closest one
@@ -130,7 +130,7 @@ export default class TinyMCE {
                     log.debug("Trying with: ", lang);
                     await import(`tinymce-i18n/langs5/${lang}`);
                     self.options.tiny.language = lang;
-                } catch (e) {
+                } catch {
                     log.debug("Could not load TinyMCE language. Fallback to English");
                     self.options.tiny.language = "en";
                 }
@@ -159,7 +159,7 @@ export default class TinyMCE {
             try {
                 await import("tinymce/plugins/" + plugin);
                 valid_plugins.push(plugin);
-            } catch (e) {
+            } catch {
                 log.debug("Could not load TinyMCE plugin: ", plugin);
             }
         }

@@ -811,7 +811,7 @@ export default Base.extend({
             var href;
             try {
                 href = self.getLinkUrl();
-            } catch (error) {
+            } catch {
                 return; // just cut out if no url
             }
             if (!href) {

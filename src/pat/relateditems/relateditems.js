@@ -649,7 +649,7 @@ export default Base.extend({
                                     .map((uid) => results[uid])
                                     .filter((item) => item !== undefined)
                             );
-                        } catch (e) {
+                        } catch {
                             // Select2 3.5.4 throws an error in some cases in
                             // updateSelection, ``this.selection.find(".select2-search-choice").remove();``
                             // No idea why, hard to track.
