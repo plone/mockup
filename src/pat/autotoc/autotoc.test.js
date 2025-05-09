@@ -265,4 +265,41 @@ describe("2 - AutoTOC with tabs", function () {
         expect(spy_validation_marker).toHaveBeenCalledTimes(1);
         jest.restoreAllMocks();
     });
+
+    it.skip("2.3 - Also set required for checkboxes or radio buttons, where no required attribute might be set on the input itself but instead on or near the label.", async function () {
+        document.body.innerHTML = `
+            <form class="pat-validation pat-autotoc"
+                  data-pat-autotoc="
+                      levels: legend;
+                      section: fieldset;
+                      className: autotabs;
+                      validationDelay: 0;
+                  "
+            >
+                <fieldset id="fieldset-1">
+                    <legend>Tab 1</legend>
+                    <label class="required">Input 1</label>
+                </fieldset>
+
+                <fieldset id="fieldset-2">
+                    <legend>Tab 2</legend>
+                    <label>Input 2 <span class="required"/></label>
+                </fieldset>
+
+                <fieldset id="fieldset-3">
+                    <legend>Tab 3</legend>
+                </fieldset>
+            </form>
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const tabs = document.querySelectorAll(".autotoc-nav > a");
+        expect(tabs.length).toEqual(3);
+
+        expect(tabs[0].classList.contains("required")).toEqual(true);
+        expect(tabs[1].classList.contains("required")).toEqual(true);
+        expect(tabs[2].classList.contains("required")).toEqual(false);
+    });
 });

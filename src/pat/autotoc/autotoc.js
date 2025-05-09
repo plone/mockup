@@ -146,7 +146,11 @@ export default Base.extend({
         }
 
         for (const tab of this.tabs) {
-            if (tab.section.querySelectorAll("[required]").length > 0) {
+            if (
+                tab.section.querySelectorAll(
+                    "label.required, label .required, [required]",
+                ).length > 0
+            ) {
                 tab.nav.classList.add("required");
             } else {
                 tab.nav.classList.remove("required");
