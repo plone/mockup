@@ -2,6 +2,35 @@
 
 
 
+## [5.1.17](https://github.com/plone/mockup/compare/5.1.16...5.1.17) (2025-05-09)
+
+
+### Features
+
+
+* **pat-autotoc:** Set the required CSS class on the tab navigation for any forms, not only pat-validation ones. ([493ae5c](https://github.com/plone/mockup/commit/493ae5c507ef2b68176e27fe7b6be62bce39b977))
+
+
+
+### Bug Fixes
+
+
+* **pat autotoc:** Show required indicator for tabs with reuqired multi-checkbox or radio button fields. ([5277fe9](https://github.com/plone/mockup/commit/5277fe92e879b4d0e55a5c6de56a6a3029d17bc2))
+
+  A groupt of multiple required checkboxes for a single field are rendered
+in Plone currently without the required attribute. The same goes for radio
+buttons. Instead the label is marked as required.
+
+This PR supports this situation and also marks the tab-navigation as
+required, if a field label is marked as required.`
+
+
+
+### Maintenance
+
+
+* **pat-autotocs:** Minor addition to tests. ([83bf52c](https://github.com/plone/mockup/commit/83bf52c16ce1a275d766fcc088b71f340eaf002a))
+
 ## [5.1.16](https://github.com/plone/mockup/compare/5.1.15...5.1.16) (2025-05-09)
 
 
