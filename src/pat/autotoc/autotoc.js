@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
+import utils from "@patternslib/patternslib/src/core/utils";
 
 export default Base.extend({
     name: "autotoc",
@@ -15,7 +16,11 @@ export default Base.extend({
         classActiveName: "active",
         scrollDuration: "slow",
         scrollEasing: "swing",
+        validationDelay: 200, // Note: This is set to twice as the default delay time for validation.
     },
+
+    tabs: [],
+
     init: function () {
         import("./autotoc.scss");
 
@@ -42,10 +47,10 @@ export default Base.extend({
         var activeId = null;
 
         $(self.options.levels, self.$el).each(function (i) {
-            var $level = $(this),
-                id = $level.prop("id")
-                    ? $level.prop("id")
-                    : $level.parents(self.options.section).prop("id");
+            const section = this.closest(self.options.section);
+            const $level = $(this);
+            let id = $level.prop("id") ? $level.prop("id") : $(section).prop("id");
+
             if (!id || $("#" + id).length > 0) {
                 id = self.options.IDPrefix + self.name + "-" + i;
             }
@@ -56,8 +61,8 @@ export default Base.extend({
                 activeId = id;
             }
             $level.data("navref", id);
-            $("<a/>")
-                .appendTo(self.$toc)
+            const $nav = $("<a/>");
+            $nav.appendTo(self.$toc)
                 .text($level.text())
                 .attr("id", id)
                 .attr("href", "#" + id)
@@ -107,6 +112,12 @@ export default Base.extend({
                     }
                 });
             $level.data("autotoc-trigger-id", id);
+
+            self.tabs.push({
+                section: section,
+                id: id,
+                nav: $nav[0],
+            });
         });
 
         if (activeId) {
@@ -120,7 +131,51 @@ export default Base.extend({
                 skipHash: true,
             });
         }
+
+        // After DOM tree is built, initialize eventual validation
+        this.initialize_validation(self.$el);
     },
+
+    initialize_validation: function ($el) {
+        const el = $el[0];
+
+        // Initialize only on pat-validation forms.
+        const form = el.closest("form.pat-validation");
+        if (!form) {
+            return;
+        }
+
+        for (const tab of this.tabs) {
+            if (tab.section.querySelectorAll("[required]").length > 0) {
+                tab.nav.classList.add("required");
+            } else {
+                tab.nav.classList.remove("required");
+            }
+        }
+
+        const debounced_validation_marker = utils.debounce(() => {
+            this.validation_marker();
+        }, this.options.validationDelay);
+
+        form.addEventListener("pat-update", (e) => {
+            if (e.detail?.pattern !== "validation") {
+                // Nothing to do.
+                return;
+            }
+            debounced_validation_marker();
+        });
+    },
+
+    validation_marker: function () {
+        for (const tab of this.tabs) {
+            if (tab.section.querySelectorAll(":invalid").length > 0) {
+                tab.nav.classList.add("invalid");
+            } else {
+                tab.nav.classList.remove("invalid");
+            }
+        }
+    },
+
     getLevel: function ($el) {
         var elementLevel = 0;
         $.each(this.options.levels.split(","), function (level, levelSelector) {
