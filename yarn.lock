@@ -2101,6 +2101,13 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@plone/plonetheme-barceloneta-base@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@plone/plonetheme-barceloneta-base/-/plonetheme-barceloneta-base-3.2.3.tgz#187d3acc462b6e480dc74e05a0830943ed932e30"
+  integrity sha512-fzMrH8Qvy8ZSLmdYivnteuEcHuuSzVg+FzlVQnJh9/5LofTBulX/VhWSYuLKr0IQsQf+wc4afOlvKDkhmbMOaQ==
+  dependencies:
+    bootstrap "5.3.3"
+
 "@plone/registry@^2.5.3":
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/@plone/registry/-/registry-2.5.3.tgz#5e8802e2ca44b6ca7bb68f642e7de71dbb25381b"
@@ -3309,6 +3316,11 @@ bootstrap-icons@1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.12.1.tgz#66b0b9d62a576451bd8b3d1a0daa3049cdb453b8"
   integrity sha512-ekwupjsteHQmgGV+haQ0nNMoSyKCbJj5ou+06vFzb9uR2/bwN9isNEgXBaQzcT+fLzhKS3OaBNpwz8XdZlIgYQ==
+
+bootstrap@5.3.3:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.3.3.tgz#de35e1a765c897ac940021900fcbb831602bac38"
+  integrity sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==
 
 bootstrap@5.3.6:
   version "5.3.6"
