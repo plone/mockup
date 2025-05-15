@@ -339,6 +339,54 @@
 
       <main id="content">
         <h1>Changelog</h1>
+<h2><a href="https://github.com/plone/mockup/compare/5.3.4...5.3.5">5.3.5</a> (2025-05-15)</h2>
+<h3>Features</h3>
+<ul>
+<li>
+<p><strong>pat contentbrowser:</strong> configurable searchIndex for filtering (<a href="https://github.com/plone/mockup/commit/051438b1c976172d23e6299e6379a6f2b982b2ce">051438b</a>)</p>
+</li>
+<li>
+<p><strong>pat-autotoc:</strong> Set required and invalid classes on autotoc nav an… (<a href="https://github.com/plone/mockup/issues/1455">#1455</a>) (<a href="https://github.com/plone/mockup/commit/24b45704d82ca238ba561212e754754cb356fbc1">24b4570</a>)</p>
+<ul>
+<li>pat-autotoc: Reformat docs and remove fancy table-text-centering, which makes extending the docs more difficult than it should be.</li>
+</ul>
+</li>
+<li>
+<p>feat(pat-autotoc): Set required and invalid classes on form tabs if applicable.</p>
+</li>
+<li>
+<p><strong>pat-autotoc:</strong> Set the required CSS class on the tab navigation for any forms, not only pat-validation ones. (<a href="https://github.com/plone/mockup/commit/d822df5ae16a6b4377a9e94379c52e2a89c6afe5">d822df5</a>)</p>
+</li>
+</ul>
+<h3>Bug Fixes</h3>
+<ul>
+<li>
+<p><strong>pat autotoc:</strong> Show required indicator for tabs with reuqired multi-checkbox or radio button fields. (<a href="https://github.com/plone/mockup/commit/50aeca0d8ba8b6e758df24c323465eb6b1d4bebe">50aeca0</a>)</p>
+<p>A groupt of multiple required checkboxes for a single field are rendered
+in Plone currently without the required attribute. The same goes for radio
+buttons. Instead the label is marked as required.</p>
+</li>
+</ul>
+<p>This PR supports this situation and also marks the tab-navigation as
+required, if a field label is marked as required.`</p>
+<ul>
+<li>
+<p><strong>pat contentbrowser:</strong> fix batching with levelFilter or searchTerm (<a href="https://github.com/plone/mockup/commit/5146f4b0a1f2dc30363b9e6b1baa2b571c056ecf">5146f4b</a>)</p>
+</li>
+<li>
+<p><strong>pat contentbrowser:</strong> show id when there is no Title (<a href="https://github.com/plone/mockup/commit/d89637ccff21b7aa3d0484d5f2274fb80b0ae4c8">d89637c</a>)</p>
+</li>
+<li>
+<p><strong>pat tinymce:</strong> fix value type of &quot;menubar&quot; setting. See plone.staticresources<a href="https://github.com/plone/mockup/issues/379">#379</a> (<a href="https://github.com/plone/mockup/commit/069eae0acb444d9e7607443222f2bc9922155942">069eae0</a>)</p>
+</li>
+<li>
+<p><strong>pat tinymce:</strong> set language code after underscore replacement in init options (<a href="https://github.com/plone/mockup/commit/83922ea361e11b49ea291c8fabeaf863f2f5e1c0">83922ea</a>)</p>
+</li>
+</ul>
+<h3>Maintenance</h3>
+<ul>
+<li><strong>pat-autotocs:</strong> Minor addition to tests. (<a href="https://github.com/plone/mockup/commit/ef589e7d595922a46869a31a3bc84fc549f6b76b">ef589e7</a>)</li>
+</ul>
 <h2><a href="https://github.com/plone/mockup/compare/5.3.3...5.3.4">5.3.4</a> (2025-03-17)</h2>
 <h3>Bug Fixes</h3>
 <ul>
