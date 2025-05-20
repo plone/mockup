@@ -40,7 +40,7 @@
     let keyboardNavInitialized = false;
     let shiftKey = false;
     let searchTerm = null;
-    let gridView = false;
+    let gridView = ($config.layout || "list") === "grid";
     let defaultConfigMode = $config.mode;
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
