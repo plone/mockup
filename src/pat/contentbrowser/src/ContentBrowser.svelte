@@ -378,7 +378,11 @@
         } else {
             scrollToRight();
         }
-        await contentItems.get({ path: $currentPath, searchTerm: val, updateCache: true });
+        await contentItems.get({
+            path: $currentPath,
+            searchTerm: val,
+            updateCache: true,
+        });
     };
 
     function loadMore(node) {
