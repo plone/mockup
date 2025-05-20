@@ -83,7 +83,10 @@
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
             success: (fileupload, obj) => {
-                $previewUids.push(obj.UID);
+                updatePreview({
+                    uuid: obj.UID,
+                    action: "add",
+                });
             },
             queuecomplete: (fileUpload, obj) => {
                 contentItems.get({ path: $currentPath, updateCache: true });
