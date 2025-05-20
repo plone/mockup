@@ -113,7 +113,7 @@
         "/webpack.config.js"
     ],
     "engines": {
-        "node": ">=12.20.0"
+        "node": ">=22"
     },
     "browserslist": [
         "defaults"
