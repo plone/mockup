@@ -10,28 +10,30 @@ Show a widget to select items in an offcanvas miller-column browser.
 
 ## Configuration
 
-|           Option           |  Type   |                 Default                 |                                                                        Description                                                                        |
-| :------------------------: | :-----: | :-------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|       vocabularyUrl        | string  |                   null                  |                                             This is a URL to a JSON-formatted file used to populate the list                                              |
-|         attributes         |  array  | ['UID', 'Title', 'portal_type', 'path'] |                 This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.                 |
-|          rootPath          | string  |                   "/"                   |                                              Browsing/searching root path. You will not get beneath this path                                             |
-|          rootUrl           | string  |                                         |                                                               Browsing/searching root url.                                                                |
-|          basePath          | string  |            set to rootPath.             |                                                             Start browse/search in this path.                                                             |
-|        contextPath         | string  |                                         |                         Path of the object, which is currently edited. If this path is given, this object will not be selectable.                         |
-|       selectableTypes      |  array  |                   []                    |                                                           List of portal_types to be selectable                                                           |
-|       browseableTypes      |  array  |               ["Folder"]                |                                                           List of portal_types to be browseable                                                           |
-|         favorites          |  array  |                   []                    |     Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path".      |
-|    maximumSelectionSize    | integer |                   -1                    |            The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited.            |
-|           mode             | string  |                "browse"                 |                                                            Toggle between "browse" and "search"                                                           |
-|           width            | integer |                                         |                                                    Override the width of the selected items field                                                         |
-|           bSize            | integer |                   10                    |                                                          Batch size of the items listed in levels                                                         |
-|          maxDepth          | integer |                                         |                                                           Maximum level depth for "browse" mode                                                           |
-|         separator          | string  |                   ','                   |                                                  Select2 option. String which separates multiple items.                                                   |
-|           upload           | boolean |                                         |                                            Allow file and image uploads from within the related items widget.                                             |
-|       recentlyUsed         | boolean |                  false                  |                                                           Show the recently used items dropdown.                                                          |
-|      recentlyUsedKey       | integer |                                         |                     Storage key for saving the recently used items. This is generated with fieldname and username in the patternoptions.                  |
-|    recentlyUsedMaxItems    | integer |                    20                   |                                              Maximum items to keep in recently used list. 0: no restriction.                                              |
-|     customComponentKeys    |  dict   |                    {}                   |                                           Register custom components. Currently only "SelectedItem" implemented                                           |
+|           Option           |  Type   |                 Default                 |                                                                        Description                                                               |
+| :------------------------: | :-----: | :-------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------: |
+| vocabularyUrl              | string  | null                                    | This is a URL to a JSON-formatted file used to populate the list                                                                                 |
+| attributes                 | array   | ['UID', 'Title', 'portal_type', 'path'] | This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.                        |
+| rootPath                   | string  | "/"                                     | Browsing/searching root path. You will not get beneath this path                                                                                 |
+| rootUrl                    | string  |                                         | Browsing/searching root url.                                                                                                                     |
+| basePath                   | string  | set to rootPath.                        | Start browse/search in this path.                                                                                                                |
+| contextPath                | string  |                                         | Path of the object, which is currently edited. If this path is given, this object will not be selectable.                                        |
+| selectableTypes            | array   | []                                      | List of portal_types to be selectable                                                                                                            |
+| browseableTypes            | array   | ["Folder"]                              | List of portal_types to be browseable                                                                                                            |
+| favorites                  | array   | []                                      | Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". |
+| maximumSelectionSize       | integer | -1                                      | The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited.              |
+| mode                       | string  | "browse"                                | Toggle between "browse" and "search"                                                                                                             |
+| layout                     | string  | "list"                                  | Toggle between "list" and "grid" (show teaser image in column)                                                                                   |
+| width                      | integer | unset                                   | Override the width of the selected items field                                                                                                   |
+| bSize                      | integer | 10                                      | Batch size of the items listed in levels                                                                                                         |
+| maxDepth                   | integer |                                         | Maximum level depth for "browse" mode                                                                                                            |
+| separator                  | string  | ','                                     | Select2 option. String which separates multiple items.                                                                                           |
+| upload                     | boolean | false                                   | Allow file and image uploads from within the related items widget.                                                                               |
+| recentlyUsed               | boolean | false                                   | Show the recently used items dropdown.                                                                                                           |
+| recentlyUsedKey            | integer |                                         | Storage key for saving the recently used items. This is generated with fieldname and username in the patternoptions.                             |
+| recentlyUsedMaxItems       | integer | 20                                      | Maximum items to keep in recently used list. 0: no restriction.                                                                                  |
+| customComponentKeys        | dict    | {}                                      | Register custom components. Currently only "SelectedItem" implemented                                                                            |
+| searchIndex                | string  | "SearchableText"                        | Catalog search index for filtering and search mode. (Note: only ZCTextIndex allowed)                                                             |
 
 
 ## Default
@@ -87,7 +89,7 @@ Show a widget to select items in an offcanvas miller-column browser.
 
 ## Register custom component
 
-Currently only for `SelectedItem` component available.
+Use the `customComponentKeys.selectedItem` configuration value as follows to override the `SelectedItems` compontent (only supported component currently).
 
 ```html
 <input
@@ -102,6 +104,9 @@ Currently only for `SelectedItem` component available.
 ```
 
 Copy the existing component `src/SelectedItem.svelte` to your addon, customize it and register it in your JS bundle as follows:
+
+Note: the `name` of the registered component must match the `customComponentKeys.selectedItem` config value defined above.
+It can be any unique identifier.
 
 ```javascript
 ...
@@ -123,5 +128,5 @@ register_selecteditem_component();
 
 ```
 
-Note: this needs the `svelte-loader` plugin in your webpack.config.js ... see mockups webpack config for info.
+Note: this needs the `svelte-loader` plugin in your webpack.config.js ... see mockups `webpack.config.js` for more info.
 
