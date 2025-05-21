@@ -279,6 +279,11 @@ export default class TinyMCE {
             self.$el.hide();
         }
 
+        // The `importcss_file_filter` is used to filter the CSS files
+        // from `content_css` which should be used to automatically create the
+        // styles dropdown.
+        // Also see:
+        // https://www.tiny.cloud/docs/tinymce/latest/importcss/#importcss_file_filter
         if (
             tinyOptions.importcss_file_filter &&
             typeof tinyOptions.importcss_file_filter.indexOf === "function" &&
