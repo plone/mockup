@@ -1,9 +1,8 @@
 import ButtonView from "../../../../core/ui/views/button";
-import tplButton from "../../templates/selection_button.xml";
 
 export default ButtonView.extend({
     collection: null,
-    template: tplButton,
+    template: '<%- _t("${current} of ${total} selected", { current: current, total: total })  %>',
 
     initialize: function (options) {
         ButtonView.prototype.initialize.apply(this, [options]);
@@ -26,15 +25,10 @@ export default ButtonView.extend({
         }
     },
 
-    serializedModel: function () {
-        const obj = {
-            icon: "",
-            title: this.options.title,
-            length: 0,
+    serializedModel: function() {
+        return {
+            current: (this.collection !== null) ? this.collection.length : 0,
+            total: (this.appCollection.state.totalRecords) ? this.appCollection.state.totalRecords : 0,
         };
-        if (this.collection !== null) {
-            obj.length = this.collection.length;
-        }
-        return obj;
     },
 });
