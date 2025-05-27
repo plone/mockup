@@ -10,17 +10,33 @@ Automatically create a table of contents.
 
 ## Configuration
 
-|        Option        |  Type  |      Default      |              Description              |
-| :------------------: | :----: | :---------------: | :-----------------------------------: |
-|       IDPrefix       | string |  'autotoc-item-'  |      Prefix used to generate ID.      |
-|   classActiveName    | string |     'active'      |     Class used for active level.      |
-| classLevelPrefixName | string | 'autotoc-level-'  | Class prefix used for the TOC levels. |
-|   classSectionName   | string | 'autotoc-section' |    Class used for section in TOC.     |
-|     classTOCName     | string |   'autotoc-nav'   |        Class used for the TOC.        |
-|        levels        | string |    'h1,h2,h3'     |    Selectors used to find levels.     |
-|    scrollDuration    | string |      'slow'       |          Speed of scrolling.          |
-|     scrollEasing     | string |      'swing'      |    Easing to use while scrolling.     |
-|       section        | string |     'section'     |       Tag type to use for TOC.        |
+|        Option        |  Type  |      Default      |              Description                                                    |
+| :------------------: | :----: | :---------------: | :-------------------------------------------------------------------------: |
+| IDPrefix             | string | 'autotoc-item-'   | Prefix used to generate ID.                                                 |
+| classActiveName      | string | 'active'          | Class used for active level.                                                |
+| classLevelPrefixName | string | 'autotoc-level-'  | Class prefix used for the TOC levels.                                       |
+| classSectionName     | string | 'autotoc-section' | Class used for section in TOC.                                              |
+| classTOCName         | string | 'autotoc-nav'     | Class used for the TOC.                                                     |
+| levels               | string | 'h1,h2,h3'        | Selectors used to find levels.                                              |
+| scrollDuration       | string | 'slow'            | Speed of scrolling.                                                         |
+| scrollEasing         | string | 'swing'           | Easing to use while scrolling.                                              |
+| section              | string | 'section'         | Tag type to use for TOC.                                                    |
+| validationDelay      | number | 200               | For tabbed forms: Delay time in ms after the validation marker gets active. |
+
+## Validation support for tabbed forms
+
+In case the autotoc pattern is used for tabbed forms together with
+pat-validation (a quite common case for z3c forms in Plone) the autotoc
+navigation items are marked with `required` and `invalid` classes, if
+applicable.
+
+This allows for a quick overview in which tabs required input fields or invalid
+data is present.
+
+The option `validationDelay` is set to twice the delay of pat-validation input
+check delay. The default is 200ms after which the form's tab-navigation is
+marked with the required and invalid CSS classes.
+
 
 ## Examples
 

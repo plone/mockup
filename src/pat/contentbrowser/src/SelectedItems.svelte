@@ -8,6 +8,7 @@
 
     let ref;
     let initializing = true;
+    let RegisteredSelectedItem;
 
     // get reactive context config
     const config = getContext("config");
@@ -21,18 +22,29 @@
     // showContentBrowser reactive state
     const showContentBrowser = getContext("showContentBrowser");
 
-    // get selectedItem component from registry.
-    // the registry key can be customized with pattern_options
-    // if an addon registers a custom component to a custom key
-    const RegisteredSelectedItem = plone_registry.getComponent(
-        $config.componentRegistryKeys?.selectedItem || "pat-contentbrowser.SelectedItem",
-    );
-
     onMount(async () => {
         await initializeSelectedItemsStore();
         initializeSorting();
         initializing = false;
     });
+
+    async function getSelectedItemComponent() {
+        // get selectedItem component from registry.
+        // the registry key can be customized with pattern_options
+        // if an addon registers a custom component to a custom key
+        if ($config.componentRegistryKeys?.selectedItem) {
+            RegisteredSelectedItem = plone_registry.getComponent(
+                $config.componentRegistryKeys.selectedItem,
+            );
+        }
+        // fallback if no custom component was registered
+        // or no valid component in registry
+        if (!RegisteredSelectedItem?.component) {
+            RegisteredSelectedItem = plone_registry.getComponent(
+                "pat-contentbrowser.SelectedItem",
+            );
+        }
+    }
 
     function unselectItem(uid) {
         selectedItems.update((n) => {
@@ -40,10 +52,6 @@
         });
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
-
-    // use this function in "SelectedItem" component with
-    // const unselectItem = getContext("unselectItem")
-    setContext("unselectItem", unselectItem);
 
     async function initializeSelectedItemsStore() {
         const initialValue = $config.selection.length
@@ -123,9 +131,13 @@
         on:click={() => ($showContentBrowser = $selectedItems.length ? false : true)}
     >
         {#if $selectedItems}
-            {#each $selectedItems as selItem, i (selItem.UID)}
-                <div use:LoadSelectedItemComponent={{ item: selItem }} />
-            {/each}
+            {#await getSelectedItemComponent() then}
+                {#each $selectedItems as selItem, i (selItem.UID)}
+                    <div use:LoadSelectedItemComponent={{ item: selItem, unselectItem: unselectItem }} />
+                {/each}
+            {:catch error}
+                <p style="color: red">{error.message}</p>
+            {/await}
         {/if}
         {#if !$selectedItems}
             <p>{_t("loading selected items")}</p>

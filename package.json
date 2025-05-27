@@ -1,23 +1,23 @@
 {
     "name": "@plone/mockup",
-    "version": "5.3.2",
+    "version": "5.3.5",
     "description": "A collection of client side patterns for faster and easier web development",
     "license": "BSD-3-Clause",
     "main": "./src/patterns.js",
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
         "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "nwsapi": "Since version 2.2.3 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
+        "nwsapi": "Since version 2.2.14 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
     },
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "2",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.9.16",
-        "@plone/registry": "^2.1.0",
+        "@patternslib/patternslib": "9.10.2",
+        "@plone/registry": "^2.5.3",
         "backbone": "1.6.0",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "5.3.3",
-        "bootstrap-icons": "1.11.3",
+        "bootstrap": "5.3.6",
+        "bootstrap-icons": "1.12.1",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
         "datatables.net-bs5": "1.12.1",
@@ -41,15 +41,15 @@
         "js-cookie": "^3.0.5",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.6",
-        "tinymce": "7.6.1",
-        "tinymce-i18n": "24.12.30",
+        "tinymce": "7.8.0",
+        "tinymce-i18n": "25.3.17",
         "underscore": "^1.13.7"
     },
     "devDependencies": {
         "@11ty/eleventy": "^2.0.1",
         "@11ty/eleventy-navigation": "^0.3.5",
         "@11ty/eleventy-plugin-syntaxhighlight": "^4.2.0",
-        "@patternslib/dev": "^3.7.2",
+        "@patternslib/dev": "^3.8.1",
         "@testing-library/jest-dom": "^6.6.3",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",
@@ -80,7 +80,7 @@
         "datatables.net-select": "<1.5",
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
-        "nwsapi": "2.2.12",
+        "nwsapi": "2.2.13",
         "sass": "~1.77.8",
         "underscore": "1.13.7"
     },
@@ -113,7 +113,7 @@
         "/webpack.config.js"
     ],
     "engines": {
-        "node": ">=12.20.0"
+        "node": ">=22"
     },
     "browserslist": [
         "defaults"

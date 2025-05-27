@@ -2,6 +2,91 @@
 
 
 
+## [5.3.5](https://github.com/plone/mockup/compare/5.3.4...5.3.5) (2025-05-15)
+
+
+### Features
+
+
+* **pat contentbrowser:** configurable searchIndex for filtering ([051438b](https://github.com/plone/mockup/commit/051438b1c976172d23e6299e6379a6f2b982b2ce))
+
+
+* **pat-autotoc:** Set required and invalid classes on autotoc nav an… ([#1455](https://github.com/plone/mockup/issues/1455)) ([24b4570](https://github.com/plone/mockup/commit/24b45704d82ca238ba561212e754754cb356fbc1))
+
+  * pat-autotoc: Reformat docs and remove fancy table-text-centering, which makes extending the docs more difficult than it should be.
+
+* feat(pat-autotoc): Set required and invalid classes on form tabs if applicable.
+
+
+* **pat-autotoc:** Set the required CSS class on the tab navigation for any forms, not only pat-validation ones. ([d822df5](https://github.com/plone/mockup/commit/d822df5ae16a6b4377a9e94379c52e2a89c6afe5))
+
+
+
+### Bug Fixes
+
+
+* **pat autotoc:** Show required indicator for tabs with reuqired multi-checkbox or radio button fields. ([50aeca0](https://github.com/plone/mockup/commit/50aeca0d8ba8b6e758df24c323465eb6b1d4bebe))
+
+  A groupt of multiple required checkboxes for a single field are rendered
+in Plone currently without the required attribute. The same goes for radio
+buttons. Instead the label is marked as required.
+
+This PR supports this situation and also marks the tab-navigation as
+required, if a field label is marked as required.`
+
+
+* **pat contentbrowser:** fix batching with levelFilter or searchTerm ([5146f4b](https://github.com/plone/mockup/commit/5146f4b0a1f2dc30363b9e6b1baa2b571c056ecf))
+
+
+* **pat contentbrowser:** show id when there is no Title ([d89637c](https://github.com/plone/mockup/commit/d89637ccff21b7aa3d0484d5f2274fb80b0ae4c8))
+
+
+* **pat tinymce:** fix value type of "menubar" setting. See plone.staticresources[#379](https://github.com/plone/mockup/issues/379) ([069eae0](https://github.com/plone/mockup/commit/069eae0acb444d9e7607443222f2bc9922155942))
+
+
+* **pat tinymce:** set language code after underscore replacement in init options ([83922ea](https://github.com/plone/mockup/commit/83922ea361e11b49ea291c8fabeaf863f2f5e1c0))
+
+
+
+### Maintenance
+
+
+* **pat-autotocs:** Minor addition to tests. ([ef589e7](https://github.com/plone/mockup/commit/ef589e7d595922a46869a31a3bc84fc549f6b76b))
+
+## [5.3.4](https://github.com/plone/mockup/compare/5.3.3...5.3.4) (2025-03-17)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** add multilanguage container types to browseableTypes. ([bc7c25a](https://github.com/plone/mockup/commit/bc7c25a141e64ead5e6344a1ce43ec1cfd79bbe1))
+
+
+* **pat contentbrowser:** improve upload experience ([22dffe8](https://github.com/plone/mockup/commit/22dffe8f11b0c2455be80b05395c0bd6ae8889f8))
+
+  Change strategy to "upload and add immediately" in order to avoid too many clicks when "upload" is activated in the options ... see TinyMCE's "add Image" dialog where you can upload images.
+
+## [5.3.3](https://github.com/plone/mockup/compare/5.3.2...5.3.3) (2025-03-04)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** await custom registered SelectedItem components and fix unselect factory. ([0619eb6](https://github.com/plone/mockup/commit/0619eb6fabe1f8d34f937b1dc231a5265383d4c4))
+
+
+* **pat tinymce:** Update TinyMCE 7.7.0 ([fdf3e84](https://github.com/plone/mockup/commit/fdf3e847afca1e0f3f7595f59367909a1c361117))
+
+
+
+### Maintenance
+
+
+* **bundle:** update dependencies ([e746402](https://github.com/plone/mockup/commit/e7464025c58e47980535fabd3063495e4e4b35f1))
+
+
+* **documentation:** Fix "modal with buttons" example. ([e7a410d](https://github.com/plone/mockup/commit/e7a410df7e8e902d11e016834e2c0b646558039b))
+
 ## [5.3.2](https://github.com/plone/mockup/compare/5.3.1...5.3.2) (2025-02-21)
 
 

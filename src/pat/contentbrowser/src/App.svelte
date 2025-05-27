@@ -19,11 +19,13 @@
     export let contextPath;
     export let vocabularyUrl;
     export let mode = "browse";
+    export let layout = "list";
     export let rootPath = "";
     export let rootUrl = "";
     export let basePath = "";
     export let selectableTypes = [];
-    export let browseableTypes = ["Folder"];
+    export let browseableTypes = ["Folder", "LIF", "LRF"];
+    export let searchIndex = "SearchableText";
     export let maximumSelectionSize = -1;
     export let separator;
     export let selection = [];
@@ -76,6 +78,7 @@
     let config = getContext("config");
     $config = {
         mode: mode,
+        layout: layout,
         attributes: attributes,
         contextPath: contextPath,
         vocabularyUrl: vocabularyUrl,
@@ -86,6 +89,7 @@
         basePath: basePath,
         selectableTypes: selectableTypes,
         browseableTypes: browseableTypes,
+        searchIndex: searchIndex,
         maximumSelectionSize: maximumSelectionSize,
         separator: separator,
         selection: selection,
@@ -100,7 +104,7 @@
         componentRegistryKeys: componentRegistryKeys,
     };
 
-    log.debug(`Initialized App<${fieldId}> with config ${JSON.stringify($config)}`);
+    log.debug(`Initialized App<${fieldId}> with config`, $config);
 </script>
 
 <ContentBrowser />

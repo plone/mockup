@@ -131,7 +131,10 @@ export default class TinyMCE {
                 lang.split("-")[1].toUpperCase();
         }
 
-        if (lang !== "en" && self.options.tiny.language !== "en") {
+        self.options.tiny.language = lang;
+
+        if (lang !== "en") {
+            // load translations from tinymce-i18n
             try {
                 await import(`tinymce-i18n/langs7/${lang}`);
             } catch {
@@ -276,6 +279,11 @@ export default class TinyMCE {
             self.$el.hide();
         }
 
+        // The `importcss_file_filter` is used to filter the CSS files
+        // from `content_css` which should be used to automatically create the
+        // styles dropdown.
+        // Also see:
+        // https://6.docs.plone.org/classic-ui/tinymce-customization.html#inject-formats-with-files-named-tinymce-formats-css
         if (
             tinyOptions.importcss_file_filter &&
             typeof tinyOptions.importcss_file_filter.indexOf === "function" &&
@@ -339,6 +347,11 @@ export default class TinyMCE {
         // toolbar: "styleselect" -> "styles"
         if (tinyOptions?.toolbar) {
             tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
+        }
+
+        // XXX: This is a quickfix for the wrong "menubar" type in "plone.base.interfaces.controlpanel.ITinyMCEPluginSchema"
+        if (tinyOptions.menubar && Array.isArray(tinyOptions.menubar)) {
+            tinyOptions.menubar = tinyOptions.menubar.join(" ").trim();
         }
 
         tinymce.init(tinyOptions);
