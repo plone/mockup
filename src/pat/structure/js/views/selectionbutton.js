@@ -1,4 +1,5 @@
 import ButtonView from "../../../../core/ui/views/button";
+import _ from "underscore";
 
 export default ButtonView.extend({
     collection: null,
@@ -23,6 +24,8 @@ export default ButtonView.extend({
                 this
             );
         }
+        // keep count up-to-date
+        this.appCollection.on('reset sync', this.render, this);
     },
 
     serializedModel: function() {
