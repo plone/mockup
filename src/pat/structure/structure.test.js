@@ -188,7 +188,7 @@ describe("Structure", function () {
                 200,
                 { "Content-Type": "application/json" },
                 JSON.stringify({
-                    total: 100,
+                    total: 32,
                     results: items,
                 })
             );
@@ -322,7 +322,7 @@ describe("Structure", function () {
         expect(this.$el.find("table").length).toEqual(1);
     });
 
-    it("select item populates selection well", async function () {
+    it("select item populates selection button", async function () {
         registry.scan(this.el);
         await utils.timeout(200);
 
@@ -330,73 +330,81 @@ describe("Structure", function () {
         cb[0].checked = true;
         cb.trigger("change");
         await utils.timeout(100);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("1");
-        var selectedItems = $(".popover-content .selected-item", this.$el);
-        expect($(selectedItems[0]).text()).toContain("Folder");
+        expect(this.$el.find("#btn-change-selection").html()).toContain("1 of 32");
     });
 
-    it("test selection well label", async function () {
-        extraDataJsonItem = {
-            UID: 'XSS" data-xss="bobby',
-            getURL: "http://localhost:9876/xss",
-            path: "/xss",
-            portal_type: "Folder",
-            Description: "XSS test item",
-            Title: "<script>alert('XSS');window.foo=1;</script>",
-            review_state: "published",
-            is_folderish: true,
-            Subject: [],
-            id: "xss",
-        };
-        registry.scan(this.$el);
-        await utils.timeout(100);
-        // it's overloaded, pattern doesn't actually enforce batch limits.
-        var cb = this.$el.find(".itemRow td.selection input").eq(16);
-        cb[0].checked = true;
-        cb.trigger("change");
-        await utils.timeout(100);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("1");
+    it("select all items in the current folder", async function () {
+        let path = "";
+        let items = [];
+        let date = new Date();
+        for (var i = 0; i < 32; i++) {
+            items.push({
+                UID: "123sdfasdf" + i,
+                getURL: "http://localhost:9876" + path + "/item" + i,
+                path: path + "/item" + i,
+                portal_type: "Document",
+                Description: "document",
+                Title: "Document " + i,
+                review_state: "published",
+                is_folderish: false,
+                Subject: [],
+                id: "item" + i,
+                ExpirationDate: date,
+            })
+        }
 
-        // XSS happened.
-        expect(window.foo).not.toEqual(1);
-        expect(
-            $(".popover-content .selected-item a", this.$el).eq(0).data().xss
-        ).not.toEqual("bobby");
-        var selectedItems = $(".popover-content .selected-item", this.$el);
-        expect($(selectedItems[0]).text()).toContain(
-            "<script>alert('XSS');window.foo=1;</script>"
+        global.fetch = jest.fn().mockImplementation(
+            mockFetch({
+                results: items,
+                total: items.length,
+            }));
+
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-change-selection").html()).toContain("0 of 32 selected");
+        this.$el.find(".popover.change-selection a.select-all").trigger("click");
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-change-selection").html()).toContain("32 of 32 selected");
+
+        global.fetch.mockClear();
+        delete global.fetch;
+    });
+
+    it("select all currently shown on the page", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-change-selection").html()).toContain("0 of 32 selected");
+        this.$el.find(".popover.change-selection a.select-all-visible").trigger("click");
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-change-selection").html()).toContain("16 of 32 selected");
+    });
+
+    it("changing folder also resets the current selection", async function () {
+        registry.scan(this.$el);
+        await utils.timeout(200);
+        // select the items of the current page (will be reset later)
+        this.$el.find(".popover.change-selection a.select-all-visible").trigger("click");
+        await utils.timeout(200);
+        expect(this.$el.find("#btn-change-selection").html()).toContain("16 of 32 selected");
+
+        var item = this.$el.find(".itemRow").eq(0);
+        expect(item.data().id).toEqual("folder");
+        $(".title a.manage", item).trigger("click");
+        await utils.timeout(200);
+        expect(window.history.pushed.url).toEqual(
+            "http://localhost:9876/folder/folder_contents"
         );
-    });
+        expect(structureUrlChangedPath).toEqual("/folder");
+        expect(this.$el.find("#btn-change-selection").html()).toContain("0 of 32 selected");
 
-    it("remove item from selection well", async function () {
-        registry.scan(this.$el);
-        await utils.timeout(100);
-        var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
-        $item1[0].checked = true;
-        $item1.trigger("change");
-        this.$el
-            .find(".items.popover-content a.remove")
-            .trigger("click")
-            .trigger("change");
-        expect(this.$el.find("#btn-selected-items").html()).toContain("0");
-    });
+        $(".fc-breadcrumbs a", this.$el).eq(0).trigger("click");
+        await utils.timeout(200);
+        expect(window.history.pushed.url).toEqual(
+            "http://localhost:9876/folder_contents"
+        );
+        expect(structureUrlChangedPath).toEqual("");
+    }, 10000);
 
-    it("remove all from selection well", async function () {
-        registry.scan(this.$el);
-        await utils.timeout(100);
-        var $item1 = this.$el.find(".itemRow td.selection input").eq(0);
-        $item1[0].checked = true;
-        $item1.trigger("change");
-        await utils.timeout(100);
-        var $item2 = this.$el.find(".itemRow td.selection input").eq(1);
-        $item2[0].checked = true;
-        $item2.trigger("change");
-        await utils.timeout(100);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("2");
-        this.$el.find(".popover.selected-items a.remove-all").trigger("click");
-        await utils.timeout(100);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("0");
-    });
 
     it("paging", async function () {
         registry.scan(this.$el);
@@ -458,7 +466,7 @@ describe("Structure", function () {
         $item[0].checked = true;
         $item.trigger("change");
         await utils.timeout(200);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("16");
+        expect(this.$el.find("#btn-change-selection").html()).toContain("16 of 32 selected");
         expect($("table tbody .selection input:checked", this.$el).length).toEqual(16);
     });
 
@@ -470,13 +478,13 @@ describe("Structure", function () {
         $item[0].checked = true;
         $item.trigger("change");
         await utils.timeout(200);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("16");
+        expect(this.$el.find("#btn-change-selection").html()).toContain("16 of 32 selected");
         expect($("table tbody .selection input:checked", this.$el).length).toEqual(16);
 
         $item[0].checked = false;
         $item.trigger("change");
         await utils.timeout(200);
-        expect(this.$el.find("#btn-selected-items").html()).toContain("0");
+        expect(this.$el.find("#btn-change-selection").html()).toContain("0 of 32 selected");
         expect($("table tbody .selection input:checked", this.$el).length).toEqual(0);
     });
 
@@ -511,7 +519,7 @@ describe("Structure", function () {
 
     it("test select displayed columns", async function () {
         registry.scan(this.$el);
-        await utils.timeout(100);
+        await utils.timeout(300);
         var $row = this.$el.find("table thead tr").eq(0);
         expect($row.find("th").length).toEqual(6);
         expect($row.find("th").eq(1).text().trim()).toEqual("Title");
@@ -573,15 +581,11 @@ describe("Structure", function () {
         // folder
         var folder = this.$el.find(".itemRow").eq(0);
         expect(folder.data().id).toEqual("folder");
-        expect($(".actionmenu a.action", folder).length).toEqual(7);
+        expect($(".actionmenu a.action", folder).length).toEqual(6);
         // no pasting (see next test
         expect($(".actionmenu a.pasteItem", folder).length).toEqual(0);
         // no set default page
         expect($(".actionmenu a.set-default-page", folder).length).toEqual(0);
-        // can select all
-        expect($(".actionmenu a.selectAll", folder).text().trim()).toEqual(
-            "Select all contained items"
-        );
     });
 
     it("test itemRow default actionmenu item", async function () {
@@ -597,8 +601,6 @@ describe("Structure", function () {
         var item = this.$el.find(".itemRow").eq(10);
         expect(item.data().id).toEqual("item9");
         expect($(".actionmenu a.action", item).length).toEqual(7);
-        // cannot select all
-        expect($("a.selectAll", item).length).toEqual(0);
         // can set default page
         expect($("a.set-default-page", item).length).toEqual(1);
         expect($("a.set-default-page", item).text().trim()).toEqual(
@@ -628,7 +630,7 @@ describe("Structure", function () {
         // top item
         var item0 = this.$el.find(".itemRow").eq(0);
         expect(item0.data().id).toEqual("folder");
-        expect($(".actionmenu a.action", item0).length).toEqual(8);
+        expect($(".actionmenu a.action", item0).length).toEqual(7);
         expect($("a.pasteItem", item0).text().trim()).toEqual("Paste");
         $("a.pasteItem", item0).trigger("click");
         await utils.timeout(100);
@@ -659,18 +661,6 @@ describe("Structure", function () {
         // No items actually moved, this is to be implemented server-side.
     });
 
-    it.skip("test itemRow actionmenu selectAll click", async function () {
-        registry.scan(this.$el);
-        await utils.timeout(200);
-
-        var folder = this.$el.find(".itemRow").eq(0);
-        $(".actionmenu a.selectAll", folder).trigger("click");
-        await utils.timeout(200);
-        expect($("table tbody .selection input:checked", this.$el).length).toEqual(0);
-        // all items in the folder be populated within the selection well.
-        expect(this.$el.find("#btn-selected-items").html()).toContain("101");
-    });
-
     it("test navigate to item", async function () {
         registry.scan(this.$el);
         await utils.timeout(200);
@@ -689,19 +679,19 @@ describe("Structure", function () {
 
     it("test navigate to folder push states", async function () {
         registry.scan(this.$el);
-        await utils.timeout(100);
+        await utils.timeout(200);
 
         var item = this.$el.find(".itemRow").eq(0);
         expect(item.data().id).toEqual("folder");
         $(".title a.manage", item).trigger("click");
-        await utils.timeout(100);
+        await utils.timeout(200);
         expect(window.history.pushed.url).toEqual(
             "http://localhost:9876/folder/folder_contents"
         );
         expect(structureUrlChangedPath).toEqual("/folder");
 
         $(".fc-breadcrumbs a", this.$el).eq(0).trigger("click");
-        await utils.timeout(100);
+        await utils.timeout(200);
         expect(window.history.pushed.url).toEqual(
             "http://localhost:9876/folder_contents"
         );
