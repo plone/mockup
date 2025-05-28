@@ -418,15 +418,9 @@
 <td style="text-align:center">Toggle between &quot;browse&quot; and &quot;search&quot;</td>
 </tr>
 <tr>
-<td style="text-align:center">layout</td>
-<td style="text-align:center">string</td>
-<td style="text-align:center">&quot;list&quot;</td>
-<td style="text-align:center">Toggle between &quot;list&quot; and &quot;grid&quot; (show teaser image in column)</td>
-</tr>
-<tr>
 <td style="text-align:center">width</td>
 <td style="text-align:center">integer</td>
-<td style="text-align:center">unset</td>
+<td style="text-align:center"></td>
 <td style="text-align:center">Override the width of the selected items field</td>
 </tr>
 <tr>
@@ -450,7 +444,7 @@
 <tr>
 <td style="text-align:center">upload</td>
 <td style="text-align:center">boolean</td>
-<td style="text-align:center">false</td>
+<td style="text-align:center"></td>
 <td style="text-align:center">Allow file and image uploads from within the related items widget.</td>
 </tr>
 <tr>
@@ -477,12 +471,6 @@
 <td style="text-align:center">{}</td>
 <td style="text-align:center">Register custom components. Currently only &quot;SelectedItem&quot; implemented</td>
 </tr>
-<tr>
-<td style="text-align:center">searchIndex</td>
-<td style="text-align:center">string</td>
-<td style="text-align:center">&quot;SearchableText&quot;</td>
-<td style="text-align:center">Catalog search index for filtering and search mode. (Note: only ZCTextIndex allowed)</td>
-</tr>
 </tbody>
 </table>
 <h2>Default</h2>
@@ -496,13 +484,11 @@
 <h2>Mode &quot;browse&quot;, Upload</h2>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Image", "File"], "vocabularyUrl": "contentbrowser-test.json", "upload": true}<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
 <h2>Register custom component</h2>
-<p>Use the <code>customComponentKeys.selectedItem</code> configuration value as follows to override the <code>SelectedItems</code> compontent (only supported component currently).</p>
+<p>Currently only for <code>SelectedItem</code> component available.</p>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{<br>        "customComponentKeys": {<br>            "SelectedItem": "pat-contentbrowser.myfield.MySelectedItemComponent",<br>        },<br>    }<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
 <p>Copy the existing component <code>src/SelectedItem.svelte</code> to your addon, customize it and register it in your JS bundle as follows:</p>
-<p>Note: the <code>name</code> of the registered component must match the <code>customComponentKeys.selectedItem</code> config value defined above.
-It can be any unique identifier.</p>
 <pre class="language-javascript"><code class="language-javascript"><span class="token operator">...</span><br><span class="token keyword">import</span> plone_registry <span class="token keyword">from</span> <span class="token string">"@plone/registry"</span><span class="token punctuation">;</span><br><span class="token operator">...</span><br><br><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">register_selecteditem_component</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><br>    <span class="token comment">// we register our component to a custom keyname,</span><br>    <span class="token comment">// which later can be used for pattern_options</span><br>    <span class="token keyword">const</span> SelectedImages <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">await</span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">"./MySelectedItemComponent.svelte"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>default<span class="token punctuation">;</span><br>    plone_registry<span class="token punctuation">.</span><span class="token function">registerComponent</span><span class="token punctuation">(</span><span class="token punctuation">{</span><br>        <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"pat-contentbrowser.myfield.MySelectedItemComponent"</span><span class="token punctuation">,</span><br>        <span class="token literal-property property">component</span><span class="token operator">:</span> SelectedImages<span class="token punctuation">,</span><br>    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br><span class="token punctuation">}</span><br><span class="token function">register_selecteditem_component</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br><br><span class="token operator">...</span><br></code></pre>
-<p>Note: this needs the <code>svelte-loader</code> plugin in your webpack.config.js ... see mockups <code>webpack.config.js</code> for more info.</p>
+<p>Note: this needs the <code>svelte-loader</code> plugin in your webpack.config.js ... see mockups webpack config for info.</p>
 
       </main>
     </div>
