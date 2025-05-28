@@ -10,7 +10,7 @@ export default PopoverView.extend({
     className: "popover change-selection",
 
 
-    title: _t("Change selection"),
+    title: _t("Manage selection"),
 
     content: _.template(
         '<div class="list-group">' +

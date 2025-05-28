@@ -1,5 +1,4 @@
 import ButtonView from "../../../../core/ui/views/button";
-import _ from "underscore";
 
 export default ButtonView.extend({
     collection: null,

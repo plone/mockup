@@ -50,6 +50,10 @@ msgid "select ${preview_path}"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "Id"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "Title"
 msgstr ""
 
@@ -253,10 +257,6 @@ msgstr ""
 msgid "Set as default page"
 msgstr ""
 
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Select all contained items"
-msgstr ""
-
 #: ./src/pat/structure/js/actions.js
 msgid "cutting"
 msgstr ""
@@ -355,10 +355,6 @@ msgstr ""
 
 #: ./src/pat/structure/js/views/rearrange.js
 msgid "Sorting the content on the base of the site could affect your navigation order. Are you certain you want to do this?"
-msgstr ""
-
-#: ./src/pat/structure/js/views/selectionwell.js
-msgid "Change selection"
 msgstr ""
 
 #: ./src/pat/structure/js/views/selectionwell.js
