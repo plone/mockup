@@ -40,7 +40,7 @@
     let keyboardNavInitialized = false;
     let shiftKey = false;
     let searchTerm = null;
-    let gridView = false;
+    let gridView = ($config.layout || "list") === "grid";
     let defaultConfigMode = $config.mode;
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -83,7 +83,10 @@
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
             success: (fileupload, obj) => {
-                $previewUids.push(obj.UID);
+                updatePreview({
+                    uuid: obj.UID,
+                    action: "add",
+                });
             },
             queuecomplete: (fileUpload, obj) => {
                 contentItems.get({ path: $currentPath, updateCache: true });
@@ -375,7 +378,11 @@
         } else {
             scrollToRight();
         }
-        await contentItems.get({ path: $currentPath, searchTerm: val, updateCache: true });
+        await contentItems.get({
+            path: $currentPath,
+            searchTerm: val,
+            updateCache: true,
+        });
     };
 
     function loadMore(node) {

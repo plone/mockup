@@ -19,6 +19,7 @@
     export let contextPath;
     export let vocabularyUrl;
     export let mode = "browse";
+    export let layout = "list";
     export let rootPath = "";
     export let rootUrl = "";
     export let basePath = "";
@@ -77,6 +78,7 @@
     let config = getContext("config");
     $config = {
         mode: mode,
+        layout: layout,
         attributes: attributes,
         contextPath: contextPath,
         vocabularyUrl: vocabularyUrl,
