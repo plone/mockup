@@ -71,15 +71,6 @@ const menuOptions = {
         css: "",
         modal: false,
     },
-    "selectAll": {
-        method: "selectAll",
-        url: "#",
-        title: _t("Select all contained items"),
-        category: "dropdown",
-        icon: "check-all",
-        css: "",
-        modal: false,
-    },
 };
 
 const ActionMenu = function (menu) {
@@ -106,10 +97,6 @@ const ActionMenu = function (menu) {
         !app.setDefaultPageUrl
     ) {
         delete result["set-default-page"];
-    }
-
-    if (!model.is_folderish) {
-        delete result.selectAll;
     }
 
     const typeToViewAction = app.options.typeToViewAction;
