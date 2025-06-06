@@ -12,7 +12,7 @@
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "2",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.10.2",
+        "@patternslib/patternslib": "git+https://github.com/patternslib/Patterns.git#validation-min-max",,
         "@plone/registry": "^2.5.3",
         "backbone": "1.6.0",
         "backbone.paginator": "2.0.8",
@@ -63,7 +63,6 @@
         "svg-inline-loader": "^0.8.2"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.9.16",
         "backbone": "1.6.0",
         "datatables.net": "<1.13",
         "datatables.net-bs5": "<1.13",
