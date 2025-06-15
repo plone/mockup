@@ -6,6 +6,12 @@
         margin: 0 0 1em 1em;
         a {
             display: block;
+            padding: 0;
+            border: 0;
+            text-decoration: underline;
+        }
+        a.active {
+            color: var(--bs-nav-link-color);
         }
         a:focus {
             outline-style: none;
