@@ -2,6 +2,14 @@
 
 
 
+## [5.3.7](https://github.com/plone/mockup/compare/5.3.6...5.3.7) (2025-06-16)
+
+
+### Maintenance
+
+
+* **pat tinymce:** Update TinyMCE=7.9.1 ([c5add32](https://github.com/plone/mockup/commit/c5add32ec197a31804cc929952a98251bdf31cf1))
+
 ## [5.3.6](https://github.com/plone/mockup/compare/5.3.5...5.3.6) (2025-06-16)
 
 
