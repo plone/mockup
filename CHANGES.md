@@ -2,6 +2,31 @@
 
 
 
+## [5.3.6](https://github.com/plone/mockup/compare/5.3.5...5.3.6) (2025-06-16)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** correctly select uploaded items. ([49f7020](https://github.com/plone/mockup/commit/49f702029a06f9f1fea8102bb7c6edcc9c083b40))
+
+
+
+### Technical Changes
+
+
+* **pat contentbrowser:** add new config value 'layout' ([5a89ef7](https://github.com/plone/mockup/commit/5a89ef7807ca85843a2607877e1a4c5f72977a39))
+
+
+
+### Maintenance
+
+
+* **pat contentbrowser:** reformat README ([b9d401e](https://github.com/plone/mockup/commit/b9d401e3a36adfc5c6a3290f62dd41938a906f61))
+
+
+* Update the compatible node version to the current LTS version. ([de8a1a0](https://github.com/plone/mockup/commit/de8a1a09787b0c8a8e7a0e8e8bc3b97921ef934c))
+
 ## [5.3.5](https://github.com/plone/mockup/compare/5.3.4...5.3.5) (2025-05-15)
 
 
