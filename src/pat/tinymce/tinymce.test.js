@@ -348,7 +348,6 @@ describe("TinyMCE", function () {
         document.documentElement.setAttribute("lang", "de");
         document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
         await registry_scan();
-        console.log(document.body.innerHTML);
         expect(document.body.innerHTML).toContain(
             'aria-label="Ändern Sie die Größe des Editors, indem Sie die Pfeiltasten „Abwärts“ und „Aufwärts“ drücken."')
 
@@ -357,7 +356,6 @@ describe("TinyMCE", function () {
         document.documentElement.setAttribute("lang", "pt-br");
         document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
         await registry_scan();
-        console.log(document.body.innerHTML);
         expect(document.body.innerHTML).toContain(
             'aria-label="Use as teclas de seta acima e abaixo para redimensionar o editor."')
 
