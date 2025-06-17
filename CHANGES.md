@@ -2,6 +2,43 @@
 
 
 
+## [5.4.0-beta.0](https://github.com/plone/mockup/compare/5.3.7...5.4.0-beta.0) (2025-06-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **pat structure:** Rebuild widgets.po
+* **pat structure:** Fix tests and some minor issues
+* **pat structure:** Improve selection button and popover
+
+### Features
+
+
+* **pat structure:** Fix tests and some minor issues ([f283835](https://github.com/plone/mockup/commit/f283835fde5058d5de74daae777cf9cfc7520241))
+
+  * remove select all context action
+* fix count on selection button
+* fix tests
+
+
+* **pat structure:** Improve selection button and popover ([69ece05](https://github.com/plone/mockup/commit/69ece05f1375ba54763605545bfaf6376ee5d74a))
+
+  The selection button shows now the number of selected and maximum number of items within the current folder.
+The corresponding popover offers the option to select all items, all visible items on the page and to cancel the selection.
+The previous popover to manage the selected items is gone.
+There are also some minor fixes, e.g. one to prevent degrading the breadcrumb to show only ids, but rather keep the titles.
+The upper-left checkbox in the table for selecting all the items has now a tooltip.
+
+
+* **pat structure:** Rebuild widgets.po ([12f2127](https://github.com/plone/mockup/commit/12f2127668547b7e5ada471d947c68f80cfaceb6))
+
+
+
+### Bug Fixes
+
+
+* **pat structure:** Clear selection when changing path in structure pattern ([e0a78f6](https://github.com/plone/mockup/commit/e0a78f6fdc0110786bdd89f5def6468dfa7b7e44))
+
 ## [5.3.7](https://github.com/plone/mockup/compare/5.3.6...5.3.7) (2025-06-16)
 
 
