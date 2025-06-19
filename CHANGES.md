@@ -2,6 +2,14 @@
 
 
 
+## [5.4.0](https://github.com/plone/mockup/compare/5.4.0-beta.0...5.4.0) (2025-06-19)
+
+
+### Maintenance
+
+
+* upgrade dependencies ([45533f3](https://github.com/plone/mockup/commit/45533f31d58cfb47d3b01b55a6520f4978626082))
+
 ## [5.4.0-beta.0](https://github.com/plone/mockup/compare/5.3.7...5.4.0-beta.0) (2025-06-17)
 
 
