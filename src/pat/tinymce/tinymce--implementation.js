@@ -136,7 +136,7 @@ export default class TinyMCE {
         if (lang !== "en") {
             // load translations from tinymce-i18n
             try {
-                await import(`tinymce-i18n/langs7/${lang}`);
+                await import(`tinymce-i18n/langs7/${lang}`);                
             } catch {
                 log.debug("Could not load TinyMCE language: ", lang);
                 try {
@@ -154,8 +154,20 @@ export default class TinyMCE {
                     self.options.tiny.language = "en";
                 }
             }
+            await self.initPluginLanguage();
         }
     }
+    
+    async initPluginLanguage() {
+        var self = this;
+        const lang = self.options.tiny.language ;
+
+        if(self.options.tiny.plugins.includes("help")){
+            await import(`tinymce/plugins/help/js/i18n/keynav/${self.options.tiny.language}.js`);
+        }
+
+    }
+
     async init() {
         import("./tinymce.scss");
 
@@ -190,8 +202,9 @@ export default class TinyMCE {
                 log.debug("Could not load TinyMCE plugin: ", plugin);
             }
         }
-        this.options.tiny.plugins = valid_plugins;
-
+        
+        this.options.tiny.plugins = valid_plugins;        
+        
         await import("tinymce/themes/silver");
 
         await import("tinymce/icons/default");
