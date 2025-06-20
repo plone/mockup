@@ -182,6 +182,9 @@ export default class TinyMCE {
                 TemplatePlugin();
                 valid_plugins.push(plugin);
                 continue;
+            } else if(self.options.tiny.plugins.includes("emoticons")){
+                await import("tinymce/plugins/emoticons/js/emojis.min.js");
+                continue;
             }
             try {
                 await import("tinymce/plugins/" + plugin);
