@@ -160,10 +160,10 @@ export default class TinyMCE {
     
     async initPluginLanguage() {
         var self = this;
-        const lang = self.options.tiny.language ;
+        const lang = self.options.tiny.language;
 
         if(self.options.tiny.plugins.includes("help")){
-            await import(`tinymce/plugins/help/js/i18n/keynav/${self.options.tiny.language}.js`);
+            await import(`tinymce/plugins/help/js/i18n/keynav/${lang}.js`);
         }
 
     }
