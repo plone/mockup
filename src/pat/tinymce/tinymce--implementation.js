@@ -156,6 +156,16 @@ export default class TinyMCE {
             }
         }
     }
+    async initPluginFixes() {
+        var self = this;
+        const lang = self.options.tiny.language;
+        
+        // fix help plugin
+        // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
+        if(self.options.tiny.plugins.includes("help")){
+            await import(`tinymce/plugins/help/js/i18n/keynav/${lang}.js`);
+        }
+    }
     async init() {
         import("./tinymce.scss");
 
@@ -263,6 +273,8 @@ export default class TinyMCE {
         };
 
         await self.initLanguage();
+
+        await self.initPluginFixes();
 
         if (typeof self.options.folderTypes === "string") {
             self.options.folderTypes = self.options.folderTypes.split(",");
