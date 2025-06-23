@@ -65,7 +65,7 @@ export default class TinyMCE {
     generateUrl(data) {
         var self = this;
         let part = "undefined";
-        if(typeof data === "object" && Object.keys(data).indexOf(self.options.linkAttribute) != -1) {
+        if (typeof data === "object" && Object.keys(data).indexOf(self.options.linkAttribute) != -1) {
             part = data[self.options.linkAttribute];
         } else if (typeof data === "string") {
             part = data;
@@ -156,22 +156,49 @@ export default class TinyMCE {
             }
         }
     }
-    async initPluginFixes() {
+
+    async initPlugins() {
         var self = this;
+
         const lang = self.options.tiny.language;
-        
-        // fix help plugin
-        // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
-        if(self.options.tiny.plugins.includes("help")){
-            await import(`tinymce/plugins/help/js/i18n/keynav/${lang}.js`);
+
+        let valid_plugins = [];
+
+        // tinyMCE Plugins
+        for (const plugin of self.options.tiny.plugins) {
+
+            if (plugin == "plonelink" || plugin == "ploneimage") {
+                valid_plugins.push(plugin);
+                continue;
+            } else if (plugin == "template") {
+                // load backported template plugin
+                const TemplatePlugin = (await import("./js/template")).default;
+                TemplatePlugin();
+                valid_plugins.push(plugin);
+                continue;
+            } else if (plugin == "emoticons") {
+                // fix emiticons plugin
+                // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
+                await import(`tinymce/plugins/emoticons/js/emojis.min.js`);
+
+            } else if (plugin == "help") {
+                // fix help plugin
+                // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
+                await import(`tinymce/plugins/help/js/i18n/keynav/${lang}.js`);
+            }
+
+            try {
+                await import("tinymce/plugins/" + plugin);
+                valid_plugins.push(plugin);
+            } catch {
+                log.debug("Could not load TinyMCE plugin: ", plugin);
+            }
         }
 
-        // fix emiticons plugin
-        // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
-        if(self.options.tiny.plugins.includes("emoticons")){
-            await import(`tinymce/plugins/emoticons/js/emojis.min.js`);
-        }
+        self.options.tiny.plugins = valid_plugins;
+
     }
+
     async init() {
         import("./tinymce.scss");
 
@@ -186,27 +213,9 @@ export default class TinyMCE {
         const tinymce = (await import("tinymce/tinymce")).default;
         await import("tinymce/models/dom");
 
-        let valid_plugins = [];
-        // tinyMCE Plugins
-        for (const plugin of this.options.tiny.plugins) {
-            if (plugin == "plonelink" || plugin == "ploneimage") {
-                valid_plugins.push(plugin);
-                continue;
-            } else if (plugin == "template") {
-                // load backported template plugin
-                const TemplatePlugin = (await import("./js/template")).default;
-                TemplatePlugin();
-                valid_plugins.push(plugin);
-                continue;
-            }
-            try {
-                await import("tinymce/plugins/" + plugin);
-                valid_plugins.push(plugin);
-            } catch {
-                log.debug("Could not load TinyMCE plugin: ", plugin);
-            }
-        }
-        this.options.tiny.plugins = valid_plugins;
+        await this.initLanguage();
+
+        await this.initPlugins();
 
         await import("tinymce/themes/silver");
 
@@ -277,10 +286,6 @@ export default class TinyMCE {
                 this.el.dispatchEvent(events.change_event());
             });
         };
-
-        await self.initLanguage();
-
-        await self.initPluginFixes();
 
         if (typeof self.options.folderTypes === "string") {
             self.options.folderTypes = self.options.folderTypes.split(",");
