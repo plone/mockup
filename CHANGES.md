@@ -15,25 +15,13 @@
 ### Bug Fixes
 
 
-* **pat tinymce:** init emoticons plugin with correct emojis definitions ([f95a454](https://github.com/plone/mockup/commit/f95a454b62be6700a8e096d59584cff2540a2604))
-
-
 * **pat tinymce:** init emoticons plugin with correct emojis definitions ([ec95477](https://github.com/plone/mockup/commit/ec95477179eefca83980153303b286aab0db0042))
-
-
-* **pat tinymce:** init help plugin with correct language ([33e8194](https://github.com/plone/mockup/commit/33e8194145f1185799bada8a21945de38a28beeb))
 
 
 * **pat tinymce:** init help plugin with correct language ([804bcf8](https://github.com/plone/mockup/commit/804bcf8311c63c7f2ec4ae8247d26541407f4556))
 
 
-* **pat tinymce:** refactoring plugin initialization, move code to class function ([0c1e564](https://github.com/plone/mockup/commit/0c1e56413fd8552c8a19f14cf012a3d247143699))
-
-
 * **pat tinymce:** refactoring plugin initialization, move code to class function ([06a40c9](https://github.com/plone/mockup/commit/06a40c999b4cac39100522c816e63d1f49f897ee))
-
-
-* **pat tinymce:** remove log statement ([9bb5160](https://github.com/plone/mockup/commit/9bb516098f6f38cb70a4a7609e6b9376d66d9590))
 
 
 
