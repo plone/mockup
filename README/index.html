@@ -391,9 +391,23 @@ The data structure of the configuration can be a JSON string or CSS declaration 
 Defining a JSON structure is more flexible though.</p>
 <p>Here are two examples.</p>
 <p><code>pat-relateditems</code> configuration as JSON structure:</p>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{<br>        "selectableTypes": ["Document"],<br>        "vocabularyUrl": "relateditems-test.json"<br>    }<span class="token punctuation">'</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
+    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{
+        "selectableTypes": ["Document"],
+        "vocabularyUrl": "relateditems-test.json"
+    }<span class="token punctuation">'</span></span>
+<span class="token punctuation">/></span></span></code></pre>
 <p><code>pat-relateditems</code> configuration as CSS declarations:</p>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span><br>    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><br>        selectableTypes: Document;<br>        vocabularyUrl: relateditems-test.json;<br>    <span class="token punctuation">"</span></span><br><span class="token punctuation">/></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
+    <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-relateditems<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-relateditems</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>
+        selectableTypes: Document;
+        vocabularyUrl: relateditems-test.json;
+    <span class="token punctuation">"</span></span>
+<span class="token punctuation">/></span></span></code></pre>
 <p>Because of historic reasons, the Mockup pattern attributes are written in &quot;camelCase&quot;, for example <code>vocabularyUrl</code>.
 But to resemble the CSS syntax, new patterns should instead separate each word with a dash, for example <code>vocabulary-url</code>.</p>
 <h2>Mockup Patterns</h2>

@@ -420,7 +420,10 @@
 import Pattern from "./code-editor";
 Pattern.init(document.querySelector(".pat-code-editor"));
 </div>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-code-editor<span class="token punctuation">"</span></span> <span class="token attr-name">data-pat-code-editor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>language: javascript<span class="token punctuation">"</span></span> <span class="token attr-name">contenteditable</span><span class="token punctuation">></span></span><br>import Pattern from "./code-editor";<br>Pattern.init(document.querySelector(".pat-code-editor"));<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-code-editor<span class="token punctuation">"</span></span> <span class="token attr-name">data-pat-code-editor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>language: javascript<span class="token punctuation">"</span></span> <span class="token attr-name">contenteditable</span><span class="token punctuation">></span></span>
+import Pattern from "./code-editor";
+Pattern.init(document.querySelector(".pat-code-editor"));
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h3>Invocation on a textarea</h3>
 <p>This will create a div where the code editor is finally initialized and changes are synchronized back to the text editor.</p>
 <textarea class="pat-code-editor" data-pat-code-editor="language: css">
@@ -429,7 +432,12 @@ body {
   color: blue;
 }
 </textarea>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-code-editor<span class="token punctuation">"</span></span> <span class="token attr-name">data-pat-code-editor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>language: css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><br>body {<br>  background-color: black;<br>  color: blue;<br>}<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-code-editor<span class="token punctuation">"</span></span> <span class="token attr-name">data-pat-code-editor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>language: css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+body {
+  background-color: black;
+  color: blue;
+}
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span></code></pre>
 
       </main>
     </div>

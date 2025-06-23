@@ -406,22 +406,49 @@
         }
     ];">
 </div>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>data:[<br>        { "label": "node1",<br>        "children": [<br>            { "label": "child1" },<br>            { "label": "child2" }<br>        ]<br>        },<br>        { "label": "node2",<br>        "children": [<br>            { "label": "child3" }<br>        ]<br>        }<br>    ];<span class="token punctuation">'</span></span><br><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>data:[
+        { "label": "node1",
+        "children": [
+            { "label": "child1" },
+            { "label": "child2" }
+        ]
+        },
+        { "label": "node2",
+        "children": [
+            { "label": "child3" }
+        ]
+        }
+    ];<span class="token punctuation">'</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h3>JSON data</h3>
 <div class="pat-tree" data-pat-tree="data:[{&quot;label&quot;: &quot;node1&quot;,&quot;children&quot;: [{&quot;label&quot;: &quot;child1&quot;},{&quot;label&quot;: &quot;child2&quot;}]}]; autoOpen:true;">
 </div>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;<span class="token punctuation">'</span></span><br><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;<span class="token punctuation">'</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h3>Remote data URL</h3>
 <div class="pat-tree" data-pat-tree="dataUrl:/fileTree.json;
                    autoOpen:true;">
 </div>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dataUrl:/fileTree.json;<br>                   autoOpen:true;<span class="token punctuation">"</span></span><br><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dataUrl:/fileTree.json;
+                   autoOpen:true;<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h3>Drag and drop</h3>
 <div class="pat-tree" data-pat-tree="dataUrl:fileTree.json;
                    dragAndDrop: true;
                    autoOpen: true">
 </div>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><br>    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span><br>    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dataUrl:fileTree.json;<br>                   dragAndDrop: true;<br>                   autoOpen: true<span class="token punctuation">"</span></span><br><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-tree<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-tree</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dataUrl:fileTree.json;
+                   dragAndDrop: true;
+                   autoOpen: true<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 
       </main>
     </div>
