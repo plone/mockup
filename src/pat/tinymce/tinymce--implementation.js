@@ -188,7 +188,6 @@ export default class TinyMCE {
             }
 
             try {
-                console.log(plugin);
                 await import("tinymce/plugins/" + plugin);
                 valid_plugins.push(plugin);
             } catch {
