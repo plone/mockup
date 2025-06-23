@@ -39,6 +39,10 @@ bundle-plone:
 bundle: install
 	$(YARN) run build:webpack
 
+.PHONY: docs
+docs: install
+	$(YARN) build:webpack:docs
+	$(YARN) build:docs
 
 # Unlink any linked dependencies before building a bundle.
 bundle-pre:

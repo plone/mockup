@@ -17,13 +17,9 @@ jobs:
       with:
         node-version: "22"
         cache: "yarn"
-    - name: Build mockup
-      run: |
-        npx yarn
-        npm run build:webpack:docs
     - name: Build docs
       run: |
-        npm run build:docs
+        make docs
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
       with:
