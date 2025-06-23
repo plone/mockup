@@ -2,6 +2,49 @@
 
 
 
+## [5.4.1](https://github.com/plone/mockup/compare/5.4.0...5.4.1) (2025-06-23)
+
+
+### Features
+
+
+* **pat autotoc:** make markup compatible with the bootstrap and cleanup custom styling. ([ad0cf17](https://github.com/plone/mockup/commit/ad0cf17de6ffba320edd5de43647382478762246))
+
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** init emoticons plugin with correct emojis definitions ([f95a454](https://github.com/plone/mockup/commit/f95a454b62be6700a8e096d59584cff2540a2604))
+
+
+* **pat tinymce:** init emoticons plugin with correct emojis definitions ([ec95477](https://github.com/plone/mockup/commit/ec95477179eefca83980153303b286aab0db0042))
+
+
+* **pat tinymce:** init help plugin with correct language ([33e8194](https://github.com/plone/mockup/commit/33e8194145f1185799bada8a21945de38a28beeb))
+
+
+* **pat tinymce:** init help plugin with correct language ([804bcf8](https://github.com/plone/mockup/commit/804bcf8311c63c7f2ec4ae8247d26541407f4556))
+
+
+* **pat tinymce:** refactoring plugin initialization, move code to class function ([0c1e564](https://github.com/plone/mockup/commit/0c1e56413fd8552c8a19f14cf012a3d247143699))
+
+
+* **pat tinymce:** refactoring plugin initialization, move code to class function ([06a40c9](https://github.com/plone/mockup/commit/06a40c999b4cac39100522c816e63d1f49f897ee))
+
+
+* **pat tinymce:** remove log statement ([9bb5160](https://github.com/plone/mockup/commit/9bb516098f6f38cb70a4a7609e6b9376d66d9590))
+
+
+
+### Maintenance
+
+
+* upgrade 11ty and documentation build script ([9224c39](https://github.com/plone/mockup/commit/9224c3935d8f0ffc4f1ff57fb590325cd6ca7feb))
+
+
+* upgrade dependencies ([99a434c](https://github.com/plone/mockup/commit/99a434c17e7034e51141a94a560cc7bc9b4ee5ef))
+
 ## [5.4.0](https://github.com/plone/mockup/compare/5.4.0-beta.0...5.4.0) (2025-06-19)
 
 
