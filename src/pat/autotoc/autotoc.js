@@ -1,7 +1,6 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import utils from "@patternslib/patternslib/src/core/utils";
-import Tab from "bootstrap/js/dist/tab";
 
 export default Base.extend({
     name: "autotoc",
@@ -11,9 +10,8 @@ export default Base.extend({
         section: "section",
         levels: "h1,h2,h3",
         IDPrefix: "autotoc-item-",
-        classTOCName: "autotoc-nav nav",
-        classContentAreaName: "autotoc-content tab-content",
-        classSectionName: "autotoc-section tab-pane fade",
+        classTOCName: "autotoc-nav",
+        classSectionName: "autotoc-section",
         classLevelPrefixName: "autotoc-level-",
         classActiveName: "active",
         scrollDuration: "slow",
@@ -28,52 +26,23 @@ export default Base.extend({
 
         var self = this;
 
-        self.$nav = $("<nav/>")
-            .attr("aria-label", "Tab Navigation")
-
-        self.$toc = $("<ul/>")
-            .addClass(self.options.classTOCName)
-            .appendTo(self.$nav);
+        self.$toc = $("<nav/>").addClass(self.options.classTOCName);
 
         if (self.options.prependTo) {
-            self.$nav.prependTo(self.options.prependTo);
+            self.$toc.prependTo(self.options.prependTo);
         } else if (self.options.appendTo) {
-            self.$nav.appendTo(self.options.appendTo);
+            self.$toc.appendTo(self.options.appendTo);
         } else {
-            self.$nav.prependTo(self.$el);
+            self.$toc.prependTo(self.$el);
         }
-
 
         if (self.options.className) {
             self.$el.addClass(self.options.className);
         }
 
-        $(self.options.section, self.$el)
-            .addClass(self.options.classSectionName)
-            .attr("role", "tabpanel")
-            .attr("tabindex", "0")
+        $(self.options.section, self.$el).addClass(self.options.classSectionName);
 
         var asTabs = self.$el.hasClass("autotabs");
-
-        if (asTabs) {
-            self.$toc.addClass("nav-tabs");
-            self.$contentArea = $("<div/>").addClass(self.options.classContentAreaName);
-            self.$contentArea.insertAfter(self.$nav);
-            $(self.options.section, self.$el).appendTo(self.$contentArea);
-            $(self.options.section, self.$el).find("legend").hide();
-        } else {
-            self.$toc.addClass([
-                "flex-column",
-                "float-end",
-                "border",
-                "mt-0",
-                "me-0",
-                "mb-3",
-                "ms-3",
-                "py-2",
-                "px-0"
-            ])
-        }
 
         var activeId = null;
 
@@ -85,43 +54,39 @@ export default Base.extend({
             if (!id || $("#" + id).length > 0) {
                 id = self.options.IDPrefix + self.name + "-" + i;
             }
-
-            const tabId = `${id}-tab`;
-            $(section).attr("id", id).attr("aria-labelledby", tabId);
-
             if (window.location.hash === "#" + id) {
-                activeId = tabId;
+                activeId = id;
             }
             if (activeId === null && $level.hasClass(self.options.classActiveName)) {
-                activeId = tabId;
+                activeId = id;
             }
             $level.data("navref", id);
-
-            const $navItem = $("<li/>");
-            $navItem
-                .addClass("nav-item")
-                .attr("role", "presentation")
-                .appendTo(self.$toc);
-
             const $nav = $("<a/>");
-            $nav.appendTo($navItem)
+            $nav.appendTo(self.$toc)
                 .text($level.text())
-                .attr("id", tabId)
+                .attr("id", id)
                 .attr("href", "#" + id)
-                .attr("aria-controls", id)
-                .attr("data-bs-toggle", "tab")
-                .attr("data-bs-target", `#${id}`)
-                .addClass([
-                    "nav-link",
-                    self.options.classLevelPrefixName + self.getLevel($level),
-                ])
+                .addClass(self.options.classLevelPrefixName + self.getLevel($level))
                 .on("click", function (e, options) {
+                    e.stopPropagation();
+                    e.preventDefault();
                     if (!options) {
                         options = {
                             doScroll: true,
                             skipHash: false,
                         };
                     }
+                    var $el = $(this);
+                    self.$toc
+                        .children("." + self.options.classActiveName)
+                        .removeClass(self.options.classActiveName);
+                    self.$el
+                        .children("." + self.options.classActiveName)
+                        .removeClass(self.options.classActiveName);
+                    $(e.target).addClass(self.options.classActiveName);
+                    $level
+                        .parents(self.options.section)
+                        .addClass(self.options.classActiveName);
                     if (
                         options.doScroll !== false &&
                         self.options.scrollDuration &&
@@ -142,17 +107,10 @@ export default Base.extend({
                     $(this).trigger("clicked");
                     if (!options.skipHash) {
                         if (window.history && window.history.pushState) {
-                            window.history.pushState({}, "", `#${id}`);
+                            window.history.pushState({}, "", "#" + $el.attr("id"));
                         }
                     }
                 });
-            if (!asTabs) {
-                $nav.addClass([
-                    "text-decoration-underline",
-                    "p-0",
-                    "mx-3",
-                ]);
-            }
             $level.data("autotoc-trigger-id", id);
 
             self.tabs.push({
@@ -163,25 +121,23 @@ export default Base.extend({
         });
 
         if (activeId) {
-            const activeTabButton = self.$toc.find("a#" + activeId)[0];
-            if (activeTabButton) {
-                const tab = Tab.getOrCreateInstance(activeTabButton);
-                tab.show();
-            }
+            $("a#" + activeId).trigger("click", {
+                doScroll: true,
+                skipHash: true,
+            });
         } else {
-            const firstTabButton = self.$toc.find("a").first()[0];
-            if (firstTabButton) {
-                const tab = Tab.getOrCreateInstance(firstTabButton);
-                tab.show();
-            }
+            self.$toc.find("a").first().trigger("click", {
+                doScroll: false,
+                skipHash: true,
+            });
         }
 
         // After DOM tree is built, initialize eventual validation
-        this.initialize_validation();
+        this.initialize_validation(self.$el);
     },
 
-    initialize_validation: function () {
-        const el = this.el
+    initialize_validation: function ($el) {
+        const el = $el[0];
 
         // Initialize only on forms
         const form = el.closest("form");
