@@ -28,21 +28,20 @@ export default Base.extend({
 
         var self = this;
 
-        self.$nav = $("<nav/>")
-            .attr("aria-label", "Tab Navigation")
+        const $nav = $("<nav/>")
+            .attr("aria-label", "Tab Navigation");
 
-        self.$toc = $("<ul/>")
+        const $toc = $("<ul/>")
             .addClass(self.options.classTOCName)
-            .appendTo(self.$nav);
+            .appendTo($nav);
 
         if (self.options.prependTo) {
-            self.$nav.prependTo(self.options.prependTo);
+            $nav.prependTo(self.options.prependTo);
         } else if (self.options.appendTo) {
-            self.$nav.appendTo(self.options.appendTo);
+            $nav.appendTo(self.options.appendTo);
         } else {
-            self.$nav.prependTo(self.$el);
+            $nav.prependTo(self.$el);
         }
-
 
         if (self.options.className) {
             self.$el.addClass(self.options.className);
@@ -51,18 +50,18 @@ export default Base.extend({
         $(self.options.section, self.$el)
             .addClass(self.options.classSectionName)
             .attr("role", "tabpanel")
-            .attr("tabindex", "0")
+            .attr("tabindex", "0");
 
         var asTabs = self.$el.hasClass("autotabs");
 
         if (asTabs) {
-            self.$toc.addClass("nav-tabs");
+            $toc.addClass("nav-tabs");
             self.$contentArea = $("<div/>").addClass(self.options.classContentAreaName);
-            self.$contentArea.insertAfter(self.$nav);
+            self.$contentArea.insertAfter($nav);
             $(self.options.section, self.$el).appendTo(self.$contentArea);
             $(self.options.section, self.$el).find("legend").hide();
         } else {
-            self.$toc.addClass([
+            $toc.addClass([
                 "flex-column",
                 "float-end",
                 "border",
@@ -72,45 +71,51 @@ export default Base.extend({
                 "ms-3",
                 "py-2",
                 "px-0"
-            ])
+            ]);
         }
 
         var activeId = null;
 
         $(self.options.levels, self.$el).each(function (i) {
-            const section = this.closest(self.options.section);
             const $level = $(this);
-            let id = $level.prop("id") ? $level.prop("id") : $(section).prop("id");
+            const $section = $level.closest(self.options.section);
+            let sectionId = $section.prop("id");
+            let sectionHash = `#${sectionId}`;
+            const tabId = `${self.options.IDPrefix}${self.name}-${i}`;
+            const tabHash = `#${tabId}`;
+            const levelId = `${tabId}-pane`;
+            const levelHash = `#${levelId}`;
 
-            if (!id || $("#" + id).length > 0) {
-                id = self.options.IDPrefix + self.name + "-" + i;
+            if (!asTabs) {
+                $level.attr("id", levelId).attr("aria-labelledby", tabId);
+            } else {
+                $section.attr("aria-labelledby", tabId);
+                if (!sectionId) {
+                    // sections without ID get auto generated "<tabId>-pane"
+                    sectionId = levelId;
+                    sectionHash = `#${levelId}`;
+                    $section.attr("id", levelId);
+                }
             }
 
-            const tabId = `${id}-tab`;
-            $(section).attr("id", id).attr("aria-labelledby", tabId);
-
-            if (window.location.hash === "#" + id) {
+            if (activeId === null && (tabHash.indexOf(window.location.hash) != -1 || $level.hasClass(self.options.classActiveName))) {
                 activeId = tabId;
             }
-            if (activeId === null && $level.hasClass(self.options.classActiveName)) {
-                activeId = tabId;
-            }
-            $level.data("navref", id);
 
             const $navItem = $("<li/>");
             $navItem
                 .addClass("nav-item")
                 .attr("role", "presentation")
-                .appendTo(self.$toc);
+                .appendTo($toc);
 
             const $nav = $("<a/>");
             $nav.appendTo($navItem)
-                .text($level.text())
+                .html($level.html())
                 .attr("id", tabId)
-                .attr("href", "#" + id)
-                .attr("aria-controls", id)
+                .attr("href", asTabs ? sectionHash : levelHash)
+                .attr("aria-controls", asTabs ? sectionId : levelId)
                 .attr("data-bs-toggle", "tab")
-                .attr("data-bs-target", `#${id}`)
+                .attr("data-bs-target", asTabs ? sectionHash : levelHash)
                 .addClass([
                     "nav-link",
                     self.options.classLevelPrefixName + self.getLevel($level),
@@ -142,10 +147,11 @@ export default Base.extend({
                     $(this).trigger("clicked");
                     if (!options.skipHash) {
                         if (window.history && window.history.pushState) {
-                            window.history.pushState({}, "", `#${id}`);
+                            window.history.pushState({}, "", tabHash);
                         }
                     }
                 });
+
             if (!asTabs) {
                 $nav.addClass([
                     "text-decoration-underline",
@@ -153,28 +159,17 @@ export default Base.extend({
                     "mx-3",
                 ]);
             }
-            $level.data("autotoc-trigger-id", id);
 
             self.tabs.push({
-                section: section,
-                id: id,
+                section: $section[0],
+                id: levelId,
                 nav: $nav[0],
             });
         });
 
-        if (activeId) {
-            const activeTabButton = self.$toc.find("a#" + activeId)[0];
-            if (activeTabButton) {
-                const tab = Tab.getOrCreateInstance(activeTabButton);
-                tab.show();
-            }
-        } else {
-            const firstTabButton = self.$toc.find("a").first()[0];
-            if (firstTabButton) {
-                const tab = Tab.getOrCreateInstance(firstTabButton);
-                tab.show();
-            }
-        }
+        const activeTabButton = activeId ? $toc.find("a#" + activeId)[0] : $toc.find("a").first()[0];
+        const tab = Tab.getOrCreateInstance(activeTabButton);
+        tab.show();
 
         // After DOM tree is built, initialize eventual validation
         this.initialize_validation();

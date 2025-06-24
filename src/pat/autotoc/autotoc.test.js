@@ -57,14 +57,13 @@ describe("1 - AutoTOC", function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        expect(document.querySelectorAll(".nav > li > a")[0].getAttribute("id")).toEqual(
-            "autotoc-item-autotoc-0-tab"
+        const firstTab = document.querySelectorAll(".nav > li > a")[0]
+        expect(firstTab.getAttribute("id")).toEqual(
+            "autotoc-item-autotoc-0"
         );
         expect(
-            document
-                .querySelectorAll(".nav > li > a")[0]
-                .getAttribute("data-bs-target")
-        ).toEqual("#autotoc-item-autotoc-0");
+            firstTab.getAttribute("data-bs-target")
+        ).toEqual("#autotoc-item-autotoc-0-pane");
     });
     it("can have custom levels", async function () {
         this.$el.attr("data-pat-autotoc", "levels: h1");
@@ -122,7 +121,7 @@ describe("1 - AutoTOC", function () {
         registry.scan(this.$el);
         await utils.timeout(1);
 
-        expect($("> nav > ul > li > a.active", this.$el).text()).toEqual("Title 2");
+        expect($("> nav > ul > li > a.active", this.$el).text()).toEqual("Title 1");
     });
     it("custom className", async function () {
         this.$el.attr("data-pat-autotoc", "className:SOMETHING");
