@@ -4,6 +4,12 @@
 
 ## [5.4.2](https://github.com/plone/mockup/compare/5.4.1...5.4.2) (2025-06-24)
 
+
+### Bug Fixes
+
+
+* **pat autotoc:** Revert: make markup compatible with the bootstrap and cleanup custom styling. ([ad0cf17](https://github.com/plone/mockup/commit/ad0cf17de6ffba320edd5de43647382478762246))
+
 ## [5.4.1](https://github.com/plone/mockup/compare/5.4.0...5.4.1) (2025-06-23)
 
 
