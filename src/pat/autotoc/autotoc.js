@@ -98,7 +98,10 @@ export default Base.extend({
                 }
             }
 
-            if (activeId === null && (tabHash.indexOf(window.location.hash) != -1 || $level.hasClass(self.options.classActiveName))) {
+            // NOTE: if you have nested autotocs then you have to add the
+            // parent autotoc tabId to `options.IDPrefix` of the sub autotoc
+            // in order to mark parent and sub tab as active.
+            if (activeId === null && (window.location.hash.indexOf(tabHash) == 0 || $level.hasClass(self.options.classActiveName))) {
                 activeId = tabId;
             }
 

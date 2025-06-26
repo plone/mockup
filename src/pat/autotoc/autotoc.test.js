@@ -121,7 +121,7 @@ describe("1 - AutoTOC", function () {
         registry.scan(this.$el);
         await utils.timeout(1);
 
-        expect($("> nav > ul > li > a.active", this.$el).text()).toEqual("Title 1");
+        expect($("> nav > ul > li > a.active", this.$el).text()).toEqual("Title 2");
     });
     it("custom className", async function () {
         this.$el.attr("data-pat-autotoc", "className:SOMETHING");
