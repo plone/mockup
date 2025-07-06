@@ -2101,6 +2101,13 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@plone/plonetheme-barceloneta-base@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@plone/plonetheme-barceloneta-base/-/plonetheme-barceloneta-base-3.3.0.tgz#f1bc079ec932cdee1484e52f18b9880b41a92d72"
+  integrity sha512-cUVNWSt0M+3l0AmqwAK753X5JgU6lQqMDuo2IKECDJn8NKwmT9m1Hci9Y+MjGN+xZ5mVdbPFtWRxs891LkF+Pw==
+  dependencies:
+    bootstrap "5.3.7"
+
 "@plone/registry@^2.5.4":
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/@plone/registry/-/registry-2.5.4.tgz#6767936d8fca94bd7bf477fa0bc434ef3049081f"
