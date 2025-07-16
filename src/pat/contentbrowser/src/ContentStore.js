@@ -39,24 +39,19 @@ export default function (config, pathCache) {
         if (!physicalPath.startsWith(rootPath)) {
             // The path from the returned items from "vocabularyUrl" are starting
             // relative from the Plone Site. So we need to generate the phyiscalPath here.
-            if (rootPathParts.length === 1) {
-                physicalPath = rootPath + physicalPath;
-            } else {
-                // We also have to merge the rootPath and the clicked path correctly for example:
-                // rootPath: /Plone/media, clicked path: /media/subfolder
-                // has to become:
-                // /Plone/media/subfolder
-                let pathParts = physicalPath.replace(/^\/+/, '').split("/");
-                let overlapIdx = rootPathParts.length;
-                for (let idx = 0; idx < rootPathParts.length; idx++) {
-                    if (rootPathParts[idx] === pathParts[0]) {
-                        overlapIdx = idx;
-                        break;
-                    }
+            // NOTE: We also have to merge the rootPath and the clicked path correctly for example:
+            // rootPath: /path/to/plonesite/media, clicked path: /media/subfolder
+            // has to become:
+            // /path/to/plonesite/media/subfolder
+            let pathParts = physicalPath.replace(/^\/+/, '').split("/");
+            let overlapIdx = 0;
+            for (overlapIdx; overlapIdx < rootPathParts.length; overlapIdx++) {
+                if (rootPathParts[overlapIdx] === pathParts[0]) {
+                    break;
                 }
-                hideRootPath = "/" + (rootPathParts.filter(it => pathParts.includes(it))).join("/");
-                physicalPath = "/" + (rootPathParts.slice(1, overlapIdx).concat(pathParts)).join("/");
             }
+            hideRootPath = "/" + (rootPathParts.filter(it => !pathParts.includes(it))).join("/");
+            physicalPath = "/" + (rootPathParts.slice(0, overlapIdx).concat(pathParts)).join("/");
         }
 
         let paths = [];
