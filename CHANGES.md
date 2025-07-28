@@ -2,6 +2,21 @@
 
 
 
+## [5.4.3](https://github.com/plone/mockup/compare/5.4.2...5.4.3) (2025-07-28)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Fix physicalPath generation when a Plone site is in a sub folder structure. ([857ac3d](https://github.com/plone/mockup/commit/857ac3d042d52c7c6bd2bc6d7c0a5b589d0f6199))
+
+
+
+### Maintenance
+
+
+* upgrade dependencies ([5038437](https://github.com/plone/mockup/commit/50384375797b30dbcb2a686fdf8c61ac9a5e1b16))
+
 ## [5.4.2](https://github.com/plone/mockup/compare/5.4.1...5.4.2) (2025-06-24)
 
 
