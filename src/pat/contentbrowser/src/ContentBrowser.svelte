@@ -83,15 +83,26 @@
             relativePath: "@@fileUpload",
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
-            success: (fileupload, obj) => {
-                updatePreview({
-                    uuid: obj.UID,
-                    action: "add",
-                });
-            },
-            queuecomplete: (fileUpload, obj) => {
-                contentItems.get({ path: $currentPath, updateCache: true });
+            success: async (fileupload, obj) => {
+                await contentItems.get({ path: $currentPath, updateCache: true });
+
                 showUpload = false;
+
+                const level = $contentItems.find(lvl => lvl.displayPath === $currentPath);
+
+                if (level && level.results) {
+                    while (level.load_more){
+                        await contentItems.get({ path: $currentPath, loadMorePath: level.path, page: level.page + 1 });
+                    }
+                    const item = level.results.find(it => it.UID === obj.UID);
+                    if (item){
+                        updatePreview({
+                            data: item,
+                            action: "show",
+                        });
+                        scrollToRight();
+                    }
+                }
             },
         });
     }
