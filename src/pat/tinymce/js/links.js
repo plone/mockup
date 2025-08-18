@@ -50,7 +50,7 @@ var LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
-    updateRelatedItems: function () { },
+    updateRelatedItems: function () {},
 });
 
 var ExternalLink = LinkType.extend({
@@ -96,7 +96,7 @@ var InternalLink = LinkType.extend({
 
     createContentBrowser: async function () {
         var options = {
-            "selection": [],
+            selection: [],
             ...this.linkModal.options?.relatedItems,
         };
         options["maximum-selection-size"] = 1;
@@ -120,7 +120,6 @@ var InternalLink = LinkType.extend({
         }
         return null;
     },
-
 });
 
 var UploadLink = LinkType.extend({
@@ -161,7 +160,7 @@ var ImageLink = InternalLink.extend({
         var value = this.value();
         return this.tinypattern.generateImageUrl(
             value,
-            this.linkModal.getScaleFromSrcset(this.linkModal.$scale.val())
+            this.linkModal.getScaleFromSrcset(this.linkModal.$scale.val()),
         );
     },
 });
@@ -275,7 +274,7 @@ var AnchorLink = LinkType.extend({
             for (i = 0; i < self.anchorData.length; i = i + 1) {
                 var data = self.anchorData[i];
                 self.$select.append(
-                    '<option value="' + i + '">' + data.title + "</option>"
+                    '<option value="' + i + '">' + data.title + "</option>",
                 );
             }
         } else {
@@ -320,14 +319,18 @@ var AnchorLink = LinkType.extend({
 const add_image = (editor) => {
     // in case of inline mode we need the node where the pattern is instantinated
     // not the tinymce editable div ("-editable")
-    var pattern_inst = document.getElementById(editor.id.replace("-editable", ""))["pattern-tinymce"].instance;
+    var pattern_inst = document.getElementById(editor.id.replace("-editable", ""))[
+        "pattern-tinymce"
+    ].instance;
     pattern_inst.addImageClicked();
-}
+};
 
 const add_link = (editor) => {
-    var pattern_inst = document.getElementById(editor.id.replace("-editable", ""))["pattern-tinymce"].instance;
+    var pattern_inst = document.getElementById(editor.id.replace("-editable", ""))[
+        "pattern-tinymce"
+    ].instance;
     pattern_inst.addLinkClicked();
-}
+};
 
 // image plugin
 // eslint-disable-next-line no-unused-vars
@@ -545,7 +548,7 @@ export default Base.extend({
         self.$enableImageZoom = $('input[name="enableImageZoom"]', self.modal.$modal);
         self.$captionFromDescription = $(
             'input[name="captionFromDescription"]',
-            self.modal.$modal
+            self.modal.$modal,
         );
         self.$caption = $('textarea[name="caption"]', self.modal.$modal);
 
@@ -554,13 +557,10 @@ export default Base.extend({
             var type = self.options.linkTypes[index];
             var $container = $(".linkType." + type + " .main", self.modal.$modal);
             if ($container.length) {
-                var instance = new self.options.linkTypeClassMapping[type](
-                    $container,
-                    {
-                        linkModal: self,
-                        tinypattern: self.tinypattern,
-                    }
-                );
+                var instance = new self.options.linkTypeClassMapping[type]($container, {
+                    linkModal: self,
+                    tinypattern: self.tinypattern,
+                });
                 await events.await_pattern_init(instance);
                 self.linkTypes[type] = instance;
             }
@@ -568,7 +568,7 @@ export default Base.extend({
 
         $(".autotoc-nav a", self.modal.$modal).on("click", function () {
             var $fieldset = $("fieldset.linkType", self.modal.$modal).eq(
-                $(this).index()
+                $(this).index(),
             );
             var classes = $fieldset[0].className.split(/\s+/);
             _.each(classes, function (val) {
@@ -613,7 +613,7 @@ export default Base.extend({
                 "data-linkType": self.linkType,
                 "href": href,
             },
-            self.linkTypes[self.linkType].attributes()
+            self.linkTypes[self.linkType].attributes(),
         );
         if (self.anchorElm) {
             if (self.onlyText && linkAttrs.text !== self.initialText) {
@@ -634,8 +634,8 @@ export default Base.extend({
                     self.tiny.dom.createHTML(
                         "a",
                         linkAttrs,
-                        self.tiny.dom.encode(self.data.text)
-                    )
+                        self.tiny.dom.encode(self.data.text),
+                    ),
                 );
             } else {
                 self.tiny.execCommand("mceInsertLink", false, linkAttrs);
@@ -666,14 +666,12 @@ export default Base.extend({
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
-        var cssclasses = [
-            "image-richtext",
-        ];
+        var cssclasses = ["image-richtext"];
         if (self.$align.val()) {
             cssclasses.push(self.$align.val());
         }
         if (self.linkType !== "externalImage") {
-            cssclasses.push("picture-variant-" + self.$scale.val())
+            cssclasses.push("picture-variant-" + self.$scale.val());
         }
         if (captionFromDescription || caption) {
             cssclasses.push("captioned");
@@ -688,7 +686,7 @@ export default Base.extend({
             "class": cssclasses.join(" "),
             "data-linkType": self.linkType,
             "data-scale": self.getScaleFromSrcset(self.$scale.val()),
-            ...self.linkTypes[self.linkType].attributes()
+            ...self.linkTypes[self.linkType].attributes(),
         };
 
         if (self.linkType !== "externalImage") {
@@ -817,7 +815,7 @@ export default Base.extend({
             function (e) {
                 e.preventDefault();
                 self.hide();
-            }
+            },
         );
     },
 
@@ -850,8 +848,8 @@ export default Base.extend({
 
         if (self.anchorElm) {
             self.data.target = self.tiny.dom.getAttrib(self.anchorElm, "target");
-        } else if (self.tiny.options.get('link_default_target')) {
-            self.data.target = self.tiny.options.get('link_default_target');
+        } else if (self.tiny.options.get("link_default_target")) {
+            self.data.target = self.tiny.options.get("link_default_target");
         }
 
         if ((value = self.tiny.dom.getAttrib(self.anchorElm, "rel"))) {
@@ -903,7 +901,7 @@ export default Base.extend({
                 // set scale selection in link modal:
                 var pictureVariant = self.dom.getAttrib(
                     self.imgElm,
-                    "data-picturevariant"
+                    "data-picturevariant",
                 );
                 self.$scale.val(pictureVariant);
 

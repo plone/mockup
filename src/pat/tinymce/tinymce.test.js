@@ -10,7 +10,7 @@ $.fx.off = true;
 var createTinymce = async function (options) {
     return await registry.patterns.tinymce.init(
         $('<textarea class="pat-tinymce"></textarea>').appendTo("body"),
-        options || {}
+        options || {},
     );
 };
 
@@ -43,7 +43,7 @@ describe("TinyMCE", function () {
                     filename: "blah.png",
                     portal_type: "Image",
                     size: 239292,
-                })
+                }),
             );
         });
 
@@ -74,7 +74,7 @@ describe("TinyMCE", function () {
                 JSON.stringify({
                     total: results.length,
                     results: results,
-                })
+                }),
             );
         });
 
@@ -111,7 +111,7 @@ describe("TinyMCE", function () {
                 JSON.stringify({
                     total: items.length,
                     results: items,
-                })
+                }),
             );
         });
     });
@@ -134,19 +134,19 @@ describe("TinyMCE", function () {
 
     it("loads buttons for plugins", async function () {
         var $el = $(
-            "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
+            "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>",
         ).appendTo("body");
         registry.scan($el);
         await utils.timeout(10);
-        expect(tinymce.get(0).options.get('plugins')).toContain("ploneimage");
-        expect(tinymce.get(0).options.get('plugins')).toContain("plonelink");
-        expect(tinymce.get(0).options.get('toolbar')).toContain("plonelink");
-        expect(tinymce.get(0).options.get('toolbar')).toContain("ploneimage");
+        expect(tinymce.get(0).options.get("plugins")).toContain("ploneimage");
+        expect(tinymce.get(0).options.get("plugins")).toContain("plonelink");
+        expect(tinymce.get(0).options.get("toolbar")).toContain("plonelink");
+        expect(tinymce.get(0).options.get("toolbar")).toContain("ploneimage");
     });
 
     it.skip("on form submit, save data to form", async function () {
         var $container = $(
-            "<form>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</form>"
+            "<form>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</form>",
         ).appendTo("body");
 
         var $el = $container.find("textarea");
@@ -201,7 +201,7 @@ describe("TinyMCE", function () {
             appendToUrl: "/@@view",
         });
         expect(tiny.instance.stripGeneratedUrl("resolveuid/foobar/@@view")).toEqual(
-            "foobar"
+            "foobar",
         );
     });
 
@@ -210,7 +210,7 @@ describe("TinyMCE", function () {
             prependToScalePart: "/somescale/",
         });
         expect(tiny.instance.getScaleFromUrl("foobar/somescale/foobar")).toEqual(
-            "foobar"
+            "foobar",
         );
     });
 
@@ -226,7 +226,7 @@ describe("TinyMCE", function () {
             prependToScalePart: "/somescale",
         });
         expect(tiny.instance.getScaleFromUrl("foobar/somescale/image_large")).toEqual(
-            "large"
+            "large",
         );
     });
 
@@ -236,7 +236,7 @@ describe("TinyMCE", function () {
             appendToScalePart: "/@@view",
         });
         expect(tiny.instance.getScaleFromUrl("foobar/somescale/large/@@view")).toEqual(
-            "large"
+            "large",
         );
     });
 
@@ -245,7 +245,7 @@ describe("TinyMCE", function () {
             prependToScalePart: "/somescale",
         });
         expect(tiny.instance.getScaleFromUrl("foobar/somescale/image_large")).toEqual(
-            "large"
+            "large",
         );
     });
 
@@ -332,9 +332,7 @@ describe("TinyMCE", function () {
 
         modal.linkType = "image";
         modal.$scale.find('[value="thumb"]')[0].selected = true;
-        expect(modal.getLinkUrl()).toEqual(
-            "resolveuid/foobar/@@images/image/thumb"
-        );
+        expect(modal.getLinkUrl()).toEqual("resolveuid/foobar/@@images/image/thumb");
     });
 
     it("test i18n language negotiation and translation loading", async () => {
@@ -342,14 +340,16 @@ describe("TinyMCE", function () {
         await registry_scan();
         // there is a translated accessibility information for the resize handle in the dom
         expect(document.body.innerHTML).toContain(
-            'aria-label="Press the Up and Down arrow keys to resize the editor."')
+            'aria-label="Press the Up and Down arrow keys to resize the editor."',
+        );
 
         // mockup/core/i18n reads language from <html lang="">
         document.documentElement.setAttribute("lang", "de");
         document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
         await registry_scan();
         expect(document.body.innerHTML).toContain(
-            'aria-label="Ändern Sie die Größe des Editors, indem Sie die Pfeiltasten „Abwärts“ und „Aufwärts“ drücken."')
+            'aria-label="Ändern Sie die Größe des Editors, indem Sie die Pfeiltasten „Abwärts“ und „Aufwärts“ drücken."',
+        );
 
         // set combined ISO code for Portuguese (Brazil)
         // this needs to be converted for tiny to pt_BR
@@ -357,8 +357,8 @@ describe("TinyMCE", function () {
         document.body.innerHTML = `<div><textarea class="pat-tinymce"><p>foobar</p></textarea></div>`;
         await registry_scan();
         expect(document.body.innerHTML).toContain(
-            'aria-label="Use as teclas de seta acima e abaixo para redimensionar o editor."')
-
+            'aria-label="Use as teclas de seta acima e abaixo para redimensionar o editor."',
+        );
     });
 
     // it("test add image link upload", function () {
@@ -687,5 +687,4 @@ describe("TinyMCE", function () {
     //         ).toEqual("anchor");
     //     }, 100);
     // });
-
 });

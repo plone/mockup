@@ -28,7 +28,7 @@ export default class TinyMCE {
                 $.extend(true, {}, self.options, {
                     tinypattern: self,
                     linkTypes: linkTypes,
-                })
+                }),
             );
             self.linkModal.show();
         } else {
@@ -65,7 +65,10 @@ export default class TinyMCE {
     generateUrl(data) {
         var self = this;
         let part = "undefined";
-        if (typeof data === "object" && Object.keys(data).indexOf(self.options.linkAttribute) != -1) {
+        if (
+            typeof data === "object" &&
+            Object.keys(data).indexOf(self.options.linkAttribute) != -1
+        ) {
             part = data[self.options.linkAttribute];
         } else if (typeof data === "string") {
             part = data;
@@ -125,10 +128,7 @@ export default class TinyMCE {
 
         // Fix for country specific languages
         if (lang.split("-").length > 1) {
-            lang =
-                lang.split("-")[0] +
-                "_" +
-                lang.split("-")[1].toUpperCase();
+            lang = lang.split("-")[0] + "_" + lang.split("-")[1].toUpperCase();
         }
 
         self.options.tiny.language = lang;
@@ -166,7 +166,6 @@ export default class TinyMCE {
 
         // tinyMCE Plugins
         for (const plugin of self.options.tiny.plugins) {
-
             if (plugin == "plonelink" || plugin == "ploneimage") {
                 valid_plugins.push(plugin);
                 continue;
@@ -180,7 +179,6 @@ export default class TinyMCE {
                 // fix emiticons plugin
                 // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
                 await import(`tinymce/plugins/emoticons/js/emojis.min.js`);
-
             } else if (plugin == "help") {
                 // fix help plugin
                 // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
@@ -196,16 +194,15 @@ export default class TinyMCE {
         }
 
         self.options.tiny.plugins = valid_plugins;
-
     }
 
     async init() {
         import("./tinymce.scss");
 
-        const theme = $('html').attr('data-bs-theme');
-        let css = 'oxide';
-        if (theme && theme == 'dark') {
-            css = 'oxide-dark';
+        const theme = $("html").attr("data-bs-theme");
+        let css = "oxide";
+        if (theme && theme == "dark") {
+            css = "oxide-dark";
         }
         import(`tinymce/skins/ui/${css}/content.css`);
         import(`tinymce/skins/ui/${css}/skin.css`);
@@ -254,7 +251,6 @@ export default class TinyMCE {
             if (self.tiny === undefined || self.tiny === null) {
                 self.tiny = editor;
             }
-
         };
         tinyOptions["setup"] = (editor) => {
             editor.ui.registry.addMenuButton("inserttable", {
@@ -330,7 +326,7 @@ export default class TinyMCE {
             tinyOptions.importcss_selector_filter.length
         ) {
             tinyOptions.importcss_selector_filter = new RegExp(
-                tinyOptions.importcss_selector_filter
+                tinyOptions.importcss_selector_filter,
             );
         }
 
@@ -341,7 +337,7 @@ export default class TinyMCE {
                     tinyOptions.importcss_groups[i].filter.length
                 ) {
                     tinyOptions.importcss_groups[i].filter = new RegExp(
-                        tinyOptions.importcss_groups[i].filter
+                        tinyOptions.importcss_groups[i].filter,
                     );
                 }
             }
@@ -354,22 +350,28 @@ export default class TinyMCE {
                 return url;
             }
             // otherwise default tiny behavior
-            if (self.tiny.options.get('relative_urls')) {
+            if (self.tiny.options.get("relative_urls")) {
                 return self.tiny.documentBaseURI.toRelative(url);
             }
-            url = self.tiny.documentBaseURI.toAbsolute(url, self.tiny.options.get('remove_script_host'));
+            url = self.tiny.documentBaseURI.toAbsolute(
+                url,
+                self.tiny.options.get("remove_script_host"),
+            );
             return url;
-        }
+        };
 
         // BBB: TinyMCE 6+ has renamed toolbar and menuitem plugins.
         // map them here until they are updated in Plone's configuration:
         // menu: "formats" -> "styles"
         if (tinyOptions?.menu?.format) {
-            tinyOptions.menu.format.items = tinyOptions.menu.format.items.replace('formats', 'styles');
+            tinyOptions.menu.format.items = tinyOptions.menu.format.items.replace(
+                "formats",
+                "styles",
+            );
         }
         // toolbar: "styleselect" -> "styles"
         if (tinyOptions?.toolbar) {
-            tinyOptions.toolbar = tinyOptions.toolbar.replace('styleselect', 'styles');
+            tinyOptions.toolbar = tinyOptions.toolbar.replace("styleselect", "styles");
         }
 
         // XXX: This is a quickfix for the wrong "menubar" type in "plone.base.interfaces.controlpanel.ITinyMCEPluginSchema"
