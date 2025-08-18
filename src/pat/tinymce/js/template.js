@@ -21,9 +21,9 @@ const typeOf = (x) => {
     } else if (t === "object" && Array.isArray(x)) {
         return "array";
     }
-    // eslint-disable-next-line no-prototype-builtins
     else if (
         t === "object" &&
+        // eslint-disable-next-line no-prototype-builtins
         hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))
     ) {
         return "string";
