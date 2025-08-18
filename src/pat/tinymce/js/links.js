@@ -899,10 +899,10 @@ export default Base.extend({
                 self.linkTypes[self.linkType].load(self.imgElm);
 
                 // set scale selection in link modal:
-                var pictureVariant = self.dom.getAttrib(
-                    self.imgElm,
-                    "data-picturevariant",
-                );
+                var pictureVariant =
+                    self.dom.getAttrib(self.imgElm, "data-picturevariant") ||
+                    // fallback for backwards compatibility
+                    self.dom.getAttrib(self.imgElm, "data-scale");
                 self.$scale.val(pictureVariant);
 
                 // var selectedImageUid = self.dom.getAttrib(

@@ -10,6 +10,9 @@ const log = logger.getLogger("tinymce--implementation");
 let LinkModal = null;
 
 export default class TinyMCE {
+    linkModal;
+    imageModal;
+
     constructor(el, options) {
         this.el = el;
         this.$el = $(el);
@@ -17,7 +20,7 @@ export default class TinyMCE {
     }
     addLinkClicked() {
         var self = this;
-        if (self.linkModal === null) {
+        if (!self.linkModal) {
             var $el = $("<div/>").insertAfter(self.$el);
             var linkTypes = ["internal", "upload", "external", "email", "anchor"];
             if (!self.options.upload) {
@@ -38,7 +41,7 @@ export default class TinyMCE {
     }
     addImageClicked() {
         var self = this;
-        if (self.imageModal === null) {
+        if (!self.imageModal) {
             var linkTypes = ["image", "uploadImage", "externalImage"];
             if (!self.options.upload) {
                 linkTypes.splice(1, 1);
@@ -221,7 +224,6 @@ export default class TinyMCE {
         LinkModal = (await import("./js/links")).default;
 
         var self = this;
-        self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
         // tiny needs an id in order to initialize. Creat it if not set.
         var id = utils.setId(self.$el);
 

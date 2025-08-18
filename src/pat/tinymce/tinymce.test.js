@@ -4,14 +4,19 @@ import $ from "jquery";
 import sinon from "sinon";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
+import events from "@patternslib/patternslib/src/core/events";
 
 $.fx.off = true;
 
 var createTinymce = async function (options) {
-    return await registry.patterns.tinymce.init(
-        $('<textarea class="pat-tinymce"></textarea>').appendTo("body"),
-        options || {},
-    );
+    document.body.innerHTML = `
+        <textarea class="pat-tinymce"></textarea>
+    `;
+    const textarea = document.querySelector("textarea");
+    const instance = new TinyMCE(textarea, options || {});
+    await events.await_pattern_init(instance);
+
+    return instance;
 };
 
 const registry_scan = async () => {
@@ -247,6 +252,48 @@ describe("TinyMCE", function () {
         expect(tiny.instance.getScaleFromUrl("foobar/somescale/image_large")).toEqual(
             "large",
         );
+    });
+
+    it.skip("When parsing images from old Plone installations without picture-variants, TinyMCE‌'s image dialog falls back to data-scale", async function () {
+        // TinyMCE contents without a picture variant but a data-scale, as it
+        // was used in Plone 5.
+        const pat_instance = await createTinymce({
+            prependToScalePart: "/@@images/image/",
+            imageScales: '[{"title": "Preview", "value": "preview"}]',
+            pictureVariants: {
+                preview: {
+                    title: "Preview",
+                    sourceset: [
+                        {
+                            scale: "preview",
+                            media: "",
+                        },
+                    ],
+                },
+            },
+        });
+
+        // Await the TinyMCE initialization.
+        await utils.timeout(0);
+        const tiny = pat_instance.instance.tiny;
+
+        tiny.setContent(`
+            <img
+                src="resolveuid/foobar/@@images/image/preview"
+                data-scale="preview"
+                alt="This is an alt"
+                title="This is a title"
+                data-caption="This is a caption"
+            />
+        `);
+
+        // Select the image before opening the image dialog.
+        const img = tiny.dom.getRoot().getElementsByTagName("img")[0];
+        tiny.selection.select(img);
+
+        pat_instance.instance.addImageClicked();
+
+        // TODO: Finalize tests.
     });
 
     it("test inline tinyMCE", async function () {
