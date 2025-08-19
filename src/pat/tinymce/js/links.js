@@ -59,16 +59,16 @@ const ExternalLink = LinkType.extend({
     init: function () {
         LinkType.prototype.init.call(this);
         // selectedItemsNode.addEventListener("change", readSelectedItemsFromInput);
-        this.getEl().addEventListener("change", function () {
+        this.getEl().addEventListener("change", (e) => {
             // check here if we should automatically add in http:// to url
-            const val = $(this).val();
+            const val = $(e.target).val();
             if (new RegExp("https?://").test(val)) {
                 // already valid url
                 return;
             }
-            const domain = $(this).val().split("/")[0];
+            const domain = val.split("/")[0];
             if (domain.indexOf(".") !== -1) {
-                $(this).val("http://" + val);
+                $(e.target).val("http://" + val);
             }
         });
     },
@@ -343,7 +343,7 @@ tinymce.PluginManager.add("ploneimage", (editor, url) => {
 
 // link plugin
 // eslint-disable-next-line no-unused-vars
-tinymce.PluginManager.add("plonelink", function (editor, url) {
+tinymce.PluginManager.add("plonelink", (editor, url) => {
     editor.ui.registry.addButton("plonelink", {
         icon: "link",
         tooltip: "Insert/edit link",
@@ -553,20 +553,20 @@ export default Base.extend({
             }
         }
 
-        $(".autotoc-nav a", this.modal.$modal).on("click", function () {
+        $(".autotoc-nav a", this.modal.$modal).on("click", (e) => {
             const $fieldset = $("fieldset.linkType", this.modal.$modal).eq(
-                $(this).index(),
+                $(e.target).index(),
             );
             const classes = $fieldset[0].className.split(/\s+/);
-            _.each(classes, function (val) {
+            _.each(classes, (val) => {
                 if (_.indexOf(this.options.linkTypes, val) !== -1) {
                     this.linkType = val;
                 }
             });
         });
 
-        this.$captionFromDescription.on("change", function () {
-            if (this.checked) {
+        this.$captionFromDescription.on("change", (e) => {
+            if (e.target.checked) {
                 this.$caption.prop("disabled", true);
             } else {
                 this.$caption.prop("disabled", false);
@@ -693,12 +693,12 @@ export default Base.extend({
             this.imgElm = null;
         }
 
-        function waitLoad(imgElm) {
-            imgElm.onload = imgElm.onerror = function () {
+        const waitLoad = (imgElm) => {
+            imgElm.onload = imgElm.onerror = () => {
                 imgElm.onload = imgElm.onerror = null;
                 this.focusElement(imgElm);
             };
-        }
+        };
 
         const newImgElm = this.dom.create("img", data);
 
@@ -749,7 +749,7 @@ export default Base.extend({
         //     );
         // }
 
-        this.$button.off("click").on("click", function (e) {
+        this.$button.off("click").on("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
             this.linkType = this.modal.$modal.find("fieldset.active").data("linktype");
@@ -758,7 +758,7 @@ export default Base.extend({
             //     if (patUpload.dropzone.files.length > 0) {
             //         patUpload.processUpload();
             //         // eslint-disable-next-line no-unused-vars
-            //         this.$upload.on("uploadAllCompleted", function (evt, data) {
+            //         this.$upload.on("uploadAllCompleted", (evt, data) => {
             //             let counter = 0;
             //             const checkUpload = () => {
             //                 if (counter < 5 && !this.linkTypes[this.linkType].value()) {
