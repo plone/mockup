@@ -10,109 +10,106 @@ const log = logger.getLogger("tinymce--implementation");
 let LinkModal = null;
 
 export default class TinyMCE {
+    linkModal;
+    imageModal;
+
     constructor(el, options) {
         this.el = el;
         this.$el = $(el);
         this.options = options;
     }
     addLinkClicked() {
-        var self = this;
-        if (self.linkModal === null) {
-            var $el = $("<div/>").insertAfter(self.$el);
-            var linkTypes = ["internal", "upload", "external", "email", "anchor"];
-            if (!self.options.upload) {
+        if (!this.linkModal) {
+            const $el = $("<div/>").insertAfter(this.$el);
+            const linkTypes = ["internal", "upload", "external", "email", "anchor"];
+            if (!this.options.upload) {
                 linkTypes.splice(1, 1);
             }
-            self.linkModal = new LinkModal(
+            this.linkModal = new LinkModal(
                 $el,
-                $.extend(true, {}, self.options, {
-                    tinypattern: self,
+                $.extend(true, {}, this.options, {
+                    tinypattern: this,
                     linkTypes: linkTypes,
                 }),
             );
-            self.linkModal.show();
+            this.linkModal.show();
         } else {
-            self.linkModal.reinitialize();
-            self.linkModal.show();
+            this.linkModal.reinitialize();
+            this.linkModal.show();
         }
     }
     addImageClicked() {
-        var self = this;
-        if (self.imageModal === null) {
-            var linkTypes = ["image", "uploadImage", "externalImage"];
-            if (!self.options.upload) {
+        if (!this.imageModal) {
+            const linkTypes = ["image", "uploadImage", "externalImage"];
+            if (!this.options.upload) {
                 linkTypes.splice(1, 1);
             }
-            var options = $.extend(true, {}, self.options, {
-                tinypattern: self,
+            const options = $.extend(true, {}, this.options, {
+                tinypattern: this,
                 linkTypes: linkTypes,
                 initialLinkType: "image",
                 text: {
                     insertHeading: _t("Insert Image"),
                 },
                 relatedItems: {
-                    selectableTypes: self.options.imageTypes,
+                    selectableTypes: this.options.imageTypes,
                 },
             });
-            var $el = $("<div/>").insertAfter(self.$el);
-            self.imageModal = new LinkModal($el, options);
-            self.imageModal.show();
+            const $el = $("<div/>").insertAfter(this.$el);
+            this.imageModal = new LinkModal($el, options);
+            this.imageModal.show();
         } else {
-            self.imageModal.reinitialize();
-            self.imageModal.show();
+            this.imageModal.reinitialize();
+            this.imageModal.show();
         }
     }
     generateUrl(data) {
-        var self = this;
         let part = "undefined";
         if (
             typeof data === "object" &&
-            Object.keys(data).indexOf(self.options.linkAttribute) != -1
+            Object.keys(data).indexOf(this.options.linkAttribute) != -1
         ) {
-            part = data[self.options.linkAttribute];
+            part = data[this.options.linkAttribute];
         } else if (typeof data === "string") {
             part = data;
         }
-        return self.options.prependToUrl + part + self.options.appendToUrl;
+        return this.options.prependToUrl + part + this.options.appendToUrl;
     }
     generateImageUrl(data, scale_name) {
-        var self = this;
-        var url = self.generateUrl(data);
+        let url = this.generateUrl(data);
         if (scale_name) {
             url =
                 url +
-                self.options.prependToScalePart +
+                this.options.prependToScalePart +
                 scale_name +
-                self.options.appendToScalePart;
+                this.options.appendToScalePart;
         } else {
-            url = url + self.options.appendToOriginalScalePart;
+            url = url + this.options.appendToOriginalScalePart;
         }
         return url;
     }
     stripGeneratedUrl(url) {
         // to get original attribute back
-        var self = this;
-        url = url.split(self.options.prependToScalePart, 2)[0];
-        if (self.options.prependToUrl) {
-            var parts = url.split(self.options.prependToUrl, 2);
+        url = url.split(this.options.prependToScalePart, 2)[0];
+        if (this.options.prependToUrl) {
+            const parts = url.split(this.options.prependToUrl, 2);
             if (parts.length === 2) {
                 url = parts[1];
             }
         }
-        if (self.options.appendToUrl) {
-            url = url.split(self.options.appendToUrl)[0];
+        if (this.options.appendToUrl) {
+            url = url.split(this.options.appendToUrl)[0];
         }
         return url;
     }
     getScaleFromUrl(url) {
-        var self = this;
-        var split = url.split(self.options.prependToScalePart);
+        const split = url.split(this.options.prependToScalePart);
         if (split.length !== 2) {
             // not valid scale, screw it
             return null;
         }
-        if (self.options.appendToScalePart) {
-            url = split[1].split(self.options.appendToScalePart)[0];
+        if (this.options.appendToScalePart) {
+            url = split[1].split(this.options.appendToScalePart)[0];
         } else {
             url = split[1];
         }
@@ -120,80 +117,6 @@ export default class TinyMCE {
             url = url.split("/image_")[1];
         }
         return url;
-    }
-    async initLanguage() {
-        var self = this;
-        var i18n = new I18n();
-        var lang = i18n.currentLanguage;
-
-        // Fix for country specific languages
-        if (lang.split("-").length > 1) {
-            lang = lang.split("-")[0] + "_" + lang.split("-")[1].toUpperCase();
-        }
-
-        self.options.tiny.language = lang;
-
-        if (lang !== "en") {
-            // load translations from tinymce-i18n
-            try {
-                await import(`tinymce-i18n/langs7/${lang}`);
-            } catch {
-                log.debug("Could not load TinyMCE language: ", lang);
-                try {
-                    // expected lang not available, let's fallback to closest one
-                    if (lang.split("_").length > 1) {
-                        lang = lang.split("_")[0];
-                    } else {
-                        lang = lang + "_" + lang.toUpperCase();
-                    }
-                    log.debug("Trying with: ", lang);
-                    await import(`tinymce-i18n/langs7/${lang}`);
-                    self.options.tiny.language = lang;
-                } catch {
-                    log.debug("Could not load TinyMCE language. Fallback to English");
-                    self.options.tiny.language = "en";
-                }
-            }
-        }
-    }
-
-    async initPlugins() {
-        var self = this;
-
-        const lang = self.options.tiny.language;
-
-        let valid_plugins = [];
-
-        // tinyMCE Plugins
-        for (const plugin of self.options.tiny.plugins) {
-            if (plugin == "plonelink" || plugin == "ploneimage") {
-                valid_plugins.push(plugin);
-                continue;
-            } else if (plugin == "template") {
-                // load backported template plugin
-                const TemplatePlugin = (await import("./js/template")).default;
-                TemplatePlugin();
-                valid_plugins.push(plugin);
-                continue;
-            } else if (plugin == "emoticons") {
-                // fix emiticons plugin
-                // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
-                await import(`tinymce/plugins/emoticons/js/emojis.min.js`);
-            } else if (plugin == "help") {
-                // fix help plugin
-                // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
-                await import(`tinymce/plugins/help/js/i18n/keynav/${lang}.js`);
-            }
-
-            try {
-                await import("tinymce/plugins/" + plugin);
-                valid_plugins.push(plugin);
-            } catch {
-                log.debug("Could not load TinyMCE plugin: ", plugin);
-            }
-        }
-
-        self.options.tiny.plugins = valid_plugins;
     }
 
     async init() {
@@ -209,36 +132,32 @@ export default class TinyMCE {
 
         const tinymce = (await import("tinymce/tinymce")).default;
         await import("tinymce/models/dom");
-
-        await this.initLanguage();
-
-        await this.initPlugins();
-
         await import("tinymce/themes/silver");
-
         await import("tinymce/icons/default");
 
         LinkModal = (await import("./js/links")).default;
 
-        var self = this;
-        self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
         // tiny needs an id in order to initialize. Creat it if not set.
-        var id = utils.setId(self.$el);
+        const id = utils.setId(this.$el);
 
         if (
-            self.options.pictureVariants &&
-            typeof self.options.pictureVariants === "string"
+            this.options.pictureVariants &&
+            typeof this.options.pictureVariants === "string"
         ) {
-            self.options.pictureVariants = JSON.parse(self.options.pictureVariants);
+            this.options.pictureVariants = JSON.parse(this.options.pictureVariants);
         }
 
-        var tinyOptions = self.options.tiny;
-        if (self.options.inline === true) {
-            self.options.tiny.inline = true;
-            self.options.tiny.toolbar_mode = "scrolling";
+        // TinyMCE editor options
+        const tinyOptions = structuredClone(this.options.tiny);
+        this.lang = tinyOptions.language = await this.initLanguage();
+        tinyOptions.plugins = await this.initPlugins();
+
+        if (this.options.inline === true) {
+            tinyOptions.inline = true;
+            tinyOptions.toolbar_mode = "scrolling";
         }
-        self.tinyId = self.options.inline ? id + "-editable" : id; // when displaying TinyMCE inline, a separate div is created.
-        tinyOptions.selector = "#" + self.tinyId;
+        this.tinyId = this.options.inline ? `${id}-editable` : id; // when displaying TinyMCE inline, a separate div is created.
+        tinyOptions.selector = `#${this.tinyId}`;
         // XXX: disabled skin means it wont load css files which we already
         // include in widgets.min.css
         tinyOptions.skin = false;
@@ -247,9 +166,9 @@ export default class TinyMCE {
         // TinyMCE 7 needs "license_key": "gpl" explicitly
         tinyOptions.license_key = "gpl";
 
-        tinyOptions.init_instance_callback = function (editor) {
-            if (self.tiny === undefined || self.tiny === null) {
-                self.tiny = editor;
+        tinyOptions.init_instance_callback = (editor) => {
+            if (this.tiny === undefined || this.tiny === null) {
+                this.tiny = editor;
             }
         };
         tinyOptions["setup"] = (editor) => {
@@ -283,19 +202,19 @@ export default class TinyMCE {
             });
         };
 
-        if (typeof self.options.folderTypes === "string") {
-            self.options.folderTypes = self.options.folderTypes.split(",");
+        if (typeof this.options.folderTypes === "string") {
+            this.options.folderTypes = this.options.folderTypes.split(",");
         }
 
-        if (typeof self.options.imageTypes === "string") {
-            self.options.imageTypes = self.options.imageTypes.split(",");
+        if (typeof this.options.imageTypes === "string") {
+            this.options.imageTypes = this.options.imageTypes.split(",");
         }
 
-        if (self.options.inline === true) {
+        if (this.options.inline === true) {
             // create a div, which will be made content-editable by TinyMCE and
             // copy contents from textarea to it. Then hide textarea.
-            self.$el.after('<div id="' + self.tinyId + '">' + self.$el.val() + "</div>");
-            self.$el.hide();
+            this.$el.after('<div id="' + this.tinyId + '">' + this.$el.val() + "</div>");
+            this.$el.hide();
         }
 
         // The `importcss_file_filter` is used to filter the CSS files
@@ -309,11 +228,11 @@ export default class TinyMCE {
             tinyOptions.importcss_file_filter.indexOf(",") !== -1
         ) {
             // need a custom function to check now
-            var files = tinyOptions.importcss_file_filter.split(",");
+            const files = tinyOptions.importcss_file_filter.split(",");
 
             tinyOptions.importcss_file_filter = function (value) {
-                for (var i = 0; i < files.length; i++) {
-                    if (value.indexOf(files[i]) !== -1) {
+                for (const file of files) {
+                    if (value.indexOf(file) !== -1) {
                         return true;
                     }
                 }
@@ -331,14 +250,9 @@ export default class TinyMCE {
         }
 
         if (tinyOptions.importcss_groups && tinyOptions.importcss_groups.length) {
-            for (var i = 0; i < tinyOptions.importcss_groups.length; i++) {
-                if (
-                    tinyOptions.importcss_groups[i].filter &&
-                    tinyOptions.importcss_groups[i].filter.length
-                ) {
-                    tinyOptions.importcss_groups[i].filter = new RegExp(
-                        tinyOptions.importcss_groups[i].filter,
-                    );
+            for (const group of tinyOptions.importcss_groups) {
+                if (group.filter?.length) {
+                    group.filter = new RegExp(group.filter);
                 }
             }
         }
@@ -350,12 +264,12 @@ export default class TinyMCE {
                 return url;
             }
             // otherwise default tiny behavior
-            if (self.tiny.options.get("relative_urls")) {
-                return self.tiny.documentBaseURI.toRelative(url);
+            if (this.tiny.options.get("relative_urls")) {
+                return this.tiny.documentBaseURI.toRelative(url);
             }
-            url = self.tiny.documentBaseURI.toAbsolute(
+            url = this.tiny.documentBaseURI.toAbsolute(
                 url,
-                self.tiny.options.get("remove_script_host"),
+                this.tiny.options.get("remove_script_host"),
             );
             return url;
         };
@@ -380,7 +294,75 @@ export default class TinyMCE {
         }
 
         tinymce.init(tinyOptions);
-        self.tiny = tinymce.get(self.tinyId);
+        this.tiny = tinymce.get(this.tinyId);
+    }
+
+    async initLanguage() {
+        const i18n = new I18n();
+        let lang = i18n.currentLanguage;
+
+        // Fix for country specific languages
+        if (lang.split("-").length > 1) {
+            lang = lang.split("-")[0] + "_" + lang.split("-")[1].toUpperCase();
+        }
+
+        if (lang !== "en") {
+            // load translations from tinymce-i18n
+            try {
+                await import(`tinymce-i18n/langs7/${lang}`);
+            } catch {
+                log.debug("Could not load TinyMCE language: ", lang);
+                try {
+                    // expected lang not available, let's fallback to closest one
+                    if (lang.split("_").length > 1) {
+                        lang = lang.split("_")[0];
+                    } else {
+                        lang = lang + "_" + lang.toUpperCase();
+                    }
+                    log.debug("Trying with: ", lang);
+                    await import(`tinymce-i18n/langs7/${lang}`);
+                } catch {
+                    log.debug("Could not load TinyMCE language. Fallback to English");
+                    lang = "en";
+                }
+            }
+        }
+        return lang;
+    }
+
+    async initPlugins() {
+        const valid_plugins = [];
+
+        // tinyMCE Plugins
+        for (const plugin of this.options.tiny.plugins) {
+            if (plugin == "plonelink" || plugin == "ploneimage") {
+                valid_plugins.push(plugin);
+                continue;
+            } else if (plugin == "template") {
+                // load backported template plugin
+                const TemplatePlugin = (await import("./js/template")).default;
+                TemplatePlugin();
+                valid_plugins.push(plugin);
+                continue;
+            } else if (plugin == "emoticons") {
+                // fix emiticons plugin
+                // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
+                await import(`tinymce/plugins/emoticons/js/emojis.min.js`);
+            } else if (plugin == "help") {
+                // fix help plugin
+                // see https://community.plone.org/t/tinymce-menubar-settings-not-working-6-1-1/22190/1
+                await import(`tinymce/plugins/help/js/i18n/keynav/${this.lang}.js`);
+            }
+
+            try {
+                await import("tinymce/plugins/" + plugin);
+                valid_plugins.push(plugin);
+            } catch {
+                log.debug("Could not load TinyMCE plugin: ", plugin);
+            }
+        }
+
+        return valid_plugins;
     }
 
     destroy() {
