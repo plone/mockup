@@ -140,11 +140,17 @@ export default class TinyMCE {
         // tiny needs an id in order to initialize. Creat it if not set.
         const id = utils.setId(this.$el);
 
+        // Plone 6 picture variants.
         if (
             this.options.pictureVariants &&
             typeof this.options.pictureVariants === "string"
         ) {
             this.options.pictureVariants = JSON.parse(this.options.pictureVariants);
+        }
+
+        // BBB for Plone 5 image scales, in case no picture variants are set.
+        if (this.options.imageScales && typeof this.options.imageScales === "string") {
+            this.options.imageScales = JSON.parse(this.options.imageScales);
         }
 
         // TinyMCE editor options
