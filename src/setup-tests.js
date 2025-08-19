@@ -26,3 +26,9 @@ window.dt = require("datatables.net")();
 
 // Import the css.escape polyfill for jsdom.
 import "css.escape";
+
+// Add structuredClone polyfill for jsdom.
+// See: https://github.com/jsdom/jsdom/issues/3363
+global.structuredClone = val => {
+  return JSON.parse(JSON.stringify(val))
+}

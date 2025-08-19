@@ -4,7 +4,7 @@
 import tinymce from "tinymce/tinymce";
 
 const hasProto = (v, constructor, predicate) => {
-    var _a;
+    let _a;
     if (predicate(v, constructor.prototype)) {
         return true;
     } else {
@@ -65,7 +65,7 @@ const never = constant(false);
 
 const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-var global$2 = tinymce.util.Tools;
+const global$2 = tinymce.util.Tools;
 
 const option = (name) => (editor) => editor.options.get(name);
 const register$2 = (editor) => {
@@ -283,7 +283,7 @@ const get = (obj, key) => {
 };
 const has = (obj, key) => hasOwnProperty.call(obj, key);
 
-var global$1 = tinymce.html.Serializer;
+const global$1 = tinymce.html.Serializer;
 
 const entitiesAttr = {
     '"': "&quot;",
@@ -365,10 +365,10 @@ const insertTemplate = (editor, _ui, html) => {
     editor.addVisual();
 };
 
-var global = tinymce.Env;
+const global = tinymce.Env;
 
 const getPreviewContent = (editor, html) => {
-    var _a;
+    let _a;
     let previewHtml = parseAndSerialize(editor, html);
     if (html.indexOf("<html>") === -1) {
         let contentCssEntries = "";
@@ -395,7 +395,7 @@ const getPreviewContent = (editor, html) => {
         const preventClicksOnLinksScript =
             "<script>" +
             'document.addEventListener && document.addEventListener("click", function(e) {' +
-            "for (var elm = e.target; elm; elm = elm.parentNode) {" +
+            "for (let elm = e.target; elm; elm = elm.parentNode) {" +
             'if (elm.nodeName === "A" && !(' +
             isMetaKeyPressed +
             ")) {" +
