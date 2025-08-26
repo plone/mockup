@@ -29,7 +29,7 @@ class Pattern extends BasePattern {
 
     scan_navigation() {
         const href =
-            document.querySelector('head link[rel="canonical"]')?.href ||
+            //document.querySelector('head link[rel="canonical"]')?.href ||
             window.location.href;
 
         const anchors = this.el.querySelectorAll("a");
