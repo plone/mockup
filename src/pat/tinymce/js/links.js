@@ -160,7 +160,7 @@ const ImageLink = InternalLink.extend({
         const value = this.value();
         return this.tinypattern.generateImageUrl(
             value,
-            this.linkModal.getScaleFromSrcset(this.linkModal.$scale.val()),
+            this.linkModal.getScale(this.linkModal.$scale.val()),
         );
     },
 });
@@ -423,6 +423,11 @@ export default Base.extend({
     },
 
     init: function () {
+        this.use_picture_variants =
+            Object.keys(this.options.pictureVariants || {}).length > 0;
+        this.use_scales =
+            !this.use_picture_variants && (this.options.imageScales || []).length > 0;
+
         this.tinypattern = this.options.tinypattern;
         if (this.tinypattern.options.anchorSelector) {
             this.options.anchorSelector = this.tinypattern.options.anchorSelector;
@@ -510,6 +515,9 @@ export default Base.extend({
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
             pictureVariants: this.options.pictureVariants,
+            imageScales: this.options.imageScales,
+            use_picture_variants: this.use_picture_variants,
+            use_scales: this.use_scales,
             imageCaptioningEnabled: this.options.imageCaptioningEnabled,
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
@@ -634,11 +642,16 @@ export default Base.extend({
         this.tiny.nodeChanged();
     },
 
-    getScaleFromSrcset: function (pictureVariant) {
-        let pictureVariantsConfig = this.options.pictureVariants[pictureVariant];
-        return pictureVariantsConfig.sourceset[
-            pictureVariantsConfig.sourceset.length - 1
-        ].scale;
+    getScale: function (size) {
+        if (this.use_picture_variants) {
+            const pictureVariantsConfig = this.options.pictureVariants[size];
+            return pictureVariantsConfig.sourceset[
+                pictureVariantsConfig.sourceset.length - 1
+            ].scale;
+        } else if (this.use_scales) {
+            return size;
+        }
+        return "";
     },
 
     updateImage: function (src) {
@@ -655,7 +668,11 @@ export default Base.extend({
             cssclasses.push(this.$align.val());
         }
         if (this.linkType !== "externalImage") {
-            cssclasses.push("picture-variant-" + this.$scale.val());
+            if (this.use_picture_variants) {
+                cssclasses.push(`picture-variant-${this.$scale.val()}`);
+            } else if (this.use_scales) {
+                cssclasses.push(`image-scale-${this.$scale.val()}`);
+            }
         }
         if (captionFromDescription || caption) {
             cssclasses.push("captioned");
@@ -669,12 +686,16 @@ export default Base.extend({
             "alt": this.$alt.val(),
             "class": cssclasses.join(" "),
             "data-linkType": this.linkType,
-            "data-scale": this.getScaleFromSrcset(this.$scale.val()),
+            "data-scale": this.getScale(this.$scale.val()),
             ...this.linkTypes[this.linkType].attributes(),
         };
 
         if (this.linkType !== "externalImage") {
-            data["data-picturevariant"] = this.$scale.val();
+            if (this.use_picture_variants) {
+                data["data-picturevariant"] = this.$scale.val();
+            } else if (this.use_scales) {
+                data["data-scale"] = this.$scale.val();
+            }
         }
 
         if (caption && !captionFromDescription) {
@@ -874,12 +895,14 @@ export default Base.extend({
                 this.linkType = linkType;
                 this.linkTypes[this.linkType].load(this.imgElm);
 
-                // set scale selection in link modal:
-                const pictureVariant = this.dom.getAttrib(
-                    this.imgElm,
-                    "data-picturevariant",
-                );
-                this.$scale.val(pictureVariant);
+                // Set the active scale selection in link modal
+                let size = "";
+                if (this.use_picture_variants) {
+                    size = this.dom.getAttrib(this.imgElm, "data-picturevariant");
+                } else if (this.use_scales) {
+                    size = this.dom.getAttrib(this.imgElm, "data-scale");
+                }
+                this.$scale.val(size);
 
                 // const selectedImageUid = this.dom.getAttrib(
                 //     this.imgElm,
