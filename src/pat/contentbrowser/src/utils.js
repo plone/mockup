@@ -15,7 +15,6 @@ export async function request({
     searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
-    browseableTypes = [],
     pageSize = 100,
     page = 1,
 }) {
@@ -35,15 +34,6 @@ export async function request({
             sort_on: "getObjPositionInParent",
             sort_order: "ascending",
         };
-        if (selectableTypes.length) {
-            // we need to append browseableTypes here in order to
-            // preserve browsing subitems
-            vocabQuery.criteria.push({
-                i: "portal_type",
-                o: "plone.app.querystring.operation.list.contains",
-                v: selectableTypes.concat(browseableTypes),
-            })
-        }
     }
     if (levelInfoPath) {
         // query exact path
