@@ -101,7 +101,9 @@ export default function (config, pathCache) {
                 level = await load(query);
 
                 // check if there is more than the current batch
-                level.load_more = config.pageSize < level.total;
+                if(level.load_more === undefined) {
+                    level.load_more = config.pageSize < level.total;
+                }
                 level.page = 1;
                 level.path = p;
                 level.searchTerm = searchTerm;

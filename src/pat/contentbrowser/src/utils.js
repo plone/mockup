@@ -35,15 +35,6 @@ export async function request({
             sort_on: "getObjPositionInParent",
             sort_order: "ascending",
         };
-        if (selectableTypes.length) {
-            // we need to append browseableTypes here in order to
-            // preserve browsing subitems
-            vocabQuery.criteria.push({
-                i: "portal_type",
-                o: "plone.app.querystring.operation.list.contains",
-                v: selectableTypes.concat(browseableTypes),
-            })
-        }
     }
     if (levelInfoPath) {
         // query exact path
@@ -100,11 +91,16 @@ export async function request({
         return {
             results: [],
             total: 0,
+            load_more: false,
         }
     };
+
     const url_query = JSON.stringify(vocabQuery);
     const url_parameters = JSON.stringify(attributes);
-    const url_batch = pageSize ? JSON.stringify({
+    // NOTE: if selectableTypes or browseableTypes is defined
+    // the response has to be unbatched otherwise we might end up in
+    // an empty listing if many items of different types are present
+    const url_batch = (pageSize && !(selectableTypes.length || browseableTypes.length)) ? JSON.stringify({
         page: page,
         size: pageSize,
     }) : "";
@@ -114,7 +110,7 @@ export async function request({
     const headers = new Headers();
     headers.set("Accept", "application/json");
 
-    let request_params =  {
+    let request_params = {
         method: method,
         headers: headers,
     };
@@ -142,21 +138,30 @@ export async function request({
 
     const json = await response.json();
 
-    if (!searchPath && !levelInfoPath && selectableTypes.length) {
+    if (!searchPath && !levelInfoPath && (selectableTypes.length || browseableTypes.length)) {
         // we iter through response and filter out non-selectable
         // types but keep folderish types to maintain browsing
         // the content structure.
-        const filtered_response = {
-            results: [],
-            total: json.total,
-        }
+        const filtered_results = [];
+
         for (const it of json.results) {
-            if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
-                filtered_response.results.push(it);
+            // determine if item can be browsed
+            const can_browse = (browseableTypes.length  && browseableTypes.indexOf(it.portal_type) != -1) || (!browseableTypes.length && it.is_folderish);
+            // determine if item can be selected
+            const can_select = (selectableTypes.length && selectableTypes.indexOf(it.portal_type) != -1) || !selectableTypes.length;
+
+            if (can_select || can_browse) {
+                filtered_results.push(it);
             }
         }
-        return filtered_response;
+
+        return {
+            results: filtered_results,
+            total: filtered_results.length,
+            load_more: false,
+        }
     }
+
     return json;
 }
 

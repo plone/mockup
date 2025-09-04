@@ -96,11 +96,20 @@
         });
     }
 
+    function isBrowseable(item) {
+        return (
+            item.is_folderish &&
+            (($config.browseableTypes.length &&
+                $config.browseableTypes.indexOf(item.portal_type) != -1) ||
+                !$config.browseableTypes.length)
+        );
+    }
+
     function showPreview(item) {
         if ($config.mode == "browse") {
             $previewUids = [item.UID];
 
-            if (item.is_folderish) {
+            if (isBrowseable(item)) {
                 // show folder
                 currentPath.set(item.path);
             } else {
@@ -646,7 +655,7 @@
                                                     >
                                                 {/if}
                                             </div>
-                                            {#if item.is_folderish && $config.mode == "browse"}
+                                            {#if isBrowseable(item) && $config.mode == "browse"}
                                                 <div class="browseSub">
                                                     <svg
                                                         use:resolveIcon={{
