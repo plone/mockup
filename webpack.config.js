@@ -163,7 +163,7 @@ module.exports = () => {
         );
     }
 
-    console.log(JSON.stringify(config, null, 4));
+    //console.log(JSON.stringify(config, null, 4));
 
     return config;
 };
