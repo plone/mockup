@@ -34,7 +34,6 @@ parser.addArgument("base-path");
 parser.addArgument("context-path");
 parser.addArgument("maximum-selection-size");
 parser.addArgument("selectable-types");
-parser.addArgument("browseable-types");
 parser.addArgument("search-index");
 parser.addArgument("separator");
 parser.addArgument("selection");
