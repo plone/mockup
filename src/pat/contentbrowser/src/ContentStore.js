@@ -1,5 +1,8 @@
+import logger from "@patternslib/patternslib/src/core/logging";
 import { writable, get } from "svelte/store";
 import { request } from "./utils.js";
+
+const log = logger.getLogger("pat-contentbrowser");
 
 export default function (config, pathCache) {
     const store = writable([]);
@@ -22,7 +25,8 @@ export default function (config, pathCache) {
         try {
             return await request(query);
         }
-        catch {
+        catch (e) {
+            log.debug(`Could not load data from backend. ${e}`);
             return {
                 "error": "Could load data from backend."
             };
