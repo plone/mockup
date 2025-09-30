@@ -104,27 +104,39 @@ export async function request({
     };
     const url_query = JSON.stringify(vocabQuery);
     const url_parameters = JSON.stringify(attributes);
-    const url_batch = JSON.stringify({
+    const url_batch = pageSize ? JSON.stringify({
         page: page,
         size: pageSize,
-    });
+    }) : "";
 
-    const url = encodeURI(`${vocabularyUrl}${vocabularyUrl.indexOf("?") !== -1 ? "&" : "?"}query=${url_query}&attributes=${url_parameters}&batch=${url_batch}`);
-    log.debug(url);
+    let url = encodeURI(`${vocabularyUrl}${vocabularyUrl.indexOf("?") !== -1 ? "&" : "?"}query=${url_query}&attributes=${url_parameters}` + (url_batch ? `&batch=${url_batch}` : ""));
 
     const headers = new Headers();
     headers.set("Accept", "application/json");
 
-    const response = await fetch(url, {
+    let request_params =  {
         method: method,
         headers: headers,
-    });
+    };
+
+    if (method == "POST" && url.indexOf("?") !== -1) {
+        const url_parts = url.split("?");
+        url = url_parts[0];
+        const post_data = url_parts[1];
+        headers.set("Content-Type", "application/x-www-form-urlencoded");
+
+        log.debug(url, post_data);
+
+        request_params['body'] = post_data;
+    }
+
+    const response = await fetch(url, request_params);
 
     if (!response.ok) {
         return {
             results: [],
             total: 0,
-            errors: json.errors,
+            errors: response.errors,
         };
     }
 
@@ -153,9 +165,13 @@ export async function get_items_from_uids(uids, config) {
         return [];
     }
     const selectedItemsFromUids = await request({
+        // use POST request (when many selected items are present the URL might get too long)
+        method: "POST",
         vocabularyUrl: config.vocabularyUrl,
         attributes: config.attributes,
         uids: uids,
+        // do not batch here, otherwise we do not get all items
+        pageSize: null,
     });
     let results = (await selectedItemsFromUids?.results) || [];
     // resort the results based on the order of uids
