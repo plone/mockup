@@ -15,7 +15,6 @@ export async function request({
     searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
-    browseableTypes = [],
     pageSize = 100,
     page = 1,
 }) {
@@ -91,16 +90,12 @@ export async function request({
         return {
             results: [],
             total: 0,
-            load_more: false,
         }
     };
 
     const url_query = JSON.stringify(vocabQuery);
     const url_parameters = JSON.stringify(attributes);
-    // NOTE: if selectableTypes or browseableTypes is defined
-    // the response has to be unbatched otherwise we might end up in
-    // an empty listing if many items of different types are present
-    const url_batch = (pageSize && !(selectableTypes.length || browseableTypes.length)) ? JSON.stringify({
+    const url_batch = pageSize ? JSON.stringify({
         page: page,
         size: pageSize,
     }) : "";
@@ -136,33 +131,7 @@ export async function request({
         };
     }
 
-    const json = await response.json();
-
-    if (!searchPath && !levelInfoPath && (selectableTypes.length || browseableTypes.length)) {
-        // we iter through response and filter out non-selectable
-        // types but keep folderish types to maintain browsing
-        // the content structure.
-        const filtered_results = [];
-
-        for (const it of json.results) {
-            // determine if item can be browsed
-            const can_browse = (browseableTypes.length  && browseableTypes.indexOf(it.portal_type) != -1) || (!browseableTypes.length && it.is_folderish);
-            // determine if item can be selected
-            const can_select = (selectableTypes.length && selectableTypes.indexOf(it.portal_type) != -1) || !selectableTypes.length;
-
-            if (can_select || can_browse) {
-                filtered_results.push(it);
-            }
-        }
-
-        return {
-            results: filtered_results,
-            total: filtered_results.length,
-            load_more: false,
-        }
-    }
-
-    return json;
+    return await response.json();
 }
 
 export async function get_items_from_uids(uids, config) {

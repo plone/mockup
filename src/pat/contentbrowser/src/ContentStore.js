@@ -12,7 +12,6 @@ export default function (config, pathCache) {
             vocabularyUrl: config.vocabularyUrl,
             attributes: config.attributes,
             pageSize: config.pageSize,
-            browseableTypes: config.browseableTypes,
             searchIndex: config.searchIndex,
         };
         query = {
@@ -101,9 +100,7 @@ export default function (config, pathCache) {
                 level = await load(query);
 
                 // check if there is more than the current batch
-                if(level.load_more === undefined) {
-                    level.load_more = config.pageSize < level.total;
-                }
+                level.load_more = config.pageSize < level.total;
                 level.page = 1;
                 level.path = p;
                 level.searchTerm = searchTerm;

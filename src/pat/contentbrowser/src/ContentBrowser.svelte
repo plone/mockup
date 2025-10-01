@@ -99,9 +99,16 @@
     function isBrowseable(item) {
         return (
             item.is_folderish &&
-            (($config.browseableTypes.length &&
-                $config.browseableTypes.indexOf(item.portal_type) != -1) ||
-                !$config.browseableTypes.length)
+            (!$config.browseableTypes.length ||
+                $config.browseableTypes.indexOf(item.portal_type) != -1)
+        );
+    }
+
+    function isSelectable(item) {
+        return (
+            $selectedUids.indexOf(item.UID) === -1 &&
+            (!$config.selectableTypes.length ||
+                $config.selectableTypes.indexOf(item.portal_type) != -1)
         );
     }
 
@@ -330,10 +337,6 @@
         $showContentBrowser = false;
         keyboardNavInitialized = false;
         updatePreview({ action: "clear" });
-    }
-
-    function isSelectable(item) {
-        return $selectedUids.indexOf(item.UID) === -1;
     }
 
     function scrollToRight() {
@@ -612,7 +615,8 @@
                                                 : ''}{$previewUids.indexOf(item.UID) !=
                                             -1
                                                 ? ' selectedItem'
-                                                : ''}{!isSelectable(item)
+                                                : ''}{!isSelectable(item) &&
+                                            !isBrowseable(item)
                                                 ? ' text-body-tertiary'
                                                 : ''}"
                                             role="button"
