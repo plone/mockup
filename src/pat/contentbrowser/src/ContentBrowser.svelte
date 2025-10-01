@@ -10,6 +10,7 @@
         clickOutside,
         formatDate,
         get_items_from_uids,
+        iconTag,
         request,
         resolveIcon,
         updateRecentlyUsed,
@@ -625,13 +626,15 @@
                                                         alt={item.Title || itemId(item)}
                                                     />
                                                 {:else}
-                                                    <span class="plone-icon">
-                                                        <svg
-                                                            use:resolveIcon={{
-                                                                iconName: `contenttype/${item.portal_type.toLowerCase().replace(/\.| /g, "-")}`,
-                                                            }}
-                                                        />
-                                                    </span>
+                                                    {#await iconTag(`contenttype/${item.portal_type
+                                                            .toLowerCase()
+                                                            .replace(/\.| /g, "-")}`)}
+                                                        ...
+                                                    {:then iconHTML}
+                                                        <span class="plone-icon">
+                                                            {@html iconHTML}
+                                                        </span>
+                                                    {/await}
                                                 {/if}
                                                 <span
                                                     class={!item.Title ? "id-only" : ""}

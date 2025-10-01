@@ -183,12 +183,14 @@ export async function get_items_from_uids(uids, config) {
 
 
 /** use Plone resolveIcon to load a SVG icon and replace node with icon code */
+
+export async function iconTag(iconName) {
+    const icon = await utils.resolveIcon(iconName);
+    return icon;
+}
+
 export async function resolveIcon(node, { iconName }) {
-    async function getIcon(iconName) {
-        const icon = await utils.resolveIcon(iconName)
-        return icon;
-    }
-    const iconCode = await getIcon(iconName);
+    const iconCode = await iconTag(iconName);
     node.outerHTML = iconCode;
     return {
         destroy() { },
