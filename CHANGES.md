@@ -2,6 +2,33 @@
 
 
 
+## [5.4.4](https://github.com/plone/mockup/compare/5.4.3...5.4.4) (2025-10-02)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Check browseable items automatically with "is_folderish" metadata. ([6e5c1bd](https://github.com/plone/mockup/commit/6e5c1bd265dc3bd04f109c2df32a8b9182b94dbb))
+
+
+* **pat contentbrowser:** Correctly update item icons when searching or filtering. ([15a8ca0](https://github.com/plone/mockup/commit/15a8ca02e8a9df14388b580d42f1a040cb71ed27))
+
+
+* **pat contentbrowser:** Use POST request for quering selected items in order to not get too long URIs when there are many items present. ([653484b](https://github.com/plone/mockup/commit/653484b34082ab9e31955ef3d8ebfde135b640c9))
+
+
+
+### Maintenance
+
+
+* **pat-tinymce:** Autoformat. Run prettier and eslint. ([db84db6](https://github.com/plone/mockup/commit/db84db69e201bd70eacc320bbe576641c1e91737))
+
+
+* **pat-tinymce:** Minor code modernization. ([6c60eba](https://github.com/plone/mockup/commit/6c60eba7fdc1ae0263390f7d59bb205a6e48d8e4))
+
+
+* Upgrade dependencies. ([c21c4ff](https://github.com/plone/mockup/commit/c21c4ff72fe3da6b83843e9ca07b0f1b52909025))
+
 ## [5.4.3](https://github.com/plone/mockup/compare/5.4.2...5.4.3) (2025-07-28)
 
 
