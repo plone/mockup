@@ -12,7 +12,6 @@ export default function (config, pathCache) {
             vocabularyUrl: config.vocabularyUrl,
             attributes: config.attributes,
             pageSize: config.pageSize,
-            browseableTypes: config.browseableTypes,
             searchIndex: config.searchIndex,
         };
         query = {

@@ -24,7 +24,7 @@
     export let rootUrl = "";
     export let basePath = "";
     export let selectableTypes = [];
-    export let browseableTypes = ["Folder", "LIF", "LRF"];
+    export let browseableTypes = [];
     export let searchIndex = "SearchableText";
     export let maximumSelectionSize = -1;
     export let separator;

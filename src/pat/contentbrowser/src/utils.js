@@ -15,7 +15,6 @@ export async function request({
     searchPath = null,
     levelInfoPath = null,
     selectableTypes = [],
-    browseableTypes = [],
     pageSize = 100,
     page = 1,
 }) {
@@ -35,15 +34,6 @@ export async function request({
             sort_on: "getObjPositionInParent",
             sort_order: "ascending",
         };
-        if (selectableTypes.length) {
-            // we need to append browseableTypes here in order to
-            // preserve browsing subitems
-            vocabQuery.criteria.push({
-                i: "portal_type",
-                o: "plone.app.querystring.operation.list.contains",
-                v: selectableTypes.concat(browseableTypes),
-            })
-        }
     }
     if (levelInfoPath) {
         // query exact path
@@ -102,6 +92,7 @@ export async function request({
             total: 0,
         }
     };
+
     const url_query = JSON.stringify(vocabQuery);
     const url_parameters = JSON.stringify(attributes);
     const url_batch = pageSize ? JSON.stringify({
@@ -114,7 +105,7 @@ export async function request({
     const headers = new Headers();
     headers.set("Accept", "application/json");
 
-    let request_params =  {
+    let request_params = {
         method: method,
         headers: headers,
     };
@@ -140,24 +131,7 @@ export async function request({
         };
     }
 
-    const json = await response.json();
-
-    if (!searchPath && !levelInfoPath && selectableTypes.length) {
-        // we iter through response and filter out non-selectable
-        // types but keep folderish types to maintain browsing
-        // the content structure.
-        const filtered_response = {
-            results: [],
-            total: json.total,
-        }
-        for (const it of json.results) {
-            if (selectableTypes.indexOf(it.portal_type) != -1 || it.is_folderish) {
-                filtered_response.results.push(it);
-            }
-        }
-        return filtered_response;
-    }
-    return json;
+    return await response.json();
 }
 
 export async function get_items_from_uids(uids, config) {

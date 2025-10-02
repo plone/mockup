@@ -96,11 +96,27 @@
         });
     }
 
+    function isBrowseable(item) {
+        return (
+            item.is_folderish &&
+            (!$config.browseableTypes.length ||
+                $config.browseableTypes.indexOf(item.portal_type) != -1)
+        );
+    }
+
+    function isSelectable(item) {
+        return (
+            $selectedUids.indexOf(item.UID) === -1 &&
+            (!$config.selectableTypes.length ||
+                $config.selectableTypes.indexOf(item.portal_type) != -1)
+        );
+    }
+
     function showPreview(item) {
         if ($config.mode == "browse") {
             $previewUids = [item.UID];
 
-            if (item.is_folderish) {
+            if (isBrowseable(item)) {
                 // show folder
                 currentPath.set(item.path);
             } else {
@@ -321,10 +337,6 @@
         $showContentBrowser = false;
         keyboardNavInitialized = false;
         updatePreview({ action: "clear" });
-    }
-
-    function isSelectable(item) {
-        return $selectedUids.indexOf(item.UID) === -1;
     }
 
     function scrollToRight() {
@@ -603,7 +615,8 @@
                                                 : ''}{$previewUids.indexOf(item.UID) !=
                                             -1
                                                 ? ' selectedItem'
-                                                : ''}{!isSelectable(item)
+                                                : ''}{!isSelectable(item) &&
+                                            !isBrowseable(item)
                                                 ? ' text-body-tertiary'
                                                 : ''}"
                                             role="button"
@@ -646,7 +659,7 @@
                                                     >
                                                 {/if}
                                             </div>
-                                            {#if item.is_folderish && $config.mode == "browse"}
+                                            {#if isBrowseable(item) && $config.mode == "browse"}
                                                 <div class="browseSub">
                                                     <svg
                                                         use:resolveIcon={{
