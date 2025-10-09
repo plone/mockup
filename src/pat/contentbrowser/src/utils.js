@@ -31,7 +31,7 @@ export async function request({
                     v: `${path}::1`,
                 },
             ],
-            sort_on: "getObjPositionInParent",
+            sort_on: "sortable_title",
             sort_order: "ascending",
         };
     }
