@@ -306,7 +306,7 @@ export default class TinyMCE {
             lang = lang.split("-")[0] + "_" + lang.split("-")[1].toUpperCase();
         }
 
-        if (lang !== "en") {
+        if (lang.substr(0,2) !== "en") {
             // load translations from tinymce-i18n
             try {
                 await import(`tinymce-i18n/langs7/${lang}`);
