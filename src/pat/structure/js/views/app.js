@@ -171,15 +171,15 @@ export default BaseView.extend({
                     "{path}"
                 );
                 url = pushStateUrl.replace("{path}", path);
+                window.history.pushState(null, null, url);
             } else if (this.options.urlStructure) {
                 // fallback to urlStructure specification
                 url =
                     this.options.urlStructure.base +
                     path +
                     this.options.urlStructure.appended;
+                window.history.pushState(null, null, url);
             }
-            console.log("a1");
-            window.history.pushState(null, null, url);
 
             if (this.options.traverseView) {
                 // flag specifies that the context view implements a traverse
@@ -188,7 +188,7 @@ export default BaseView.extend({
                 // specifying a path.
                 path = "";
             }
-            if (path !== "") {
+            if (url && path !== "") {
                 document.body.dataset.baseUrl = url;
             }
             $("body").trigger("structure-url-changed", [path]);
@@ -229,7 +229,6 @@ export default BaseView.extend({
                     path = "/";
                 }
                 this.setCurrentPath(path);
-                console.log("a2");
                 document.body.dataset.baseUrl = `${document.body.dataset.portalUrl}${path}`;
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
