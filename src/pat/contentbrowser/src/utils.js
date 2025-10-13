@@ -16,6 +16,8 @@ export async function request({
     levelInfoPath = null,
     selectableTypes = [],
     pageSize = 100,
+    sortOn = 'sortable_title',
+    sortOrder = 'ascending',
     page = 1,
 }) {
     let vocabQuery = {
@@ -31,8 +33,8 @@ export async function request({
                     v: `${path}::1`,
                 },
             ],
-            sort_on: "sortable_title",
-            sort_order: "ascending",
+            sort_on: sortOn,
+            sort_order: sortOrder,
         };
     }
     if (levelInfoPath) {
