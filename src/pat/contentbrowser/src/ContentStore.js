@@ -13,6 +13,8 @@ export default function (config, pathCache) {
             attributes: config.attributes,
             pageSize: config.pageSize,
             searchIndex: config.searchIndex,
+            sortOn: config.sortOn,
+            sortOrder: config.sortOrder,
         };
         query = {
             ...defaults,
