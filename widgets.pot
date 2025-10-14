@@ -94,6 +94,10 @@ msgid "loading selected items"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/SelectedItems.svelte
+msgid "Select or Upload"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/SelectedItems.svelte
 msgid "Select"
 msgstr ""
 
