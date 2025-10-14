@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 const log = logging.getLogger("pat-toolbar");
 
 export const parser = new Parser("toolbar");
-parser.addArgument("render-url", "@@render-toolbar");
+parser.addArgument("render-view", "@@render-toolbar");
 
 class Pattern extends BasePattern {
     static name = "toolbar";
@@ -60,11 +60,11 @@ class Pattern extends BasePattern {
     }
 
     async reload_toolbar() {
-        const render_url = this.options["render-url"];
+        const render_view = this.options["render-view"];
         let url = document.body.dataset.baseUrl;
         // Ensure a trailing slash in the URL.
         url = url[url.length - 1] === "/" ? url : `${url}/`
-        url = `${url}${render_url}`;
+        url = `${url}${render_view}`;
 
         if (this.previous_toolbar_url === url) {
             // no need to reload same url
