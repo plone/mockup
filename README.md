@@ -237,7 +237,7 @@ cp widgets.pot ../plone.app.locales/plone/app/locales/locales/
 3. Run i18ndude to update the po files
 
 ```
-cd ../plone.app.locales/plone/app/locales/locales
+cd ../plone.app.locales/src/plone/app/locales/locales
 i18ndude sync --pot widgets.pot */LC_MESSAGES/widgets.po
 ```
 
@@ -245,7 +245,7 @@ i18ndude sync --pot widgets.pot */LC_MESSAGES/widgets.po
 
 To test a translation, for example French:
 
-- Edit the po file ``src/plone.app.locales/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po``.
+- Edit the po file ``src/plone.app.locales/src/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po``.
 
 - Restart your instance to rebuild the mo file from the po file.
 
@@ -270,12 +270,13 @@ This is enforced via a pre-commit hook managed by [husky](https://github.com/typ
 
 **And this is how you use it:**
 
-We have 4 different types of changelog entries:
+We have 5 different types of changelog entries:
 
 -   Breaking Changes (type: `breaking`),
 -   Features (type: `feat`),
 -   Bug Fixes (type: `fix`),
 -   Maintenance (type: `maint`).
+-   Technical (type: `tech`).
 
 We can group commits in the changelog via a scope or grouping.
 Let's follow a convention and use these groupings, but the grouping is optional and any other group name can be used.
