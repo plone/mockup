@@ -83,14 +83,25 @@
             relativePath: "@@fileUpload",
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
+            maxFiles:
+                $config.maximumSelectionSize > 0 ? $config.maximumSelectionSize : null,
             success: (fileupload, obj) => {
-                updatePreview({
-                    uuid: obj.UID,
-                    action: "add",
-                });
+                if ($config.maximumSelectionSize == 1) {
+                    // remove currently selected item and save the uid of the uploaded item
+                    selectedItems.set([]);
+                    $previewUids = [obj.UID];
+                } else {
+                    // in multiselect mode we add the uploaded item to the previous selection
+                    updatePreview({ uuid: obj.UID, action: "add" });
+                }
             },
             queuecomplete: (fileUpload, obj) => {
-                contentItems.get({ path: $currentPath, updateCache: true });
+                if ($config.uploadAddImmediately) {
+                    addSelectedItems();
+                } else {
+                    // refresh current path to show uploaded items
+                    contentItems.get({ path: $currentPath, updateCache: true });
+                }
                 showUpload = false;
             },
         });

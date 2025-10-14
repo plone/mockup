@@ -46,6 +46,8 @@ parser.addArgument("recently-used-max-items");
 parser.addArgument("b-size");
 parser.addArgument("sort_on");
 parser.addArgument("sort_order");
+parser.addArgument("upload");
+parser.addArgument("upload-add-immediately");
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";
