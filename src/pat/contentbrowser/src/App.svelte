@@ -37,8 +37,8 @@
     export let recentlyUsedKey;
     export let recentlyUsedMaxItems;
     export let bSize = 20;
-    export let sort_on = "sortable_title";
-    export let sort_order = "ascending";
+    export let sortOn = "sortable_title";
+    export let sortOrder = "ascending";
     export let componentRegistryKeys = {};
 
     const log = logger.getLogger("pat-contentbrowser");
@@ -103,8 +103,8 @@
         recentlyUsedKey: recentlyUsedKey,
         recentlyUsedMaxItems: recentlyUsedMaxItems,
         pageSize: bSize,
-        sortOn: sort_on,
-        sortOrder: sort_order,
+        sortOn: sortOn,
+        sortOrder: sortOrder,
         componentRegistryKeys: componentRegistryKeys,
     };
 
