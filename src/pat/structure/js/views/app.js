@@ -188,9 +188,6 @@ export default BaseView.extend({
                 // specifying a path.
                 path = "";
             }
-            if (url && path !== "") {
-                document.body.dataset.baseUrl = url;
-            }
             $("body").trigger("structure-url-changed", [path]);
 
             this.loading.hide();
@@ -229,7 +226,6 @@ export default BaseView.extend({
                     path = "/";
                 }
                 this.setCurrentPath(path);
-                document.body.dataset.baseUrl = `${document.body.dataset.portalUrl}${path}`;
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
                 this.doNotPushState = true;
