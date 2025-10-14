@@ -21,10 +21,7 @@ export default class TinyMCE {
     addLinkClicked() {
         if (!this.linkModal) {
             const $el = $("<div/>").insertAfter(this.$el);
-            const linkTypes = ["internal", "upload", "external", "email", "anchor"];
-            if (!this.options.upload) {
-                linkTypes.splice(1, 1);
-            }
+            const linkTypes = ["internal", "external", "email", "anchor"];
             this.linkModal = new LinkModal(
                 $el,
                 $.extend(true, {}, this.options, {
@@ -40,10 +37,7 @@ export default class TinyMCE {
     }
     addImageClicked() {
         if (!this.imageModal) {
-            const linkTypes = ["image", "uploadImage", "externalImage"];
-            if (!this.options.upload) {
-                linkTypes.splice(1, 1);
-            }
+            const linkTypes = ["image", "externalImage"];
             const options = $.extend(true, {}, this.options, {
                 tinypattern: this,
                 linkTypes: linkTypes,
