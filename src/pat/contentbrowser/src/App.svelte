@@ -33,6 +33,7 @@
     export let fieldId;
     export let upload;
     export let uploadAddImmediately = true;
+    export let uploadAcceptedMimetypes;
     export let favorites;
     export let recentlyUsed;
     export let recentlyUsedKey;
@@ -100,6 +101,7 @@
         fieldId: fieldId,
         uploadEnabled: upload,
         uploadAddImmediately: uploadAddImmediately,
+        uploadAcceptedMimetypes: uploadAcceptedMimetypes,
         favorites: favorites,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,

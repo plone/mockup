@@ -50,7 +50,7 @@ const LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
-    updateRelatedItems: function () {},
+    updateRelatedItems: function () { },
 });
 
 const ExternalLink = LinkType.extend({
@@ -94,7 +94,7 @@ const InternalLink = LinkType.extend({
         return this.el.querySelector("input");
     },
 
-    createContentBrowser: async function () {
+    contentBrowserOptions: function () {
         const options = {
             selection: [],
             ...this.linkModal.options?.relatedItems,
@@ -102,12 +102,17 @@ const InternalLink = LinkType.extend({
         options["maximum-selection-size"] = 1;
         // enable upload in ContentBrowser instead of separate tab
         options["upload"] = 1;
-        const inputEl = this.getEl();
         const element = this.tiny.selection.getNode();
         const linkType = this.tiny.dom.getAttrib(element, "data-linktype");
         if (linkType === "internal" || linkType === "image") {
             options.selection.push(this.tiny.dom.getAttrib(element, "data-val"));
         }
+        return options;
+    },
+
+    createContentBrowser: async function () {
+        const inputEl = this.getEl();
+        const options = this.contentBrowserOptions();
         const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
             .default;
         this.contentBrowserPattern = new ContentBrowser(inputEl, options);
@@ -125,6 +130,13 @@ const InternalLink = LinkType.extend({
 const ImageLink = InternalLink.extend({
     name: "imagelinktype",
     trigger: ".pat-imagelinktype-dummy",
+
+    contentBrowserOptions: function () {
+        const options = InternalLink.prototype.contentBrowserOptions.call(this);
+        options["uploadAcceptedMimetypes"] = "image/*";
+        return options;
+    },
+
     toUrl: function () {
         const value = this.value();
         return this.tinypattern.generateImageUrl(

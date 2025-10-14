@@ -87,6 +87,7 @@
             hiddenInputContainer: ".upload-wrapper",
             maxFiles:
                 $config.maximumSelectionSize > 0 ? $config.maximumSelectionSize : null,
+            acceptedFiles: $config.uploadAcceptedMimetypes,
             success: (fileupload, obj) => {
                 if ($config.maximumSelectionSize == 1) {
                     // remove currently selected item and save the uid of the uploaded item

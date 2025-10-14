@@ -46,6 +46,7 @@ parser.addArgument("recently-used-max-items");
 parser.addArgument("b-size");
 parser.addArgument("upload");
 parser.addArgument("upload-add-immediately");
+parser.addArgument("upload-accepted-mimetypes");
 parser.addArgument("sort-on");
 parser.addArgument("sort-order");
 
