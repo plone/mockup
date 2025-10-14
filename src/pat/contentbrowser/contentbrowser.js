@@ -44,10 +44,10 @@ parser.addArgument("recently-used");
 parser.addArgument("recently-used-key");
 parser.addArgument("recently-used-max-items");
 parser.addArgument("b-size");
-parser.addArgument("sort_on");
-parser.addArgument("sort_order");
 parser.addArgument("upload");
 parser.addArgument("upload-add-immediately");
+parser.addArgument("sort-on");
+parser.addArgument("sort-order");
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";
