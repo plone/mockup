@@ -77,6 +77,8 @@
         await utils.timeout(1);
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
+        let validation_errors = false;
+
         const patUpload = new Upload(uploadEl, {
             baseUrl: $config.rootUrl,
             currentPath: $currentPath,
@@ -95,7 +97,26 @@
                     updatePreview({ uuid: obj.UID, action: "add" });
                 }
             },
+            error(file, message) {
+                validation_errors = true;
+                // see dropzone.js docs for message structure
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error) {
+                        message = message.error;
+                    }
+                    for (let node of file.previewElement.querySelectorAll(
+                        "[data-dz-errormessage]",
+                    )) {
+                        node.textContent = message;
+                    }
+                }
+            },
             queuecomplete: (fileUpload, obj) => {
+                if (validation_errors) {
+                    // there was an error uploading one or more files
+                    return;
+                }
                 if ($config.uploadAddImmediately) {
                     addSelectedItems();
                 } else {
