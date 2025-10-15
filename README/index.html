@@ -29,6 +29,10 @@
           </li>
           
           <li class="">
+            <a class="menu-item" href="/mockup/src/pat/base-url/README/"></a>
+          </li>
+          
+          <li class="">
             <a class="menu-item" href="/mockup/pat/contenbrowser/">Contentbrowser</a>
           </li>
           
@@ -536,14 +540,14 @@ https://www.npmjs.com/package/webpack-bundle-analyzer</p>
 <ol start="3">
 <li>Run i18ndude to update the po files</li>
 </ol>
-<pre><code>cd ../plone.app.locales/src/plone/app/locales/locales
+<pre><code>cd ../plone.app.locales/plone/app/locales/locales
 i18ndude sync --pot widgets.pot */LC_MESSAGES/widgets.po
 </code></pre>
 <h3>i18n message handling in Plone</h3>
 <p>To test a translation, for example French:</p>
 <ul>
 <li>
-<p>Edit the po file <code>src/plone.app.locales/src/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po</code>.</p>
+<p>Edit the po file <code>src/plone.app.locales/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po</code>.</p>
 </li>
 <li>
 <p>Restart your instance to rebuild the mo file from the po file.</p>
@@ -566,13 +570,12 @@ This rule is defined in the <a href=".editorconfig">.editorconfig file</a>.</li>
 Changelog generation is done by the <a href="https://github.com/release-it/conventional-changelog/">conventional changelog plugin</a> for <a href="https://github.com/release-it/release-it">release-it</a>.
 This is enforced via a pre-commit hook managed by <a href="https://github.com/typicode/husky">husky</a>.</p>
 <p><strong>And this is how you use it:</strong></p>
-<p>We have 5 different types of changelog entries:</p>
+<p>We have 4 different types of changelog entries:</p>
 <ul>
 <li>Breaking Changes (type: <code>breaking</code>),</li>
 <li>Features (type: <code>feat</code>),</li>
 <li>Bug Fixes (type: <code>fix</code>),</li>
 <li>Maintenance (type: <code>maint</code>).</li>
-<li>Technical (type: <code>tech</code>).</li>
 </ul>
 <p>We can group commits in the changelog via a scope or grouping.
 Let's follow a convention and use these groupings, but the grouping is optional and any other group name can be used.</p>
