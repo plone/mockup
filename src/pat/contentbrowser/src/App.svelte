@@ -32,6 +32,8 @@
     export let query = {};
     export let fieldId;
     export let upload;
+    export let uploadAddImmediately = true;
+    export let uploadAcceptedMimetypes;
     export let favorites;
     export let recentlyUsed;
     export let recentlyUsedKey;
@@ -98,6 +100,8 @@
         query: query,
         fieldId: fieldId,
         uploadEnabled: upload,
+        uploadAddImmediately: uploadAddImmediately,
+        uploadAcceptedMimetypes: uploadAcceptedMimetypes,
         favorites: favorites,
         recentlyUsed: recentlyUsed,
         recentlyUsedKey: recentlyUsedKey,

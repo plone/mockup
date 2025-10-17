@@ -77,20 +77,53 @@
         await utils.timeout(1);
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
+        let validation_errors = false;
+
         const patUpload = new Upload(uploadEl, {
             baseUrl: $config.rootUrl,
             currentPath: $currentPath,
             relativePath: "@@fileUpload",
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
+            maxFiles:
+                $config.maximumSelectionSize > 0 ? $config.maximumSelectionSize : null,
+            acceptedFiles: $config.uploadAcceptedMimetypes,
             success: (fileupload, obj) => {
-                updatePreview({
-                    uuid: obj.UID,
-                    action: "add",
-                });
+                if ($config.maximumSelectionSize == 1) {
+                    // remove currently selected item and save the uid of the uploaded item
+                    selectedItems.set([]);
+                    $previewUids = [obj.UID];
+                } else {
+                    // in multiselect mode we add the uploaded item to the previous selection
+                    updatePreview({ uuid: obj.UID, action: "add" });
+                }
+            },
+            error(file, message) {
+                validation_errors = true;
+                // see dropzone.js docs for message structure
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error) {
+                        message = message.error;
+                    }
+                    for (let node of file.previewElement.querySelectorAll(
+                        "[data-dz-errormessage]",
+                    )) {
+                        node.textContent = message;
+                    }
+                }
             },
             queuecomplete: (fileUpload, obj) => {
-                contentItems.get({ path: $currentPath, updateCache: true });
+                if (validation_errors) {
+                    // there was an error uploading one or more files
+                    return;
+                }
+                if ($config.uploadAddImmediately) {
+                    addSelectedItems();
+                } else {
+                    // refresh current path to show uploaded items
+                    contentItems.get({ path: $currentPath, updateCache: true });
+                }
                 showUpload = false;
             },
         });

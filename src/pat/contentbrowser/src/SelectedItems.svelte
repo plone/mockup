@@ -148,7 +148,7 @@
         class="btn btn-primary"
         href="#"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        on:click|preventDefault={() => ($showContentBrowser = true)}>{_t("Select")}</a
+        on:click|preventDefault={() => ($showContentBrowser = true)}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
     >
 </div>
 

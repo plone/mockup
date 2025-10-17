@@ -50,7 +50,7 @@ const LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
-    updateRelatedItems: function () {},
+    updateRelatedItems: function () { },
 });
 
 const ExternalLink = LinkType.extend({
@@ -94,7 +94,7 @@ const InternalLink = LinkType.extend({
         return this.el.querySelector("input");
     },
 
-    createContentBrowser: async function () {
+    contentBrowserOptions: function () {
         const options = {
             selection: [],
             ...this.linkModal.options?.relatedItems,
@@ -102,12 +102,17 @@ const InternalLink = LinkType.extend({
         options["maximum-selection-size"] = 1;
         // enable upload in ContentBrowser instead of separate tab
         options["upload"] = 1;
-        const inputEl = this.getEl();
         const element = this.tiny.selection.getNode();
         const linkType = this.tiny.dom.getAttrib(element, "data-linktype");
         if (linkType === "internal" || linkType === "image") {
             options.selection.push(this.tiny.dom.getAttrib(element, "data-val"));
         }
+        return options;
+    },
+
+    createContentBrowser: async function () {
+        const inputEl = this.getEl();
+        const options = this.contentBrowserOptions();
         const ContentBrowser = (await import("../../contentbrowser/contentbrowser"))
             .default;
         this.contentBrowserPattern = new ContentBrowser(inputEl, options);
@@ -122,40 +127,16 @@ const InternalLink = LinkType.extend({
     },
 });
 
-const UploadLink = LinkType.extend({
-    name: "uploadlinktype",
-    trigger: ".pat-uploadlinktype-dummy",
-    /* need to do it a bit differently here.
-       when a user uploads and tries to upload from
-       it, you need to delegate to the real insert
-       linke types */
-    getDelegatedLinkType: function () {
-        if (this.linkModal.linkType === "uploadImage") {
-            return this.linkModal.linkTypes.image;
-        } else {
-            return this.linkModal.linkTypes.internal;
-        }
-    },
-    toUrl: function () {
-        return this.getDelegatedLinkType().toUrl();
-    },
-    attributes: function () {
-        return this.getDelegatedLinkType().attributes();
-    },
-    set: function (val) {
-        return this.getDelegatedLinkType().set(val);
-    },
-    load: function (element) {
-        return this.getDelegatedLinkType().load(element);
-    },
-    value: function () {
-        return this.getDelegatedLinkType().value();
-    },
-});
-
 const ImageLink = InternalLink.extend({
     name: "imagelinktype",
     trigger: ".pat-imagelinktype-dummy",
+
+    contentBrowserOptions: function () {
+        const options = InternalLink.prototype.contentBrowserOptions.call(this);
+        options["uploadAcceptedMimetypes"] = "image/*";
+        return options;
+    },
+
     toUrl: function () {
         const value = this.value();
         return this.tinypattern.generateImageUrl(
@@ -396,12 +377,10 @@ export default Base.extend({
         },
         linkTypeClassMapping: {
             internal: InternalLink,
-            upload: UploadLink,
             external: ExternalLink,
             email: EmailLink,
             anchor: AnchorLink,
             image: ImageLink,
-            uploadImage: UploadLink,
             externalImage: LinkType,
         },
     },
@@ -409,12 +388,10 @@ export default Base.extend({
     // Image modal is going to have its own modal class, funcs and template.
     linkTypeTemplateMapping: {
         internal: LinkTemplate,
-        upload: LinkTemplate,
         external: LinkTemplate,
         email: LinkTemplate,
         anchor: LinkTemplate,
         image: ImageTemplate,
-        uploadImage: ImageTemplate,
         externalImage: ImageTemplate,
     },
 
@@ -517,7 +494,7 @@ export default Base.extend({
     },
 
     isImageMode: function () {
-        return ["image", "uploadImage", "externalImage"].indexOf(this.linkType) !== -1;
+        return ["image", "externalImage"].indexOf(this.linkType) !== -1;
     },
 
     initElements: async function () {
@@ -719,62 +696,11 @@ export default Base.extend({
     modalShown: async function (e) {
         await this.initElements();
         this.initData();
-        // upload init
-        // if (this.options.upload) {
-        //     this.$upload = $(".uploadify-me", this.modal.$modal);
-        //     this.options.upload.relatedItems = $.extend(
-        //         true,
-        //         {},
-        //         this.options.relatedItems
-        //     );
-        //     this.options.upload.relatedItems.selectableTypes = this.options.folderTypes;
-        //     this.$upload.addClass("pat-upload");
-        //     new PatternUpload(this.$upload, this.options.upload);
-        //     this.$upload.on(
-        //         "uploadAllCompleted",
-        //         (evt, data) => {
-        //             if (this.linkTypes.image) {
-        //                 this.linkTypes.image.set(data.data.UID);
-        //                 $(
-        //                     "#" + $("#tinylink-image", this.modal.$modal).data("navref")
-        //                 ).trigger("click");
-        //             } else {
-        //                 this.linkTypes.internal.set(data.data.UID);
-        //                 $(
-        //                     "#" +
-        //                         $("#tinylink-internal", this.modal.$modal).data("navref")
-        //                 ).trigger("click");
-        //             }
-        //         }
-        //     );
-        // }
 
         this.$button.off("click").on("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
             this.linkType = this.modal.$modal.find("fieldset.active").data("linktype");
-            // if (this.linkType === "uploadImage" || this.linkType === "upload") {
-            //     const patUpload = this.$upload.data().patternUpload;
-            //     if (patUpload.dropzone.files.length > 0) {
-            //         patUpload.processUpload();
-            //         // eslint-disable-next-line no-unused-vars
-            //         this.$upload.on("uploadAllCompleted", (evt, data) => {
-            //             let counter = 0;
-            //             const checkUpload = () => {
-            //                 if (counter < 5 && !this.linkTypes[this.linkType].value()) {
-            //                     counter += 1;
-            //                     setTimeout(checkUpload, 100);
-            //                     return;
-            //                 } else {
-            //                     const href = this.getLinkUrl();
-            //                     this.updateImage(href);
-            //                     this.hide();
-            //                 }
-            //             };
-            //             checkUpload();
-            //         });
-            //     }
-            // }
             let href;
             try {
                 href = this.getLinkUrl();
