@@ -2,6 +2,47 @@
 
 
 
+## [5.4.5](https://github.com/plone/mockup/compare/5.4.4...5.4.5) (2025-10-17)
+
+
+### Features
+
+
+* **pat contentbrowser:** add configurable sort index and order ([ba03b43](https://github.com/plone/mockup/commit/ba03b43644d89d43141eecf4a5cb0708b79f7764))
+
+
+* **pat contentbrowser:** add new parameter 'upload-add-immediately: true' which directly adds uploads after success to the selected items field and closes the contentbrowser ([af38348](https://github.com/plone/mockup/commit/af38348a0896fc71566654b0f825612e81b6c1c4))
+
+
+* **pat contentbrowser:** configurable accepted mimetypes for uploads. pat-tinymce uses this to ensure only 'image/*' mimetypes in image modal. ([f9d017a](https://github.com/plone/mockup/commit/f9d017aeab12e51201f89d91ef260cfc3a93247c))
+
+
+
+### Bug Fixes
+
+
+* **i18n:** update translations ([88c1ec5](https://github.com/plone/mockup/commit/88c1ec542b37b38efde77298416537100fc908b3))
+
+
+* **pat contentbrowser:** show error when upload fails. ([5c5dcf8](https://github.com/plone/mockup/commit/5c5dcf8766524f46e68799782e5a4c790aa39f63))
+
+
+* **pat tinymce:** cleanup tinymce link modal upload tab ([0990b2c](https://github.com/plone/mockup/commit/0990b2c17bc5b125b7829eb7581e877c6194ff14))
+
+
+
+### Technical Changes
+
+
+* **pat contentbrowser:** follow patternslib convention of parameter names ([f54c5b3](https://github.com/plone/mockup/commit/f54c5b3d9c1a512d0989183dcc58d419b6a74bc0))
+
+
+
+### Maintenance
+
+
+* dependency updates ([747b267](https://github.com/plone/mockup/commit/747b2677ba2c778032b96d6e2a6edca43d02d9bf))
+
 ## [5.4.4](https://github.com/plone/mockup/compare/5.4.3...5.4.4) (2025-10-02)
 
 
