@@ -2,6 +2,24 @@
 
 
 
+## [5.5.0](https://github.com/plone/mockup/compare/5.4.5...5.5.0) (2025-12-18)
+
+
+### Features
+
+
+* **pat tinymce:** Upgrade TinyMCE v8 ([a7fe23a](https://github.com/plone/mockup/commit/a7fe23aaec31492117a7894aba67febbb9340936))
+
+
+* **pat tinymce:** use license_key value from controlpanel. Fallback to 'gpl'. ([66d3d41](https://github.com/plone/mockup/commit/66d3d41c6e19c001d458df112ea6cd6326007db6))
+
+
+
+### Maintenance
+
+
+* dependency updates ([e976163](https://github.com/plone/mockup/commit/e976163a6f725db439b2fb90db31f9d987feecbd))
+
 ## [5.4.5](https://github.com/plone/mockup/compare/5.4.4...5.4.5) (2025-10-17)
 
 
