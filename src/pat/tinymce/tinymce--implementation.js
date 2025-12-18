@@ -157,8 +157,11 @@ export default class TinyMCE {
         tinyOptions.skin = false;
         // do not show the "upgrade" button for plugins
         tinyOptions.promotion = false;
-        // TinyMCE 7 needs "license_key": "gpl" explicitly
-        tinyOptions.license_key = "gpl";
+
+        if (!tinyOptions?.license_key) {
+            // set default license key to "gpl" if not set
+            tinyOptions.license_key = "gpl";
+        }
 
         tinyOptions.init_instance_callback = (editor) => {
             if (this.tiny === undefined || this.tiny === null) {

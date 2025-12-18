@@ -8955,15 +8955,15 @@ tinyglobby@0.2.15, tinyglobby@^0.2.14:
     fdir "^6.5.0"
     picomatch "^4.0.3"
 
-tinymce-i18n@25.7.25:
-  version "25.7.25"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-25.7.25.tgz#ee6c29b9380a361f405f58f9598da61e691f4f21"
-  integrity sha512-1aa39Z5CE5mEsuLJ1+LQ94l5jo/FM+7r9ndGuwRnMnR3rNcNecF5y/Yeb2NYacAQdAnTzzs61QOC7O7bsPJ9Eg==
+tinymce-i18n@25.11.17:
+  version "25.11.17"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-25.11.17.tgz#4af30adf61e3cff6bed6f847d47aae0bbd10251c"
+  integrity sha512-Fi5hGRDL9o42VsdahgNgHRHO/4ClAAqIew45QMu8sa5LQT2wTaVPf/tAXnVDHxR7c6NWZQmZp/E18LosxLq42A==
 
-tinymce@7.9.1:
-  version "7.9.1"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.9.1.tgz#1b18bad9cb7a3b4b12e3e5a7f29fc7daad0713d7"
-  integrity sha512-zaOHwmiP1EqTeLRXAvVriDb00JYnfEjWGPdKEuac7MiZJ5aiDMZ4Unc98Gmajn+PBljOmO1GKV6G0KwWn3+k8A==
+tinymce@8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-8.3.1.tgz#04d53f0b18e6ff69afe2bd748b86e495c61d260e"
+  integrity sha512-mdQdTAA90aEIyhEteIwy+QQ6UnxPCd3qQ5MlGvvByOvnjyOSdBzBcmnXeqWuhGz3fIs3XBJjIw7JyIMiHjebqw==
 
 tippy.js@^6.3.7:
   version "6.3.7"
