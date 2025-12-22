@@ -6,7 +6,8 @@
     "main": "./src/patterns.js",
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern."
+        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
+        "select2": "Use the commit hash for checkout since pnpm has problems with the annotated commit #3.5.4"
     },
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "3.0.2",
@@ -38,7 +39,7 @@
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
         "js-cookie": "^3.0.5",
-        "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
+        "select2": "git+https://github.com/ivaynberg/select2.git#95a977f674b6938af55ec5f28b7772df93786c5c",
         "sortablejs": "^1.15.6",
         "tinymce": "8.3.1",
         "tinymce-i18n": "25.11.17",
@@ -80,6 +81,7 @@
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
         "sass": "~1.77.8",
+        "slick-carousel": "git+https://github.com/kenwheeler/slick.git#d0716f19aa730006ee80ab026625fb1107816a97",
         "underscore": "1.13.7"
     },
     "scripts": {
@@ -132,6 +134,5 @@
     ],
     "publishConfig": {
         "access": "public"
-    },
-    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    }
 }

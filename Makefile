@@ -18,35 +18,36 @@
 -include .env
 export
 
-YARN   ?= npx yarn
+PNPM = pnpm
 
 
-yarn.lock install:
-	$(YARN) install
+pnpm-lock.yaml install:
+	npm i -g corepack@latest && corepack enable
+	$(PNPM) install
 
 
 .PHONY:
 watch-plone:
-	$(YARN) run watch:webpack:plone
+	$(PNPM) run watch:webpack:plone
 
 
 .PHONY:
 bundle-plone:
-	$(YARN) run build:webpack:plone
+	$(PNPM) run build:webpack:plone
 
 
 .PHONY: bundle
 bundle: install
-	$(YARN) run build:webpack
+	$(PNPM) run build:webpack
 
 .PHONY: docs
 docs: install
-	$(YARN) build:webpack:docs
-	$(YARN) build:docs
+	$(PNPM) build:webpack:docs
+	$(PNPM) build:docs
 
 # Unlink any linked dependencies before building a bundle.
 bundle-pre:
-	-$(YARN) unlink @patternslib/dev
-	-$(YARN) unlink @patternslib/pat-code-editor
-	-$(YARN) unlink @patternslib/patternslib
-	$(YARN) install --force
+	-$(PNPM) unlink @patternslib/dev
+	-$(PNPM) unlink @patternslib/pat-code-editor
+	-$(PNPM) unlink @patternslib/patternslib
+	$(PNPM) install --force
