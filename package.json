@@ -1,6 +1,6 @@
 {
     "name": "@plone/mockup",
-    "version": "5.4.5",
+    "version": "5.4.6",
     "description": "A collection of client side patterns for faster and easier web development",
     "license": "BSD-3-Clause",
     "main": "./src/patterns.js",
@@ -10,7 +10,7 @@
         "nwsapi": "Since version 2.2.14 some selectors do not work anymore. See https://github.com/dperini/nwsapi/issues/83"
     },
     "dependencies": {
-        "@11ty/eleventy-upgrade-help": "3.0.1",
+        "@11ty/eleventy-upgrade-help": "3.0.2",
         "@patternslib/pat-code-editor": "4.0.1",
         "@patternslib/patternslib": "9.10.3",
         "@plone/registry": "^2.5.4",
@@ -42,7 +42,7 @@
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.6",
         "tinymce": "7.9.1",
-        "tinymce-i18n": "25.7.25",
+        "tinymce-i18n": "25.11.17",
         "underscore": "^1.13.7"
     },
     "devDependencies": {
