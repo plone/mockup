@@ -2,6 +2,20 @@
 
 
 
+## [5.4.6](https://github.com/plone/mockup/compare/5.4.5...5.4.6) (2026-01-10)
+
+
+### Maintenance
+
+
+* bump npm version ([55d16d2](https://github.com/plone/mockup/commit/55d16d21edbe547fcf7c06122912afcbbf992938))
+
+
+* update dependencies. ([1b2c8bf](https://github.com/plone/mockup/commit/1b2c8bf4c4d830d2626d0e62e7a5ca4631d5600c))
+
+
+* update GHA branch ([9992ca5](https://github.com/plone/mockup/commit/9992ca5639258e7d6ff8f710a7cefa1173fb97a9))
+
 ## [5.4.5](https://github.com/plone/mockup/compare/5.4.4...5.4.5) (2025-10-17)
 
 
