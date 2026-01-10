@@ -2,6 +2,14 @@
 
 
 
+## [5.5.1](https://github.com/plone/mockup/compare/5.5.0...5.5.1) (2026-01-10)
+
+
+### Maintenance
+
+
+* update dependencies ([9eeb301](https://github.com/plone/mockup/commit/9eeb301bbb4322383eb04a1c3c4c081890a148e0))
+
 ## [5.5.0](https://github.com/plone/mockup/compare/5.4.5...5.5.0) (2025-12-18)
 
 
