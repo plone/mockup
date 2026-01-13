@@ -198,7 +198,7 @@ function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
                     human += format(
                         new Date(date_parts[0], date_parts[1] - 1, date_parts[2]),
                         conf.localization.longDateFormat,
-                        conf
+                        conf,
                     );
                 }
                 break;
@@ -233,8 +233,8 @@ function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
                     format(
                         new Date(year, month, day),
                         conf.localization.longDateFormat,
-                        conf
-                    )
+                        conf,
+                    ),
                 );
             }
         }
@@ -261,8 +261,8 @@ function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
                     format(
                         new Date(year, month, day),
                         conf.localization.longDateFormat,
-                        conf
-                    )
+                        conf,
+                    ),
                 );
             }
         }
@@ -463,7 +463,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         if (bymonthday.length > 1) {
                             // No support for multiple days in one month
                             unsupportedFeatures.push(
-                                conf.localization.multipleDayOfMonth
+                                conf.localization.multipleDayOfMonth,
                             );
                             // Just keep the first
                             bymonthday = bymonthday[0];
@@ -479,7 +479,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         if (byday.indexOf(",") !== -1) {
                             // No support for multiple days in one month
                             unsupportedFeatures.push(
-                                conf.localization.multipleDayOfMonth
+                                conf.localization.multipleDayOfMonth,
                             );
                             byday = byday.split(",")[0];
                         }
@@ -492,7 +492,9 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                             .find("select[name=rimonthlyweekdayofmonthindex]")
                             .val(index);
                         const day_index = conf.weekdays.indexOf(weekday);
-                        field.find("select[name=rimonthlyweekdayofmonth]").val(day_index);
+                        field
+                            .find("select[name=rimonthlyweekdayofmonth]")
+                            .val(day_index);
                     }
 
                     selectors = field.find("input[name=rimonthlytype]");
@@ -500,7 +502,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         radiobutton = selectors[index];
                         $(radiobutton).attr(
                             "checked",
-                            radiobutton.value === monthlyType
+                            radiobutton.value === monthlyType,
                         );
                     }
                     break;
@@ -517,7 +519,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         if (bymonthday.length > 1) {
                             // No support for multiple days in one month
                             unsupportedFeatures.push(
-                                conf.localization.multipleDayOfMonth
+                                conf.localization.multipleDayOfMonth,
                             );
                             bymonthday = bymonthday[0];
                         }
@@ -531,7 +533,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                         if (byday.indexOf(",") !== -1) {
                             // No support for multiple days in one month
                             unsupportedFeatures.push(
-                                conf.localization.multipleDayOfMonth
+                                conf.localization.multipleDayOfMonth,
                             );
                             byday = byday.split(",")[0];
                         }
@@ -562,7 +564,9 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
 
                 case "rirangeoptions":
                     // default value per configuration
-                    var rangeType = conf.hasRepeatForeverButton ? "NOENDDATE" : "BYOCCURRENCES";
+                    var rangeType = conf.hasRepeatForeverButton
+                        ? "NOENDDATE"
+                        : "BYOCCURRENCES";
 
                     if (count) {
                         rangeType = "BYOCCURRENCES";
@@ -591,7 +595,7 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
     var messagearea = form.find("#messagearea");
     if (unsupportedFeatures.length !== 0) {
         messagearea.text(
-            conf.localization.unsupportedFeatures + " " + unsupportedFeatures.join("; ")
+            conf.localization.unsupportedFeatures + " " + unsupportedFeatures.join("; "),
         );
         messagearea.show();
         return 1;
@@ -664,7 +668,7 @@ const RecurrenceInput = function (conf, textarea) {
         event.preventDefault();
         textarea["ical"].EXDATE.splice(
             $.inArray(this.attributes.date.value, textarea["ical"].EXDATE),
-            1
+            1,
         );
         var $this = $(this);
         $this.removeClass("exdate");
@@ -676,7 +680,7 @@ const RecurrenceInput = function (conf, textarea) {
         event.preventDefault();
         textarea["ical"].RDATE.splice(
             $.inArray(this.attributes.date.value, textarea["ical"].RDATE),
-            1
+            1,
         );
         $(this)
             .parent()
@@ -704,7 +708,7 @@ const RecurrenceInput = function (conf, textarea) {
                     ${format(
                         new Date(date_parts[0], date_parts[1] - 1, date_parts[2]),
                         conf.localization.longDateFormat,
-                        conf
+                        conf,
                     )},
                     <span class="rlabel">${conf.localization.additionalDate}</span>
                 </span>
@@ -772,11 +776,11 @@ const RecurrenceInput = function (conf, textarea) {
                     y = parseInt(date.substring(0, 4), 10);
                     m = parseInt(date.substring(4, 6), 10) - 1; // jan=0
                     d = parseInt(date.substring(6, 8), 10);
-                    occurrence.date = `${y}-${zeropad(m+1)}-${zeropad(d)}T000000`;
+                    occurrence.date = `${y}-${zeropad(m + 1)}-${zeropad(d)}T000000`;
                     occurrence.formattedDate = format(
                         new Date(y, m, d),
                         conf.localization.longDateFormat,
-                        conf
+                        conf,
                     );
                 }
 
@@ -791,7 +795,7 @@ const RecurrenceInput = function (conf, textarea) {
                         startdate,
                         rfc5545,
                         this.attributes.start.value,
-                        readonly
+                        readonly,
                     );
                 });
 
@@ -868,7 +872,7 @@ const RecurrenceInput = function (conf, textarea) {
             startdate = new Date(
                 startFieldYear.val(),
                 startFieldMonth.val() - 1,
-                startFieldDay.val()
+                startFieldDay.val(),
             );
         }
         if (startdate === null) {
@@ -943,7 +947,7 @@ const RecurrenceInput = function (conf, textarea) {
                     textarea["ical"].RDATE,
                     textarea["ical"].EXDATE,
                     conf,
-                    false
+                    false,
                 ).result;
 
             loadOccurrences(startdate, rfc5545, 0, false);
@@ -964,7 +968,7 @@ const RecurrenceInput = function (conf, textarea) {
             textarea["ical"].RDATE,
             textarea["ical"].EXDATE,
             conf,
-            false
+            false,
         );
         var label = self.display.find("label[class=ridisplay-label]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
@@ -1123,10 +1127,10 @@ const RecurrenceInput = function (conf, textarea) {
                     textarea["ical"].RDATE,
                     textarea["ical"].EXDATE,
                     conf,
-                    false
+                    false,
                 ).result,
                 0,
-                false
+                false,
             );
         }
     }
@@ -1162,7 +1166,7 @@ const RecurrenceInput = function (conf, textarea) {
                 input[name=rirangebyenddatecalendar],
                 #rimonthlyoptions select,
                 #riyearlyoptions select,
-                #riyearlyinterval select`
+                #riyearlyinterval select`,
             )
             .on("change", function () {
                 // Update only if the occurances are shown
