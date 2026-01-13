@@ -1393,6 +1393,7 @@ export default Base.extend({
         ributtonExtraClass: "",
 
         // INPUT CONFIGURATION
+        allowAdditionalDates: false,
         hasRepeatForeverButton: true,
 
         // JQUERY TEMPLATE NAMES
