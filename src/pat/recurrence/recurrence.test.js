@@ -16,15 +16,15 @@ describe("Recurrence", function () {
 
         expect(document.querySelectorAll("div.ridisplay").length).toEqual(1);
         expect(
-            document.querySelectorAll("div.ridisplay div.rioccurrences").length
+            document.querySelectorAll("div.ridisplay div.rioccurrences").length,
         ).toEqual(1);
         expect(document.querySelectorAll("div.riform div.rioccurrences").length).toEqual(
-            1
+            1,
         );
 
         // initially hidden elements
         expect(
-            document.querySelector("div.ridisplay div.rioccurrences").style.display
+            document.querySelector("div.ridisplay div.rioccurrences").style.display,
         ).toEqual("none");
         expect(document.querySelector("div.riform").style.display).toEqual("none");
     });
