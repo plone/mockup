@@ -739,7 +739,6 @@ const RecurrenceInput = function (conf, textarea) {
         }
 
         occurrenceDiv = element.find(".rioccurrences");
-        occurrenceDiv.hide();
 
         const year = startdate.getFullYear();
         const month = startdate.getMonth() + 1;
@@ -811,11 +810,11 @@ const RecurrenceInput = function (conf, textarea) {
                         .find(".rioccurrences .action a.rdate")
                         .on("click", occurrenceDelete);
                 }
-                // Show the new div
-                occurrenceDiv.show();
             },
-            error: function (jqXHR, textStatus) {
-                alert(textStatus);
+            error: function () {
+                occurrenceDiv[0].innerHTML = `
+                  <div class="alert alert-warning">${conf.localization.error_load_occurrences}</div>
+                `;
             },
         });
     }
@@ -1377,6 +1376,8 @@ export default Base.extend({
                 monthly: "Monthly",
                 yearly: "Yearly",
             },
+
+            error_load_occurrences: "Cannot load the occurrences preview.",
         },
 
         readOnly: false,

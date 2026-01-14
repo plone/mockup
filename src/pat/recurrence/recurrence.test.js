@@ -28,4 +28,30 @@ describe("Recurrence", function () {
         ).toEqual("none");
         expect(document.querySelector("div.riform").style.display).toEqual("none");
     });
+
+    it("Adds a warning, if the occurrences preview cannot be loaded.", async function () {
+        // Without any test mock server, the occurrences preview cannot be loaded.
+        document.body.innerHTML = `
+            <input name="start" type="date" value="2026-01-01" />
+            <textarea class="pat-recurrence"
+                      data-pat-recurrence='{
+                          "startField": "[name=start]"
+                      }'
+            ></textarea>
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const edit_btn = document.querySelector("[name=riedit]");
+        edit_btn.click();
+
+        const occurrences_preview = document.querySelector(
+            ".rioccurrences .alert-warning",
+        );
+        expect(occurrences_preview).toBeTruthy();
+        expect(occurrences_preview.textContent.trim()).toBe(
+            "Cannot load the occurrences preview.",
+        );
+    });
 });
