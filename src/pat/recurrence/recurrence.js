@@ -218,17 +218,21 @@ function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
 
         for (let rdate of RDATE) {
             if (rdate !== "") {
-                // RDATE values are "YYYY-MM-DD"
+                // The values from the input field are ISO8601 "YYYY-MM-DD"
+                // RFC5545 expects a date or date-time format of e.g.
+                // "YYYYMMDD". See:‌
+                // https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2
+                rdate = rdate.replaceAll("-", "");
                 // by adding "T000000" the recurrence sequence generator of
                 // plone.event.recurrence adds the current start time correctly
-                rdate += rdate.length === 10 ? "T000000" : "";
+                rdate += rdate.length === 8 ? "T000000" : "";
                 rdate += tz ? "Z" : "";
                 tmp_dates.push(rdate);
 
                 // human readable RDATE
                 year = parseInt(rdate.substring(0, 4), 10);
-                month = parseInt(rdate.substring(5, 7), 10) - 1;
-                day = parseInt(rdate.substring(8, 10), 10);
+                month = parseInt(rdate.substring(4, 6), 10) - 1; // js month.
+                day = parseInt(rdate.substring(6, 8), 10);
                 tmp_human.push(
                     format(
                         new Date(year, month, day),

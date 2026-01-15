@@ -95,4 +95,45 @@ describe("Recurrence", function () {
         const add_occurrence = document.querySelector(".modal .riaddoccurrence");
         expect(add_occurrence).toBeTruthy();
     });
+
+    it("Adds EXDATES as expected by RFC5545.", async function () {
+        // This fixes a problem described in
+        // https://github.com/plone/plone.formwidget.recurrence/issues/48
+        // A RDATE needs to follow RFC5545 date or date-time format. See:
+        // https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2
+        document.body.innerHTML = `
+            <input name="start" type="date" value="2026-01-01" />
+            <textarea class="pat-recurrence"
+                      data-pat-recurrence='{
+                          "startField": "[name=start]",
+                          "hasAdditionalDates": true
+                      }'
+            ></textarea>
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const edit_btn = document.querySelector("[name=riedit]");
+        edit_btn.click();
+
+        const add_date = document.querySelector(".modal #adddate");
+        add_date.value = "2026-01-14";
+        const add_date_btn = document.querySelector(".modal #addaction");
+        add_date_btn.click();
+
+        const jq = (await import("jquery")).default;
+        jq(".modal form").$ajaxSubmit = () => {};
+
+        // Save
+        const save_btn = document.querySelector(".modal .risavebutton");
+        save_btn.click();
+
+        // modal is closed now.
+        const modal = document.querySelector(".modal");
+        expect(modal).toBeFalsy();
+
+        const recurrence = document.querySelector(".pat-recurrence");
+        console.log(recurrence.value);
+    });
 });
