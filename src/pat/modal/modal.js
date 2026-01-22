@@ -7,8 +7,6 @@ import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
 
-import "jquery-form";
-
 export default Base.extend({
     name: "plone-modal",
     trigger: ".pat-plone-modal",
@@ -158,8 +156,8 @@ export default Base.extend({
                                 self[actionOptions.modalFunction]();
                                 // handle event on input/button using jquery.form library
                             } else if (
-                                $.nodeName($action[0], "input") ||
-                                $.nodeName($action[0], "button") ||
+                                ($action[0].nodeName.toLowerCase() == "input") ||
+                                ($action[0].nodeName.toLowerCase() == "button") ||
                                 options.isForm === true
                             ) {
                                 self.options.handleFormAction.apply(self, [
