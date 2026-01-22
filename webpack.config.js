@@ -74,11 +74,6 @@ module.exports = () => {
                         test: /[\\/]node_modules[\\/]select2.*[\\/]/,
                         chunks: "async",
                     },
-                    jquery_plugins: {
-                        name: "jquery_plugins",
-                        test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
-                        chunks: "async",
-                    },
                 },
             },
         },

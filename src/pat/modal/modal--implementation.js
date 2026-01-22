@@ -161,8 +161,8 @@ export default Base.extend({
                                 self[actionOptions.modalFunction]();
                                 // handle event on input/button using jquery.form library
                             } else if (
-                                $.nodeName($action[0], "input") ||
-                                $.nodeName($action[0], "button") ||
+                                $action[0].nodeName.toLowerCase() === "input" ||
+                                $action[0].nodeName.toLowerCase() === "button" ||
                                 options.isForm === true
                             ) {
                                 self.options.handleFormAction.apply(self, [
@@ -173,7 +173,7 @@ export default Base.extend({
                                 // handle event on link with jQuery.ajax
                             } else if (
                                 options.ajaxUrl !== null ||
-                                $.nodeName($action[0], "a")
+                                $action[0].nodeName.toLowerCase() === "a"
                             ) {
                                 self.options.handleLinkAction.apply(self, [
                                     $action,
@@ -195,7 +195,7 @@ export default Base.extend({
 
             var $form;
 
-            if ($.nodeName($action[0], "form")) {
+            if ($action[0].nodeName.toLowerCase() === "form") {
                 $form = $action;
             } else {
                 $form = $action.parents("form:not(.disableAutoSubmit)");
@@ -239,9 +239,6 @@ export default Base.extend({
             // request failed, the message must not show up in a modal that
             // was opened since.
             var $modal = self.$modal;
-            // Load the jquery-form plugin ($.fn.ajaxSubmit) on demand — this is
-            // its only use in mockup, so it need not weigh on every page.
-            await import("jquery-form");
             $form.ajaxSubmit({
                 timeout: options.timeout,
                 data: extraData,
@@ -576,7 +573,7 @@ export default Base.extend({
             if (self.options.loadLinksWithinModal) {
                 self.$modal.on("click", function (e) {
                     e.stopPropagation();
-                    if ($.nodeName(e.target, "a")) {
+                    if (e.target.nodeName.toLowerCase() === "a") {
                         e.preventDefault();
                         // TODO: open links inside modal
                         // and slide modal body
