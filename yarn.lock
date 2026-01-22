@@ -6308,27 +6308,15 @@ jqtree@1.8.10, jqtree@>=0.16:
   resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.8.10.tgz#e335e08d014f9568d9d088425516b8ee5d04bf8b"
   integrity sha512-uzNyD4MfBzU0qCpTOrzEtufwX6/lOHc+QTWkonFT1iDWNx+cBJN/0kbrWKHkrgLIKztE05Y1fIWEbdAGOH8F5g==
 
-jquery-form@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/jquery-form/-/jquery-form-4.3.0.tgz#7d3961c314a1f2d15298f4af1d3943f54f4149c6"
-  integrity sha512-q3uaVCEWdLOYUCI6dpNdwf/7cJFOsUgdpq6r0taxtGQ5NJSkOzofyWm4jpOuJ5YxdmL1FI5QR+q+HB63HHLGnQ==
-  dependencies:
-    jquery ">=1.7.2"
-
 jquery-jcrop@^0.9.13:
   version "0.9.15"
   resolved "https://registry.yarnpkg.com/jquery-jcrop/-/jquery-jcrop-0.9.15.tgz#490f216f922f77a7e6c9be6c1d5d69582f414964"
   integrity sha512-425X88jEoWojYPS5YhZciEW83z4J/TLPh9gvRfftroUBDr70Er58kerD1kY+cT/z8Ys5/VEkUZ9AA4tFwqgY+w==
 
-jquery.browser@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/jquery.browser/-/jquery.browser-0.1.0.tgz#9c72a6095fd2814b44476ea8f716677b72a6a2bb"
-  integrity sha512-5GjtLzzEBzxs/nwSVpCbSdk0acssfKsP7Upp43zmdHVV1Vb6E9VayyqPAQlfLrTeZL3YSWocCbkOvKdAc2CN4g==
-
-jquery@3.7.1, jquery@>=1.7, jquery@>=1.7.2, jquery@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
-  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
+jquery@4.0.0, jquery@>=1.7, jquery@^3.7.1, jquery@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.0.0.tgz#95c33ac29005ff72ec444c5ba1cf457e61404fbb"
+  integrity sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==
 
 js-cookie@^3.0.5:
   version "3.0.5"
