@@ -59,7 +59,7 @@ describe("TinyMCE", function () {
             for (const val of vars) {
                 const pair = val.split("=");
                 if (decodeURIComponent(pair[0]) === "query") {
-                    query = $.parseJSON(decodeURIComponent(pair[1]));
+                    query = JSON.parse(decodeURIComponent(pair[1]));
                 }
             }
             const results = [];
