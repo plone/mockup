@@ -2090,10 +2090,9 @@
     codejar "^3.6.0"
     highlight.js "<11"
 
-"@patternslib/patternslib@9.10.3":
-  version "9.10.3"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-9.10.3.tgz#c7af8a5729995699d308b52f881a04474cbda2d9"
-  integrity sha512-N/SRVPYTSTaI2koX97IvDy7KNol89xvBBNUxVSusJDb2RytORE+iVBpPuKW3Leu0RxCJCK72KmVMkduRgV/vxQ==
+"@patternslib/patternslib@patternslib/Patterns#petschki-mockup-parser-json-value":
+  version "9.10.4"
+  resolved "https://codeload.github.com/patternslib/Patterns/tar.gz/e2d0e5be5acb36b220c2d6a5e68b323f86e2f0b3"
   dependencies:
     "@fullcalendar/adaptive" "^5.11.3"
     "@fullcalendar/core" "^5.11.3"
