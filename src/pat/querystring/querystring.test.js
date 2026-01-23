@@ -1,5 +1,4 @@
 import "./querystring";
-import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
@@ -16,7 +15,7 @@ describe("Querystring", function () {
             <div id="formfield-query"><input class="pat-querystring text-widget list-field"
                    type="text" name="form.widgets.ICollection.query"
                    style="display: none;"
-                   value=\'[
+                   value='[
                         {
                             "i": "portal_type",
                             "o": "plone.app.querystring.operation.selection.any",
@@ -31,8 +30,8 @@ describe("Querystring", function () {
                                 "published"
                             ]
                         }
-                    ]\'
-                   data-pat-querystring=\'{
+                    ]'
+                   data-pat-querystring='{
                         "indexOptionsUrl": "http://localhost:8080/Plone/@@qsOptions",
                         "previewURL": "http://localhost:8080/Plone/news/aggregator/@@querybuilder_html_results",
                         "previewCountURL": "http://localhost:8080/Plone/news/aggregator/@@querybuildernumberofresults",
@@ -124,7 +123,7 @@ describe("Querystring", function () {
                                 }
                             ]
                         }
-                    }\'></div>
+                    }'></div>
                     <div id="formfield-sort_on">
                         <input id="form-widgets-sort_on" value="start" type="text">
                     </div>
@@ -159,11 +158,9 @@ describe("Querystring", function () {
         ).toEqual(3);
 
         // check for correct initialized values
-        expect($(".querystring-sort-wrapper select").val()).toEqual("start");
+        expect(document.querySelector(".querystring-sort-wrapper select").value).toEqual("start");
         expect(
-            $(
-                ".querystring-sort-wrapper .querystring-sortreverse input[type='checkbox']"
-            )[0].checked
+            document.querySelectorAll(".querystring-sort-wrapper .querystring-sortreverse input[type='checkbox']")[0].checked
         ).toBeTruthy();
 
         global.fetch.mockClear();
