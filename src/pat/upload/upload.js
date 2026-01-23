@@ -177,7 +177,7 @@ export default Base.extend({
             // upload pattern, e.g. the TinyMCE pattern's link plugin.
             var data;
             try {
-                data = $.parseJSON(response);
+                data = JSON.parse(response);
             } catch {
                 data = response;
             }
