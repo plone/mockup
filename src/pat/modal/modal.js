@@ -529,7 +529,7 @@ export default Base.extend({
         import("./modal.scss");
 
         var self = this;
-        self.options.loadLinksWithinModal = $.parseJSON(
+        self.options.loadLinksWithinModal = JSON.parse(
             self.options.loadLinksWithinModal
         );
 
