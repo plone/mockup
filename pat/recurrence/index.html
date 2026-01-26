@@ -366,8 +366,43 @@
 </tbody>
 </table>
 <h2>Example</h2>
-<textarea class="pat-recurrence"></textarea>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-recurrence<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span></code></pre>
+<h3>Recurrence without additional start feature</h3>
+<p><label>Recurrence start date:
+<input name="start-1" type="date" value="2026-01-01">
+</label>
+<label>Recurrence:</label></p>
+<textarea class="pat-recurrence" data-pat-recurrence='{
+        "startField": "[name=start-2]"
+    }'></textarea>
+
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-recurrence<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-recurrence</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{
+        "startField": "[name=start-2]"
+    }<span class="token punctuation">'</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span></code></pre>
+<h3>Recurrence with additional start feature</h3>
+<p>Note: adding additional start dates is a feature of the specification but is
+not supported by a number of external tools, like Google Calendar, Microsoft
+Outlook or Gnome Calendar.
+Therefore, this feature is disabled by default.
+However, you can enable it with the <code>allowAdditionalDates</code> feature.</p>
+<p><label>Recurrence start date:
+<input name="start-2" type="date" value="2026-01-01">
+</label>
+<label>Recurrence:</label></p>
+<textarea class="pat-recurrence" data-pat-recurrence='{
+        "startField": "[name=start-2]",
+        "allowAdditionalDates": true
+    }'></textarea>
+
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-recurrence<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-recurrence</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{
+        "startField": "[name=start-2]",
+        "allowAdditionalDates": true
+    }<span class="token punctuation">'</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span></code></pre>
 
       </main>
     </div>
