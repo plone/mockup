@@ -291,6 +291,7 @@
         <div class="rioccurrences"></div>
 
         <div class="rioccurrencesactions">
+            <% if (allowAdditionalDates === true) { %>
             <h6><strong><%= localization.addDate %></strong></h6>
             <div class="riaddoccurrence ">
                 <div class="alert alert-danger d-none"></div>
@@ -299,6 +300,7 @@
                     <input class="btn btn-sm btn-success" type="button" name="addaction" id="addaction" value="<%= localization.add %>">
                 </div>
             </div>
+            <% } %>
         </div>
 
         <div class="ributtons">
