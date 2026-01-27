@@ -169,8 +169,8 @@ describe("Recurrence", function () {
         const add_date_btn = document.querySelector(".modal #addaction");
         add_date_btn.click();
 
-        const jq = (await import("jquery")).default;
-        jq.fn.ajaxSubmit = () => {};
+        const Modal = (await import("../modal/modal--implementation")).default;
+        jest.spyOn(Modal.prototype, "submitForm").mockImplementation(() => {});
 
         // Save
         const save_btn = document.querySelector(".modal .risavebutton");

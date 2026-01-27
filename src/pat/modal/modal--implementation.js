@@ -6,10 +6,8 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
+import submitForm from "../../core/form-submit";
 
-// jquery-form ($.fn.ajaxSubmit) is loaded lazily at its single call site in
-// handleFormAction — most modals never AJAX-submit a form, so it stays out of
-// this module's static import graph.
 
 export default Base.extend({
     name: "plone-modal",
@@ -239,7 +237,7 @@ export default Base.extend({
             // request failed, the message must not show up in a modal that
             // was opened since.
             var $modal = self.$modal;
-            $form.ajaxSubmit({
+            self.submitForm($form, {
                 timeout: options.timeout,
                 data: extraData,
                 url: url,
@@ -643,6 +641,10 @@ export default Base.extend({
         if (self.modalInitialized()) {
             $(".modal-submit-error", self.$modal).remove();
         }
+    },
+    submitForm: function ($form, settings) {
+        // Submit the form in the background. See core/form-submit.
+        return submitForm($form[0], settings);
     },
     init: function () {
         import("./modal.scss");

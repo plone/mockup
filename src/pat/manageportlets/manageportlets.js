@@ -3,6 +3,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 import logger from "@patternslib/patternslib/src/core/logging";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
+import submitForm from "../../core/form-submit";
 
 const log = logger.getLogger("pat-manage-portlets");
 
@@ -173,17 +174,28 @@ export default Base.extend({
     },
     setupSavePortletsSettings: function () {
         var that = this;
-        $(".portlets-settings, form.portlet-action", that.$el).ajaxForm({
-            beforeSubmit: function () {
-                that.loading.show();
+        $(".portlets-settings, form.portlet-action", that.$el).on(
+            "submit",
+            function (e) {
+                e.preventDefault();
+                submitForm(this, {
+                    // the button which was clicked, if there is one
+                    submitter: e.originalEvent?.submitter,
+                    beforeSubmit: function () {
+                        that.loading.show();
+                    },
+                    success: function (html) {
+                        that.loading.hide();
+                        log.info("form submit");
+                        var $body = $(utils.parseBodyTag(html));
+                        that.rebind($("#" + that.$el.attr("id"), $body).eq(0));
+                    },
+                    error: function () {
+                        that.loading.hide();
+                    },
+                });
             },
-            success: function (html) {
-                that.loading.hide();
-                log.info("form submit");
-                var $body = $(utils.parseBodyTag(html));
-                that.rebind($("#" + that.$el.attr("id"), $body).eq(0));
-            },
-        });
+        );
         // Block/unblock inherited portlets (parent, group and content type portlets)
         $(".portlets-settings select", that.$el).on("change", function () {
             log.info("select change");
