@@ -106,7 +106,7 @@ describe("Recurrence", function () {
             <textarea class="pat-recurrence"
                       data-pat-recurrence='{
                           "startField": "[name=start]",
-                          "hasAdditionalDates": true
+                          "allowAdditionalDates": true
                       }'
             ></textarea>
         `;
@@ -123,7 +123,7 @@ describe("Recurrence", function () {
         add_date_btn.click();
 
         const jq = (await import("jquery")).default;
-        jq(".modal form").$ajaxSubmit = () => {};
+        jq.fn.ajaxSubmit = () => {};
 
         // Save
         const save_btn = document.querySelector(".modal .risavebutton");
@@ -134,6 +134,7 @@ describe("Recurrence", function () {
         expect(modal).toBeFalsy();
 
         const recurrence = document.querySelector(".pat-recurrence");
-        console.log(recurrence.value);
+        expect(recurrence.value).toContain("RRULE:FREQ=DAILY");
+        expect(recurrence.value).toContain("RDATE:20260114T000000");
     });
 });
