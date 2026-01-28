@@ -111,8 +111,14 @@ export default Base.extend({
             // Don't load "en" which is the default where no separate language file exists.
             if (this.options.language && this.options.language !== "en" && !this.options.language.startsWith("en")) {
                 let lang = this.options.language.split("-");
-                // Fix for country specific languages
-                lang = (lang.length > 1) ? `${lang[0]}-${lang[1]}` : lang[0];        
+                // Fix for country specific languages — only for supported combined locales
+                const supportedCombined = new Set(["pt-BR", "pt-PT", "ug-CN", "zh-CN", "zh-TW"]);
+                if(lang.length>1){
+                    const combined =`${lang[0]}-${lang[1].toUpperCase()}`;
+                    lang = supportedCombined.has(combined) ? combined : lang[0];
+                }else{
+                     lang = lang[0];
+                }       
                 await import(`select2/select2_locale_${lang}`);
             }
         } catch {
