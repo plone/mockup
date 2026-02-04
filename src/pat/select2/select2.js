@@ -2,6 +2,7 @@ import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import I18n from "../../core/i18n";
 import utils from "../../core/utils";
+import _t from "../../core/i18n-wrapper";
 
 export default Base.extend({
     name: "select2",
@@ -14,56 +15,57 @@ export default Base.extend({
 
     initializeValues() {
         // Init Selection ---------------------------------------------
-        if (this.options.initialValues) {
-            this.options.id = (term) => {
-                return term.id;
-            };
-            this.options.initSelection = ($el, callback) => {
-                const data = [];
-                const value = $el.val();
-                let seldefaults = this.options.initialValues;
-
-                // Create the initSelection value that contains the default selection,
-                // but in a javascript object
-                if (
-                    typeof this.options.initialValues === "string" &&
-                    this.options.initialValues !== ""
-                ) {
-                    // if default selection value starts with a '{', then treat the value as
-                    // a JSON object that needs to be parsed
-                    if (this.options.initialValues[0] === "{") {
-                        seldefaults = JSON.parse(this.options.initialValues);
-                    }
-                    // otherwise, treat the value as a list, separated by the defaults.separator value of
-                    // strings in the format "id:text", and convert it to an object
-                    else {
-                        seldefaults = {};
-                        const initial_values = $(
-                            this.options.initialValues.split(this.options.separator)
-                        );
-                        for (const it of initial_values) {
-                            const selection = it.split(":");
-                            const id = selection[0].trim();
-                            const text = selection[1].trim();
-                            seldefaults[id] = text;
-                        }
-                    }
-                }
-
-                const items = $(value.split(this.options.separator));
-                for (const it of items) {
-                    let text = it;
-                    if (seldefaults[it]) {
-                        text = seldefaults[it];
-                    }
-                    data.push({
-                        id: utils.removeHTML(it),
-                        text: utils.removeHTML(text),
-                    });
-                }
-                callback(data);
-            };
+        if (!this.options.initialValues) {
+            return;
         }
+        this.options.id = (term) => {
+            return term.id;
+        };
+        this.options.initSelection = ($el, callback) => {
+            console.log("init selection");
+            const data = [];
+            const value = $el.val();
+            let seldefaults = this.options.initialValues;
+            // Create the initSelection value that contains the default selection,
+            // but in a javascript object
+            if (
+                typeof this.options.initialValues === "string" &&
+                this.options.initialValues !== ""
+            ) {
+                // if default selection value starts with a '{', then treat the value as
+                // a JSON object that needs to be parsed
+                if (this.options.initialValues[0] === "{") {
+                    seldefaults = JSON.parse(this.options.initialValues);
+                }
+                // otherwise, treat the value as a list, separated by the defaults.separator value of
+                // strings in the format "id:text", and convert it to an object
+                else {
+                    seldefaults = {};
+                    const initial_values = $(
+                        this.options.initialValues.split(this.options.separator)
+                    );
+                    for (const it of initial_values) {
+                        const selection = it.split(":");
+                        const id = selection[0].trim();
+                        const text = selection[1].trim();
+                        seldefaults[id] = text;
+                    }
+                }
+            }
+
+            const items = $(value.split(this.options.separator));
+            for (const it of items) {
+                let text = it;
+                if (seldefaults[it]) {
+                    text = seldefaults[it];
+                }
+                data.push({
+                    id: utils.removeHTML(it),
+                    text: utils.removeHTML(text),
+                });
+            }
+            callback(data);
+        };
     },
 
     initializeTags() {
@@ -99,14 +101,14 @@ export default Base.extend({
                 onEnd: () => this.$el.select2("onSortEnd"),
             });
         };
-        this.$el.on("change", _initializeOrdering.bind(this));
+        this.$el.on("change.select2", _initializeOrdering.bind(this));
         _initializeOrdering();
     },
 
     async initializeSelect2() {
-        import("select2/select2.css");
+        import("select2/dist/css/select2.min.css");
         import("./select2.scss");
-        await import("select2");
+        await import("select2/dist/js/select2.full");
         try {
             // Don't load "en" which is the default where no separate language file exists.
             if (this.options.language && this.options.language !== "en" && !this.options.language.startsWith("en")) {
@@ -134,6 +136,10 @@ export default Base.extend({
             }
         };
 
+        if (this.options.allowClear & !this.options.placeholder) {
+            this.options.placeholder = _t("choose");
+        }
+
         function callback(action, e) {
             if (action) {
                 if (this.options.debug) {
@@ -148,13 +154,14 @@ export default Base.extend({
             }
         }
 
+        console.log(this.options);
         this.$el.select2(this.options);
-        this.$el.on("select2-selected", (e) => callback(this.options.onSelected, e));
-        this.$el.on("select2-selecting", (e) => callback(this.options.onSelecting, e));
-        this.$el.on("select2-deselecting", (e) =>
+        this.$el.on("select2:select", (e) => callback(this.options.onSelected, e));
+        this.$el.on("select2:selecting", (e) => callback(this.options.onSelecting, e));
+        this.$el.on("select2:unselecting", (e) =>
             callback(this.options.onDeselecting, e)
         );
-        this.$el.on("select2-deselected", (e) => callback(this.options.onDeselected, e));
+        this.$el.on("select2:unselect", (e) => callback(this.options.onDeselected, e));
         this.$select2 = this.$el.parent().find(".select2-container");
         this.$el.parent().off("close.plone-modal.patterns");
         if (this.options.orderable) {
@@ -190,88 +197,55 @@ export default Base.extend({
                     this.options.multiple === undefined ? true : this.options.multiple;
                 this.options.ajax = this.options.ajax || {};
                 this.options.ajax.url = this.options.vocabularyUrl;
-                // XXX removing the following function does'nt break tests. dead code?
-                this.options.initSelection = ($el, callback) => {
-                    const data = [];
-                    const value = $el.val();
-                    for (const val of value.split(this.options.separator)) {
-                        const _val = utils.removeHTML(val);
-                        data.push({ id: _val, text: _val });
-                    }
-                    callback(data);
-                };
             }
 
             let queryTerm = "";
 
             const ajaxTimeout = parseInt(this.options.ajaxTimeout || 300, 10);
             delete this.options.ajaxTimeout;
-            this.options.ajax = $.extend(
-                {
-                    quietMillis: ajaxTimeout,
-                    data: (term, page) => {
-                        queryTerm = term;
-                        return {
-                            query: term,
-                            page_limit: 10,
-                            page: page,
-                        };
-                    },
-                    results: (data) => {
-                        let results = data.results;
-                        if (this.options.vocabularyUrl) {
-                            const dataIds = [];
-                            for (const it of data.results) {
-                                dataIds.push(it.id);
-                            }
-                            results = [];
-
-                            const haveResult =
-                                queryTerm === "" || dataIds.includes(queryTerm);
-                            if (this.options.allowNewItems && !haveResult) {
-                                queryTerm = utils.removeHTML(queryTerm);
-                                results.push({
-                                    id: queryTerm,
-                                    text: queryTerm,
-                                });
-                            }
-
-                            for (const it of data.results) {
-                                results.push(it);
-                            }
-                        }
-                        return { results: results };
-                    },
+            this.options.ajax = {
+                quietMillis: ajaxTimeout,
+                data: (term, page) => {
+                    queryTerm = term;
+                    return {
+                        query: term,
+                        page_limit: 10,
+                        page: page,
+                    };
                 },
-                this.options.ajax
-            );
-        } else if (this.options.multiple && this.$el.is("select")) {
-            // Multiselects are converted to input[type=hidden] for Select2
-            // TODO: This should actually not be necessary.
-            //       This is kept for backwards compatibility but should be
-            //       re-checked and removed if possible.
-            this.$el.attr("multiple", true);
-            const vals = this.$el.val() || [];
-            const options = [...this.el.querySelectorAll("option")].map((it) => {
-                return { text: it.innerHTML, id: it.value };
-            });
+                results: (data) => {
+                    let results = data.results;
+                    if (this.options.vocabularyUrl) {
+                        const dataIds = [];
+                        for (const it of data.results) {
+                            dataIds.push(it.id);
+                        }
+                        results = [];
 
-            const el = document.createElement("input");
-            el.type = "hidden";
-            el.value = vals.join(this.options.separator);
-            el.className = this.el.getAttribute("class");
-            el.name = this.el.name;
-            el.id = this.el.id;
-            this.el.after(el);
-            this.el.remove();
-            this.el = el;
-            this.$el = $(el);
+                        const haveResult =
+                            queryTerm === "" || dataIds.includes(queryTerm);
+                        if (this.options.allowNewItems && !haveResult) {
+                            queryTerm = utils.removeHTML(queryTerm);
+                            results.push({
+                                id: queryTerm,
+                                text: queryTerm,
+                            });
+                        }
 
-            this.options.data = options;
+                        for (const it of data.results) {
+                            results.push(it);
+                        }
+                    }
+                    return { results: results };
+                },
+                ...this.options.ajax
+            };
         }
+
         this.initializeValues();
         this.initializeTags();
+
         await this.initializeSelect2();
-        await this.initializeOrdering();
+        // await this.initializeOrdering();
     },
 });
