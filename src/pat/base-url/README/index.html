@@ -342,56 +342,9 @@
       </nav>
 
       <main id="content">
-        <h2>Description</h2>
-<p>The <em>forward</em> pattern forwards click events to another element(s).</p>
-<h2>Documentation</h2>
-<p>This pattern can be used to redirect a click on an element to one or more other elements.</p>
-<p><a href="#" class="pat-forward" data-pat-forward="selector: #submit">Submit form</a>
-</p><form>
-<submit id="submit">Submit</submit>
-</form><p></p>
-<p>If the trigger parameter is set to <code>auto</code>, the click event will be triggered
-immediately after the page is loaded.</p>
-<p><a href="#" class="pat-forward" data-pat-forward="selector: #submit; trigger: auto">Autosubmit form</a>
-</p><form>
-<submit id="submit">Submit</submit>
-</form><p></p>
-<h3>Option reference</h3>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-<th>Default</th>
-<th>Allowed Values</th>
-<th>Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>selector</code></td>
-<td>The element to which the click event should be forwarded.</td>
-<td></td>
-<td>CSS Selector or <code>self</code></td>
-<td>CSS Selector</td>
-</tr>
-<tr>
-<td><code>trigger</code></td>
-<td>When the forward action should be fired</td>
-<td><code>click</code></td>
-<td>`click</td>
-<td>auto`</td>
-</tr>
-<tr>
-<td><code>delay</code></td>
-<td>Defines time in milliseconds for which the action should be deferred</td>
-<td>null</td>
-<td>integer</td>
-<td>ms</td>
-</tr>
-</tbody>
-</table>
-<p>Note: If the selector is <code>self</code> the handler gets unregistered after it has been run once.</p>
+        <h1>pat-base-url</h1>
+<p>Update the <code>data-base-url</code> attribute on the body tag when a <code>navigate</code> event is
+thrown and thus the browser's URL has changed.</p>
 
       </main>
     </div>
