@@ -73,11 +73,6 @@ module.exports = () => {
                         test: /[\\/]node_modules[\\/]select2.*[\\/]/,
                         chunks: "async",
                     },
-                    jquery_plugins: {
-                        name: "jquery_plugins",
-                        test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
-                        chunks: "async",
-                    },
                 },
             },
         },
@@ -114,7 +109,7 @@ module.exports = () => {
 
     config.resolve.alias.svelte = path.resolve('node_modules', 'svelte/src/runtime')
     config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
-    config.resolve.mainFields = ["browser", "module", "main", "svelte"];
+    config.resolve.mainFields = ["module", "main", "svelte"];
     // config.resolve.conditionNames = ["svelte", "browser", "import"];
     // config.resolve.conditionNames = ["svelte", "module", "browser", "import"];
 
@@ -135,7 +130,7 @@ module.exports = () => {
                 },
                 jquery: {
                     singleton: true,
-                    requiredVersion: package_json.dependencies["jquery"],
+                    version: package_json.dependencies["jquery"],
                     eager: true,
                 },
             },
@@ -163,7 +158,7 @@ module.exports = () => {
         );
     }
 
-    //console.log(JSON.stringify(config, null, 4));
+    console.log(JSON.stringify(config, null, 4));
 
     return config;
 };

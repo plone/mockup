@@ -10,6 +10,19 @@ jquery.expr.pseudos.visible = function () {
     return true;
 };
 
+// BBB: jQuery4 backports for select2
+jquery.isFunction = function (obj) {
+    return typeof obj === "function";
+};
+jquery.isArray = function (obj) {
+    return Array.isArray
+        ? Array.isArray(obj)
+        : Object.prototype.toString.call(obj) === "[object Array]";
+};
+jquery.trim = function (str) {
+    return str == null ? "" : String.prototype.trim.call(str);
+};
+
 // Do not output error messages
 import logging from "@patternslib/patternslib/src/core/logging";
 logging.setLevel(50);
@@ -30,5 +43,5 @@ import "css.escape";
 // Add structuredClone polyfill for jsdom.
 // See: https://github.com/jsdom/jsdom/issues/3363
 global.structuredClone = val => {
-  return JSON.parse(JSON.stringify(val))
+    return JSON.parse(JSON.stringify(val))
 }

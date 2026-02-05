@@ -1,4 +1,3 @@
-import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import utils from "../../core/utils";
 
@@ -39,20 +38,29 @@ export default Base.extend({
         }
 
         if (self.options.data && typeof self.options.data === "string") {
-            self.options.data = $.parseJSON(self.options.data);
+            self.options.data = JSON.parse(self.options.data);
         }
         if (self.options.onLoad !== null) {
             // delay generating tree...
-            var options = $.extend({}, self.options);
+            const options = { ...self.options };
 
-            $.getJSON(options.dataUrl, function (data) {
+            try {
+                const response = await fetch(options.dataUrl);
+
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+
+                const data = await response.json();
+
                 options.data = data;
                 delete options.dataUrl;
+
                 self.tree = self.$el.tree(options);
                 self.options.onLoad(self);
-            }).fail(function (response) {  // eslint-disable-line no-unused-vars
-                console.log("failed to load json data");
-            });
+            } catch (error) {
+                console.log(`failed to load json data: ${error}`);
+            }
         } else {
             self.tree = self.$el.tree(self.options);
         }

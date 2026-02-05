@@ -29,6 +29,20 @@ async function register_global_libraries() {
 
     // Register jQuery globally
     const jquery = (await import("jquery")).default;
+
+    // BBB: jQuery4 backports for select2
+    jquery.isFunction = function (obj) {
+        return typeof obj === "function";
+    };
+    jquery.isArray = function (obj) {
+        return Array.isArray
+            ? Array.isArray(obj)
+            : Object.prototype.toString.call(obj) === "[object Array]";
+    };
+    jquery.trim = function (str) {
+        return str == null ? "" : String.prototype.trim.call(str);
+    };
+
     window.jQuery = jquery;
     window.$ = jquery;
 }
