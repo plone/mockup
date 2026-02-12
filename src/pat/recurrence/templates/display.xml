@@ -1,8 +1,8 @@
 <div class="ridisplay">
     <div class="rimain">
         <% if(!readOnly) { %>
-            <a class="btn btn-primary" name="riedit" href="#"><%= localization.add_rules %></a>
-            <a class="btn btn-danger" name="ridelete" style="display:none" href="#"><%= localization.delete_rules %></a>
+            <button type="button" class="btn btn-primary" name="riedit"><%= localization.add_rules %></button>
+            <button type="button" class="btn btn-danger" name="ridelete" style="display:none"><%= localization.delete_rules %></button>
         <% } %>
         <label class="ridisplay-label"><%= localization.displayUnactivate %></label>
     </div>
