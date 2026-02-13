@@ -38,8 +38,13 @@ div.ridisplay label.ridisplay-label {
     font-weight: 300;
 }
 
-div.ridisplay .rimain a {
+div.ridisplay .rimain button {
     margin-right: 0.5em;
+}
+
+div.rioccurrences .occurrence .action button:focus-visible {
+    outline: 2px solid var(--bs-primary, #0d6efd);
+    outline-offset: 2px;
 }
 
 div.rioccurrences .occurrence.rdate {

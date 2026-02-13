@@ -763,50 +763,68 @@ export default Base.extend({
     activateFocusTrap: function () {
         var self = this;
         const modal_el = self.$modal[0];
-        var inputsBody = modal_el
-            .querySelector(`.${self.options.templateOptions.classBodyName}`)
-            .querySelectorAll(`select, input:not([type="hidden"]), textarea, button, a`);
-        var inputsFooter = modal_el
-            .querySelector(`.${self.options.templateOptions.classFooterName}`)
-            .querySelectorAll(`select, input:not([type="hidden"]), textarea, button, a`);
-        var inputs = [];
+        const focusable_selector = `select, input:not([type="hidden"]), textarea, button, a`;
 
-        for (const el of [...inputsBody, ...inputsFooter]) {
-            if (dom.is_visible(el)) {
-                inputs.push(el);
-            }
-        }
-
-        if (inputs.length === 0) {
-            inputs = modal_el.querySelectorAll(".modal-title");
-        }
-        var firstInput = inputs.length !== 0 ? inputs[0] : null;
-        var lastInput = inputs.length !== 0 ? inputs[inputs.length - 1] : null;
-        var closeInput = modal_el.querySelector(".modal-close");
-
-        modal_el.addEventListener(
-            "keydown",
-            (e) => {
-                if (e.key === "Tab") {
-                    e.preventDefault();
-
-                    var target = e.target;
-                    var currentIndex = inputs.indexOf(target);
-                    if (currentIndex >= 0 && currentIndex < inputs.length) {
-                        var nextIndex = currentIndex + (e.shiftKey ? -1 : 1);
-                        if (nextIndex < 0 || nextIndex >= inputs.length) {
-                            closeInput.focus();
-                        } else {
-                            inputs[nextIndex].focus();
-                        }
-                    } else if (e.shiftKey && lastInput) {
-                        lastInput.focus();
-                    } else if (firstInput) {
-                        firstInput.focus();
-                    }
+        // Re-query visible focusable elements on each Tab press so that
+        // dynamically loaded content (e.g. AJAX-loaded occurrence lists)
+        // is always reachable via keyboard.
+        function getVisibleInputs() {
+            var bodyEl = modal_el.querySelector(
+                `.${self.options.templateOptions.classBodyName}`
+            );
+            var footerEl = modal_el.querySelector(
+                `.${self.options.templateOptions.classFooterName}`
+            );
+            var inputsBody = bodyEl
+                ? bodyEl.querySelectorAll(focusable_selector)
+                : [];
+            var inputsFooter = footerEl
+                ? footerEl.querySelectorAll(focusable_selector)
+                : [];
+            var inputs = [];
+            for (const el of [...inputsBody, ...inputsFooter]) {
+                if (dom.is_visible(el)) {
+                    inputs.push(el);
                 }
             }
-        );
+            if (inputs.length === 0) {
+                inputs = [...modal_el.querySelectorAll(".modal-title")];
+            }
+            return inputs;
+        }
+
+        var closeInput = modal_el.querySelector(".modal-close");
+
+        // Remove previous focus trap listener to prevent duplicates
+        // when activateFocusTrap is called multiple times (e.g. redraw).
+        if (self._focusTrapHandler) {
+            modal_el.removeEventListener("keydown", self._focusTrapHandler);
+        }
+        self._focusTrapHandler = (e) => {
+            if (e.key === "Tab") {
+                e.preventDefault();
+
+                var inputs = getVisibleInputs();
+                var firstInput = inputs.length !== 0 ? inputs[0] : null;
+                var lastInput = inputs.length !== 0 ? inputs[inputs.length - 1] : null;
+                var target = e.target;
+                var currentIndex = inputs.indexOf(target);
+                if (currentIndex >= 0 && currentIndex < inputs.length) {
+                    var nextIndex = currentIndex + (e.shiftKey ? -1 : 1);
+                    if (nextIndex < 0 || nextIndex >= inputs.length) {
+                        closeInput.focus();
+                    } else {
+                        inputs[nextIndex].focus();
+                    }
+                } else if (e.shiftKey && lastInput) {
+                    lastInput.focus();
+                } else if (firstInput) {
+                    firstInput.focus();
+                }
+            }
+        };
+        modal_el.addEventListener("keydown", self._focusTrapHandler);
+
         if (self.options.backdropOptions.closeOnClick === true) {
             modal_el.addEventListener("click", (e) => {
                 if (!e.target.closest(`.${self.options.templateOptions.classModal}`)) {
@@ -815,6 +833,8 @@ export default Base.extend({
             });
         }
 
+        var inputs = getVisibleInputs();
+        var firstInput = inputs.length !== 0 ? inputs[0] : null;
         if (firstInput && ["INPUT", "SELECT", "TEXTAREA"].includes(firstInput.nodeName)) {
             // autofocus first element when opening a modal with a form
             firstInput.focus();

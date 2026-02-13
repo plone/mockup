@@ -96,6 +96,53 @@ describe("Recurrence", function () {
         expect(add_occurrence).toBeTruthy();
     });
 
+    it("Uses button elements for display widget controls.", async function () {
+        document.body.innerHTML = `
+            <textarea class="pat-recurrence"></textarea>
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const editBtn = document.querySelector("[name=riedit]");
+        const deleteBtn = document.querySelector("[name=ridelete]");
+        expect(editBtn.tagName).toEqual("BUTTON");
+        expect(deleteBtn.tagName).toEqual("BUTTON");
+        expect(editBtn.type).toEqual("button");
+        expect(deleteBtn.type).toEqual("button");
+    });
+
+    it("Uses button elements for added date actions.", async function () {
+        document.body.innerHTML = `
+            <input name="start" type="date" value="2026-01-01" />
+            <textarea class="pat-recurrence"
+                      data-pat-recurrence='{
+                          "startField": "[name=start]",
+                          "allowAdditionalDates": true
+                      }'
+            ></textarea>
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const edit_btn = document.querySelector("[name=riedit]");
+        edit_btn.click();
+
+        // Add a date via the form
+        const add_date = document.querySelector(".modal #adddate");
+        add_date.value = "2026-02-15";
+        const add_date_btn = document.querySelector(".modal #addaction");
+        add_date_btn.click();
+
+        // The dynamically added rdate action should be a button
+        const rdate_action = document.querySelector(
+            ".modal .rioccurrences .action button.rdate",
+        );
+        expect(rdate_action).toBeTruthy();
+        expect(rdate_action.tagName).toEqual("BUTTON");
+    });
+
     it("Adds EXDATES as expected by RFC5545.", async function () {
         // This fixes a problem described in
         // https://github.com/plone/plone.formwidget.recurrence/issues/48

@@ -13,22 +13,22 @@
             <% if(!readOnly) { %>
                 <span class="action">
                     <% if(occurrence.type === "rrule") { %>
-                        <a date="<%= occurrence.date %>" href="#"
+                        <button type="button" date="<%= occurrence.date %>"
                            class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.exclude %>">
                             <%= icons.exclude %>
-                        </a>
+                        </button>
                     <% } %>
                     <% if(occurrence.type === "rdate") { %>
-                        <a date="<%= occurrence.date %>" href="#"
+                        <button type="button" date="<%= occurrence.date %>"
                            class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.remove %>">
                             <%= icons.remove %>
-                        </a>
+                        </button>
                     <% } %>
                     <% if(occurrence.type === "exdate") { %>
-                        <a date="<%= occurrence.date %>" href="#"
+                        <button type="button" date="<%= occurrence.date %>"
                            class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.include %>">
                            <%= icons.include %>
-                        </a>
+                        </button>
                     <% } %>
                 </span>
             <% } %>
