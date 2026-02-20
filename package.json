@@ -55,7 +55,7 @@
         "npm-run-all2": "^8.0.4",
         "rimraf": "^6.0.1",
         "sinon": "^16.1.3",
-        "svelte": "^4.2.19",
+        "svelte": "^5.51.5",
         "svelte-jester": "^3.0.0",
         "svelte-loader": "^3.2.3",
         "svelte-scrollto": "^0.2.0",
