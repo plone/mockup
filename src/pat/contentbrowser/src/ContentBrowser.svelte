@@ -36,15 +36,15 @@
     // initialize content browser store
     const contentItems = contentStore($config, pathCache);
 
-    let showUpload = false;
-    let previewItem = {};
-    let keyboardNavInitialized = false;
-    let shiftKey = false;
-    let searchTerm = null;
-    let gridView = ($config.layout || "list") === "grid";
+    let showUpload = $state(false);
+    let previewItem = $state({});
+    let keyboardNavInitialized = $state(false);
+    let shiftKey = $state(false);
+    let searchTerm = $state(null);
+    let gridView = $state(($config.layout || "list") === "grid");
     let defaultConfigMode = $config.mode;
 
-    let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    let vw = $state(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
 
     function updatePreview({ data = null, uuid = null, action = "show" }) {
         if (data && action == "show") {
@@ -334,16 +334,16 @@
         closeBrowser();
     }
 
-    function selectRecentlyUsed(event) {
-        addItem(event.detail.item);
+    function selectRecentlyUsed({ item }) {
+        addItem(item);
     }
 
     function itemId(item) {
         return item.path?.split("/").pop() || "- no id -";
     }
 
-    async function selectFavorite(event) {
-        const path = event.detail.item.path;
+    async function selectFavorite({ item: favoriteItem }) {
+        const path = favoriteItem.path;
         const response = await request({
             vocabularyUrl: $config.vocabularyUrl,
             attributes: $config.attributes,
@@ -452,20 +452,16 @@
         }, 300);
     }
 
-    $: {
+    $effect(() => {
         if ($showContentBrowser) {
             contentItems.get({ path: $currentPath });
         }
-    }
+    });
 
-    $: {
+    $effect(() => {
         $contentItems;
         scrollToRight();
-    }
-
-    $: {
-        $previewUids;
-    }
+    });
 </script>
 
 {#if $showContentBrowser}
@@ -473,12 +469,12 @@
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
-            on:introend={() => {
+            onintroend={() => {
                 scrollToRight();
                 initKeyboardNav();
             }}
             use:clickOutside
-            on:click_outside={closeBrowser}
+            onclick_outside={closeBrowser}
         >
             <div class="toolBar navbar">
                 <div class="input-group w-auto">
@@ -487,27 +483,28 @@
                         name="filter"
                         class="form-control form-control-sm"
                         value={searchTerm}
-                        on:input={searchItemsKeyup}
+                        oninput={searchItemsKeyup}
                     />
                     {#if searchTerm}
                         <button
                             class="btn btn-light btn-sm"
                             type="button"
-                            on:click|preventDefault={() => searchItems("")}
+                            aria-label={_t("clear search")}
+                            onclick={(e) => { e.preventDefault(); searchItems(""); }}
                             ><svg use:resolveIcon={{ iconName: "x" }} /></button
                         >
                     {/if}
                 </div>
-                <RecentlyUsed on:selectItem={selectRecentlyUsed} />
-                <Favorites on:selectItem={selectFavorite} />
+                <RecentlyUsed onselectitem={selectRecentlyUsed} />
+                <Favorites onselectitem={selectFavorite} />
                 {#if $config.uploadEnabled && $config.mode == "browse"}
                     <div class="ms-2">
                         <button
                             type="button"
                             class="upload btn btn-outline-light btn-sm"
                             tabindex="0"
-                            on:keydown={upload}
-                            on:click={upload}
+                            onkeydown={upload}
+                            onclick={upload}
                             ><svg use:resolveIcon={{ iconName: "upload" }} />
                             {_t("upload to ${current_path}", {
                                 current_path: $currentPath,
@@ -518,7 +515,8 @@
                 <button
                     class="btn btn-link text-white ms-auto"
                     tabindex="0"
-                    on:click|preventDefault={() => closeBrowser()}
+                    aria-label={_t("close")}
+                    onclick={(e) => { e.preventDefault(); closeBrowser(); }}
                     ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                 >
             </div>
@@ -533,7 +531,7 @@
                                 levels.length - 1
                                     ? 'active'
                                     : ''}"
-                                in:fly|local={{ duration: 500 }}
+                                in:fly={{ duration: 500 }}
                             >
                                 <div class="levelToolbar">
                                     {#if i == 0 && $config.mode == "browse"}
@@ -541,9 +539,10 @@
                                             type="button"
                                             class="btn btn-link btn-xs ps-0"
                                             tabindex="0"
-                                            on:keydown={() =>
+                                            aria-label={_t("home")}
+                                            onkeydown={() =>
                                                 changePath($config.rootPath)}
-                                            on:click={() => changePath($config.rootPath)}
+                                            onclick={() => changePath($config.rootPath)}
                                             ><svg
                                                 use:resolveIcon={{ iconName: "house" }}
                                             /></button
@@ -558,8 +557,7 @@
                                                         level.Title || itemId(level),
                                                 })}
                                                 disabled={!isSelectable(level)}
-                                                on:click|preventDefault={() =>
-                                                    addItem(level)}
+                                                onclick={(e) => { e.preventDefault(); addItem(level); }}
                                                 ><svg
                                                     use:resolveIcon={{
                                                         iconName: "plus",
@@ -578,15 +576,12 @@
                                                         name="levelFilter"
                                                         class="form-control form-control-sm"
                                                         value={level.searchTerm || ""}
-                                                        on:input={filterLevelKeyup}
+                                                        oninput={filterLevelKeyup}
                                                     />
                                                     <button
                                                         class="btn btn-link btn-xs level-filter"
                                                         title={_t("clear filter")}
-                                                        on:click|preventDefault={() => {
-                                                            filterLevel("");
-                                                            level.showFilter = false;
-                                                        }}
+                                                        onclick={(e) => { e.preventDefault(); filterLevel(""); level.showFilter = false; }}
                                                     >
                                                         <svg
                                                             use:resolveIcon={{
@@ -598,8 +593,7 @@
                                                     <button
                                                         class="btn btn-link btn-xs level-filter"
                                                         title={_t("level filter")}
-                                                        on:click|preventDefault={() =>
-                                                            (level.showFilter = true)}
+                                                        onclick={(e) => { e.preventDefault(); level.showFilter = true; }}
                                                     >
                                                         <svg
                                                             use:resolveIcon={{
@@ -613,7 +607,7 @@
                                                 <button
                                                     class="btn btn-link btn-xs grid-view"
                                                     title={_t("grid view")}
-                                                    on:click={() => (gridView = true)}
+                                                    onclick={() => (gridView = true)}
                                                 >
                                                     <svg
                                                         use:resolveIcon={{
@@ -625,7 +619,7 @@
                                                 <button
                                                     class="btn btn-link btn-xs grid-view"
                                                     title={_t("list view")}
-                                                    on:click={() => (gridView = false)}
+                                                    onclick={() => (gridView = false)}
                                                 >
                                                     <svg
                                                         use:resolveIcon={{
@@ -639,7 +633,6 @@
                                 </div>
                                 <div class="levelItems">
                                     {#each level.results || [] as item, n}
-                                        <!-- svelte-ignore missing-declaration -->
                                         <div
                                             class="contentItem{n % 2 == 0
                                                 ? ' odd'
@@ -655,9 +648,8 @@
                                             role="button"
                                             tabindex={n}
                                             data-uuid={item.UID}
-                                            on:keydown|preventDefault={(e) =>
-                                                keyboardNavigation(item, e)}
-                                            on:click={(e) => clickItem(item, e)}
+                                            onkeydown={(e) => { e.preventDefault(); keyboardNavigation(item, e); }}
+                                            onclick={(e) => clickItem(item, e)}
                                         >
                                             <div
                                                 class={gridView
@@ -729,7 +721,7 @@
                         {/if}
                     {/each}
                     {#if previewItem?.UID && $previewUids.length == 1}
-                        <div class="preview" in:fly|local={{ duration: 500 }}>
+                        <div class="preview" in:fly={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <div class="selectLevel me-3">
                                     {#if isSelectable(previewItem)}
@@ -738,8 +730,7 @@
                                             title={_t("select ${preview_path}", {
                                                 preview_path: previewItem.Title,
                                             })}
-                                            on:click|preventDefault={() =>
-                                                addItem(previewItem)}
+                                            onclick={(e) => { e.preventDefault(); addItem(previewItem); }}
                                             ><svg
                                                 use:resolveIcon={{ iconName: "plus" }}
                                             />
@@ -806,12 +797,12 @@
                         </div>
                     {/if}
                     {#if $previewUids.length > 1}
-                        <div class="preview" in:fly|local={{ duration: 500 }}>
+                        <div class="preview" in:fly={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <button
                                     class="btn btn-xs btn-outline-primary d-flex align-items-center"
                                     title={_t("add selected items")}
-                                    on:click|preventDefault={addSelectedItems}
+                                    onclick={(e) => { e.preventDefault(); addSelectedItems(); }}
                                     ><svg use:resolveIcon={{ iconName: "plus" }} />
                                     <span class="select-button-ellipsis"
                                         >{_t("add selected items")}</span

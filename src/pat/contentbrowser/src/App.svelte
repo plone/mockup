@@ -1,6 +1,7 @@
 <script>
     import logger from "@patternslib/patternslib/src/core/logging";
     import { getContext } from "svelte";
+    import { get } from "svelte/store";
     import ContentBrowser from "./ContentBrowser.svelte";
     import SelectedItems from "./SelectedItems.svelte";
     import {
@@ -13,35 +14,41 @@
         setShowContentBrowser,
     } from "./stores";
 
-    export let maxDepth;
-    export let width;
-    export let attributes;
-    export let contextPath;
-    export let vocabularyUrl;
-    export let mode = "browse";
-    export let layout = "list";
-    export let rootPath = "";
-    export let rootUrl = "";
-    export let basePath = "";
-    export let selectableTypes = [];
-    export let browseableTypes = [];
-    export let searchIndex = "SearchableText";
-    export let maximumSelectionSize = -1;
-    export let separator;
-    export let selection = [];
-    export let query = {};
-    export let fieldId;
-    export let upload;
-    export let uploadAddImmediately = true;
-    export let uploadAcceptedMimetypes;
-    export let favorites;
-    export let recentlyUsed;
-    export let recentlyUsedKey;
-    export let recentlyUsedMaxItems;
-    export let bSize = 20;
-    export let sortOn = "sortable_title";
-    export let sortOrder = "ascending";
-    export let componentRegistryKeys = {};
+    let {
+        maxDepth,
+        width,
+        attributes,
+        contextPath: contextPathProp,
+        vocabularyUrl,
+        mode = "browse",
+        layout = "list",
+        rootPath: rootPathProp = "",
+        rootUrl = "",
+        basePath = "",
+        selectableTypes = [],
+        browseableTypes = [],
+        searchIndex = "SearchableText",
+        maximumSelectionSize = -1,
+        separator,
+        selection = [],
+        query = {},
+        fieldId,
+        upload,
+        uploadAddImmediately = true,
+        uploadAcceptedMimetypes,
+        favorites,
+        recentlyUsed,
+        recentlyUsedKey,
+        recentlyUsedMaxItems,
+        bSize = 20,
+        sortOn = "sortable_title",
+        sortOrder = "ascending",
+        componentRegistryKeys = {},
+    } = $props();
+
+    // Local mutable copies of the two props that may be reassigned locally
+    let rootPath = $state(rootPathProp);
+    let contextPath = $state(contextPathProp);
 
     const log = logger.getLogger("pat-contentbrowser");
 
@@ -57,30 +64,32 @@
     // initially set current path
     const currentPath = getContext("currentPath");
 
-    if (!$currentPath) {
+    if (!get(currentPath)) {
+        let initialPath = "";
         if (basePath || rootPath) {
             // if root path is not above base path we start at rootPath
-            $currentPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
+            initialPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
             if (
                 rootPath &&
-                $currentPath != rootPath &&
-                $currentPath.indexOf(rootPath) == 0
+                initialPath != rootPath &&
+                initialPath.indexOf(rootPath) == 0
             ) {
                 // remove rootPath from $currentPath
-                $currentPath = $currentPath.replace(rootPath, "");
+                initialPath = initialPath.replace(rootPath, "");
             }
         } else {
             // no path available. try to determine path from vocabularyUrl
             const vocabPath = new URL(vocabularyUrl).pathname.split("/");
-            rootPath =
+            initialPath =
+                rootPath =
                 contextPath =
-                $currentPath =
                     vocabPath.slice(0, vocabPath.length - 1).join("/") || "/";
         }
+        currentPath.set(initialPath);
     }
 
-    let config = getContext("config");
-    $config = {
+    const config = getContext("config");
+    config.set({
         mode: mode,
         layout: layout,
         attributes: attributes,
@@ -110,9 +119,9 @@
         sortOn: sortOn,
         sortOrder: sortOrder,
         componentRegistryKeys: componentRegistryKeys,
-    };
+    });
 
-    log.debug(`Initialized App<${fieldId}> with config`, $config);
+    log.debug(`Initialized App<${fieldId}> with config`, config);
 </script>
 
 <ContentBrowser />
