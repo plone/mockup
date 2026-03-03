@@ -1,0 +1,98 @@
+name: Robot Tests (Coredev)
+
+on:
+  push:
+    branches:
+      - master
+      - 5.4.x
+  pull_request:
+    branches:
+      - master
+      - 5.4.x
+
+jobs:
+  robot-tests:
+    name: Coredev robot tests
+    runs-on: ubuntu-latest
+    env:
+      PYTHONWARNINGS: ignore
+      GIT_CLONE_DEPTH: 1
+      zope_i18n_compile_mo_files: 'true'
+      ROBOTSUITE_LOGLEVEL: ERROR
+      ROBOTSUITE_PREFIX: ONLYROBOT
+      NODE_OPTIONS: "--max_old_space_size=8192"
+
+    steps:
+      - name: locale
+        # needed for CMFPlone testUnicodeSplitter test on Ubuntu
+        run: |
+          sudo locale-gen nl_NL@euro
+          sudo update-locale
+
+      # ── 1. Checkout repositories ─────────────────────────────────────────────
+      - name: Checkout mockup
+        uses: actions/checkout@v4
+
+      - name: Checkout buildout.coredev
+        uses: actions/checkout@v4
+        with:
+          repository: plone/buildout.coredev
+          path: tests
+
+      # ── 2. Node.js setup ──────────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+
+      - name: Install yarn dependencies
+        run: yarn install
+
+      # ── 3. Python / make install ─────────────────────────────────────────────
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tests/requirements.txt
+
+      - name: Mark plone.staticresources as source checkout for mxdev
+        working-directory: tests
+        run: |
+          python3 -c "
+          import configparser
+          cfg = configparser.ConfigParser()
+          cfg.read('mxcheckouts.ini')
+          if not cfg.has_section('plone.staticresources'):
+              cfg.add_section('plone.staticresources')
+          cfg.set('plone.staticresources', 'use', 'true')
+          with open('mxcheckouts.ini', 'w') as f:
+              cfg.write(f)
+          "
+
+      - name: make install (checks out plone.staticresources via mxdev)
+        working-directory: tests
+        run: make install
+
+      # ── 2b. Build mockup bundle into tests/src/plone.staticresources ─────────
+      - name: Build mockup for tests (webpack)
+        run: yarn build:webpack:tests
+
+      # ── 4. Install Playwright / rfbrowser ────────────────────────────────────
+      - name: make rfbrowser
+        working-directory: tests
+        run: make rfbrowser
+
+      # ── 5. Coredev robot tests ───────────────────────────────────────────────
+      - name: Run Coredev robot tests
+        working-directory: tests
+        run: TEST_ARGS="--all -t ONLYROBOT" make test
+
+      - name: Upload robot test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: tests/parts/tests/
+          if-no-files-found: ignore

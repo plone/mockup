@@ -162,6 +162,12 @@ module.exports = () => {
             "../plone.staticresources/src/plone/staticresources/static/bundle-plone/"
         );
     }
+    if (process.env.DEPLOYMENT === "tests") {
+        config.output.path = path.resolve(
+            __dirname,
+            "./tests/src/plone.staticresources/src/plone/staticresources/static/bundle-plone/"
+        );
+    }
 
     //console.log(JSON.stringify(config, null, 4));
 
