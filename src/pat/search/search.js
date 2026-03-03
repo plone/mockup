@@ -1,6 +1,7 @@
 // Plone extended search.
 import Base from "@patternslib/patternslib/src/core/base";
 import utils from "../../core/utils";
+import patUtils from "@patternslib/patternslib/src/core/utils";
 
 export default Base.extend({
     name: "search",
@@ -21,8 +22,18 @@ export default Base.extend({
         const sortOrderEl = document.querySelector('[name="sort_order"]');
         const batchStartEl = document.getElementById("search-batch-start");
 
-        const serializeForm = () =>
-            new URLSearchParams(new FormData(searchform)).toString();
+        const serializeForm = () => {
+            const formParams = new URLSearchParams(new FormData(searchform));
+            // Preserve non-form URL params (e.g. Subject=), drop ajax_load and
+            // any key managed by the form to avoid duplicates
+            const params = new URLSearchParams(
+                [...new URLSearchParams(window.location.search)].filter(
+                    ([key]) => key !== "ajax_load" && !formParams.has(key)
+                )
+            );
+            formParams.forEach((value, key) => params.append(key, value));
+            return params.toString();
+        };
 
         /* handle history */
         if (window.history?.pushState) {
@@ -51,7 +62,6 @@ export default Base.extend({
             }
         };
 
-        let timeout = 0;
         const search = () => {
             loading.show();
             const params = serializeForm();
@@ -76,10 +86,7 @@ export default Base.extend({
                 });
         };
 
-        const searchDelayed = () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(search, 200);
-        };
+        const searchDelayed = patUtils.debounce(search, 200);
 
         const setBatchStart = (b_start) => {
             if (batchStartEl) {
