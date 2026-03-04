@@ -1,14 +1,12 @@
 name: Robot Tests (Coredev)
 
 on:
-  push:
-    branches:
-      - master
-      - 5.4.x
-  pull_request:
-    branches:
-      - master
-      - 5.4.x
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Optionally provide a reason for running the tests, e.g. "Testing a fix for issue #1234".'
+        required: false
+        default: 'Final Review'
 
 jobs:
   robot-tests:
