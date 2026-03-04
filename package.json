@@ -87,6 +87,7 @@
         "build:webpack": "NODE_ENV=production webpack --config webpack.config.js",
         "build:webpack:dev": "NODE_ENV=development webpack --config webpack.config.js",
         "build:webpack:plone": "NODE_ENV=production DEPLOYMENT=plone webpack --config webpack.config.js",
+        "build:webpack:tests": "NODE_ENV=production DEPLOYMENT=tests webpack --config webpack.config.js",
         "build:webpack:docs": "NODE_ENV=production DEPLOYMENT=docs webpack --config webpack.config.js",
         "build:webpack:dev:plone": "NODE_ENV=development DEPLOYMENT=plone webpack --config webpack.config.js",
         "build:docs": "ELEVENTY_ENV=production  npx @11ty/eleventy --pathprefix=mockup",
