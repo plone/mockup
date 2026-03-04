@@ -3,10 +3,10 @@ name: Robot Tests (Coredev)
 on:
   workflow_dispatch:
     inputs:
-      reason:
-        description: 'Optionally provide a reason for running the tests, e.g. "Testing a fix for issue #1234".'
-        required: false
-        default: 'Final Review'
+      approved:
+        description: 'Finished review? Run coredev robottests.'
+        required: true
+        type: boolean
 
 jobs:
   robot-tests:
