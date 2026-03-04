@@ -3,6 +3,7 @@ import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import plone_registry from "@plone/registry";
+import { mount } from "svelte";
 
 // Contentbrowser pattern
 
@@ -80,7 +81,7 @@ class Pattern extends BasePattern {
         contentBrowserEl.classList.add("content-browser-wrapper");
         this.el.parentNode.insertBefore(contentBrowserEl, this.el);
 
-        this.component_content_browser = new ContentBrowserApp({
+        this.component_content_browser = mount(ContentBrowserApp, {
             target: contentBrowserEl,
             props: {
                 fieldId: nodeId,

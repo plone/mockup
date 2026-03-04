@@ -101,22 +101,18 @@ module.exports = () => {
                 },
                 emitCss: process.env.NODE_ENV !== "development",
                 hotReload: process.env.NODE_ENV === "development",
+                onwarn: (warning, handler) => {
+                    // App.svelte props are intentionally read once at mount time as static config.
+                    if (warning.code === "state_referenced_locally") return;
+                    handler(warning);
+                },
             },
         },
     });
 
-    config.module.rules.push({
-        test: /node_modules\/svelte\/.*\.mjs$/,
-        resolve: {
-            fullySpecified: false,
-        },
-    });
-
-    config.resolve.alias.svelte = path.resolve('node_modules', 'svelte/src/runtime')
     config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
-    config.resolve.mainFields = ["browser", "module", "main", "svelte"];
-    // config.resolve.conditionNames = ["svelte", "browser", "import"];
-    // config.resolve.conditionNames = ["svelte", "module", "browser", "import"];
+    config.resolve.mainFields = ["browser", "module", "main"];
+    config.resolve.conditionNames = ["svelte", "browser", "require"];
 
     config.plugins.push(
         mf_config({
