@@ -80,7 +80,7 @@
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
         "sass": "~1.77.8",
-        "underscore": "1.13.7"
+        "underscore": "1.13.8"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
