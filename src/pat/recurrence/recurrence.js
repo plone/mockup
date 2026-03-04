@@ -717,15 +717,15 @@ const RecurrenceInput = function (conf, textarea) {
                     <span class="rlabel">${conf.localization.additionalDate}</span>
                 </span>
                 <span class="action">
-                    <a date="${datevalue}" href="#" class="btn btn-sm btn-secondary rdate" >
+                    <button type="button" date="${datevalue}" class="btn btn-sm btn-secondary rdate">
                         ${conf.icons.remove}
-                    </a>
+                    </button>
                 </span>
                 </div>`);
             $newdate.hide();
             self.$modalForm.find("div.rioccurrences").prepend($newdate);
             $newdate.slideDown();
-            $newdate.find("a.rdate").on("click", occurrenceDelete);
+            $newdate.find("button.rdate").on("click", occurrenceDelete);
         } else {
             errorarea.text(conf.localization.alreadyAdded).show();
         }
@@ -805,13 +805,13 @@ const RecurrenceInput = function (conf, textarea) {
                 // Add the delete/undelete actions:
                 if (!readonly) {
                     element
-                        .find(".rioccurrences .action a.rrule")
+                        .find(".rioccurrences .action button.rrule")
                         .on("click", occurrenceExclude);
                     element
-                        .find(".rioccurrences .action a.exdate")
+                        .find(".rioccurrences .action button.exdate")
                         .on("click", occurrenceInclude);
                     element
-                        .find(".rioccurrences .action a.rdate")
+                        .find(".rioccurrences .action button.rdate")
                         .on("click", occurrenceDelete);
                 }
             },
@@ -982,8 +982,8 @@ const RecurrenceInput = function (conf, textarea) {
         if (startdate !== null) {
             loadOccurrences(startdate, RFC5545.result, 0, true);
         }
-        self.display.find('a[name="riedit"]').text(conf.localization.edit_rules);
-        self.display.find('a[name="ridelete"]').show();
+        self.display.find('button[name="riedit"]').text(conf.localization.edit_rules);
+        self.display.find('button[name="ridelete"]').show();
     }
 
     function recurrenceOff() {
@@ -998,8 +998,8 @@ const RecurrenceInput = function (conf, textarea) {
         textarea.innerHTML = "";
         $textarea.trigger("change"); // Clear the textarea.
         self.display.find(".rioccurrences").hide();
-        self.display.find('a[name="riedit"]').text(conf.localization.add_rules);
-        self.display.find('a[name="ridelete"]').hide();
+        self.display.find('button[name="riedit"]').text(conf.localization.add_rules);
+        self.display.find('button[name="ridelete"]').hide();
     }
 
     function checkFields(form) {
@@ -1223,13 +1223,13 @@ const RecurrenceInput = function (conf, textarea) {
     */
 
     // When you click "Delete...", the recurrence rules should be cleared.
-    self.display.find('a[name="ridelete"]').on("click", function (e) {
+    self.display.find('button[name="ridelete"]').on("click", function (e) {
         e.preventDefault();
         recurrenceOff();
     });
 
     // Show form modal when you click on the "Edit..." link
-    self.display.find('a[name="riedit"]').on("click", function (e) {
+    self.display.find('button[name="riedit"]').on("click", function (e) {
         // Load the form to set up the right fields to show, etc.
         e.preventDefault();
         self.modal.show();
