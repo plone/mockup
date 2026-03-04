@@ -22,7 +22,8 @@ dom.is_visible = (el) => {
 };
 
 // Attach datatables to jQuery, as in tests it is not done by just importing.
-window.dt = require("datatables.net")();
+// In datatables.net 2.x, requiring the module already attaches it to jQuery via the UMD wrapper.
+window.dt = require("datatables.net");
 
 // Import the css.escape polyfill for jsdom.
 import "css.escape";
