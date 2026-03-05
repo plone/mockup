@@ -1,15 +1,15 @@
 name: Robot Tests (Coredev)
 
 on:
-  workflow_dispatch:
-    inputs:
-      approved:
-        description: 'Finished review? Run coredev robottests.'
-        required: true
-        type: boolean
+  issue_comment:
+    types: [created]
 
 jobs:
   robot-tests:
+    if: >
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '/run-coredev-robottests')
+
     name: Coredev robot tests
     runs-on: ubuntu-latest
     env:
@@ -21,6 +21,11 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=8192"
 
     steps:
+      - name: Info
+        run: |
+          echo "Workflow triggered with comment '/run-coredev-robottests' "
+          echo "on PR #${{ github.event.issue.number }}"
+
       - name: locale
         # needed for CMFPlone testUnicodeSplitter test on Ubuntu
         run: |
@@ -28,8 +33,10 @@ jobs:
           sudo update-locale
 
       # ── 1. Checkout repositories ─────────────────────────────────────────────
-      - name: Checkout mockup
+      - name: Checkout mockup PR
         uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
 
       - name: Checkout buildout.coredev
         uses: actions/checkout@v4
