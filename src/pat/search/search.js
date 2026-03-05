@@ -1,24 +1,43 @@
 // Plone extended search.
-import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import utils from "../../core/utils";
+import patUtils from "@patternslib/patternslib/src/core/utils";
 
 export default Base.extend({
     name: "search",
     trigger: ".pat-search",
     init: function () {
-        var loading = new utils.Loading();
+        const loading = new utils.Loading();
 
-        var $filter = $("#search-filter");
-        var $filterBtn = $("#search-filter-toggle", $filter);
-        var $advSearchInput = $("#advanced-search-input");
-        var $ctSelectAll = $("#pt_toggle");
-        var $selectAllContainer = $(".search-type-options");
-        var $sortingContainer = $("#sorting-options");
+        // Cache DOM references
+        const searchform = document.getElementById("searchform");
+        const filter = document.getElementById("search-filter");
+        const filterBtn = filter?.querySelector("#search-filter-toggle") ?? null;
+        const advSearchInput = document.getElementById("advanced-search-input");
+        const ctSelectAll = document.getElementById("pt_toggle");
+        const selectAllContainer = document.querySelector(".search-type-options");
+        const sortingContainer = document.getElementById("sorting-options");
+        const sortingLinks = sortingContainer?.querySelectorAll("a") ?? [];
+        const sortOnEl = document.querySelector('[name="sort_on"]');
+        const sortOrderEl = document.querySelector('[name="sort_order"]');
+        const batchStartEl = document.getElementById("search-batch-start");
+
+        const serializeForm = () => {
+            const formParams = new URLSearchParams(new FormData(searchform));
+            // Preserve non-form URL params (e.g. Subject=), drop ajax_load and
+            // any key managed by the form to avoid duplicates
+            const params = new URLSearchParams(
+                [...new URLSearchParams(window.location.search)].filter(
+                    ([key]) => key !== "ajax_load" && !formParams.has(key)
+                )
+            );
+            formParams.forEach((value, key) => params.append(key, value));
+            return params.toString();
+        };
 
         /* handle history */
-        if (window.history && window.history.pushState) {
-            $(window).on("popstate", function () {
+        if (window.history?.pushState) {
+            window.addEventListener("popstate", () => {
                 /* we're just going to cheat and reload the page so
                    we aren't keep moving around state here..
                    Here, I'm lazy, we're not using react here... */
@@ -26,108 +45,122 @@ export default Base.extend({
             });
         }
 
-        var pushHistory = function () {
-            if (window.history && window.history.pushState) {
-                var url =
-                    window.location.origin +
-                    window.location.pathname +
-                    "?" +
-                    $("#searchform").serialize();
+        const pushHistory = (params) => {
+            if (window.history?.pushState) {
+                const url =
+                    window.location.origin + window.location.pathname + "?" + params;
                 window.history.pushState(null, null, url);
             }
         };
 
-        var timeout = 0;
-        var search = function () {
+        // Helper: replace element by id from parsed document
+        const replaceById = (id, doc) => {
+            const current = document.getElementById(id);
+            const next = doc.getElementById(id);
+            if (current && next) {
+                current.replaceWith(next);
+            }
+        };
+
+        const search = () => {
             loading.show();
-            pushHistory();
-            $.ajax({
-                url: window.location.origin + window.location.pathname + "?ajax_load=1",
-                data: $("#searchform").serialize(),
-            }).done(function (html) {
-                var $html = $(html);
-                $("#search-results").replaceWith($("#search-results", $html));
-                $("#search-term").replaceWith($("#search-term", $html));
-                $("#results-count").replaceWith($("#results-count", $html));
-                loading.hide();
-            });
-        };
-        var searchDelayed = function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(search, 200);
+            const params = serializeForm();
+            pushHistory(params);
+            const url =
+                window.location.origin +
+                window.location.pathname +
+                "?ajax_load=1&" +
+                params;
+            fetch(url)
+                .then((response) => response.text())
+                .then((html) => {
+                    const doc = new DOMParser().parseFromString(html, "text/html");
+                    replaceById("search-results", doc);
+                    replaceById("search-term", doc);
+                    replaceById("results-count", doc);
+                    loading.hide();
+                })
+                .catch((error) => {
+                    console.error("Search request failed:", error);
+                    loading.hide();
+                });
         };
 
-        var setBatchStart = function (b_start) {
-            $("#search-batch-start").attr("value", b_start);
+        const searchDelayed = patUtils.debounce(search, 200);
+
+        const setBatchStart = (b_start) => {
+            if (batchStartEl) {
+                batchStartEl.value = b_start;
+            }
         };
 
-        // for sorme reason the backend always flag with active class the sorting options
-        var updateSortingState = function ($el) {
-            $("a", $sortingContainer).removeClass("active");
-            $el.addClass("active");
+        // for some reason the backend always flags with active class the sorting options
+        const updateSortingState = (activeEl) => {
+            sortingLinks.forEach((a) => a.classList.remove("active"));
+            activeEl?.classList.add("active");
         };
-        var default_sort = $("#search-results").attr("data-default-sort");
-        updateSortingState($("a[data-sort=" + default_sort + "]"));
+        const defaultSort = document
+            .getElementById("search-results")
+            ?.getAttribute("data-default-sort");
+        updateSortingState(
+            defaultSort
+                ? sortingContainer.querySelector(`a[data-sort=${defaultSort}]`)
+                : null
+        );
 
         /* sorting */
-        $("a", $sortingContainer).on("click", function (e) {
-            e.preventDefault();
-            updateSortingState($(this));
-            var sort = $(this).attr("data-sort");
-            var order = $(this).attr("data-order");
-            if (sort) {
-                $('[name="sort_on"]').attr("value", sort);
-                if (order && order == "reverse") {
-                    $('[name="sort_order"]').attr("value", "reverse");
-                } else {
-                    $('[name="sort_order"]').attr("value", "");
-                }
-            } else {
-                $('[name="sort_on"]').attr("value", "");
-                $('[name="sort_order"]').attr("value", "");
-            }
-            search();
+        sortingLinks.forEach((a) => {
+            a.addEventListener("click", (e) => {
+                e.preventDefault();
+                updateSortingState(e.currentTarget);
+                const sort = e.currentTarget.getAttribute("data-sort");
+                const order = e.currentTarget.getAttribute("data-order");
+                if (sortOnEl) sortOnEl.value = sort ?? "";
+                if (sortOrderEl) sortOrderEl.value = sort && order === "reverse" ? "reverse" : "";
+                search();
+            });
         });
 
         /* form submission */
-        $(".searchPage").on("submit", function (e) {
-            e.preventDefault();
-            setBatchStart("0");
-            search();
+        document.querySelectorAll(".searchPage").forEach((form) => {
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                setBatchStart("0");
+                search();
+            });
         });
 
         /* filters */
-        $filterBtn.on("click", function (e) {
+        filterBtn?.addEventListener("click", (e) => {
             e.preventDefault();
-            $filter.toggleClass("activated");
-            if ($filter.hasClass("activated")) {
-                $advSearchInput.attr("value", "True");
-            } else {
-                $advSearchInput.attr("value", "False");
+            filter.classList.toggle("activated");
+            if (advSearchInput) {
+                advSearchInput.value = filter.classList.contains("activated")
+                    ? "True"
+                    : "False";
             }
         });
 
-        $ctSelectAll.on("change", function () {
-            if ($ctSelectAll[0].checked) {
-                $("input", $selectAllContainer).each(function () {
-                    this.checked = true;
-                });
-            } else {
-                $("input", $selectAllContainer).each(function () {
-                    this.checked = false;
-                });
-            }
+        ctSelectAll?.addEventListener("change", () => {
+            selectAllContainer?.querySelectorAll("input").forEach((input) => {
+                input.checked = ctSelectAll.checked;
+            });
         });
 
-        $("input", $filter).on("change", function () {
-            setBatchStart("0");
-            searchDelayed();
+        filter?.querySelectorAll("input").forEach((input) => {
+            input.addEventListener("change", () => {
+                setBatchStart("0");
+                searchDelayed();
+            });
         });
 
         /* pagination */
-        $("#searchform").on("click", ".pagination a", function (e) {
-            var urlParams = new URLSearchParams($(e.currentTarget).attr("href")),
-                b_start = urlParams.get("b_start:int");
+        searchform?.addEventListener("click", (e) => {
+            const link = e.target.closest(".pagination a");
+            if (!link) return;
+            const b_start = new URLSearchParams(link.getAttribute("href")).get(
+                "b_start:int"
+            );
             if (!b_start) {
                 // not plone pagination
                 return;
