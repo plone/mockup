@@ -2,6 +2,33 @@
 
 
 
+## [5.4.7](https://github.com/plone/mockup/compare/5.4.6...5.4.7) (2026-03-05)
+
+
+### Bug Fixes
+
+
+* **pat search:** fix including URL parameters when batch/sort/filtering search page ([a7d228c](https://github.com/plone/mockup/commit/a7d228cbf20d738882ce206c80ab33882f12aeea))
+
+
+* **pat search:** remove jQuery ([9747b20](https://github.com/plone/mockup/commit/9747b20b72c55d1856801e1199b503cee9e99684))
+
+
+* **pat select2:** Fix combined language codes for select2 translations. Fixes [#1501](https://github.com/plone/mockup/issues/1501) ([bd3ace2](https://github.com/plone/mockup/commit/bd3ace2d12acd06b54b3ff405c1dd47d602e9fca))
+
+
+* **pat tinymce:** latest 7.x version ([85ef6fb](https://github.com/plone/mockup/commit/85ef6fbf3cfc238273c2ddc0445a6f256bdda883))
+
+
+
+### Maintenance
+
+
+* **bundle:** upgrade dependencies ([ec946d7](https://github.com/plone/mockup/commit/ec946d73514374611206e544f5c611895bbec9d6))
+
+
+* fix releasing on MacOS with make ([831628a](https://github.com/plone/mockup/commit/831628ac8e6bac77372f6a8b9160e6c1855a9d5e))
+
 ## [5.4.6](https://github.com/plone/mockup/compare/5.4.5...5.4.6) (2026-01-10)
 
 
