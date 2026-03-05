@@ -44,6 +44,12 @@ docs: install
 	$(YARN) build:webpack:docs
 	$(YARN) build:docs
 
+# Override clean target from @patternslib/dev to work around macOS issue
+# where Finder recreates .DS_Store faster than rm can delete it.
+.PHONY: clean
+clean: clean-dist
+	-if [ -d node_modules ]; then mv node_modules ".node_modules_trash_$$$$" && find ".node_modules_trash_$$$$" -delete 2>/dev/null; rm -rf ".node_modules_trash_$$$$" 2>/dev/null; fi
+
 # Unlink any linked dependencies before building a bundle.
 bundle-pre:
 	-$(YARN) unlink @patternslib/dev
