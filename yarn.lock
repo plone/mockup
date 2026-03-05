@@ -9241,10 +9241,10 @@ tinymce-i18n@25.11.17:
   resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-25.11.17.tgz#4af30adf61e3cff6bed6f847d47aae0bbd10251c"
   integrity sha512-Fi5hGRDL9o42VsdahgNgHRHO/4ClAAqIew45QMu8sa5LQT2wTaVPf/tAXnVDHxR7c6NWZQmZp/E18LosxLq42A==
 
-tinymce@7.9.1:
-  version "7.9.1"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.9.1.tgz#1b18bad9cb7a3b4b12e3e5a7f29fc7daad0713d7"
-  integrity sha512-zaOHwmiP1EqTeLRXAvVriDb00JYnfEjWGPdKEuac7MiZJ5aiDMZ4Unc98Gmajn+PBljOmO1GKV6G0KwWn3+k8A==
+tinymce@7.9.2:
+  version "7.9.2"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-7.9.2.tgz#d47db80fade57da2d54c4a086675d3570c65ce0a"
+  integrity sha512-zS2gn2CPQmZhUqLzkhwYH+WGsx/DIRY/mS18RVzsIcuQg2lN2uzaqoHSJU6DdMUpvXBtBFnLNpumC3QrDwLBzA==
 
 tippy.js@^6.3.7:
   version "6.3.7"
