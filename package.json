@@ -12,7 +12,7 @@
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "3.0.2",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.10.3",
+        "@patternslib/patternslib": "9.10.4",
         "@plone/registry": "^2.5.4",
         "backbone": "1.6.1",
         "backbone.paginator": "2.0.8",
@@ -34,7 +34,7 @@
         "datatables.net-select": "1.4.0",
         "datatables.net-select-bs5": "1.4.0",
         "dropzone": "5.9.3",
-        "jqtree": "1.8.10",
+        "jqtree": "1.8.11",
         "jquery": "^3.7.1",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
@@ -43,7 +43,7 @@
         "sortablejs": "^1.15.6",
         "tinymce": "7.9.1",
         "tinymce-i18n": "25.11.17",
-        "underscore": "^1.13.7"
+        "underscore": "^1.13.8"
     },
     "devDependencies": {
         "@11ty/eleventy": "^3.1.1",
@@ -63,7 +63,7 @@
         "svg-inline-loader": "^0.8.2"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.10.3",
+        "@patternslib/patternslib": "9.10.4",
         "backbone": "1.6.1",
         "datatables.net": "<1.13",
         "datatables.net-bs5": "<1.13",
@@ -82,7 +82,7 @@
         "jquery": "3.7.1",
         "nwsapi": "2.2.13",
         "sass": "~1.77.8",
-        "underscore": "1.13.7"
+        "underscore": "1.13.8"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
