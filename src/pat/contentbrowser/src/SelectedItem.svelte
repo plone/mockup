@@ -5,8 +5,8 @@
     let { item, unselectItem } = $props();
 </script>
 
-<div class="selected-item border border-secondary-subtle rounded p-2 mb-1 bg-body-tertiary" data-uuid={item.UID}>
-    <div class="item-info">
+<div class="selected-item border border-secondary-subtle rounded mb-1 bg-body-tertiary" data-uuid={item.UID}>
+    <div class="item-info p-2">
         <!-- svelte-ignore a11y_missing_attribute -->
         <button
             class="btn btn-link btn-sm link-secondary"
@@ -35,7 +35,6 @@
         cursor: move;
     }
     .selected-item > * {
-        margin-right: 0.5rem;
         display: block;
     }
     .selected-item button {
@@ -45,6 +44,7 @@
     .selected-item .item-info {
         display: flex;
         align-items: start;
+        margin-right: 0.5rem;
     }
     .selected-item > img {
         object-fit: cover;
