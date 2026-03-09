@@ -1,4 +1,3 @@
-import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 
 export default Base.extend({
@@ -20,7 +19,7 @@ export default Base.extend({
         import("datatables.net-rowreorder-bs5/css/rowReorder.bootstrap5.min.css");
         import("datatables.net-select-bs5/css/select.bootstrap5.min.css");
 
-        await import("datatables.net");
+        const DataTable = (await import("datatables.net")).default;
         await import("datatables.net-bs5");
         await import("datatables.net-buttons");
         await import("datatables.net-buttons-bs5");
@@ -38,6 +37,7 @@ export default Base.extend({
         await import("datatables.net-select");
         await import("datatables.net-select-bs5");
 
-        $(this.el).DataTable(this.options);
+        this.dt = new DataTable(this.el, this.options);
     },
+
 });
