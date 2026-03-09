@@ -12,6 +12,7 @@
         <!-- svelte-ignore a11y-missing-attribute -->
         <button
             class="btn btn-link btn-sm link-secondary"
+            type="button"
             on:click|preventDefault={() => unselectItem(item.UID)}
             ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
         >
