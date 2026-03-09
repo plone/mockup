@@ -1,15 +1,13 @@
 <script>
     import { resolveIcon } from "./utils";
     import _t from "../../../core/i18n-wrapper";
-    import { createEventDispatcher, getContext } from "svelte";
+    import { getContext } from "svelte";
 
     const config = getContext("config");
-    const dispatch = createEventDispatcher();
+    let { onselectitem } = $props();
 
     function select(item) {
-        dispatch("selectItem", {
-            item: item,
-        });
+        onselectitem?.({ item });
     }
 </script>
 
@@ -28,7 +26,7 @@
     <ul class="dropdown-menu">
         {#each $config.favorites as favorite}
         <li>
-            <a class="dropdown-item" href="{favorite.path}" on:click|preventDefault={() => select(favorite)}>{favorite.title}</a>
+            <a class="dropdown-item" href="{favorite.path}" onclick={(e) => { e.preventDefault(); select(favorite); }}>{favorite.title}</a>
         </li>
         {/each}
     </ul>

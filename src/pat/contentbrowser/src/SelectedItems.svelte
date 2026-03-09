@@ -1,14 +1,14 @@
 <script>
-    import { getContext, onMount, setContext } from "svelte";
+    import { getContext, onMount, mount } from "svelte";
     import { get_items_from_uids } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
     import events from "@patternslib/patternslib/src/core/events";
     import plone_registry from "@plone/registry";
 
-    let ref;
-    let initializing = true;
-    let RegisteredSelectedItem;
+    let ref = $state();
+    let initializing = $state(true);
+    let RegisteredSelectedItem = $state();
 
     // get reactive context config
     const config = getContext("config");
@@ -23,12 +23,13 @@
     const showContentBrowser = getContext("showContentBrowser");
 
     onMount(async () => {
+        getSelectedItemComponent();
         await initializeSelectedItemsStore();
         initializeSorting();
         initializing = false;
     });
 
-    async function getSelectedItemComponent() {
+    function getSelectedItemComponent() {
         // get selectedItem component from registry.
         // the registry key can be customized with pattern_options
         // if an addon registers a custom component to a custom key
@@ -104,19 +105,18 @@
     }
 
     function LoadSelectedItemComponent(node, props) {
-        const component = new RegisteredSelectedItem.component({
+        mount(RegisteredSelectedItem.component, {
             target: node,
             props: props,
         });
     }
 
-    $: {
-        $selectedItems;
+    $effect(() => {
         if ($selectedItems.length || !initializing) {
             setNodeValue(selectedUidsFromSelectedItems());
             initializeSorting();
         }
-    }
+    });
 </script>
 
 <div
@@ -124,31 +124,29 @@
     style="width: {$config.width || 'auto'}"
     bind:this={ref}
 >
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="content-browser-selected-items"
-        on:click={() => ($showContentBrowser = $selectedItems.length ? false : true)}
+        onclick={() => ($showContentBrowser = $selectedItems.length ? false : true)}
     >
         {#if $selectedItems}
-            {#await getSelectedItemComponent() then}
+            {#if RegisteredSelectedItem}
                 {#each $selectedItems as selItem, i (selItem.UID)}
-                    <div use:LoadSelectedItemComponent={{ item: selItem, unselectItem: unselectItem }} />
+                    <div use:LoadSelectedItemComponent={{ item: selItem, unselectItem: unselectItem }}></div>
                 {/each}
-            {:catch error}
-                <p style="color: red">{error.message}</p>
-            {/await}
+            {/if}
         {/if}
         {#if !$selectedItems}
             <p>{_t("loading selected items")}</p>
         {/if}
     </div>
-    <!-- svelte-ignore a11y-invalid-attribute -->
+    <!-- svelte-ignore a11y_invalid_attribute -->
     <a
         class="btn btn-primary"
         href="#"
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        on:click|preventDefault={() => ($showContentBrowser = true)}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
+        onclick={(e) => { e.preventDefault(); $showContentBrowser = true; }}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
     >
 </div>
 
