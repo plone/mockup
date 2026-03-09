@@ -21,6 +21,13 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=8192"
 
     steps:
+      - name: Acknowledge command
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Info
         run: |
           echo "Workflow triggered with comment '/run-coredev-robottests' "
