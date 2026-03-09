@@ -78,11 +78,14 @@ export default BaseView.extend({
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
         const datatables_options = {
-            order: [0, "asc"],
+            // Don't apply initial ordering.
+            order: [],
             columnDefs: [
                 {
+                    // The first (selection checkboxes) and last (actions)
+                    // columns should not be sortable.
                     orderable: false,
-                    targets: [0, this.app.activeColumns.length + 1],
+                    targets: [0, this.app.activeColumns.length + 2],
                 },
             ],
             paging: false,
