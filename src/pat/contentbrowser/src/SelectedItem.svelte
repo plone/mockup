@@ -1,19 +1,18 @@
 <script>
-    import { getContext } from "svelte";
     import { resolveIcon } from "./utils";
 
     // item data
-    export let item;
-    export let unselectItem;
+    let { item, unselectItem } = $props();
 </script>
 
 <div class="selected-item border border-secondary-subtle rounded p-2 mb-1 bg-body-tertiary" data-uuid={item.UID}>
     <div class="item-info">
-        <!-- svelte-ignore a11y-missing-attribute -->
+        <!-- svelte-ignore a11y_missing_attribute -->
         <button
             class="btn btn-link btn-sm link-secondary"
             type="button"
-            on:click|preventDefault={() => unselectItem(item.UID)}
+            aria-label="remove"
+            onclick={(e) => { e.preventDefault(); unselectItem(item.UID); }}
             ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
         >
         <div>

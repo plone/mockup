@@ -1,16 +1,14 @@
 <script>
     import { resolveIcon, recentlyUsedItems } from "./utils";
     import _t from "../../../core/i18n-wrapper";
-    import { createEventDispatcher, getContext } from "svelte";
+    import { getContext } from "svelte";
 
     const config = getContext("config");
     const items = recentlyUsedItems(true, $config);
-    const dispatch = createEventDispatcher();
+    let { onselectitem } = $props();
 
     function select(item) {
-        dispatch("selectItem", {
-            item: item,
-        });
+        onselectitem?.({ item });
     }
 </script>
 
@@ -31,7 +29,7 @@
                 <li>
                     <a
                         href={recentlyUsed.getURL || "#"}
-                        on:click|preventDefault={() => select(recentlyUsed)}
+                        onclick={(e) => { e.preventDefault(); select(recentlyUsed); }}
                         class="dropdown-item"
                     >
                         <svg
