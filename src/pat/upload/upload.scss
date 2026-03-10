@@ -30,6 +30,8 @@
         }
         .previews {
             margin-top: 4em;
+            max-height: 50vh;
+            overflow-y: auto;
             .item {
                 padding: 5px 0;
                 clear: both;
