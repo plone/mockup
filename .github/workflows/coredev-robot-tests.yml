@@ -121,6 +121,6 @@ jobs:
         with:
           name: robot-results
           path: |
-            test_*
-            robot_*
+            tests/test_*
+            tests/robot_*
           if-no-files-found: ignore
