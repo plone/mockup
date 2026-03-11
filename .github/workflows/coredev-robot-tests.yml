@@ -99,7 +99,7 @@ jobs:
       # ── 5. Coredev robot tests ───────────────────────────────────────────────
       - name: Run Coredev robot tests
         working-directory: tests
-        run: TEST_ARGS="--all -t ONLYROBOT" make test
+        run: TEST_ARGS="--all -t ONLYROBOT" ./run-tests.sh
 
       - name: Upload robot test results
         if: always()
