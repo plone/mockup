@@ -7,8 +7,6 @@ import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
 
-import "jquery-form";
-
 export default Base.extend({
     name: "plone-modal",
     trigger: ".pat-plone-modal",
@@ -158,8 +156,8 @@ export default Base.extend({
                                 self[actionOptions.modalFunction]();
                                 // handle event on input/button using jquery.form library
                             } else if (
-                                $.nodeName($action[0], "input") ||
-                                $.nodeName($action[0], "button") ||
+                                ($action[0].nodeName.toLowerCase() == "input") ||
+                                ($action[0].nodeName.toLowerCase() == "button") ||
                                 options.isForm === true
                             ) {
                                 self.options.handleFormAction.apply(self, [
@@ -231,29 +229,53 @@ export default Base.extend({
             $form.trigger("submit");
 
             self.loading.show(false);
-            $form.ajaxSubmit({
-                timeout: options.timeout,
-                data: extraData,
-                url: url,
-                error: function (xhr, textStatus, errorStatus) {
+
+            // Use native fetch API with FormData
+            const formData = new FormData($form[0]);
+
+            // Add extra data from the clicked action
+            for (const key in extraData) {
+                if (extraData[key]) {
+                    formData.append(key, extraData[key]);
+                }
+            }
+
+            // Setup timeout using AbortController
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), options.timeout);
+
+            fetch(url, {
+                method: $form.attr("method") || "POST",
+                body: formData,
+                signal: controller.signal,
+                credentials: "same-origin",
+            })
+                .then((response) => {
+                    clearTimeout(timeoutId);
+
+                    // Create a mock xhr object for compatibility with existing callbacks
+                    const mockXhr = {
+                        status: response.status,
+                        statusText: response.statusText,
+                        getResponseHeader: (header) => response.headers.get(header),
+                        getAllResponseHeaders: () => {
+                            let headers = "";
+                            response.headers.forEach((value, key) => {
+                                headers += `${key}: ${value}\r\n`;
+                            });
+                            return headers;
+                        },
+                    };
+
+                    return response.text().then((text) => ({
+                        response: text,
+                        state: "success",
+                        xhr: mockXhr,
+                    }));
+                })
+                .then(({ response, state, xhr }) => {
                     self.loading.hide();
-                    if (textStatus === "timeout" && options.onTimeout) {
-                        options.onTimeout.apply(self, xhr, errorStatus);
-                        // on "error", "abort", and "parsererror"
-                    } else if (options.onError) {
-                        if (typeof options.onError === "string") {
-                            window[options.onError](xhr, textStatus, errorStatus);
-                        } else {
-                            options.onError(xhr, textStatus, errorStatus);
-                        }
-                    } else {
-                        // window.alert(_t('There was an error submitting the form.'));
-                        console.log("error happened", textStatus, " do something");
-                    }
-                    self.emit("formActionError", [xhr, textStatus, errorStatus]);
-                },
-                success: function (response, state, xhr, form) {
-                    self.loading.hide();
+
                     // if error is found (NOTE: check for both the portal errors
                     // and the form field-level errors)
                     if (
@@ -267,10 +289,10 @@ export default Base.extend({
                                     response,
                                     state,
                                     xhr,
-                                    form
+                                    $form[0]
                                 );
                             } else {
-                                options.onFormError(self, response, state, xhr, form);
+                                options.onFormError(self, response, state, xhr, $form[0]);
                             }
                         } else {
                             self.redraw(response, patternOptions);
@@ -292,9 +314,9 @@ export default Base.extend({
 
                     if (options.onSuccess) {
                         if (typeof options.onSuccess === "string") {
-                            window[options.onSuccess](self, response, state, xhr, form);
+                            window[options.onSuccess](self, response, state, xhr, $form[0]);
                         } else {
-                            options.onSuccess(self, response, state, xhr, form);
+                            options.onSuccess(self, response, state, xhr, $form[0]);
                         }
                     }
 
@@ -307,9 +329,37 @@ export default Base.extend({
                             self.reloadWindow();
                         }
                     }
-                    self.emit("formActionSuccess", [response, state, xhr, form]);
-                },
-            });
+                    self.emit("formActionSuccess", [response, state, xhr, $form[0]]);
+                })
+                .catch((error) => {
+                    clearTimeout(timeoutId);
+                    self.loading.hide();
+
+                    const textStatus = error.name === "AbortError" ? "timeout" : "error";
+                    const errorStatus = error.message;
+
+                    // Create a mock xhr object for error callbacks
+                    const mockXhr = {
+                        status: 0,
+                        statusText: textStatus,
+                        responseText: "",
+                    };
+
+                    if (textStatus === "timeout" && options.onTimeout) {
+                        options.onTimeout.apply(self, [mockXhr, errorStatus]);
+                        // on "error", "abort", and "parsererror"
+                    } else if (options.onError) {
+                        if (typeof options.onError === "string") {
+                            window[options.onError](mockXhr, textStatus, errorStatus);
+                        } else {
+                            options.onError(mockXhr, textStatus, errorStatus);
+                        }
+                    } else {
+                        // window.alert(_t('There was an error submitting the form.'));
+                        console.log("error happened", textStatus, " do something");
+                    }
+                    self.emit("formActionError", [mockXhr, textStatus, errorStatus]);
+                });
         },
         handleLinkAction: function ($action, options, patternOptions) {
             var self = this;
@@ -531,7 +581,7 @@ export default Base.extend({
         import("./modal.scss");
 
         var self = this;
-        self.options.loadLinksWithinModal = $.parseJSON(
+        self.options.loadLinksWithinModal = JSON.parse(
             self.options.loadLinksWithinModal
         );
 
