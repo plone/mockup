@@ -92,9 +92,9 @@ jobs:
         run: yarn build:webpack:tests
 
       # ── 4. Install Playwright / rfbrowser ────────────────────────────────────
-      - name: make rfbrowser
+      - name: install rfbrowser
         working-directory: tests
-        run: make rfbrowser
+        run: .venv/bin/rfbrowser init chromium
 
       # ── 5. Coredev robot tests ───────────────────────────────────────────────
       - name: Run Coredev robot tests
