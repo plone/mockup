@@ -35,9 +35,10 @@ class Pattern extends BasePattern {
         const anchors = this.el.querySelectorAll("a");
 
         for (const anchor of anchors) {
-
             //const parent = anchor.parentElement;
-            const parent = this.options.parentSelector ? anchor.closest(this.options.parentSelector) : anchor.parentElement;
+            const parent = this.options.parentSelector
+                ? anchor.closest(this.options.parentSelector)
+                : anchor.parentElement;
             const navlink = anchor.href.replace("/view", "");
 
             // We can exit early, if the navlink is not part of the current URL.
@@ -80,7 +81,6 @@ class Pattern extends BasePattern {
                 if (parent.tagName === "DETAILS") {
                     parent.open = true;
                 }
-
             }
 
             // set "current" to the current selected nav item, if it is in the navigation structure.
