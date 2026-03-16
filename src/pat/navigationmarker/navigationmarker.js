@@ -19,9 +19,9 @@ class Pattern extends BasePattern {
             window.navigation,
             "navigate",
             "pat-navigationmarker--history-changed",
-            () => {
-                this.scan_navigation();
-            }
+            (e) => {
+                this.scan_navigation(e);
+            },
         );
 
         this.scan_navigation();
@@ -29,7 +29,9 @@ class Pattern extends BasePattern {
 
     scan_navigation() {
         const href =
-            //document.querySelector('head link[rel="canonical"]')?.href ||
+            e?.destination?.url ||
+            document.body.dataset.baseUrl || // NOTE: TODO: Attention: If this is not yet updated, there would be an outdated URL.
+            document.querySelector('head link[rel="canonical"]')?.href ||
             window.location.href;
 
         const anchors = this.el.querySelectorAll("a");
