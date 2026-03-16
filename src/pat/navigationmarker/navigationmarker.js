@@ -27,7 +27,10 @@ class Pattern extends BasePattern {
         this.scan_navigation();
     }
 
-    scan_navigation() {
+    scan_navigation(e) {
+        // TODO:‌Check, if all these ways to get the current URL are valid.
+        // TODO:Also check, if we could move that method to a core utility module, where it can be reused by other patterns, retrieving the current URL.
+        // TODO: Maybe even a central current-url store?
         const href =
             e?.destination?.url ||
             document.body.dataset.baseUrl || // NOTE: TODO: Attention: If this is not yet updated, there would be an outdated URL.
