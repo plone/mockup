@@ -371,9 +371,9 @@
 <p>To run the demo server, do: <code>make serve</code>.</p>
 <p>This starts up the webpack build process in watch mode.
 Any JavaScript changes are immediately compiled.
-For some changes - like for adding new packages via <code>yarn add</code> and then using it you might need to restart.
+For some changes - like for adding new packages via <code>pnpm add</code> and then using it you might need to restart.
 The command also spins up a development server for our <code>11ty</code> based documentation and demo pages.
-If you don't need the docs running, you can run <code>yarn start:webpack</code> or <code>npm run start:webpack</code> instead, so that only the webpack devserver is running.</p>
+If you don't need the docs running, you can run <code>pnpm start:webpack</code> or <code>npm run start:webpack</code> instead, so that only the webpack devserver is running.</p>
 </li>
 <li>
 <p>Go to <code>http://localhost:8000</code>:
@@ -449,13 +449,11 @@ But to resemble the CSS syntax, new patterns should instead separate each word w
 <p>You can directly develop with the 11ty based documentation / demo server by running <code>make serve</code>.</p>
 <p>If you want to develop in Plone, you have two options:</p>
 <ol>
-<li>
-<p>Run <code>make watch-plone</code>. You need buildout to have plone.staticresources checked out next to Mockup.
-Mockup will compile it's bundle directly into the <code>++plone++static</code> directory of plone.staticresources and update it when you change something in Mockup.</p>
-</li>
-<li>
-<p>Run <code>npx yarn start:webpack</code>, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL <code>http://localhost:8000/bundle.min.js</code> to the JavaScript input field of the plone bundle instead of the other URL <code>++plone++static/bundle-plone/bundle.min.js</code>.</p>
-</li>
+<li>Run <code>make watch-plone</code>. You need buildout to have plone.staticresources checked out next to Mockup.
+Mockup will compile it's bundle directly into the <code>++plone++static</code> directory of plone.staticresources and update it when you change something in Mockup.</li>
+</ol>
+<ol start="2">
+<li>Run <code>npx pnpm start:webpack</code>, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL <code>http://localhost:8000/bundle.min.js</code> to the JavaScript input field of the plone bundle instead of the other URL <code>++plone++static/bundle-plone/bundle.min.js</code>.</li>
 </ol>
 <p>For more commands inspect Makefile and the script part of the package.json.</p>
 <h3>Running tests</h3>
@@ -481,22 +479,22 @@ No real browsers are involved, which make the tests run really fast.</p>
 </code></pre>
 <p>You can put some <code>debugger;</code> statements to the code to break the execution and investigate.</p>
 <h3>Developing external Packages</h3>
-<p>If you want to work on ony external package like Patternslib or any external Mockup pattern you can do so by linking those packages into the node_modules folder via <code>yarn link</code>.</p>
+<p>If you want to work on ony external package like Patternslib or any external Mockup pattern you can do so by linking those packages into the node_modules folder via <code>pnpm link</code>.</p>
 <ol>
 <li>
 <p>Check out the external package you want to develop on.</p>
 </li>
 <li>
-<p>Make sure you have installed the dependencies in the development package (e.g. by running <code>yarn install</code>). (TODO: verify that!)</p>
+<p>Make sure you have installed the dependencies in the development package (e.g. by running <code>pnpm install</code>). (TODO: verify that!)</p>
 </li>
 <li>
-<p>Run <code>yarn link</code> in the external development package to register it with yarn.</p>
+<p>Run <code>pnpm link</code> in the external development package to register it with pnpm.</p>
 </li>
 <li>
-<p>Run <code>yarn link &quot;PACKAGE-NAME&quot;</code> in mockup to create the node_modules symlink.</p>
+<p>Run <code>pnpm link &quot;PACKAGE-NAME&quot;</code> in mockup to create the node_modules symlink.</p>
 </li>
 </ol>
-<p>After developing you might want to run <code>yarn unlink &quot;PACKAGE-NAME&quot;</code> to unlink the development package.</p>
+<p>After developing you might want to run <code>pnpm unlink &quot;PACKAGE-NAME&quot;</code> to unlink the development package.</p>
 <p>For more information see:</p>
 <ul>
 <li>https://classic.yarnpkg.com/en/docs/cli/link/</li>
@@ -509,7 +507,7 @@ In doubt, remove the node_modules directory and re-install.</p>
 <p>https://survivejs.com/webpack/optimizing/build-analysis/
 https://formidable.com/blog/2018/finding-webpack-duplicates-with-inspectpack-plugin/</p>
 <p>Build the stats.json file:</p>
-<pre><code>npx yarn build:stats
+<pre><code>npx pnpm build:stats
 </code></pre>
 <p>Check dependency tree and why which package was included:
 https://www.npmjs.com/package/whybundled</p>
@@ -524,7 +522,7 @@ https://www.npmjs.com/package/webpack-bundle-analyzer</p>
 <ol>
 <li>Extract the messages from this package:</li>
 </ol>
-<pre><code>npx yarn run i18n
+<pre><code>npx pnpm run i18n
 </code></pre>
 <p>Or just <code>npm run i18n</code>...</p>
 <ol start="2">
@@ -588,7 +586,7 @@ Let's follow a convention and use these groupings, but the grouping is optional 
 Without grouping: <code>TYPE: MESSAGE</code></p>
 <p>If the commit message doesn't follow this convention, then it won't be included in the changelog.
 To bypass the pre-commit hook, use the git <code>-n</code> switch.
-Example: <code>git commit yarn.lock -m &quot;yarn install.&quot; -n</code>.</p>
+Example: <code>git commit pnpm-lock.yaml -m &quot;pnpm install.&quot; -n</code>.</p>
 <p>If you are working on a component like the structure pattern (pat-structure), use <code>pat structure</code> as a group.</p>
 <p>Examples:</p>
 <p>Add a feature to the structure pattern:</p>
@@ -599,10 +597,10 @@ Example: <code>git commit yarn.lock -m &quot;yarn install.&quot; -n</code>.</p>
 <pre class="language-shell"><code class="language-shell"><span class="token function">git</span> commit <span class="token parameter variable">-am</span> <span class="token string">"maint: Remove unnecessary file from root directory."</span></code></pre>
 <hr>
 <p><strong>Note</strong></p>
-<p>Please keep commits on the <code>yarn.lock</code> file or any other auto-generated code seperate.</p>
-<p>Just commit them seperately with <code>git commit yarn.lock -m &quot;yarn install&quot; -n</code>.</p>
+<p>Please keep commits on the <code>pnpm-lock.yaml</code> file or any other auto-generated code seperate.</p>
+<p>Just commit them seperately with <code>git commit pnpm-lock.yaml -m &quot;pnpm install&quot; -n</code>.</p>
 <p>Keeping them seperate reduces the effort when merging or rebasing branches where a merge conflict can easily happen.
-In such cases you can just withdraw your changes on the <code>yarn.lock</code> file, or remove those commits and reinstall with <code>yarn install</code> at the end of a successful merge or rebase.</p>
+In such cases you can just withdraw your changes on the <code>pnpm-lock.yaml</code> file, or remove those commits and reinstall with <code>pnpm install</code> at the end of a successful merge or rebase.</p>
 <hr>
 
       </main>
