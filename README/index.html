@@ -449,11 +449,13 @@ But to resemble the CSS syntax, new patterns should instead separate each word w
 <p>You can directly develop with the 11ty based documentation / demo server by running <code>make serve</code>.</p>
 <p>If you want to develop in Plone, you have two options:</p>
 <ol>
-<li>Run <code>make watch-plone</code>. You need buildout to have plone.staticresources checked out next to Mockup.
-Mockup will compile it's bundle directly into the <code>++plone++static</code> directory of plone.staticresources and update it when you change something in Mockup.</li>
-</ol>
-<ol start="2">
-<li>Run <code>npx pnpm start:webpack</code>, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL <code>http://localhost:8000/bundle.min.js</code> to the JavaScript input field of the plone bundle instead of the other URL <code>++plone++static/bundle-plone/bundle.min.js</code>.</li>
+<li>
+<p>Run <code>make watch-plone</code>. You need buildout to have plone.staticresources checked out next to Mockup.
+Mockup will compile it's bundle directly into the <code>++plone++static</code> directory of plone.staticresources and update it when you change something in Mockup.</p>
+</li>
+<li>
+<p>Run <code>npx pnpm start:webpack</code>, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL <code>http://localhost:8000/bundle.min.js</code> to the JavaScript input field of the plone bundle instead of the other URL <code>++plone++static/bundle-plone/bundle.min.js</code>.</p>
+</li>
 </ol>
 <p>For more commands inspect Makefile and the script part of the package.json.</p>
 <h3>Running tests</h3>
