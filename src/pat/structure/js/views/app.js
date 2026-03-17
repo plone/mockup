@@ -60,7 +60,11 @@ export default BaseView.extend({
                 // ignore this, fake event trigger to element that is not visible
                 return;
             }
-            if ($el.is("a") || $el.parent().is("a") || $el.hasClass("popover-structure-query-active")) {
+            if (
+                $el.is("a") ||
+                $el.parent().is("a") ||
+                $el.hasClass("popover-structure-query-active")
+            ) {
                 // elements that should not close
                 // NOTE: "popover-structure-query-active" is set on body when
                 // select2 elements are clicked inside the structure filter
@@ -183,8 +187,6 @@ export default BaseView.extend({
                 // of some kind - use the base object instead for that by not
                 // specifying a path.
                 path = "";
-                // TODO figure out whether the following event after this is
-                // needed at all.
             }
             $("body").trigger("structure-url-changed", [path]);
 
