@@ -27,7 +27,7 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           reactions: '+1'
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Info
         run: |
           echo "Workflow triggered with comment '/run-coredev-robottests' "
@@ -52,14 +52,17 @@ jobs:
           path: tests
 
       # ── 2. Node.js setup ──────────────────────────────────────────────────────
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: yarn
+          cache: pnpm
 
-      - name: Install yarn dependencies
-        run: yarn install
+      - name: Install pnpm dependencies
+        run: pnpm install
 
       # ── 3. Python / make install ─────────────────────────────────────────────
       - name: Set up Python 3.12
@@ -89,7 +92,7 @@ jobs:
 
       # ── 2b. Build mockup bundle into tests/src/plone.staticresources ─────────
       - name: Build mockup for tests (webpack)
-        run: yarn build:webpack:tests
+        run: pnpm build:webpack:tests
 
       # ── 4. Install Playwright / rfbrowser ────────────────────────────────────
       - name: install rfbrowser
@@ -110,7 +113,7 @@ jobs:
           with open('mxcheckouts.ini', 'w') as f:
               cfg.write(f)
           "
-          
+
       - name: Run Coredev robot tests
         working-directory: tests
         run: ROBOTSUITE_PREFIX=ONLYROBOT TEST_ARGS="--all -t ONLYROBOT" make test

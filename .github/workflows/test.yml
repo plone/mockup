@@ -4,11 +4,9 @@ on:
   push:
     branches:
     - master
-    - 5.0.x
   pull_request:
     branches:
     - master
-    - 5.0.x
 
 jobs:
   build:
@@ -18,10 +16,11 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=8192"
     steps:
     - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
     - uses: actions/setup-node@v4
       with:
         node-version: "22"
-        cache: 'yarn'
-    - run: yarn install
+        cache: pnpm
+    - run: pnpm install
     - run: make eslint
-    - run: yarn test
+    - run: pnpm test

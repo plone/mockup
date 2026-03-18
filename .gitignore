@@ -8,13 +8,10 @@
 /src/pat/modal/modal.css
 /src/pat/relateditems/relateditems.css
 /src/pat/tinymce/tinymce.css
-/stamp-npm
-/yarn-error.log
 devsrc/*
 dist/
 docs/_site
 docs/mockup/patterns
 node_modules/
-stamp-yarn
 stats.json
 /_site/*

@@ -114,6 +114,20 @@ module.exports = () => {
     config.resolve.mainFields = ["browser", "module", "main"];
     config.resolve.conditionNames = ["svelte", "browser", "require"];
 
+    // NOTE: above doesn't work.
+    // Currently, webpack needs the pnpm setting "shamefully-hoist=true" in
+    // `.npmrc` to create a flat node_modules directory.
+    // See this comment for more information:
+    // https://github.com/webpack/webpack/issues/5087#issuecomment-3193480986
+    //
+    // try to fix pnpm node_modules structure.
+    // config.resolveLoader = {
+    //     modules: [
+    //         path.resolve(__dirname, "node_modules"),
+    //         path.resolve(__dirname, "src")
+    //     ]
+    // }
+
     config.plugins.push(
         mf_config({
             name: package_json.name,
