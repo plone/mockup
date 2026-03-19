@@ -51,6 +51,7 @@
         "@11ty/eleventy-navigation": "^1.0.4",
         "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
         "@patternslib/dev": "^3.8.1",
+        "@plone/plonetheme-barceloneta-base": "^3.3.3",
         "@testing-library/jest-dom": "^6.8.0",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",
