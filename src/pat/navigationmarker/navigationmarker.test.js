@@ -59,7 +59,7 @@ describe("Navigation Marker", function () {
         await utils.timeout(1);
 
         const current_link = this.nav_element.querySelector(
-            "a[href='http://example.com/news/article-1']"
+            "a[href='http://example.com/news/article-1']",
         );
         const current_item = current_link.parentElement;
         expect(current_item.classList.contains("current")).toBe(true);
@@ -69,7 +69,9 @@ describe("Navigation Marker", function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        const news_link = this.nav_element.querySelector("a[href='http://example.com/news']");
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
         const news_item = news_link.parentElement;
         expect(news_item.classList.contains("inPath")).toBe(true);
     });
@@ -114,7 +116,7 @@ describe("Navigation Marker", function () {
         // The /view should be stripped, making "http://example.com/test-page/view" -> "http://example.com/test-page"
         // which should match the canonical URL exactly
         const view_link = this.nav_element.querySelector(
-            "a[href='http://example.com/test-page/view']"
+            "a[href='http://example.com/test-page/view']",
         );
         const view_item = view_link.parentElement;
         expect(view_item.classList.contains("current")).toBe(true);
@@ -140,7 +142,9 @@ describe("Navigation Marker", function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        const about_link = this.nav_element.querySelector("a[href='http://example.com/about']");
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
         const about_item = about_link.parentElement;
         expect(about_item.classList.contains("current")).toBe(true);
 
@@ -155,9 +159,13 @@ describe("Navigation Marker", function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        const about_link = this.nav_element.querySelector("a[href='http://example.com/about']");
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
         const about_item = about_link.parentElement;
-        const contact_link = this.nav_element.querySelector("a[href='http://example.com/contact']");
+        const contact_link = this.nav_element.querySelector(
+            "a[href='http://example.com/contact']",
+        );
         const contact_item = contact_link.parentElement;
 
         expect(about_item.classList.contains("current")).toBe(false);
@@ -174,10 +182,12 @@ describe("Navigation Marker", function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        const news_link = this.nav_element.querySelector("a[href='http://example.com/news']");
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
         const news_item = news_link.parentElement;
         const article_link = this.nav_element.querySelector(
-            "a[href='http://example.com/news/article-1']"
+            "a[href='http://example.com/news/article-1']",
         );
         const article_item = article_link.parentElement;
 
@@ -201,7 +211,9 @@ describe("Navigation Marker", function () {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        const current_link = this.nav_element.querySelector("a[href='http://example.com/news/article-1']");
+        const current_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
         expect(current_link.parentElement.classList.contains("current")).toBe(true);
     });
 
@@ -217,7 +229,9 @@ describe("Navigation Marker", function () {
         await utils.timeout(1);
 
         // Should not throw an error and should work on the anchor element itself
-        const current_link = this.nav_element.querySelector("a[href='http://example.com/news/article-1']");
+        const current_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
         expect(current_link.parentElement.classList.contains("current")).toBe(true);
     });
 });
@@ -295,4 +309,3 @@ describe("Navigation Marker - Portal URL Edge Cases", function () {
         expect(some_item.classList.contains("inPath")).toBe(true);
     });
 });
-
