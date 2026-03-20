@@ -240,6 +240,66 @@ describe("Navigation Marker", function () {
         );
         expect(current_link.classList.contains("current")).toBe(true);
     });
+
+    it("uses custom in-path-class and current-class when specified via pattern arguments", async function () {
+        // Set up custom class names via data attributes
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker" data-pat-navigationmarker="in-path-class: in-path; current-class: active">
+                <ul>
+                    <li>
+                        <a href="http://example.com">Home</a>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="news-toggle">
+                        <a href="http://example.com/news">News</a>
+                        <ul>
+                            <li>
+                                <a href="http://example.com/news/article-1">Article 1</a>
+                            </li>
+                            <li>
+                                <a href="http://example.com/news/article-2">Article 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="http://example.com/about">About</a>
+                    </li>
+                </ul>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        // Test custom current-class "active"
+        const current_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
+        const current_item = current_link.parentElement;
+        expect(current_link.classList.contains("active")).toBe(true);
+        expect(current_item.classList.contains("active")).toBe(true);
+        // Should NOT contain the default "current" class
+        expect(current_link.classList.contains("current")).toBe(false);
+        expect(current_item.classList.contains("current")).toBe(false);
+
+        // Test custom in-path-class "in-path"
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+        const news_item = news_link.parentElement;
+        expect(news_item.classList.contains("in-path")).toBe(true);
+        // Should NOT contain the default "inPath" class
+        expect(news_item.classList.contains("inPath")).toBe(false);
+
+        // Verify other items don't have the custom classes
+        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        const about_link = this.nav_element.querySelector("a[href='http://example.com/about']");
+        expect(home_link.classList.contains("in-path")).toBe(false);
+        expect(home_link.classList.contains("active")).toBe(false);
+        expect(about_link.classList.contains("in-path")).toBe(false);
+        expect(about_link.classList.contains("active")).toBe(false);
+    });
 });
 
 describe("Navigation Marker - Portal URL Edge Cases", function () {

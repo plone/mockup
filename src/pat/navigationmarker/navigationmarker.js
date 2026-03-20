@@ -4,14 +4,18 @@ import registry from "@patternslib/patternslib/src/core/registry";
 
 export const parser = new Parser("navigationmarker");
 parser.addArgument("portal-url", undefined);
+parser.addArgument("in-path-class", "inPath");
+parser.addArgument("current-class", "current");
 
 class Pattern extends BasePattern {
     static name = "navigationmarker";
     static trigger = ".pat-navigationmarker";
     static parser = parser;
 
+    parser_group_options = false;
+
     init() {
-        this.portal_url = this.options.portalUrl || document.body.dataset.portalUrl;
+        this.portal_url = this.options["portal-url"] || document.body.dataset.portalUrl;
 
         this.scan_navigation();
     }
@@ -62,7 +66,7 @@ class Pattern extends BasePattern {
 
             // Set the class
             if (in_path) {
-                parent.classList.add("inPath");
+                parent.classList.add(this.options["in-path-class"]);
                 // Don't mark the nav_item as inPath:
                 // - An <a>nchor element cannot have sub-items, so this is not needed anyways.
                 // - Having a parent nav_item marked as inPath and thus multiple
@@ -71,19 +75,19 @@ class Pattern extends BasePattern {
 
             // set "current" to the current selected nav item, if it is in the navigation structure.
             if (current_url === nav_url) {
-                parent.classList.add("current");
-                nav_item.classList.add("current");
+                parent.classList.add(this.options["current-class"]);
+                nav_item.classList.add(this.options["current-class"]);
             }
         }
     }
 
     clear(element) {
         // Clear all classes
-        if (element.classList.contains("inPath")) {
-            element.classList.remove("inPath");
+        if (element.classList.contains(this.options["in-path-class"])) {
+            element.classList.remove(this.options["in-path-class"]);
         }
-        if (element.classList.contains("current")) {
-            element.classList.remove("current");
+        if (element.classList.contains(this.options["current-class"])) {
+            element.classList.remove(this.options["current-class"]);
         }
     }
 }
