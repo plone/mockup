@@ -300,6 +300,60 @@ describe("Navigation Marker", function () {
         expect(about_link.classList.contains("in-path")).toBe(false);
         expect(about_link.classList.contains("active")).toBe(false);
     });
+
+    it("uses custom item-wrapper to determine which element gets navigation classes", async function () {
+        // Set up navigation with custom item-wrapper selector
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker" data-pat-navigationmarker="item-wrapper: .nav-wrapper; in-path-class: in-path; current-class: active">
+                <div class="nav-wrapper">
+                    <span class="nav-icon"></span>
+                    <a href="http://example.com">Home</a>
+                </div>
+                <div class="nav-wrapper">
+                    <span class="nav-icon"></span>
+                    <a href="http://example.com/news">News</a>
+                    <div class="nav-wrapper">
+                        <span class="nav-icon"></span>
+                        <a href="http://example.com/news/article-1">Article 1</a>
+                    </div>
+                </div>
+                <div class="nav-wrapper">
+                    <span class="nav-icon"></span>
+                    <a href="http://example.com/about">About</a>
+                </div>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        // Test that the custom item-wrapper (.nav-wrapper) gets the classes, not the direct parent
+        const current_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
+        const current_wrapper = current_link.closest(".nav-wrapper");
+        expect(current_wrapper.classList.contains("active")).toBe(true);
+        expect(current_link.classList.contains("active")).toBe(true);
+
+        // Test in-path class is applied to the wrapper
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+        const news_wrapper = news_link.closest(".nav-wrapper");
+        expect(news_wrapper.classList.contains("in-path")).toBe(true);
+
+        // Test that other wrappers don't have the classes
+        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        const home_wrapper = home_link.closest(".nav-wrapper");
+        const about_link = this.nav_element.querySelector("a[href='http://example.com/about']");
+        const about_wrapper = about_link.closest(".nav-wrapper");
+
+        expect(home_wrapper.classList.contains("in-path")).toBe(false);
+        expect(home_wrapper.classList.contains("active")).toBe(false);
+        expect(about_wrapper.classList.contains("in-path")).toBe(false);
+        expect(about_wrapper.classList.contains("active")).toBe(false);
+    });
 });
 
 describe("Navigation Marker - Portal URL Edge Cases", function () {

@@ -6,6 +6,7 @@ export const parser = new Parser("navigationmarker");
 parser.addArgument("portal-url", undefined);
 parser.addArgument("in-path-class", "inPath");
 parser.addArgument("current-class", "current");
+parser.addArgument("item-wrapper", null);
 
 class Pattern extends BasePattern {
     static name = "navigationmarker";
@@ -28,19 +29,22 @@ class Pattern extends BasePattern {
         const nav_items = this.el.querySelectorAll("a");
 
         for (const nav_item of nav_items) {
-            const parent = nav_item.parentElement;
+            const wrapper = this.options.itemWrapper
+                ? nav_item.closest(this.options.itemWrapper)
+                : nav_item.parentElement;
+
             const nav_url = nav_item.href.replace("/view", "");
 
             // We can exit early, if the nav_url is not part of the current URL.
             if (current_url.indexOf(nav_url) === -1) {
-                this.clear(parent);
+                this.clear(wrapper);
                 this.clear(nav_item);
                 continue;
             }
 
             // BBB
             // check the input-openers within the path
-            const check = parent.querySelector(":scope > input[type=checkbox]");
+            const check = wrapper.querySelector(":scope > input[type=checkbox]");
             if (check) {
                 check.checked = true;
             }
@@ -66,7 +70,7 @@ class Pattern extends BasePattern {
 
             // Set the class
             if (in_path) {
-                parent.classList.add(this.options["in-path-class"]);
+                wrapper.classList.add(this.options["in-path-class"]);
                 // Don't mark the nav_item as inPath:
                 // - An <a>nchor element cannot have sub-items, so this is not needed anyways.
                 // - Having a parent nav_item marked as inPath and thus multiple
@@ -75,7 +79,7 @@ class Pattern extends BasePattern {
 
             // set "current" to the current selected nav item, if it is in the navigation structure.
             if (current_url === nav_url) {
-                parent.classList.add(this.options["current-class"]);
+                wrapper.classList.add(this.options["current-class"]);
                 nav_item.classList.add(this.options["current-class"]);
             }
         }
