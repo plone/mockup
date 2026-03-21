@@ -526,6 +526,115 @@ describe("Navigation Marker", function () {
         // Home should not be in-path since we're on a sub-page
         expect(home_link.parentElement.classList.contains("inPath")).toBe(false);
     });
+
+    it("handles multiple URL scenarios with re-scanning (roundtrip test)", async function () {
+        // Test navigation behavior across different URL scenarios
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li>
+                        <a href="http://example.com/">Home</a>
+                    </li>
+                    <li>
+                        <a href="http://example.com/path1">p1</a>
+                    </li>
+                    <li>
+                        <a href="http://example.com/path2">p2</a>
+                        <ul>
+                            <li>
+                                <a href="http://example.com/path2/path2.1">p2.1</a>
+                            </li>
+                            <li>
+                                <a href="http://example.com/path2/path2.2">p2.2</a>
+                                <ul>
+                                    <li>
+                                        <a href="http://example.com/path2/path2.2/path2.2.1">p2.2.1</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://example.com/path2/path2.2/path2.2.2">p2.2.2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        `;
+
+        document.body.dataset.portalUrl = "http://example.com";
+        const canonical_link = document.querySelector('head link[rel="canonical"]');
+
+        // Test 1: On home page
+        canonical_link.href = "http://example.com/";
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const it0 = document.querySelector("a[href='http://example.com/']");
+
+        expect(it0.classList.contains("current")).toBe(true);
+        expect(it0.parentElement.classList.contains("inPath")).toBe(true); // Home is in-path when on home
+
+        // Test 2: Navigate to /path1 (rescan with new navigation)
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com/">Home</a></li>
+                    <li><a href="http://example.com/path1">p1</a></li>
+                    <li><a href="http://example.com/path2">p2</a></li>
+                </ul>
+            </nav>
+        `;
+
+        canonical_link.href = "http://example.com/path1";
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const new_it1 = document.querySelector("a[href='http://example.com/path1']");
+        const new_it0 = document.querySelector("a[href='http://example.com/']");
+
+        expect(new_it1.classList.contains("current")).toBe(true);
+        expect(new_it1.parentElement.classList.contains("current")).toBe(true);
+        expect(new_it0.classList.contains("current")).toBe(false); // Should not be current
+        expect(new_it0.parentElement.classList.contains("inPath")).toBe(false); // Should not be in-path
+
+        // Test 3: Navigate to nested path
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com/">Home</a></li>
+                    <li>
+                        <a href="http://example.com/path2">p2</a>
+                        <ul>
+                            <li><a href="http://example.com/path2/path2.1">p2.1</a></li>
+                            <li>
+                                <a href="http://example.com/path2/path2.2">p2.2</a>
+                                <ul>
+                                    <li><a href="http://example.com/path2/path2.2/path2.2.1">p2.2.1</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        `;
+
+        canonical_link.href = "http://example.com/path2/path2.2/path2.2.1";
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const final_it221 = document.querySelector(
+            "a[href='http://example.com/path2/path2.2/path2.2.1']",
+        );
+        const final_it2 = document.querySelector("a[href='http://example.com/path2']");
+        const final_it22 = document.querySelector(
+            "a[href='http://example.com/path2/path2.2']",
+        );
+
+        expect(final_it221.classList.contains("current")).toBe(true);
+        expect(final_it221.parentElement.classList.contains("current")).toBe(true);
+        expect(final_it2.parentElement.classList.contains("inPath")).toBe(true); // path2 should be in-path
+        expect(final_it22.parentElement.classList.contains("inPath")).toBe(true); // path2.2 should be in-path
+    });
 });
 
 describe("Navigation Marker - Portal URL Edge Cases", function () {
