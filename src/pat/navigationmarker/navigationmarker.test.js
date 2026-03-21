@@ -1,4 +1,5 @@
-import "./navigationmarker";
+import Pattern from "./navigationmarker";
+import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
@@ -55,8 +56,8 @@ describe("Navigation Marker", function () {
     });
 
     it("marks current navigation item with 'current' class", async function () {
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const current_link = this.nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
@@ -65,8 +66,8 @@ describe("Navigation Marker", function () {
     });
 
     it("marks current navigation wrapper item with 'current' class", async function () {
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const current_link = this.nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
@@ -76,8 +77,8 @@ describe("Navigation Marker", function () {
     });
 
     it("marks in-path link parents but not the link itself with the 'inPath' class", async function () {
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const news_link = this.nav_element.querySelector(
             "a[href='http://example.com/news']",
@@ -88,8 +89,8 @@ describe("Navigation Marker", function () {
     });
 
     it("does not mark home as 'inPath' when not actually on home page", async function () {
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const home_link = this.nav_element.querySelector("a[href='http://example.com']");
         expect(home_link.classList.contains("inPath")).toBe(false);
@@ -97,8 +98,8 @@ describe("Navigation Marker", function () {
     });
 
     it("checks input checkboxes for items in path", async function () {
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const news_checkbox = document.getElementById("news-toggle");
         expect(news_checkbox.checked).toBe(true);
@@ -119,13 +120,13 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         // The /view should be stripped, making "http://example.com/test-page/view" -> "http://example.com/test-page"
         // which should match the canonical URL exactly
-        const view_link = this.nav_element.querySelector(
+        const view_link = nav_element.querySelector(
             "a[href='http://example.com/test-page/view']",
         );
         expect(view_link.classList.contains("current")).toBe(true);
@@ -148,8 +149,8 @@ describe("Navigation Marker", function () {
         new_canonical_link.rel = "canonical";
         document.head.appendChild(new_canonical_link);
 
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const about_link = this.nav_element.querySelector(
             "a[href='http://example.com/about']",
@@ -164,8 +165,8 @@ describe("Navigation Marker", function () {
     });
 
     it("does not mark items that don't match current URL", async function () {
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const about_link = this.nav_element.querySelector(
             "a[href='http://example.com/about']",
@@ -187,8 +188,8 @@ describe("Navigation Marker", function () {
         const canonical_link = document.querySelector('head link[rel="canonical"]');
         canonical_link.href = "http://example.com/news";
 
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(instance);
 
         const news_link = this.nav_element.querySelector(
             "a[href='http://example.com/news']",
@@ -213,11 +214,11 @@ describe("Navigation Marker", function () {
             </div>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
-        const current_link = this.nav_element.querySelector(
+        const current_link = nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
         expect(current_link.classList.contains("current")).toBe(true);
@@ -230,12 +231,15 @@ describe("Navigation Marker", function () {
             </div>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
+
         registry.scan(document.body);
         await utils.timeout(1);
 
         // Should not throw an error and should work on the anchor element itself
-        const current_link = this.nav_element.querySelector(
+        const current_link = nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
         expect(current_link.classList.contains("current")).toBe(true);
@@ -268,12 +272,12 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         // Test custom current-class "active"
-        const current_link = this.nav_element.querySelector(
+        const current_link = nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
         const current_item = current_link.parentElement;
@@ -284,17 +288,15 @@ describe("Navigation Marker", function () {
         expect(current_item.classList.contains("current")).toBe(false);
 
         // Test custom in-path-class "in-path"
-        const news_link = this.nav_element.querySelector(
-            "a[href='http://example.com/news']",
-        );
+        const news_link = nav_element.querySelector("a[href='http://example.com/news']");
         const news_item = news_link.parentElement;
         expect(news_item.classList.contains("in-path")).toBe(true);
         // Should NOT contain the default "inPath" class
         expect(news_item.classList.contains("inPath")).toBe(false);
 
         // Verify other items don't have the custom classes
-        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
-        const about_link = this.nav_element.querySelector(
+        const home_link = nav_element.querySelector("a[href='http://example.com']");
+        const about_link = nav_element.querySelector(
             "a[href='http://example.com/about']",
         );
         expect(home_link.classList.contains("in-path")).toBe(false);
@@ -326,12 +328,12 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         // Test that the custom item-wrapper (.nav-wrapper) gets the classes, not the direct parent
-        const current_link = this.nav_element.querySelector(
+        const current_link = nav_element.querySelector(
             "a[href='http://example.com/news/article-1']",
         );
         const current_wrapper = current_link.closest(".nav-wrapper");
@@ -339,16 +341,14 @@ describe("Navigation Marker", function () {
         expect(current_link.classList.contains("active")).toBe(true);
 
         // Test in-path class is applied to the wrapper
-        const news_link = this.nav_element.querySelector(
-            "a[href='http://example.com/news']",
-        );
+        const news_link = nav_element.querySelector("a[href='http://example.com/news']");
         const news_wrapper = news_link.closest(".nav-wrapper");
         expect(news_wrapper.classList.contains("in-path")).toBe(true);
 
         // Test that other wrappers don't have the classes
-        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        const home_link = nav_element.querySelector("a[href='http://example.com']");
         const home_wrapper = home_link.closest(".nav-wrapper");
-        const about_link = this.nav_element.querySelector(
+        const about_link = nav_element.querySelector(
             "a[href='http://example.com/about']",
         );
         const about_wrapper = about_link.closest(".nav-wrapper");
@@ -375,21 +375,21 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         // The /view should be stripped, making it match the canonical URL
-        const view_link = this.nav_element.querySelector(
+        const view_link = nav_element.querySelector(
             "a[href='http://example.com/news/article-1/view']",
         );
         expect(view_link.classList.contains("current")).toBe(true);
 
         // The @@ and ++ patterns should be stripped and not match
-        const search_link = this.nav_element.querySelector(
+        const search_link = nav_element.querySelector(
             "a[href='http://example.com/news/@@search']",
         );
-        const add_link = this.nav_element.querySelector(
+        const add_link = nav_element.querySelector(
             "a[href='http://example.com/news/++add++document']",
         );
 
@@ -398,7 +398,7 @@ describe("Navigation Marker", function () {
         expect(add_link.parentElement.classList.contains("inPath")).toBe(true);
 
         // Trailing slash should be handled correctly
-        const news_link = this.nav_element.querySelector(
+        const news_link = nav_element.querySelector(
             "a[href='http://example.com/news/']",
         );
         expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
@@ -422,39 +422,37 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         // Current item should have both in-path and current classes
-        const conference_link = this.nav_element.querySelector(
+        const conference_link = nav_element.querySelector(
             "a[href='http://example.com/news/events/conference']",
         );
         expect(conference_link.classList.contains("current")).toBe(true);
         expect(conference_link.parentElement.classList.contains("inPath")).toBe(true);
 
         // Parent paths should be in-path
-        const news_link = this.nav_element.querySelector(
-            "a[href='http://example.com/news']",
-        );
-        const events_link = this.nav_element.querySelector(
+        const news_link = nav_element.querySelector("a[href='http://example.com/news']");
+        const events_link = nav_element.querySelector(
             "a[href='http://example.com/news/events']",
         );
         expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
         expect(events_link.parentElement.classList.contains("inPath")).toBe(true);
 
         // Sibling path should not be in-path
-        const articles_link = this.nav_element.querySelector(
+        const articles_link = nav_element.querySelector(
             "a[href='http://example.com/news/articles']",
         );
         expect(articles_link.parentElement.classList.contains("inPath")).toBe(false);
 
         // Home should not be marked as in-path (special case)
-        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        const home_link = nav_element.querySelector("a[href='http://example.com']");
         expect(home_link.parentElement.classList.contains("inPath")).toBe(false);
 
         // Unrelated paths should not be in-path
-        const about_link = this.nav_element.querySelector(
+        const about_link = nav_element.querySelector(
             "a[href='http://example.com/about']",
         );
         expect(about_link.parentElement.classList.contains("inPath")).toBe(false);
@@ -474,17 +472,15 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
-        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        const home_link = nav_element.querySelector("a[href='http://example.com']");
         expect(home_link.classList.contains("current")).toBe(true);
         expect(home_link.parentElement.classList.contains("inPath")).toBe(true);
 
-        const news_link = this.nav_element.querySelector(
-            "a[href='http://example.com/news']",
-        );
+        const news_link = nav_element.querySelector("a[href='http://example.com/news']");
         expect(news_link.parentElement.classList.contains("inPath")).toBe(false);
     });
 
@@ -506,20 +502,18 @@ describe("Navigation Marker", function () {
             </nav>
         `;
 
-        this.nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const nav_element = document.querySelector(".pat-navigationmarker");
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         // Test with absolute URLs that match the canonical structure
-        const article_link = this.nav_element.querySelector(
+        const article_link = nav_element.querySelector(
             "a[href='http://example.com/site/news/article-1']",
         );
-        const news_link = this.nav_element.querySelector(
+        const news_link = nav_element.querySelector(
             "a[href='http://example.com/site/news']",
         );
-        const home_link = this.nav_element.querySelector(
-            "a[href='http://example.com/site']",
-        );
+        const home_link = nav_element.querySelector("a[href='http://example.com/site']");
 
         expect(article_link.classList.contains("current")).toBe(true);
         expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
@@ -566,8 +560,10 @@ describe("Navigation Marker", function () {
 
         // Test 1: On home page
         canonical_link.href = "http://example.com/";
-        registry.scan(document.body);
-        await utils.timeout(1);
+
+        const nav_element_1 = document.querySelector(".pat-navigationmarker");
+        const instance_1 = new Pattern(nav_element_1);
+        await events.await_pattern_init(instance_1);
 
         const it0 = document.querySelector("a[href='http://example.com/']");
 
@@ -586,8 +582,10 @@ describe("Navigation Marker", function () {
         `;
 
         canonical_link.href = "http://example.com/path1";
-        registry.scan(document.body);
-        await utils.timeout(1);
+
+        const nav_element_2 = document.querySelector(".pat-navigationmarker");
+        const instance_2 = new Pattern(nav_element_2);
+        await events.await_pattern_init(instance_2);
 
         const new_it1 = document.querySelector("a[href='http://example.com/path1']");
         const new_it0 = document.querySelector("a[href='http://example.com/']");
@@ -619,8 +617,10 @@ describe("Navigation Marker", function () {
         `;
 
         canonical_link.href = "http://example.com/path2/path2.2/path2.2.1";
-        registry.scan(document.body);
-        await utils.timeout(1);
+
+        const nav_element_3 = document.querySelector(".pat-navigationmarker");
+        const instance_3 = new Pattern(nav_element_3);
+        await events.await_pattern_init(instance_3);
 
         const final_it221 = document.querySelector(
             "a[href='http://example.com/path2/path2.2/path2.2.1']",
@@ -669,8 +669,8 @@ describe("Navigation Marker - Portal URL Edge Cases", function () {
         `;
 
         const nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         const home_link = nav_element.querySelector("a[href='http://example.com']");
         const home_item = home_link.parentElement;
@@ -694,8 +694,8 @@ describe("Navigation Marker - Portal URL Edge Cases", function () {
         `;
 
         const nav_element = document.querySelector(".pat-navigationmarker");
-        registry.scan(document.body);
-        await utils.timeout(1);
+        const instance = new Pattern(nav_element);
+        await events.await_pattern_init(instance);
 
         const home_link = nav_element.querySelector("a[href='http://example.com']");
         const home_item = home_link.parentElement;
