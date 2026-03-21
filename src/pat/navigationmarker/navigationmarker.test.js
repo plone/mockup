@@ -710,3 +710,296 @@ describe("Navigation Marker - Portal URL Edge Cases", function () {
         expect(some_item.classList.contains("inPath")).toBe(true);
     });
 });
+
+describe("Navigation Marker - Navigate Event Handling", function () {
+    beforeEach(function () {
+        // Set up the canonical link in head
+        const canonical_link = document.createElement("link");
+        canonical_link.rel = "canonical";
+        canonical_link.href = "http://example.com/news/article-1";
+        document.head.appendChild(canonical_link);
+
+        // Set portal URL on body
+        document.body.dataset.portalUrl = "http://example.com";
+
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li>
+                        <a href="http://example.com">Home</a>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="news-toggle">
+                        <a href="http://example.com/news">News</a>
+                        <ul>
+                            <li>
+                                <a href="http://example.com/news/article-1">Article 1</a>
+                            </li>
+                            <li>
+                                <a href="http://example.com/news/article-2">Article 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="http://example.com/about">About</a>
+                    </li>
+                </ul>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+
+        // Mock window.navigation if it doesn't exist
+        if (!window.navigation) {
+            window.navigation = {
+                addEventListener: jest.fn(),
+                removeEventListener: jest.fn(),
+            };
+        }
+    });
+
+    afterEach(() => {
+        document.body.innerHTML = "";
+        document.body.removeAttribute("data-portal-url");
+        // Clean up canonical link
+        const canonical_link = document.querySelector('head link[rel="canonical"]');
+        if (canonical_link) {
+            canonical_link.remove();
+        }
+        // Clean up any event listeners
+        if (window.navigation && window.navigation.removeEventListener) {
+            window.navigation.removeEventListener(
+                "navigate",
+                "pat-navigationmarker--history-changed",
+            );
+        }
+    });
+
+    it("re-initializes mark_items when navigate event fires", async function () {
+        // Create and initialize the pattern instance properly
+        const pattern_instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(pattern_instance);
+
+        // Verify initial state
+        const article1_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
+        const article2_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-2']",
+        );
+
+        expect(article1_link.classList.contains("current")).toBe(true);
+        expect(article2_link.classList.contains("current")).toBe(false);
+
+        // Simulate a navigate event to Article 2
+        const navigate_event = {
+            destination: {
+                url: "http://example.com/news/article-2",
+            },
+        };
+
+        // Spy on mark_items to verify it gets called
+        const spy_on_mark_items = jest.spyOn(pattern_instance, "mark_items");
+
+        // Call the pattern's navigate event handler directly
+        pattern_instance.mark_items(navigate_event.destination.url);
+
+        await utils.timeout(1);
+
+        // Verify that mark_items was called with the new URL
+        expect(spy_on_mark_items).toHaveBeenCalledWith(
+            "http://example.com/news/article-2",
+        );
+
+        // Verify that the navigation markers have been updated
+        expect(article1_link.classList.contains("current")).toBe(false);
+        expect(article2_link.classList.contains("current")).toBe(true);
+        expect(article2_link.parentElement.classList.contains("current")).toBe(true);
+
+        // The news parent should still be in-path
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
+
+        spy_on_mark_items.mockRestore();
+    });
+
+    it("handles navigate event with different destination URLs", async function () {
+        const pattern_instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(pattern_instance);
+
+        const spy_on_mark_items = jest.spyOn(pattern_instance, "mark_items");
+
+        // Test navigation to About page
+        const navigate_to_about = {
+            destination: {
+                url: "http://example.com/about",
+            },
+        };
+
+        pattern_instance.mark_items(navigate_to_about.destination.url);
+        await utils.timeout(1);
+
+        expect(spy_on_mark_items).toHaveBeenCalledWith("http://example.com/about");
+
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+
+        expect(about_link.classList.contains("current")).toBe(true);
+        expect(about_link.parentElement.classList.contains("current")).toBe(true);
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(false);
+
+        // Test navigation to Home
+        const navigate_to_home = {
+            destination: {
+                url: "http://example.com",
+            },
+        };
+
+        pattern_instance.mark_items(navigate_to_home.destination.url);
+        await utils.timeout(1);
+
+        expect(spy_on_mark_items).toHaveBeenCalledWith("http://example.com");
+
+        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        expect(home_link.classList.contains("current")).toBe(true);
+        expect(home_link.parentElement.classList.contains("current")).toBe(true);
+        expect(about_link.classList.contains("current")).toBe(false);
+
+        spy_on_mark_items.mockRestore();
+    });
+
+    it("clears previous navigation states when navigate event fires", async function () {
+        const pattern_instance = new Pattern(this.nav_element);
+        await events.await_pattern_init(pattern_instance);
+
+        // Verify initial state - Article 1 is current and News is in-path
+        const article1_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1']",
+        );
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+
+        expect(article1_link.classList.contains("current")).toBe(true);
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
+
+        // Navigate to a completely different section (About)
+        pattern_instance.mark_items("http://example.com/about");
+        await utils.timeout(1);
+
+        // Verify that the previous states are cleared
+        expect(article1_link.classList.contains("current")).toBe(false);
+        expect(article1_link.parentElement.classList.contains("current")).toBe(false);
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(false);
+
+        // And the new state is set
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
+        expect(about_link.classList.contains("current")).toBe(true);
+        expect(about_link.parentElement.classList.contains("current")).toBe(true);
+    });
+
+    it("handles navigate event gracefully when window.navigation is not available", async function () {
+        // This test ensures the pattern doesn't break on browsers without Navigation API
+
+        // Temporarily remove window.navigation
+        const original_navigation = window.navigation;
+        delete window.navigation;
+
+        // Re-create the element for this test
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com">Home</a></li>
+                    <li><a href="http://example.com/news">News</a></li>
+                </ul>
+            </nav>
+        `;
+
+        const news_element = document.querySelector(".pat-navigationmarker");
+
+        // Should not throw an error during pattern initialization
+        const pattern_instance = new Pattern(news_element);
+        await expect(events.await_pattern_init(pattern_instance)).resolves.not.toThrow();
+
+        // mark_items should still work when called directly
+        expect(() => {
+            pattern_instance.mark_items("http://example.com/news");
+        }).not.toThrow();
+
+        // Restore window.navigation
+        if (original_navigation) {
+            window.navigation = original_navigation;
+        }
+    });
+
+    it("sets up navigate event listener when window.navigation is available", async function () {
+        // Mock window.navigation with spy on addEventListener
+        const mockNavigation = {
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+        };
+
+        // Temporarily replace window.navigation with our mock
+        const original_navigation = window.navigation;
+        window.navigation = mockNavigation;
+
+        // Re-create the element for this test
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com">Home</a></li>
+                    <li><a href="http://example.com/news">News</a></li>
+                </ul>
+            </nav>
+        `;
+
+        const news_element = document.querySelector(".pat-navigationmarker");
+        const pattern_instance = new Pattern(news_element);
+        await events.await_pattern_init(pattern_instance);
+
+        // Verify that addEventListener was called for the navigate event
+        expect(mockNavigation.addEventListener).toHaveBeenCalledWith(
+            "navigate",
+            expect.any(Function),
+            {}, // Empty options object passed by events.add_event_listener
+        );
+
+        // Test that the event listener function works by calling it directly
+        const addEventListenerCalls = mockNavigation.addEventListener.mock.calls;
+        const navigateEventCall = addEventListenerCalls.find(
+            (call) => call[0] === "navigate",
+        );
+        expect(navigateEventCall).toBeDefined();
+
+        const navigateEventHandler = navigateEventCall[1];
+        expect(typeof navigateEventHandler).toBe("function");
+
+        // Spy on mark_items to verify it gets called when the event fires
+        const spy_on_mark_items = jest.spyOn(pattern_instance, "mark_items");
+
+        // Simulate the navigate event by calling the handler
+        const mockNavigateEvent = {
+            destination: {
+                url: "http://example.com/news",
+            },
+        };
+
+        navigateEventHandler(mockNavigateEvent);
+
+        // Verify mark_items was called with the destination URL
+        expect(spy_on_mark_items).toHaveBeenCalledWith("http://example.com/news");
+
+        spy_on_mark_items.mockRestore();
+
+        // Restore original window.navigation
+        window.navigation = original_navigation;
+    });
+});
