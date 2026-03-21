@@ -1,4 +1,5 @@
 import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
+import events from "@patternslib/patternslib/src/core/events";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 
@@ -17,6 +18,21 @@ class Pattern extends BasePattern {
 
     init() {
         this.portal_url = this.cleanup_url(this.portal_url());
+
+        // Support for navigate event.
+        // Re-scan when a navigation change has happened,
+        // e.g. by a ajax call,
+        // e.g. via pat-inject with history:record setting.
+        events.add_event_listener(
+            window?.navigation,
+            "navigate",
+            "pat-navigationmarker--history-changed",
+            (e) => {
+                const current_url = e?.destination?.url;
+                this.mark_items(current_url);
+            },
+        );
+
         this.mark_items();
     }
 
