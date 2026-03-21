@@ -294,7 +294,9 @@ describe("Navigation Marker", function () {
 
         // Verify other items don't have the custom classes
         const home_link = this.nav_element.querySelector("a[href='http://example.com']");
-        const about_link = this.nav_element.querySelector("a[href='http://example.com/about']");
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
         expect(home_link.classList.contains("in-path")).toBe(false);
         expect(home_link.classList.contains("active")).toBe(false);
         expect(about_link.classList.contains("in-path")).toBe(false);
@@ -346,13 +348,144 @@ describe("Navigation Marker", function () {
         // Test that other wrappers don't have the classes
         const home_link = this.nav_element.querySelector("a[href='http://example.com']");
         const home_wrapper = home_link.closest(".nav-wrapper");
-        const about_link = this.nav_element.querySelector("a[href='http://example.com/about']");
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
         const about_wrapper = about_link.closest(".nav-wrapper");
 
         expect(home_wrapper.classList.contains("in-path")).toBe(false);
         expect(home_wrapper.classList.contains("active")).toBe(false);
         expect(about_wrapper.classList.contains("in-path")).toBe(false);
         expect(about_wrapper.classList.contains("active")).toBe(false);
+    });
+
+    it("handles URL cleanup for Plone view patterns", async function () {
+        // Test cleanup of /view, @@, and ++ patterns
+        const canonical_link = document.querySelector('head link[rel="canonical"]');
+        canonical_link.href = "http://example.com/news/article-1";
+
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com/news/article-1/view">Article 1 (with /view)</a></li>
+                    <li><a href="http://example.com/news/@@search">Search (with @@)</a></li>
+                    <li><a href="http://example.com/news/++add++document">Add Document (with ++)</a></li>
+                    <li><a href="http://example.com/news/">News (with trailing slash)</a></li>
+                </ul>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        // The /view should be stripped, making it match the canonical URL
+        const view_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/article-1/view']",
+        );
+        expect(view_link.classList.contains("current")).toBe(true);
+
+        // The @@ and ++ patterns should be stripped and not match
+        const search_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/@@search']",
+        );
+        const add_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/++add++document']",
+        );
+
+        // These should be treated as /news after cleanup and marked as in-path
+        expect(search_link.parentElement.classList.contains("inPath")).toBe(true);
+        expect(add_link.parentElement.classList.contains("inPath")).toBe(true);
+
+        // Trailing slash should be handled correctly
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/']",
+        );
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
+    });
+
+    it("uses improved in-path detection with slash-based logic", async function () {
+        // Test the new slash-based in-path detection
+        const canonical_link = document.querySelector('head link[rel="canonical"]');
+        canonical_link.href = "http://example.com/news/events/conference";
+
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com">Home</a></li>
+                    <li><a href="http://example.com/news">News</a></li>
+                    <li><a href="http://example.com/news/events">Events</a></li>
+                    <li><a href="http://example.com/news/events/conference">Conference</a></li>
+                    <li><a href="http://example.com/news/articles">Articles</a></li>
+                    <li><a href="http://example.com/about">About</a></li>
+                </ul>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        // Current item should have both in-path and current classes
+        const conference_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/events/conference']",
+        );
+        expect(conference_link.classList.contains("current")).toBe(true);
+        expect(conference_link.parentElement.classList.contains("inPath")).toBe(true);
+
+        // Parent paths should be in-path
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+        const events_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/events']",
+        );
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
+        expect(events_link.parentElement.classList.contains("inPath")).toBe(true);
+
+        // Sibling path should not be in-path
+        const articles_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news/articles']",
+        );
+        expect(articles_link.parentElement.classList.contains("inPath")).toBe(false);
+
+        // Home should not be marked as in-path (special case)
+        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        expect(home_link.parentElement.classList.contains("inPath")).toBe(false);
+
+        // Unrelated paths should not be in-path
+        const about_link = this.nav_element.querySelector(
+            "a[href='http://example.com/about']",
+        );
+        expect(about_link.parentElement.classList.contains("inPath")).toBe(false);
+    });
+
+    it("marks home as in-path when directly on home page", async function () {
+        // Test special case where home is marked as in-path when actually on home
+        const canonical_link = document.querySelector('head link[rel="canonical"]');
+        canonical_link.href = "http://example.com";
+
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com">Home</a></li>
+                    <li><a href="http://example.com/news">News</a></li>
+                </ul>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const home_link = this.nav_element.querySelector("a[href='http://example.com']");
+        expect(home_link.classList.contains("current")).toBe(true);
+        expect(home_link.parentElement.classList.contains("inPath")).toBe(true);
+
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/news']",
+        );
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(false);
     });
 });
 

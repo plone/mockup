@@ -16,15 +16,19 @@ class Pattern extends BasePattern {
     parser_group_options = false;
 
     init() {
-        this.portal_url = this.options["portal-url"] || document.body.dataset.portalUrl;
-
-        this.scan_navigation();
+        this.portal_url = this.cleanup_url(this.portal_url());
+        this.mark_items();
     }
 
-    scan_navigation() {
-        const current_url =
-            document.querySelector('head link[rel="canonical"]')?.href ||
-            window.location.href;
+    /**
+     * Mark all navigation items that are in the path of
+     * the current url
+     *
+     * @params {String} [url]: Optional url, the current
+     * url which all links are compared to.
+     */
+    mark_items(url) {
+        const current_url = this.cleanup_url(url || this.current_url());
 
         const nav_items = this.el.querySelectorAll("a");
 
@@ -33,7 +37,7 @@ class Pattern extends BasePattern {
                 ? nav_item.closest(this.options.itemWrapper)
                 : nav_item.parentElement;
 
-            const nav_url = nav_item.href.replace("/view", "");
+            const nav_url = this.cleanup_url(nav_item.href);
 
             // We can exit early, if the nav_url is not part of the current URL.
             if (current_url.indexOf(nav_url) === -1) {
@@ -49,27 +53,16 @@ class Pattern extends BasePattern {
                 check.checked = true;
             }
 
-            // set "inPath" to all nav items which are within the current path
-            // check if parts of nav_url are in canonical url parts
-            //
-            const current_url_parts = current_url.split("/");
-            const nav_url_parts = nav_url.split("/");
-            let in_path = false;
-
-            // The last part of the URL must match.
-            const nav_url_part = nav_url_parts[nav_url_parts.length - 1];
-            const current_url_part = current_url_parts[nav_url_parts.length - 1];
-            if (nav_url_part === current_url_part) {
-                in_path = true;
-            }
-
-            // Avoid marking "Home" with "inPath", when not actually there
-            if (nav_url === this.portal_url && current_url !== this.portal_url) {
-                in_path = false;
-            }
-
-            // Set the class
-            if (in_path) {
+            // Compare the current navigation item url with a slash at the end
+            // - if it is "inPath" it must have a slash in it.
+            // But do not set inPath for the "Home" url, as this would always
+            // be in the path.
+            // Except when directly on home page, mark it.
+            if (
+                (current_url.indexOf(`${nav_url}/`) === 0 &&
+                    nav_url !== this.portal_url) ||
+                current_url === nav_url
+            ) {
                 wrapper.classList.add(this.options["in-path-class"]);
                 // Don't mark the nav_item as inPath:
                 // - An <a>nchor element cannot have sub-items, so this is not needed anyways.
@@ -93,6 +86,40 @@ class Pattern extends BasePattern {
         if (element.classList.contains(this.options["current-class"])) {
             element.classList.remove(this.options["current-class"]);
         }
+    }
+
+    /**
+     * Cleanup the URL from parts, which use brittle and useless to compare.
+     *
+     * @param {String} url: The Url to clean up.
+     */
+    cleanup_url(url) {
+        return url
+            ?.split("/view")[0] // Remove "/view"
+            .split("@@")[0] // Remove @@ view parts
+            .split("++")[0] // Remove ++ view parts (++add++...)
+            .replace(/\/$/, ""); // Remove last "/"
+    }
+
+    /**
+     * Get the portal URL.
+     *
+     * @returns {String} - The current navigation URL.
+     */
+    portal_url() {
+        return this.options["portal-url"] || document.body.dataset.portalUrl;
+    }
+
+    /**
+     * Get the current URL.
+     *
+     * @returns {String} - The current navigation URL.
+     */
+    current_url() {
+        return (
+            document.querySelector('head link[rel="canonical"]')?.href ||
+            window.location.href
+        );
     }
 }
 
