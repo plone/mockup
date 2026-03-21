@@ -28,7 +28,10 @@ class Pattern extends BasePattern {
      * url which all links are compared to.
      */
     mark_items(url) {
-        const current_url = this.cleanup_url(url || this.current_url());
+        const current_url = this.rebase_url(
+            this.cleanup_url(url || this.current_url()),
+            this.portal_url,
+        );
 
         const nav_items = this.el.querySelectorAll("a");
 
@@ -37,7 +40,10 @@ class Pattern extends BasePattern {
                 ? nav_item.closest(this.options.itemWrapper)
                 : nav_item.parentElement;
 
-            const nav_url = this.cleanup_url(nav_item.href);
+            const nav_url = this.rebase_url(
+                this.cleanup_url(nav_item.href),
+                this.portal_url,
+            );
 
             // We can exit early, if the nav_url is not part of the current URL.
             if (current_url.indexOf(nav_url) === -1) {
@@ -86,6 +92,15 @@ class Pattern extends BasePattern {
         if (element.classList.contains(this.options["current-class"])) {
             element.classList.remove(this.options["current-class"]);
         }
+    }
+
+    /**
+     * Rebase URL agains a base URL. Do nothing,
+     *
+     * @param {String} url: The Url to clean up.
+     */
+    rebase_url(url, base_url) {
+        return new URL(url, base_url)?.href;
     }
 
     /**

@@ -487,6 +487,45 @@ describe("Navigation Marker", function () {
         );
         expect(news_link.parentElement.classList.contains("inPath")).toBe(false);
     });
+
+    it("handles URL rebasing correctly", async function () {
+        // Test absolute URLs that should work directly
+        const canonical_link = document.querySelector('head link[rel="canonical"]');
+        canonical_link.href = "http://example.com/site/news/article-1";
+
+        // Set a portal URL
+        document.body.dataset.portalUrl = "http://example.com/site";
+
+        document.body.innerHTML = `
+            <nav class="pat-navigationmarker">
+                <ul>
+                    <li><a href="http://example.com/site">Home</a></li>
+                    <li><a href="http://example.com/site/news">News</a></li>
+                    <li><a href="http://example.com/site/news/article-1">Article 1</a></li>
+                </ul>
+            </nav>
+        `;
+
+        this.nav_element = document.querySelector(".pat-navigationmarker");
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        // Test with absolute URLs that match the canonical structure
+        const article_link = this.nav_element.querySelector(
+            "a[href='http://example.com/site/news/article-1']",
+        );
+        const news_link = this.nav_element.querySelector(
+            "a[href='http://example.com/site/news']",
+        );
+        const home_link = this.nav_element.querySelector(
+            "a[href='http://example.com/site']",
+        );
+
+        expect(article_link.classList.contains("current")).toBe(true);
+        expect(news_link.parentElement.classList.contains("inPath")).toBe(true);
+        // Home should not be in-path since we're on a sub-page
+        expect(home_link.parentElement.classList.contains("inPath")).toBe(false);
+    });
 });
 
 describe("Navigation Marker - Portal URL Edge Cases", function () {
