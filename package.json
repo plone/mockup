@@ -9,7 +9,7 @@
         "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
         "select2": "Use the commit hash for checkout since pnpm has problems with the annotated commit #3.5.4"
     },
-    "packageManager": "pnpm@10.32.1",
+    "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "3.0.2",
         "@patternslib/pat-code-editor": "4.0.1",
