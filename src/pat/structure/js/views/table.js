@@ -80,12 +80,23 @@ export default BaseView.extend({
         const datatables_options = {
             // Don't apply initial ordering.
             order: [],
+            // Disable automatic width calculation so that columnDefs.width
+            // and CSS are respected as-is (DataTables v2 autoWidth overrides
+            // explicit widths by re-measuring th content).
+            autoWidth: false,
             columnDefs: [
                 {
                     // The first (selection checkboxes) and last (actions)
                     // columns should not be sortable.
                     orderable: false,
                     targets: [0, this.app.activeColumns.length + 2],
+                },
+                {
+                    // Keep the selection checkbox column as narrow as possible.
+                    // In DataTables v2, column widths must be set via columnDefs
+                    // (CSS on td alone is no longer picked up by autoWidth).
+                    width: "15px",
+                    targets: 0,
                 },
             ],
             paging: false,
@@ -185,17 +196,18 @@ export default BaseView.extend({
                 this.storeOrder();
             })
             .on("order.dt", (e, settings, ordArr) => {
-                // prevent message from showing for nativ order
-                if (ordArr.length === 1) {
-                    const order = ordArr[0];
-                    if (order.col === 0 && order.dir === "asc") {
-                        if (this.tableSortable) {
-                            this.tableSortable.enableSort();
-                        }
-                        // Clear the status message
-                        this.app.clearStatus("sorting_dndreordering_disabled");
-                        return;
+                // prevent message from showing for no ordering or native order
+                // DataTables v2 fires order.dt on initial draw with ordArr=[] when order:[]
+                const isNativeOrder =
+                    ordArr.length === 0 ||
+                    (ordArr.length === 1 && ordArr[0].col === 0 && ordArr[0].dir === "asc");
+                if (isNativeOrder) {
+                    if (this.tableSortable) {
+                        this.tableSortable.enableSort();
                     }
+                    // Clear the status message
+                    this.app.clearStatus("sorting_dndreordering_disabled");
+                    return;
                 }
                 const e_target = e.target;
                 const btn = $(
@@ -206,7 +218,7 @@ export default BaseView.extend({
                         // Use column 0 to restore ordering and then empty list so it doesn't
                         // show the icon in the column header
                         const api = $(e_target).dataTable().api();
-                        api.order([0, "asc"]);
+                        api.order([]);
                         api.draw();
                     });
                 this.app.setStatus(
