@@ -26,6 +26,7 @@ export default BaseView.extend({
         }
         BaseView.prototype.initialize.apply(this, [options]);
 
+        this._iconRenderGen = 0;
         this.on(
             "render",
             async function () {
@@ -45,7 +46,12 @@ export default BaseView.extend({
                 );
 
                 if (this.icon && typeof this.icon == "string") {
+                    const renderGen = ++this._iconRenderGen;
                     const icon_markup = await utils.resolveIcon(this.icon);
+                    // Discard result if a newer render has started in the meantime.
+                    if (renderGen !== this._iconRenderGen) {
+                        return;
+                    }
                     const icon_el = dom.create_from_string(icon_markup);
                     if (icon_el) {
                         this.$el.prepend(icon_el);
