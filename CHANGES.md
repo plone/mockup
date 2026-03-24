@@ -2,6 +2,157 @@
 
 
 
+## [5.6.0](https://github.com/plone/mockup/compare/5.5.1...5.6.0) (2026-03-24)
+
+
+### Features
+
+
+* **pat contentbrowser:** Upgrade to Svelte 5 with runes support. ([c48cf54](https://github.com/plone/mockup/commit/c48cf545b7d9dd856020e9c886cea9fbf7887260))
+
+
+* **pat datatables:** Upgrade datatables.net ([55984b0](https://github.com/plone/mockup/commit/55984b023dcf99334e2761119ec6cfb6dd2ba1ff))
+
+
+* **pat-contentbrowser:** Show images in selected items without padding. ([10fef83](https://github.com/plone/mockup/commit/10fef83ece7268ab3dc25eced375d8f772533945))
+
+
+* **pat-navigationmarker:** Add in-path-class and current-class parameters to customize the marker CSS classes. ([83f3339](https://github.com/plone/mockup/commit/83f3339defaf373b74b86fbf05a3c80397c20de6))
+
+
+* **pat-navigationmarker:** Add support for navigate event. ([418b0c5](https://github.com/plone/mockup/commit/418b0c5b3755eec9e08132b13b65b19b52c2ee36))
+
+  Re-mark the navigation items when a location URL change has been happened resp. a  event was triggered.
+
+
+* **pat-navigationmarker:** Also mark the anchor itself as current. ([8c1e1cb](https://github.com/plone/mockup/commit/8c1e1cba3ed6e231f1ad05f23a1da15cea6f163f))
+
+
+* **pat-navigationmarker:** Make the nav item wrapper configurable. ([55060ba](https://github.com/plone/mockup/commit/55060bac794a55dd0a08af3ae62c07b188417678))
+
+
+* **pat-navigationmarker:** Modernize: class based Pattern, add option portal-url, no jQuery. ([3fa4c88](https://github.com/plone/mockup/commit/3fa4c88cfd4206ac3833103829574e58537e5144))
+
+
+* **pat-navigationmarker:** Rebase URLs to agains the portal URL. ([fcb4c9c](https://github.com/plone/mockup/commit/fcb4c9cc8f7c7c8aaaff0a92a1f456b1db226f3e))
+
+  Closes: #1217
+closes [#1217](https://github.com/plone/mockup/issues/1217)
+
+* **pat-recurrence:** Allow to enable/disable the feature to add additional dates. ([544b3e2](https://github.com/plone/mockup/commit/544b3e20a75d5bdc92ce707fa3618cdb98f6edd5))
+
+  Ref: https://github.com/plone/plone.formwidget.recurrence/pull/66
+Fixes: https://github.com/plone/plone.formwidget.recurrence/issues/49
+
+
+
+### Bug Fixes
+
+
+* **pat search:** fix including URL parameters when batch/sort/filtering search page ([29d903f](https://github.com/plone/mockup/commit/29d903ffde3d18e9be35455b950a6835bcfce44e))
+
+
+* **pat search:** remove jQuery ([f5dd5bf](https://github.com/plone/mockup/commit/f5dd5bf9e2ddbdc592f73f526b86d702227c7eb8))
+
+
+* **pat select2:** Fix combined language codes for select2 translations. Fixes [#1501](https://github.com/plone/mockup/issues/1501) ([fe2abf2](https://github.com/plone/mockup/commit/fe2abf2afb57e5d60d69e9f1fd0d04918465c7f9))
+
+
+* **pat-contentbrowser:** Add type='button' to prevent the button to be focused by default in a form ([56e4634](https://github.com/plone/mockup/commit/56e4634bd384497d386bcc5800729f99dac20085))
+
+
+* **pat-plone-modal:** Evaluate focusable elements on each keypress. ([45e8d6a](https://github.com/plone/mockup/commit/45e8d6a1d1c85810464ec4175d1229350d6df5e8))
+
+  Make modal focus trap dynamic: re-query visible focusable elements on
+each Tab press so that AJAX-loaded content (occurrence lists) and
+dynamically shown/hidden fields are always reachable via keyboard.
+
+  Ref: plone/Products.CMFPlone#4272
+closes [plone/Products.CMFPlone#4272](https://github.com/plone/Products.CMFPlone/issues/4272)
+
+* **pat-recurrence:** Fix the RRULE date format for additional RDATE dates. ([5d5e30f](https://github.com/plone/mockup/commit/5d5e30fd45bf634cb01cfe90642eebc2e3888dff))
+
+  Fixes: https://github.com/plone/plone.formwidget.recurrence/issues/48
+
+
+* **pat-recurrence:** In an error case when loading the occurrences preview, show a inline warning instead of a window alert. ([46a1a00](https://github.com/plone/mockup/commit/46a1a0097890c01793556dff39d9ff1a7521dc3b))
+
+
+* **pat-recurrence:** Make widget navigatable via keyboard. ([d9b3ff3](https://github.com/plone/mockup/commit/d9b3ff34243cc6bce02ec5b9262cc0de320f2572))
+
+  - Change occurrence action links (<a href="#">) to <button> elements
+for proper semantics and native keyboard support (Enter + Space).
+- Change display widget "Add"/"Delete" links to <button> elements.
+- Update all matching JS selectors and CSS rules.
+- Add focus-visible outline styles for occurrence action buttons.
+- Add tests verifying button elements are used.
+
+  Fixes: plone/Products.CMFPlone#4272
+closes [plone/Products.CMFPlone#4272](https://github.com/plone/Products.CMFPlone/issues/4272)
+
+* **pat-structure:** Fix ordering logic. ([57cd7dd](https://github.com/plone/mockup/commit/57cd7ddc88835f88525cbac0a7d7f692eaf8c2b3))
+
+  The logic to set orderable columns in the structure pattern was quite
+wrong:
+
+- The very first and second-to-last columns were set to no ordering.
+  This PR fixes it to the very first (selection checkboxes) and very
+  last column (actions column).
+
+- The very first column was set for a default, ascending ordering. This
+  went unnoticed, as the checkbox cells all have the same order
+  information. This PR sets no initial ordering, as we want the order
+  position in the container set as the default ordering.
+
+  Fixes: #1551
+closes [#1551](https://github.com/plone/mockup/issues/1551)
+
+* **upload:** make file list scrollable to keep Upload button visible (fixes [#1554](https://github.com/plone/mockup/issues/1554)) ([4b4f3a3](https://github.com/plone/mockup/commit/4b4f3a303ab16c26a4616c55d8c9dbad1b3b401a))
+
+
+
+### Technical Changes
+
+
+* **bundle:** add GHA which runs coredev robottests with compiled bundle. ([df2797a](https://github.com/plone/mockup/commit/df2797ac67b4649dfe80d93ba3dc40a5588e8303))
+
+
+* **pat-navigationmarker:** Add tests for the navigationmarker. ([9a800a5](https://github.com/plone/mockup/commit/9a800a5f26e009293c2fae40387dec3d7f6d43ff))
+
+
+* **pat-toolbar:** Add/Extend tests. ([83115e6](https://github.com/plone/mockup/commit/83115e6045089f589deae45d4bcbb5004d51b661))
+
+
+
+### Maintenance
+
+
+* **bundle:** switch package manager from yarn to pnpm ([a56f5b3](https://github.com/plone/mockup/commit/a56f5b3ab03fb77eac32faa6b418185e75c6da01))
+
+
+* **pat-navigationmarker:** Add roundtrip test from [#1217](https://github.com/plone/mockup/issues/1217). ([40cd677](https://github.com/plone/mockup/commit/40cd67741eb56d5fc7257a7719dc2f176a136b4c))
+
+  Closes: #1217
+
+
+* **pat-navigationmarker:** Improve implementation. ([c4890d6](https://github.com/plone/mockup/commit/c4890d6d9534e1e661d0383309557b34ff610575))
+
+  Simplify, clean up urls for better comparison, document functionality, etc.
+
+  Closes: #1217
+closes [#1217](https://github.com/plone/mockup/issues/1217)
+
+* **pat-navigationmarker:** Rework tests to use direct pattern initialization and await_pattern_init. ([f21ded8](https://github.com/plone/mockup/commit/f21ded87c45fa197547a1aeeed2d8b016a5cff40))
+
+
+* Svelte minor upgrade 5.55.0 ([1114ea7](https://github.com/plone/mockup/commit/1114ea7d31d6562fb94bd8413160fd1fbcee9244))
+
+
+* upgrade dependencies ([dbbbb66](https://github.com/plone/mockup/commit/dbbbb66f30aac792c1e5d6e7078c2e6002872614))
+
+
+* Upgrade dependencies ([439e776](https://github.com/plone/mockup/commit/439e776634c9e4567291d057a72cc98fbb055f9f))
+
 ## [5.5.1](https://github.com/plone/mockup/compare/5.5.0...5.5.1) (2026-01-10)
 
 
