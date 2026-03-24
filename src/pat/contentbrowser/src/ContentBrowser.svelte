@@ -44,7 +44,9 @@
     let gridView = $state(($config.layout || "list") === "grid");
     let defaultConfigMode = $config.mode;
 
-    let vw = $state(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
+    let vw = $state(
+        Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
+    );
 
     function updatePreview({ data = null, uuid = null, action = "show" }) {
         if (data && action == "show") {
@@ -490,8 +492,10 @@
                             class="btn btn-light btn-sm"
                             type="button"
                             aria-label={_t("clear search")}
-                            onclick={(e) => { e.preventDefault(); searchItems(""); }}
-                            ><svg use:resolveIcon={{ iconName: "x" }} /></button
+                            onclick={(e) => {
+                                e.preventDefault();
+                                searchItems("");
+                            }}><svg use:resolveIcon={{ iconName: "x" }} /></button
                         >
                     {/if}
                 </div>
@@ -516,8 +520,10 @@
                     class="btn btn-link text-white ms-auto"
                     tabindex="0"
                     aria-label={_t("close")}
-                    onclick={(e) => { e.preventDefault(); closeBrowser(); }}
-                    ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
+                    onclick={(e) => {
+                        e.preventDefault();
+                        closeBrowser();
+                    }}><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
                 >
             </div>
             {#await $contentItems}
@@ -534,7 +540,7 @@
                                 in:fly={{ duration: 500 }}
                             >
                                 <div class="levelToolbar">
-                                    {#if i == 0 && $config.mode == "browse"}
+                                    {#if i == 0 && levels.length > 1 && $config.mode == "browse"}
                                         <button
                                             type="button"
                                             class="btn btn-link btn-xs ps-0"
@@ -551,20 +557,26 @@
                                     {#if i == levels.length - 1}
                                         {#if level.selectable && !level.showFilter && !previewItem.UID}
                                             <button
-                                                class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                                class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                                 title={_t("select ${level_path}", {
                                                     level_path:
                                                         level.Title || itemId(level),
                                                 })}
                                                 disabled={!isSelectable(level)}
-                                                onclick={(e) => { e.preventDefault(); addItem(level); }}
+                                                onclick={(e) => {
+                                                    e.preventDefault();
+                                                    addItem(level);
+                                                }}
                                                 ><svg
                                                     use:resolveIcon={{
-                                                        iconName: "plus",
+                                                        iconName: "check",
                                                     }}
                                                 />
-                                                <span class="select-button-ellipsis"
-                                                    >{level.Title || itemId(level)}</span
+                                                <span
+                                                    >{_t("select ${level_path}", {
+                                                        level_path:
+                                                            level.Title || itemId(level),
+                                                    })}</span
                                                 ></button
                                             >
                                         {/if}
@@ -581,7 +593,11 @@
                                                     <button
                                                         class="btn btn-link btn-xs level-filter"
                                                         title={_t("clear filter")}
-                                                        onclick={(e) => { e.preventDefault(); filterLevel(""); level.showFilter = false; }}
+                                                        onclick={(e) => {
+                                                            e.preventDefault();
+                                                            filterLevel("");
+                                                            level.showFilter = false;
+                                                        }}
                                                     >
                                                         <svg
                                                             use:resolveIcon={{
@@ -593,7 +609,10 @@
                                                     <button
                                                         class="btn btn-link btn-xs level-filter"
                                                         title={_t("level filter")}
-                                                        onclick={(e) => { e.preventDefault(); level.showFilter = true; }}
+                                                        onclick={(e) => {
+                                                            e.preventDefault();
+                                                            level.showFilter = true;
+                                                        }}
                                                     >
                                                         <svg
                                                             use:resolveIcon={{
@@ -648,7 +667,10 @@
                                             role="button"
                                             tabindex={n}
                                             data-uuid={item.UID}
-                                            onkeydown={(e) => { e.preventDefault(); keyboardNavigation(item, e); }}
+                                            onkeydown={(e) => {
+                                                e.preventDefault();
+                                                keyboardNavigation(item, e);
+                                            }}
                                             onclick={(e) => clickItem(item, e)}
                                         >
                                             <div
@@ -726,16 +748,21 @@
                                 <div class="selectLevel me-3">
                                     {#if isSelectable(previewItem)}
                                         <button
-                                            class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                            class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                             title={_t("select ${preview_path}", {
                                                 preview_path: previewItem.Title,
                                             })}
-                                            onclick={(e) => { e.preventDefault(); addItem(previewItem); }}
+                                            onclick={(e) => {
+                                                e.preventDefault();
+                                                addItem(previewItem);
+                                            }}
                                             ><svg
-                                                use:resolveIcon={{ iconName: "plus" }}
+                                                use:resolveIcon={{ iconName: "check" }}
                                             />
                                             <span class="select-button-ellipsis"
-                                                >{previewItem.Title}</span
+                                                >{_t("select ${preview_path}", {
+                                                    preview_path: previewItem.Title,
+                                                })}</span
                                             >
                                         </button>
                                     {/if}
@@ -800,10 +827,13 @@
                         <div class="preview" in:fly={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <button
-                                    class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                    class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                     title={_t("add selected items")}
-                                    onclick={(e) => { e.preventDefault(); addSelectedItems(); }}
-                                    ><svg use:resolveIcon={{ iconName: "plus" }} />
+                                    onclick={(e) => {
+                                        e.preventDefault();
+                                        addSelectedItems();
+                                    }}
+                                    ><svg use:resolveIcon={{ iconName: "check" }} />
                                     <span class="select-button-ellipsis"
                                         >{_t("add selected items")}</span
                                     >
@@ -997,7 +1027,7 @@
 
     .select-button-ellipsis {
         white-space: nowrap;
-        max-width: 150px;
+        max-width: 220px;
         text-overflow: ellipsis;
         overflow: hidden;
     }
