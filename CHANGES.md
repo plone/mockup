@@ -2,6 +2,20 @@
 
 
 
+## [5.6.1](https://github.com/plone/mockup/compare/5.6.0...5.6.1) (2026-03-24)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** add button icon and styling fix. ([4f5c4e5](https://github.com/plone/mockup/commit/4f5c4e5ee4741f6ca50de26fafc329fdc3d3ae39))
+
+
+* **pat structure:** double icon in "select items" button. ([aa491bd](https://github.com/plone/mockup/commit/aa491bdc182762b28ef86d1d9b38581f7840a5ef))
+
+
+* **pat structure:** fix for datatables v2 (column width and initial sort). ([fe25cce](https://github.com/plone/mockup/commit/fe25cce668aeade722b4d2fea5c8a415d5aaf5f2))
+
 ## [5.6.0](https://github.com/plone/mockup/compare/5.5.1...5.6.0) (2026-03-24)
 
 
