@@ -28,6 +28,12 @@ updates the URL bar after a ajax call:
 
 The logic is as follows:
 
+- Get active on a `pat-inject-before-history-update` event from pat-inject in
+  Patternslib ([See this PR](https://github.com/Patternslib/Patterns/pull/1280)).
+  The AJAX response data is stored on the event.
+  Note:‌ This pattern can listen to other events, having different event payload
+  data structures as well as other areas throwing this event.
+
 - Add or update either or both `data-base-url` and `data-view-url` if it exists
   in the ajax response from pat-inject.
 
