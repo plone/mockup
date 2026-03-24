@@ -343,8 +343,56 @@
 
       <main id="content">
         <h1>pat-base-url</h1>
-<p>Update the <code>data-base-url</code> attribute on the body tag when a <code>navigate</code> event is
-thrown and the URL in the location bar has changed.</p>
+<p>Update <code>body[data-base-url]</code> and <code>body[data-view-url]</code> on navigation changes.</p>
+<h2>Description</h2>
+<p>Plone maintains the <code>data-base-url</code> and <code>data-view-url</code> data attributes on the
+body tag. The base-url is the URL of the current context, the view-url is the
+full URL including the view name and both can be used in JavaScript.</p>
+<p>This needs to be updated, when navigating through the site with AJAX, for
+example using Patternslib <code>pat-inject</code> with the <code>history:record</code> setting, which
+updates the URL bar after a ajax call:</p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-inject<span class="token punctuation">"</span></span>
+    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>news<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-inject</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>
+      source: body;
+      target: body;
+      history: record;
+  <span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span>
+    Click here.
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span></code></pre>
+<p>The logic is as follows:</p>
+<ul>
+<li>
+<p>Add or update either or both <code>data-base-url</code> and <code>data-view-url</code> if it exists
+in the ajax response from pat-inject.</p>
+</li>
+<li>
+<p>Remove it from the body tag otherwise, so that we don't provide wrong URLs
+when the URL bar changes. A fallback should be provided, see below.</p>
+</li>
+</ul>
+<h2>Considerations</h2>
+<ul>
+<li>
+<p>When <code>data-base-url</code> and <code>data-view-url</code> are not available, a fallback should
+be used.</p>
+</li>
+<li>
+<p>The fallback can be <code>&lt;link rel=&quot;canonical&quot; href=&quot;&quot;&gt;</code> or <code>window.location</code>.</p>
+</li>
+<li>
+<p>A utility method to get the <code>base-url</code> and <code>view-url</code> would be good, which
+uses a fallback, if they are not provided on the body as data attributes.</p>
+</li>
+<li>
+<p>This pattern is sorted early and executes even before any other pattern, when
+running sequentially. But this order doesn't matter, since this Pattern is only
+getting active on an event and the execution order is not defined for events
+(whatever comes first executes first) and actually shouldn't matter anyway.</p>
+</li>
+</ul>
 
       </main>
     </div>
