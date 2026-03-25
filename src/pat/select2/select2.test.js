@@ -226,8 +226,8 @@ describe("Select2", function () {
 
         var $results = $("li.select2-search-choice");
         expect($results.length).toEqual(2);
-        expect($.trim($results.eq(0).text())).toEqual("Yellow");
-        expect($.trim($results.eq(1).text())).toEqual("Red");
+        expect($results.eq(0).text().trim()).toEqual("Yellow");
+        expect($results.eq(1).text().trim()).toEqual("Red");
 
         var firstElem = $results.eq(0);
         // css class is set and proxy is created when starting to drag
@@ -330,7 +330,7 @@ describe("Select2", function () {
         expect($("#test-select2").val()).toEqual("1;3");
         var $results = $("li.select2-search-choice");
         expect($results.length).toEqual(2);
-        expect($.trim($results.eq(0).text())).toEqual("One");
-        expect($.trim($results.eq(1).text())).toEqual("Three");
+        expect($results.eq(0).text().trim()).toEqual("One");
+        expect($results.eq(1).text().trim()).toEqual("Three");
     });
 });

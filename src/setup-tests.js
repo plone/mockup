@@ -1,5 +1,37 @@
 // Extra test setup.
 
+// Mock fetch for jsdom environment which doesn't support it natively.
+// Default implementation returns an empty 200 response.
+if (!global.fetch) {
+    global.fetch = () =>
+        Promise.resolve({
+            status: 200,
+            statusText: "OK",
+            headers: {
+                get: () => null,
+                forEach: () => {},
+            },
+            json: () => Promise.resolve({}),
+            text: () => Promise.resolve(""),
+        });
+}
+
+// Factory for creating fetch mocks that return a specific JSON payload.
+// Usage in tests: global.fetch = jest.fn().mockImplementation(mockFetch({ ... }))
+global.mockFetch =
+    (json = {}) =>
+    () =>
+        Promise.resolve({
+            status: 200,
+            statusText: "OK",
+            headers: {
+                get: () => null,
+                forEach: () => {},
+            },
+            json: () => Promise.resolve(json),
+            text: () => Promise.resolve(JSON.stringify(json)),
+        });
+
 // provide jquery
 import jquery from "jquery";
 global.$ = global.jQuery = jquery;
@@ -8,6 +40,19 @@ jquery.expr.pseudos.visible = function () {
     // Fix jQuery ":visible" selector always returns false in JSDOM.
     // https://github.com/jsdom/jsdom/issues/1048#issuecomment-401599392
     return true;
+};
+
+// BBB: jQuery4 backports for select2
+jquery.isFunction = function (obj) {
+    return typeof obj === "function";
+};
+jquery.isArray = function (obj) {
+    return Array.isArray
+        ? Array.isArray(obj)
+        : Object.prototype.toString.call(obj) === "[object Array]";
+};
+jquery.trim = function (str) {
+    return str == null ? "" : String.prototype.trim.call(str);
 };
 
 // Do not output error messages
@@ -31,5 +76,5 @@ import "css.escape";
 // Add structuredClone polyfill for jsdom.
 // See: https://github.com/jsdom/jsdom/issues/3363
 global.structuredClone = val => {
-  return JSON.parse(JSON.stringify(val))
+    return JSON.parse(JSON.stringify(val))
 }

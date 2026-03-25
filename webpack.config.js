@@ -73,11 +73,6 @@ module.exports = () => {
                         test: /[\\/]node_modules[\\/]select2.*[\\/]/,
                         chunks: "async",
                     },
-                    jquery_plugins: {
-                        name: "jquery_plugins",
-                        test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
-                        chunks: "async",
-                    },
                 },
             },
         },
@@ -145,7 +140,7 @@ module.exports = () => {
                 },
                 jquery: {
                     singleton: true,
-                    requiredVersion: package_json.dependencies["jquery"],
+                    version: package_json.dependencies["jquery"],
                     eager: true,
                 },
             },
@@ -179,7 +174,7 @@ module.exports = () => {
         );
     }
 
-    //console.log(JSON.stringify(config, null, 4));
+    console.log(JSON.stringify(config, null, 4));
 
     return config;
 };
