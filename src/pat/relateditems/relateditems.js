@@ -6,8 +6,8 @@ import utils from "../../core/utils";
 import registry from "@patternslib/patternslib/src/core/registry";
 
 const KEY = {
-    LEFT: 37,
-    RIGHT: 39,
+    LEFT: "ArrowLeft",
+    RIGHT: "ArrowRight",
 };
 
 export default Base.extend({
@@ -704,11 +704,11 @@ export default Base.extend({
                 return;
             }
 
-            if (event.which === KEY.LEFT || event.which === KEY.RIGHT) {
+            if (event.key === KEY.LEFT || event.key === KEY.RIGHT) {
                 event.stopPropagation();
 
                 const selectorContext =
-                    event.which === KEY.LEFT
+                    event.key === KEY.LEFT
                         ? ".pat-relateditems-result.one-level-up"
                         : ".select2-highlighted";
 

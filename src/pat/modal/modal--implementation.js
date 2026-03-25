@@ -779,7 +779,7 @@ export default Base.extend({
         self.$wrapper.addClass("image-modal");
         var src = self.$el.attr("href");
         var srcset = self.$el.attr("data-modal-srcset") || "";
-        var title = $.trim(self.$el.text()) || "Image";
+        var title = self.$el.text().trim() || "Image";
         // XXX aria?
         self.$raw = $(
             "<div><h1>" +
