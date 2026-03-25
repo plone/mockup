@@ -1,5 +1,37 @@
 // Extra test setup.
 
+// Mock fetch for jsdom environment which doesn't support it natively.
+// Default implementation returns an empty 200 response.
+if (!global.fetch) {
+    global.fetch = () =>
+        Promise.resolve({
+            status: 200,
+            statusText: "OK",
+            headers: {
+                get: () => null,
+                forEach: () => {},
+            },
+            json: () => Promise.resolve({}),
+            text: () => Promise.resolve(""),
+        });
+}
+
+// Factory for creating fetch mocks that return a specific JSON payload.
+// Usage in tests: global.fetch = jest.fn().mockImplementation(mockFetch({ ... }))
+global.mockFetch =
+    (json = {}) =>
+    () =>
+        Promise.resolve({
+            status: 200,
+            statusText: "OK",
+            headers: {
+                get: () => null,
+                forEach: () => {},
+            },
+            json: () => Promise.resolve(json),
+            text: () => Promise.resolve(JSON.stringify(json)),
+        });
+
 // provide jquery
 import jquery from "jquery";
 global.$ = global.jQuery = jquery;

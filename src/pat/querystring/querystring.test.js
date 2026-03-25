@@ -2,12 +2,7 @@ import "./querystring";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
-const mockFetch =
-    (json = {}) =>
-    () =>
-        Promise.resolve({
-            json: () => Promise.resolve(json),
-        });
+const mockFetch = global.mockFetch;
 
 describe("Querystring", function () {
     beforeEach(() => {
