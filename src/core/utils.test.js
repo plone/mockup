@@ -53,7 +53,7 @@ describe("utils", function () {
                 fn = function () {
                     utils.parseBodyTag(response);
                 };
-            expect(fn).toThrowError(TypeError);
+            expect(fn).toThrow(TypeError);
         });
 
         it("fails for responses without a body tag", function () {
@@ -61,7 +61,7 @@ describe("utils", function () {
                 fn = function () {
                     utils.parseBodyTag(response);
                 };
-            expect(fn).toThrowError(TypeError);
+            expect(fn).toThrow(TypeError);
         });
 
         it("parses the body tag's content from a response with multiple lines", function () {

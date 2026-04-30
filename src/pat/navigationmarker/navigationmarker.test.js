@@ -133,35 +133,24 @@ describe("Navigation Marker", function () {
     });
 
     it("falls back to window.location.href when no canonical link", async function () {
-        // Remove canonical link
+        // Remove canonical link so current_url() falls back to window.location.href
         const canonical_link = document.querySelector('head link[rel="canonical"]');
         canonical_link.remove();
 
-        // Mock window.location.href
-        const original_location = window.location.href;
-        Object.defineProperty(window, "location", {
-            value: { href: "http://example.com/about" },
-            writable: true,
-        });
-
-        // Need to create a new canonical link element to prevent error
-        const new_canonical_link = document.createElement("link");
-        new_canonical_link.rel = "canonical";
-        document.head.appendChild(new_canonical_link);
+        // Mock current_url() directly – jsdom 26 does not allow overriding window.location
+        const spy = jest
+            .spyOn(Pattern.prototype, "current_url")
+            .mockReturnValue("http://example.com/about");
 
         const instance = new Pattern(this.nav_element);
         await events.await_pattern_init(instance);
+
+        spy.mockRestore();
 
         const about_link = this.nav_element.querySelector(
             "a[href='http://example.com/about']",
         );
         expect(about_link.classList.contains("current")).toBe(true);
-
-        // Restore original location
-        Object.defineProperty(window, "location", {
-            value: { href: original_location },
-            writable: true,
-        });
     });
 
     it("does not mark items that don't match current URL", async function () {
