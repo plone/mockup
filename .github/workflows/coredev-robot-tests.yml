@@ -11,37 +11,32 @@ jobs:
       contains(github.event.comment.body, '/run-coredev-robottests')
     runs-on: ubuntu-latest
     outputs:
-      check_run_id: ${{ steps.create.outputs.result }}
-      sha: ${{ steps.get-sha.outputs.sha }}
+      check_run_id: ${{ steps.create.outputs.check_run_id }}
+      sha: ${{ steps.create.outputs.sha }}
     steps:
-      - name: Get PR head SHA
-        id: get-sha
+      - name: Get PR SHA and create Check Run
+        id: create
         uses: actions/github-script@v7
         with:
-          result-encoding: string
           script: |
             const pr = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number,
             });
-            return pr.data.head.sha;
+            const sha = pr.data.head.sha;
 
-      - name: Create Check Run
-        id: create
-        uses: actions/github-script@v7
-        with:
-          result-encoding: string
-          script: |
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: 'Coredev robot tests',
-              head_sha: '${{ steps.get-sha.outputs.sha }}',
+              head_sha: sha,
               status: 'in_progress',
               details_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
             });
-            return String(check.data.id);
+
+            core.setOutput('sha', sha);
+            core.setOutput('check_run_id', String(check.data.id));
 
   robot-tests:
     needs: create-check
