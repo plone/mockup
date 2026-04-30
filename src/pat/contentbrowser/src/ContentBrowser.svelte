@@ -374,6 +374,12 @@
         updatePreview({ action: "clear" });
     }
 
+    function toggleShowFilter(levelPath, value) {
+        contentItems.update((levels) =>
+            levels.map((l) => (l.path === levelPath ? { ...l, showFilter: value } : l)),
+        );
+    }
+
     function scrollToRight() {
         const scrollContainer = document.querySelector(".levelColumns");
         if (scrollContainer) {
@@ -449,9 +455,15 @@
             { threshold: 0, root: null, margin: "0px" },
         );
         // defer observing
-        window.setTimeout(() => {
+        const timer = window.setTimeout(() => {
             observer.observe(node);
         }, 300);
+        return {
+            destroy() {
+                window.clearTimeout(timer);
+                observer.disconnect();
+            },
+        };
     }
 
     $effect(() => {
@@ -596,7 +608,10 @@
                                                         onclick={(e) => {
                                                             e.preventDefault();
                                                             filterLevel("");
-                                                            level.showFilter = false;
+                                                            toggleShowFilter(
+                                                                level.path,
+                                                                false,
+                                                            );
                                                         }}
                                                     >
                                                         <svg
@@ -611,7 +626,10 @@
                                                         title={_t("level filter")}
                                                         onclick={(e) => {
                                                             e.preventDefault();
-                                                            level.showFilter = true;
+                                                            toggleShowFilter(
+                                                                level.path,
+                                                                true,
+                                                            );
                                                         }}
                                                     >
                                                         <svg
@@ -901,6 +919,9 @@
     .toolBar :global(svg) {
         vertical-align: -0.125em;
     }
+    .toolBar input[name="filter"] {
+        margin: 0;
+    }
     .levelColumns {
         display: flex;
         flex-wrap: nowrap;
@@ -946,7 +967,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
+    .levelToolbar input[name="levelFilter"] {
+        margin: 0;
+    }
     .levelItems {
         overflow-x: auto;
     }
