@@ -2,6 +2,33 @@
 
 
 
+## [5.6.2](https://github.com/plone/mockup/compare/5.6.1...5.6.2) (2026-04-30)
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** fixed contentstore and interection observer for batch loading after Svelte 5 migration. Fixed levelfilter toggle. ([dc19b7d](https://github.com/plone/mockup/commit/dc19b7dd485e880942c6709edbd23a374657c77c))
+
+
+### Technical Changes
+
+
+* **tests:** Fix tests after jest upgrade ([915d73c](https://github.com/plone/mockup/commit/915d73cc5426d0d9a9af4d821a1a801c413d7a56))
+
+
+### Maintenance
+
+
+* **build:** Upgrade packages ([64fb228](https://github.com/plone/mockup/commit/64fb22810ad2a13191023f16dafc15d8806eba73))
+
+  update lockfile
+
+
+* **bundle:** Fix eslint checks ([e6a0eea](https://github.com/plone/mockup/commit/e6a0eeab9e12521688615f53bec502bd019e1539))
+
+
+* **bundle:** Fix Makefile after @patternslib/dev upgrade ([6914dec](https://github.com/plone/mockup/commit/6914decbc57ab180c443b21421f42e4db9cf1663))
+
 ## [5.6.1](https://github.com/plone/mockup/compare/5.6.0...5.6.1) (2026-03-24)
 
 
