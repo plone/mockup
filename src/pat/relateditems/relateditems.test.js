@@ -193,7 +193,7 @@ describe("Related Items", function () {
             getURL: "",
         },
     ];
-    var $container;
+    var $container = document.body;
 
     var search = function (catalog, query) {
         var results_ = [];

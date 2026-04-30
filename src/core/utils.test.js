@@ -28,9 +28,9 @@ describe("utils", function () {
         });
 
         it("replaces dots in ids with dashes", function () {
-            var $el = $('<div id="something.with.dots"></div>'),
-                id = utils.setId($el);
-            id = $el.attr("id");
+            var $el = $('<div id="something.with.dots"></div>');
+            utils.setId($el);
+            var id = $el.attr("id");
             expect(id).toEqual("something-with-dots");
         });
     });

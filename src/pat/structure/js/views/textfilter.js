@@ -95,8 +95,8 @@ export default BaseView.extend({
     },
 
     setQuery: function (query, set_input) {
-        let query_string = null;
-        let query_obj = null;
+        let query_string;
+        let query_obj;
         try {
             if (typeof query === "string") {
                 query_obj = JSON.parse(query);

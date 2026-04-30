@@ -692,7 +692,6 @@ export default Base.extend({
     ) {
         var returnpos = {};
         var absTop, absBottom, absLeft, absRight;
-        absRight = absLeft = absTop = absLeft = "auto";
 
         // -- HORIZONTAL POSITION -----------------------------------------------
         if (horpos === "left") {

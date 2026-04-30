@@ -72,8 +72,7 @@ export default class Contentrules {
                         self.addStatusMessage($("#trns_form_error").html(), "warn");
                     },
                     success: function () {
-                        let ruleTitle = "";
-                        ruleTitle = $row.find(".rule-title")[0].innerText;
+                        let ruleTitle = $row.find(".rule-title")[0].innerText;
 
                         // Enable
                         if ($this.hasClass("btn-rule-enable")) {
