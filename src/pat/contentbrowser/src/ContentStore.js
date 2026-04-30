@@ -163,16 +163,19 @@ export default function (config, pathCache) {
                 return [level,];
             }
 
-            // has more ?
-            levels[0].load_more = has_more;
-            levels[0].page = page;
-
-            // append new batch
-            levels[0].results = [
-                ...levels[0].results,
-                ...level.results,
+            // append new batch with new references for Svelte 5 reactivity
+            return [
+                {
+                    ...levels[0],
+                    load_more: has_more,
+                    page: page,
+                    results: [
+                        ...levels[0].results,
+                        ...level.results,
+                    ],
+                },
+                ...levels.slice(1),
             ];
-            return levels;
         });
     }
 
@@ -189,18 +192,20 @@ export default function (config, pathCache) {
         let level = await load(query);
 
         store.update((levels) => {
-            levels.forEach((l) => {
+            return levels.map((l) => {
                 if (l.path != p) {
                     return l;
                 }
-                l.page = page;
-                l.load_more = (page * config.pageSize) < level.total;
-                l.results = [
-                    ...l.results,
-                    ...level.results,
-                ]
+                return {
+                    ...l,
+                    page: page,
+                    load_more: (page * config.pageSize) < level.total,
+                    results: [
+                        ...l.results,
+                        ...level.results,
+                    ],
+                };
             });
-            return levels;
         });
     }
 
