@@ -138,7 +138,6 @@ function widgetSaveToRfc5545(form, RDATE, EXDATE, conf, tz) {
 
             case "riyearlyoptions":
                 yearlyType = $("input[name=riyearlyType]:checked", form).val();
-                month = "";
 
                 if (yearlyType === "DAYOFMONTH") {
                     month = $("select[name=riyearlydayofmonthmonth]", form).val();
@@ -312,7 +311,6 @@ function cleanDates(dates) {
 }
 
 function parseIcal(icaldata) {
-    var lines = [];
     var result = {
         RRULE: "",
         RDATE: [],
@@ -321,7 +319,7 @@ function parseIcal(icaldata) {
     var line = null;
     var nextline;
 
-    lines = icaldata.split("\n");
+    var lines = icaldata.split("\n");
     lines.reverse();
     while (line !== "") {
         if (lines.length > 0) {

@@ -58,7 +58,7 @@ docs: install
 
 
 # Unlink any linked dependencies before building a bundle.
-bundle-pre:
+bundle-pre::
 	-$(PNPM) unlink @patternslib/dev
 	-$(PNPM) unlink @patternslib/pat-code-editor
 	-$(PNPM) unlink @patternslib/patternslib

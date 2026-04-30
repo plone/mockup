@@ -216,7 +216,6 @@ export default ContainerView.extend({
                 $el.removeClass(placement);
                 $el.offset(offset).addClass(placement);
                 actualWidth = $tip[0].offsetWidth;
-                actualHeight = $tip[0].offsetHeight;
             }
 
             this.positionArrow(delta - width + actualWidth, actualWidth, "left");

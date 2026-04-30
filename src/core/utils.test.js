@@ -28,9 +28,9 @@ describe("utils", function () {
         });
 
         it("replaces dots in ids with dashes", function () {
-            var $el = $('<div id="something.with.dots"></div>'),
-                id = utils.setId($el);
-            id = $el.attr("id");
+            var $el = $('<div id="something.with.dots"></div>');
+            utils.setId($el);
+            var id = $el.attr("id");
             expect(id).toEqual("something-with-dots");
         });
     });
@@ -53,7 +53,7 @@ describe("utils", function () {
                 fn = function () {
                     utils.parseBodyTag(response);
                 };
-            expect(fn).toThrowError(TypeError);
+            expect(fn).toThrow(TypeError);
         });
 
         it("fails for responses without a body tag", function () {
@@ -61,7 +61,7 @@ describe("utils", function () {
                 fn = function () {
                     utils.parseBodyTag(response);
                 };
-            expect(fn).toThrowError(TypeError);
+            expect(fn).toThrow(TypeError);
         });
 
         it("parses the body tag's content from a response with multiple lines", function () {
