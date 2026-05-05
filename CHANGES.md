@@ -2,6 +2,13 @@
 
 
 
+## [5.6.3](https://github.com/plone/mockup/compare/5.6.2...5.6.3) (2026-05-05)
+
+### Bug Fixes
+
+
+* **pat toolbar:** enable vertical scrolling if toolbar height is too low. ([05678ee](https://github.com/plone/mockup/commit/05678eebbc2dd980a2a9484543372824ec736b67))
+
 ## [5.6.2](https://github.com/plone/mockup/compare/5.6.1...5.6.2) (2026-04-30)
 
 ### Bug Fixes
