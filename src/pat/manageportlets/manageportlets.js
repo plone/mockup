@@ -17,7 +17,6 @@ export default Base.extend({
     isModal: false,
     dirty: false,
     init: async function () {
-        (await import("jquery-form")).default;
         var that = this;
         var $modal = that.$el.parents(".plone-modal");
         if ($modal.length === 1) {

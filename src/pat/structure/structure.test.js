@@ -42,12 +42,7 @@ function getQueryVariable(url, variable) {
 
 var extraDataJsonItem = null;
 
-const mockFetch =
-    (json = {}) =>
-    () =>
-        Promise.resolve({
-            json: () => Promise.resolve(json),
-        });
+const mockFetch = global.mockFetch;
 
 /* ==========================
     TEST: AppView constructor internal attribute/object correctness
