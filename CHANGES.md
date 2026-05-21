@@ -2,6 +2,14 @@
 
 
 
+## [5.4.8](https://github.com/plone/mockup/compare/5.4.7...5.4.8) (2026-05-21)
+
+
+### Maintenance
+
+
+* **bundle:** Upgrade dependencies. ([e42bda9](https://github.com/plone/mockup/commit/e42bda9278b63d230d867a30f2f32126fbe2ad4f))
+
 ## [5.4.7](https://github.com/plone/mockup/compare/5.4.6...5.4.7) (2026-03-05)
 
 
