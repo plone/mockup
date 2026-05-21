@@ -2,6 +2,14 @@
 
 
 
+## [5.4.9](https://github.com/plone/mockup/compare/5.4.8...5.4.9) (2026-05-21)
+
+
+### Maintenance
+
+
+* **bundle:** update TinyMCE==7.9.3 ([89487cc](https://github.com/plone/mockup/commit/89487cc9643938e994b0579e848b5925199c3034))
+
 ## [5.4.8](https://github.com/plone/mockup/compare/5.4.7...5.4.8) (2026-05-21)
 
 
