@@ -55,7 +55,7 @@
         } else if (uuid && action == "add" && $previewUids.indexOf(uuid) === -1) {
             if (
                 $config.maximumSelectionSize > 0 &&
-                $previewUids.length >= $config.maximumSelectionSize
+                $previewUids.length + $selectedUids.length >= $config.maximumSelectionSize
             ) {
                 // respect maximumSelectionSize
                 return;
@@ -143,7 +143,19 @@
         return (
             $selectedUids.indexOf(item.UID) === -1 &&
             (!$config.selectableTypes.length ||
-                $config.selectableTypes.indexOf(item.portal_type) != -1)
+                $config.selectableTypes.indexOf(item.portal_type) != -1) &&
+            ($config.maximumSelectionSize <= 1 ||
+                $selectedUids.length < $config.maximumSelectionSize)
+        );
+    }
+
+    // Whether an item can still be added to the preview (preview + selected vs. limit).
+    // Used only for preventing over-selection, not for visual greying.
+    function isPreviewable(item) {
+        if ($previewUids.indexOf(item.UID) !== -1) return true; // already in preview
+        return (
+            $config.maximumSelectionSize <= 0 ||
+            $selectedUids.length + $previewUids.length < $config.maximumSelectionSize
         );
     }
 
@@ -316,6 +328,9 @@
             selectedItems.set([item]);
             selectedUids.set([item.UID]);
         } else {
+            if ($config.maximumSelectionSize > 0 && $selectedUids.length >= $config.maximumSelectionSize) {
+                return;
+            }
             selectedItems.update((n) => [...n, item]);
             selectedUids.update(() => $selectedItems.map((x) => x.UID));
         }
@@ -328,6 +343,7 @@
         selectedItems.update((n) => {
             for (const it of previewItems) {
                 if ($selectedUids.indexOf(it.UID) != -1) continue;
+                if ($config.maximumSelectionSize > 0 && n.length >= $config.maximumSelectionSize) break;
                 n.push(it);
             }
             return n;
@@ -678,7 +694,11 @@
                                                 : ''}{$previewUids.indexOf(item.UID) !=
                                             -1
                                                 ? ' selectedItem'
-                                                : ''}{!isSelectable(item) &&
+                                                : ''}{($selectedUids.indexOf(item.UID) !== -1 ||
+                                            ($config.selectableTypes.length > 0 &&
+                                                $config.selectableTypes.indexOf(
+                                                    item.portal_type,
+                                                ) === -1)) &&
                                             !isBrowseable(item)
                                                 ? ' text-body-tertiary'
                                                 : ''}"
@@ -847,6 +867,7 @@
                                 <button
                                     class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                     title={_t("add selected items")}
+                                    disabled={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize}
                                     onclick={(e) => {
                                         e.preventDefault();
                                         addSelectedItems();

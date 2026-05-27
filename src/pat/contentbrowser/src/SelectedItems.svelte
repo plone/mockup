@@ -140,13 +140,18 @@
         {#if !$selectedItems}
             <p>{_t("loading selected items")}</p>
         {/if}
+        {#if $config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize}
+            <p class="maximum-reached">{_t("You can only select ${max} items", { max: $config.maximumSelectionSize })}</p>
+        {/if}
     </div>
     <!-- svelte-ignore a11y_invalid_attribute -->
     <a
-        class="btn btn-primary"
+        class="btn btn-primary{$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize ? ' disabled' : ''}"
         href="#"
+        aria-disabled={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize}
+        title={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize ? _t("You can only select ${max} items", { max: $config.maximumSelectionSize }) : undefined}
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
-        onclick={(e) => { e.preventDefault(); $showContentBrowser = true; }}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
+        onclick={(e) => { e.preventDefault(); if ($config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize) return; $showContentBrowser = true; }}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
     >
 </div>
 
@@ -163,5 +168,10 @@
         min-height: 2.4rem;
         padding: 0.5rem 0.5rem 0 0.5rem;
         flex: 1 1 auto;
+    }
+    .content-browser-selected-items .maximum-reached {
+        font-size: 0.8em;
+        color: var(--bs-secondary-color);
+        margin: 0.25rem 0 0.25rem;
     }
 </style>
