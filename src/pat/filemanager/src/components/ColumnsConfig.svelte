@@ -1,5 +1,6 @@
 <script>
     import { getContext } from "svelte";
+    import { flip } from "svelte/animate";
     import { _t } from "../utils/i18n.ts";
     import { dismiss } from "../utils/dismiss.ts";
 
@@ -37,6 +38,7 @@
                     <li
                         class="filemanager-columns-item"
                         class:dragging={dragKey === column.key}
+                        animate:flip={{ duration: 200 }}
                         draggable="true"
                         ondragstart={() => (dragKey = column.key)}
                         ondragover={(e) => e.preventDefault()}

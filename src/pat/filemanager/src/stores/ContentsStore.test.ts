@@ -1,4 +1,5 @@
 import $ from "jquery";
+import Cookies from "js-cookie";
 import { ConfigStore } from "./ConfigStore.svelte";
 import { ContentsStore } from "./ContentsStore.svelte";
 import { buildCriteria, searchContents } from "../api/contents.js";
@@ -47,6 +48,9 @@ function makeStore() {
 }
 
 beforeEach(() => {
+    for (const name of Object.keys(Cookies.get())) {
+        Cookies.remove(name, { path: "/" });
+    }
     mockedSearch.mockReset();
     mockedBuild.mockClear();
     mockedPaste.mockClear();
@@ -140,6 +144,19 @@ describe("ContentsStore", () => {
         await store.setBatchSize(25);
         expect(store.bSize).toBe(25);
         expect(store.bStart).toBe(0);
+    });
+
+    it("persists the batch size to a cookie and restores it on a new store", async () => {
+        mockedSearch.mockResolvedValue({ items: [], total: 0 });
+        const config = new ConfigStore({
+            contextUrl: "http://nohost/plone/folder",
+            defaultBatchSize: 10,
+        });
+        const first = new ContentsStore(config, "pat-filemanager");
+        await first.setBatchSize(50);
+
+        const second = new ContentsStore(config, "pat-filemanager");
+        expect(second.bSize).toBe(50);
     });
 
     it("navigateTo re-points the folder, resets filters/page and reloads", async () => {
@@ -298,6 +315,53 @@ describe("ContentsStore", () => {
             subsetIds: undefined,
         });
         expect(mockedSearch).toHaveBeenCalled();
+    });
+
+    it("moveTo reorders items optimistically before the server responds", async () => {
+        mockedSearch.mockResolvedValue({
+            items: [
+                { UID: "a", "@id": "http://nohost/plone/folder/a" },
+                { UID: "b", "@id": "http://nohost/plone/folder/b" },
+                { UID: "c", "@id": "http://nohost/plone/folder/c" },
+            ],
+            total: 3,
+        });
+        const store = makeStore();
+        await store.load();
+        // Move "a" down two slots; the local array updates synchronously so the
+        // keyed rows can animate, before any server round-trip resolves.
+        const pending = store.moveTo("a", 2, store.currentIds);
+        expect(store.items.map((it) => it.UID)).toEqual(["b", "c", "a"]);
+        await pending;
+    });
+
+    it("moveTo reconciles silently, never toggling loading", async () => {
+        mockedSearch.mockResolvedValue({
+            items: [{ UID: "a", "@id": "http://nohost/plone/folder/a" }],
+            total: 1,
+        });
+        const store = makeStore();
+        await store.load();
+        const pending = store.moveTo("a", "bottom");
+        expect(store.loading).toBe(false);
+        await pending;
+        expect(store.loading).toBe(false);
+    });
+
+    it("moveTo restores server truth when the reorder PATCH fails", async () => {
+        mockedSearch.mockResolvedValue({
+            items: [
+                { UID: "a", "@id": "http://nohost/plone/folder/a" },
+                { UID: "b", "@id": "http://nohost/plone/folder/b" },
+            ],
+            total: 2,
+        });
+        const store = makeStore();
+        await store.load();
+        mockedMove.mockRejectedValueOnce(new Error("nope"));
+        await expect(store.moveTo("a", 1, store.currentIds)).rejects.toThrow("nope");
+        // The failed move reloaded the authoritative order from the server.
+        expect(store.items.map((it) => it.UID)).toEqual(["a", "b"]);
     });
 
     it("makeDefaultPage sets the container default page", async () => {

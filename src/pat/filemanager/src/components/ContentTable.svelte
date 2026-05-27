@@ -1,6 +1,8 @@
 <script>
     import { getContext } from "svelte";
-    import ContentRow from "./ContentRow.svelte";
+    import { flip } from "svelte/animate";
+    import ColumnCell from "./ColumnCell.svelte";
+    import RowActionMenu from "./RowActionMenu.svelte";
     import { objId } from "../api/operations.js";
     import { _t } from "../utils/i18n.ts";
 
@@ -10,19 +12,26 @@
     const columnsStore = getContext("columns");
     /** @type {import("../stores/SelectionStore.svelte").SelectionStore} */
     const selection = getContext("selection");
+    /** @type {import("../stores/ClipboardStore.svelte").ClipboardStore} */
+    const clipboard = getContext("clipboard");
 
     const columns = $derived(columnsStore.columns);
     const colSpan = $derived(columns.length + 2);
     const pageAllSelected = $derived(selection.allSelected(contents.items));
     const canReorder = $derived(contents.sortOn === "getObjPositionInParent");
 
-    // Native HTML5 drag state, lifted here so rows can coordinate. `dragIndex`
-    // is the row being dragged (>= 0 means an internal drag is in progress, so
-    // rows claim the drop instead of letting it bubble to the upload zone);
-    // `dropIndex` is the folderish row currently highlighted as a move-into
-    // target.
+    // Native HTML5 drag state. `dragIndex` is the row being dragged (>= 0 means
+    // an internal drag is in progress, so rows claim the drop instead of letting
+    // it bubble to the upload zone); `dropIndex` is the folderish row currently
+    // highlighted as a move-into target.
     let dragIndex = $state(-1);
     let dropIndex = $state(-1);
+
+    const dragActive = $derived(dragIndex >= 0);
+
+    function isCut(item) {
+        return clipboard.op === "cut" && clipboard.sources.includes(item["@id"]);
+    }
 
     function sortIndicator(column) {
         if (!column.sortIndex || contents.sortOn !== column.sortIndex) return "";
@@ -123,18 +132,42 @@
             </tr>
         {:else}
             {#each contents.items as item, index (item.UID || item["@id"])}
-                <ContentRow
-                    {item}
-                    {index}
-                    {canReorder}
-                    dragActive={dragIndex >= 0}
-                    dragging={dragIndex === index}
-                    isDropTarget={dropIndex === index}
-                    {onDragStart}
-                    {onDragEnter}
-                    {onDragEnd}
-                    {onDrop}
-                />
+                <tr
+                    class="filemanager-row"
+                    class:is-folder={item.is_folderish}
+                    class:is-selected={selection.isSelected(item)}
+                    class:is-cut={isCut(item)}
+                    class:dragging={dragIndex === index}
+                    class:drop-target={dropIndex === index}
+                    draggable="true"
+                    animate:flip={{ duration: 200 }}
+                    ondragstart={() => onDragStart(index)}
+                    ondragenter={() => dragActive && onDragEnter(index)}
+                    ondragover={(e) => dragActive && e.preventDefault()}
+                    ondragend={() => onDragEnd()}
+                    ondrop={(e) => {
+                        if (!dragActive) return;
+                        e.preventDefault();
+                        onDrop(index);
+                    }}
+                >
+                    <td class="filemanager-select">
+                        <input
+                            type="checkbox"
+                            checked={selection.isSelected(item)}
+                            onchange={() => selection.toggle(item)}
+                            aria-label={_t("Select ${name}", { name: item.Title || item["@id"] })}
+                        />
+                    </td>
+                    {#each columns as column (column.key)}
+                        <td class="filemanager-cell filemanager-cell-{column.type}">
+                            <ColumnCell {item} {column} />
+                        </td>
+                    {/each}
+                    <td class="filemanager-actions-col">
+                        <RowActionMenu {item} {index} />
+                    </td>
+                </tr>
             {/each}
         {/if}
     </tbody>

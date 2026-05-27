@@ -129,8 +129,11 @@ export class ContentsStore {
         });
     }
 
-    async load(): Promise<void> {
-        this.loading = true;
+    async load({ silent = false }: { silent?: boolean } = {}): Promise<void> {
+        // A silent reload reconciles with the server without flipping `loading`,
+        // which would swap the listing for the "Loading…" placeholder and tear
+        // down the keyed rows — killing the row reorder (flip) animation.
+        if (!silent) this.loading = true;
         this.error = null;
         try {
             const criteria = this.buildQuery();
@@ -149,7 +152,7 @@ export class ContentsStore {
             this.items = [];
             this.total = 0;
         } finally {
-            this.loading = false;
+            if (!silent) this.loading = false;
         }
     }
 
@@ -199,12 +202,14 @@ export class ContentsStore {
         return this.load();
     }
 
+    /** The object id (last path segment) of a content url. */
+    private objIdOf(url: string): string {
+        return url.split(/[?#]/)[0].replace(/\/+$/, "").split("/").pop() || "";
+    }
+
     /** Object ids of the currently shown page, in display order. */
     get currentIds(): string[] {
-        return this.items.map((it) => {
-            const url = it["@id"];
-            return url.split(/[?#]/)[0].replace(/\/+$/, "").split("/").pop() || "";
-        });
+        return this.items.map((it) => this.objIdOf(it["@id"]));
     }
 
     /**
@@ -266,14 +271,41 @@ export class ContentsStore {
         await this.reloadAfterMutation();
     }
 
-    /** Reorder one item within this folder, then reload. */
+    /**
+     * Reorder one item within the visible page, optimistically. We splice the
+     * item into its new slot first so the keyed rows animate (flip) immediately,
+     * then PATCH the server and reconcile with a silent reload. The optimistic
+     * order already matches what the server produces for relative/`subset_ids`
+     * moves, so the reconcile is a no-op visually; on failure we restore truth.
+     */
     async moveTo(
         id: string,
         delta: "top" | "bottom" | number,
         subsetIds?: string[]
     ): Promise<void> {
-        await moveItem({ containerUrl: this.contextUrl, id, delta, subsetIds });
-        await this.load();
+        this.reorderLocally(id, delta);
+        try {
+            await moveItem({ containerUrl: this.contextUrl, id, delta, subsetIds });
+        } catch (e) {
+            await this.load();
+            throw e;
+        }
+        await this.load({ silent: true });
+    }
+
+    /** Move an item to its new slot within `items` (mirrors the server reorder). */
+    private reorderLocally(id: string, delta: "top" | "bottom" | number): void {
+        const from = this.items.findIndex((it) => this.objIdOf(it["@id"]) === id);
+        if (from < 0) return;
+        const last = this.items.length - 1;
+        const raw =
+            delta === "top" ? 0 : delta === "bottom" ? last : from + delta;
+        const to = Math.max(0, Math.min(last, raw));
+        if (to === from) return;
+        const next = [...this.items];
+        const [moved] = next.splice(from, 1);
+        next.splice(to, 0, moved);
+        this.items = next;
     }
 
     /** Set one child as this folder's default page. */
