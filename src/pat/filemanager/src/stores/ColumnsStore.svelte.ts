@@ -1,19 +1,19 @@
-import store from "@patternslib/patternslib/src/core/store";
+import { cookieStorage, type KeyValueStore } from "../utils/storage";
 import type { ColumnDef, ConfigStore } from "./ConfigStore.svelte";
 
 // Reactive visible-columns state: which columns are shown and in what order.
 // Initialized from ConfigStore (the pattern's active-columns option), then
-// user toggles/reorders are persisted to localStorage via the patternslib
-// store, replacing the legacy cookie-based column config.
+// user toggles/reorders are persisted to a cookie, the same way the legacy
+// pat-structure stored its column config.
 
 export class ColumnsStore {
     config: ConfigStore;
     active = $state<string[]>([]);
-    private storage: { get(name: string): unknown; set(name: string, value: unknown): void } | null;
+    private storage: KeyValueStore | null;
 
     constructor(config: ConfigStore, storageKey = "pat-filemanager") {
         this.config = config;
-        this.storage = storageKey ? store.local(storageKey) : null;
+        this.storage = storageKey ? cookieStorage(storageKey) : null;
 
         const saved = this.storage?.get("activeColumns");
         const restored = Array.isArray(saved) ? this.sanitize(saved as string[]) : [];

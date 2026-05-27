@@ -130,6 +130,7 @@ Confirmed locally available restapi services:
 - [x] Per-item actions: move to top, move to bottom, cut, copy, set as default page
 - [x] Breadcrumbs (with in-app folder browsing; syncs the Plone toolbar — §15; no add-new menu — adding content is out of scope)
 - [x] Status messages (P4)
+- [x] use coockie to store batch size, visible columns
 
 New features:
 

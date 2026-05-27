@@ -8,6 +8,7 @@ import {
     patchItem,
 } from "../api/operations.js";
 import { transitionItem } from "../api/workflow.js";
+import { cookieStorage, type KeyValueStore } from "../utils/storage";
 import type { ConfigStore } from "./ConfigStore.svelte";
 
 /** Minimal shape the batch actions need from a selected item. */
@@ -41,6 +42,7 @@ export interface ContentItem {
 
 export class ContentsStore {
     config: ConfigStore;
+    private storage: KeyValueStore | null;
 
     items = $state<ContentItem[]>([]);
     total = $state(0);
@@ -61,11 +63,16 @@ export class ContentsStore {
     searchableText = $state("");
     selectedTypes = $state<string[]>([]);
 
-    constructor(config: ConfigStore) {
+    constructor(config: ConfigStore, storageKey = "pat-filemanager") {
         this.config = config;
+        this.storage = storageKey ? cookieStorage(storageKey) : null;
         this.contextUrl = config.contextUrl;
         this.contextPath = config.contextPath;
-        this.bSize = config.defaultBatchSize;
+        const savedSize = this.storage?.get("batchSize");
+        this.bSize =
+            typeof savedSize === "number" && savedSize > 0
+                ? savedSize
+                : config.defaultBatchSize;
         this.sortOn = config.sortOn;
         this.sortOrder = config.sortOrder;
     }
@@ -167,6 +174,7 @@ export class ContentsStore {
     setBatchSize(size: number): Promise<void> {
         this.bSize = size;
         this.bStart = 0;
+        this.storage?.set("batchSize", size);
         return this.load();
     }
 

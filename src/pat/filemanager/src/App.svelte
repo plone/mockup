@@ -47,7 +47,7 @@
         sortOn,
         sortOrder,
     });
-    const contents = new ContentsStore(config);
+    const contents = new ContentsStore(config, storageKey);
     const columns = new ColumnsStore(config, storageKey);
     const selection = new SelectionStore(contents);
     const clipboard = new ClipboardStore();

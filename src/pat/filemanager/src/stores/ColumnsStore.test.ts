@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { ConfigStore } from "./ConfigStore.svelte";
 import { ColumnsStore } from "./ColumnsStore.svelte";
 
@@ -10,7 +11,9 @@ function makeConfig() {
 }
 
 beforeEach(() => {
-    window.localStorage.clear();
+    for (const name of Object.keys(Cookies.get())) {
+        Cookies.remove(name, { path: "/" });
+    }
 });
 
 describe("ColumnsStore", () => {
@@ -57,7 +60,7 @@ describe("ColumnsStore", () => {
         expect(store.active).toEqual(["Title", "review_state", "ModificationDate"]);
     });
 
-    it("persists to and restores from localStorage", () => {
+    it("persists to and restores from a cookie", () => {
         const first = new ColumnsStore(makeConfig(), "pat-filemanager");
         first.toggle("Subject");
         const second = new ColumnsStore(makeConfig(), "pat-filemanager");
@@ -65,9 +68,10 @@ describe("ColumnsStore", () => {
     });
 
     it("drops stale or unavailable keys when restoring", () => {
-        window.localStorage.setItem(
+        Cookies.set(
             "pat-filemanager:activeColumns",
-            JSON.stringify(["Title", "gone", "Title"])
+            JSON.stringify(["Title", "gone", "Title"]),
+            { path: "/" }
         );
         const store = new ColumnsStore(makeConfig(), "pat-filemanager");
         expect(store.active).toEqual(["Title"]);
