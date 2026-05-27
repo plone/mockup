@@ -1,5 +1,6 @@
 process.traceDeprecation = true;
 const path = require("path");
+const sveltePreprocess = require("svelte-preprocess");
 const package_json = require("./package.json");
 const patternslib_package_json = require("@patternslib/patternslib/package.json");
 const mf_config = require("@patternslib/dev/webpack/webpack.mf");
@@ -90,27 +91,71 @@ module.exports = () => {
 
     config.output.path = path.resolve(__dirname, "dist/");
 
+    const svelte_onwarn = (warning, handler) => {
+        // App.svelte props are intentionally read once at mount time as static config.
+        if (warning.code === "state_referenced_locally") return;
+        handler(warning);
+    };
+
+    // Svelte components (.svelte), with TypeScript support in <script lang="ts">.
     config.module.rules.push({
         test: /\.svelte$/,
         // exclude: /node_modules/,
         use: {
             loader: "svelte-loader",
             options: {
+                preprocess: sveltePreprocess(),
                 compilerOptions: {
                     dev: process.env.NODE_ENV === "development",
                 },
                 emitCss: process.env.NODE_ENV !== "development",
                 hotReload: process.env.NODE_ENV === "development",
-                onwarn: (warning, handler) => {
-                    // App.svelte props are intentionally read once at mount time as static config.
-                    if (warning.code === "state_referenced_locally") return;
-                    handler(warning);
-                },
+                onwarn: svelte_onwarn,
             },
         },
     });
 
-    config.resolve.extensions = [".js", ".json", ".wasm", ".svelte"];
+    // Svelte runes-in-module files (.svelte.js / .svelte.ts). svelte-loader
+    // compiles these with `compileModule` and does NOT run `preprocess`, so
+    // TypeScript is stripped by a preceding babel pass (type-strip only, no
+    // preset-env, to keep the `$state`/`$derived` runes intact for the compiler).
+    config.module.rules.push({
+        test: /\.svelte\.(js|ts)$/,
+        use: [
+            {
+                loader: "svelte-loader",
+                options: {
+                    compilerOptions: {
+                        dev: process.env.NODE_ENV === "development",
+                    },
+                    onwarn: svelte_onwarn,
+                },
+            },
+            {
+                loader: "babel-loader",
+                options: {
+                    babelrc: false,
+                    configFile: false,
+                    presets: [
+                        [
+                            "@babel/preset-typescript",
+                            { allExtensions: true, allowDeclareFields: true },
+                        ],
+                    ],
+                },
+            },
+        ],
+    });
+
+    // Plain TypeScript modules (.ts), excluding the .svelte.ts handled above.
+    // Uses the project babel config (preset-env + preset-typescript).
+    config.module.rules.push({
+        test: /\.ts$/,
+        exclude: /(\.svelte\.ts$)|(node_modules)/,
+        loader: "babel-loader",
+    });
+
+    config.resolve.extensions = [".js", ".ts", ".json", ".wasm", ".svelte"];
     config.resolve.mainFields = ["browser", "module", "main"];
     config.resolve.conditionNames = ["svelte", "browser", "require"];
 

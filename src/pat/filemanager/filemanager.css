@@ -1,0 +1,568 @@
+.pat-filemanager-app {
+    --filemanager-border: #dee2e6;
+    --filemanager-muted: #6c757d;
+}
+
+body:has(.pat-filemanager) #portal-header {
+    display: none;
+}
+
+.pat-filemanager-app .filemanager-breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+}
+
+.pat-filemanager-app .filemanager-breadcrumbs li:not(:last-child)::after {
+    content: "/";
+    margin-left: 0.25rem;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-breadcrumbs li.active a {
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.pat-filemanager-app .filemanager-toolbar {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.pat-filemanager-app .filemanager-filterbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+}
+
+.pat-filemanager-app .filemanager-search {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 3px;
+    min-width: 12rem;
+}
+
+.pat-filemanager-app .filemanager-typefilter,
+.pat-filemanager-app .filemanager-columns-config {
+    position: relative;
+}
+
+.pat-filemanager-app .filemanager-typefilter-popover,
+.pat-filemanager-app .filemanager-columns-popover {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    min-width: 12rem;
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pat-filemanager-app .filemanager-columns-config {
+    margin-left: auto;
+}
+
+.pat-filemanager-app .filemanager-columns-heading {
+    margin: 0.25rem 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-columns-list {
+    margin: 0 0 0.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.pat-filemanager-app .filemanager-columns-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-columns-item.dragging {
+    opacity: 0.5;
+}
+
+.pat-filemanager-app .filemanager-columns-reorder button {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    padding: 0 0.2rem;
+}
+
+.pat-filemanager-app .filemanager-columns-reorder button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-typefilter-popover label,
+.pat-filemanager-app .filemanager-columns-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-columns-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-top: 1px solid var(--filemanager-border);
+    padding-top: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.pat-filemanager-app .filemanager-selcount {
+    color: var(--filemanager-muted);
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-action-delete {
+    color: #b02a37;
+}
+
+.pat-filemanager-app .filemanager-action-selectall,
+.pat-filemanager-app .filemanager-allselected {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-allselected {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-uploadzone {
+    position: relative;
+}
+
+.pat-filemanager-app .filemanager-uploadzone.drag-active {
+    outline: 2px dashed #0d6efd;
+    outline-offset: -2px;
+}
+
+.pat-filemanager-app .filemanager-upload-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 110, 253, 0.08);
+    font-weight: 600;
+    color: #0d6efd;
+    pointer-events: none;
+}
+
+.pat-filemanager-app .filemanager-upload-panel {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: #f8f9fa;
+}
+
+.pat-filemanager-app .filemanager-upload-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-upload-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-upload-name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pat-filemanager-app .filemanager-upload-size {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-upload-item.is-error .filemanager-upload-error {
+    color: #b02a37;
+}
+
+.pat-filemanager-app .filemanager-upload-item.is-done .filemanager-upload-done {
+    color: #198754;
+}
+
+.pat-filemanager-app .filemanager-upload-clear {
+    margin-top: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pat-filemanager-app .filemanager-row.is-selected {
+    background: #e7f1ff;
+}
+
+.pat-filemanager-app .filemanager-row.is-cut {
+    opacity: 0.5;
+}
+
+.pat-filemanager-app .filemanager-row.dragging {
+    opacity: 0.4;
+}
+
+.pat-filemanager-app .filemanager-row.drop-target > td {
+    background: #d1e7dd;
+    box-shadow: inset 0 0 0 2px #198754;
+}
+
+.pat-filemanager-app .filemanager-row[draggable="true"] {
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-actions-col {
+    width: 2rem;
+    text-align: right;
+}
+
+.pat-filemanager-app .filemanager-rowmenu {
+    position: relative;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-toggle {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.1rem 0.35rem;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover {
+    position: absolute;
+    z-index: 10;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    padding: 0.25rem;
+    background: #fff;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover > * {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: none;
+    padding: 0.3rem 0.5rem;
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover > *:hover {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover > *:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-table th,
+.pat-filemanager-app .filemanager-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--filemanager-border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.pat-filemanager-app .filemanager-table .filemanager-select {
+    width: 1.5rem;
+}
+
+.pat-filemanager-app .filemanager-sort {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-sort.active {
+    color: #0d6efd;
+}
+
+.pat-filemanager-app .filemanager-thumb {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.pat-filemanager-app .filemanager-thumb-placeholder {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #f1f3f5;
+    border-radius: 2px;
+}
+
+.pat-filemanager-app .filemanager-state {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    background: #e9ecef;
+}
+
+.pat-filemanager-app .filemanager-state.state-published {
+    background: #d1e7dd;
+}
+
+.pat-filemanager-app .filemanager-state.state-private {
+    background: #f8d7da;
+}
+
+.pat-filemanager-app .filemanager-tag {
+    display: inline-block;
+    margin-right: 0.25rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    background: #e7f1ff;
+}
+
+.pat-filemanager-app .filemanager-message {
+    padding: 1rem;
+    text-align: center;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-message.filemanager-error {
+    color: #b02a37;
+}
+
+.pat-filemanager-app .filemanager-pagination {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.pat-filemanager-app .filemanager-range {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-pager {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-batchsize {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.pat-filemanager-app .filemanager-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-status-message {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: #e9ecef;
+}
+
+.pat-filemanager-app .filemanager-status-message.is-success {
+    background: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.pat-filemanager-app .filemanager-status-message.is-warning {
+    background: #fff3cd;
+    border-color: #ffecb5;
+}
+
+.pat-filemanager-app .filemanager-status-message.is-error {
+    background: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.pat-filemanager-app .filemanager-status-dismiss {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+}
+
+.pat-filemanager-app .filemanager-modal {
+    width: 100%;
+    max-width: 32rem;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.pat-filemanager-app .filemanager-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--filemanager-border);
+}
+
+.pat-filemanager-app .filemanager-modal-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.pat-filemanager-app .filemanager-modal-close {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.pat-filemanager-app .filemanager-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.pat-filemanager-app .filemanager-modal-intro {
+    margin: 0;
+    color: var(--filemanager-muted);
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-modal-loading,
+.pat-filemanager-app .filemanager-modal-error {
+    margin: 0;
+}
+
+.pat-filemanager-app .filemanager-modal-error {
+    color: #b02a37;
+}
+
+.pat-filemanager-app .filemanager-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-field > span,
+.pat-filemanager-app .filemanager-field > legend {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-field input[type="text"],
+.pat-filemanager-app .filemanager-field input[type="datetime-local"],
+.pat-filemanager-app .filemanager-field select,
+.pat-filemanager-app .filemanager-field textarea {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 3px;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-field-check {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pat-filemanager-app .filemanager-rename-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 24rem;
+    overflow-y: auto;
+}
+
+.pat-filemanager-app .filemanager-rename-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-rename-row .filemanager-field {
+    flex: 1 1 0;
+}
+
+.pat-filemanager-app .filemanager-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    border-top: 1px solid var(--filemanager-border);
+    padding-top: 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-modal-submit {
+    font-weight: 600;
+}
