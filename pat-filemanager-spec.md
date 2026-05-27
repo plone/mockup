@@ -8,7 +8,7 @@ plone.restapi.
 
 - **Pattern name:** `pat-filemanager` (trigger `.pat-filemanager`, dir `src/pat/filemanager/`)
 - **State management:** runes in `.svelte.ts` store classes (`$state`/`$derived`), provided to components via `setContext`
-- **Grid / drag & drop:** custom Svelte table + native HTML5 drag-and-drop (no DataTables, no DnD library)
+- **Grid / drag & drop:** custom Svelte table + native HTML5 drag-and-drop (no DataTables, no DnD library); reordering is animated with Svelte's built-in `animate:flip` (no animation library)
 - **API gaps (rename, recursive workflow, bulk PATCH):** pure restapi with client-side loops, **no backend additions**
 - no scss, use pure css or bootstrap, which is present by default in plone
 ## 1. Goals & non-goals
@@ -47,8 +47,8 @@ src/pat/filemanager/
     components/
       Toolbar.svelte          # batch-action buttons, upload, add menu
       Breadcrumbs.svelte
-      ContentTable.svelte     # table shell, header, select-all, DnD container
-      ContentRow.svelte       # one row: checkbox, image col, columns, row menu
+      ContentTable.svelte     # table shell, header, select-all, the row <tr>s
+                              #   (checkbox, columns, row menu), DnD + animate:flip
       ColumnCell.svelte       # renders a value by column type (date/state/tags/image)
       RowActionMenu.svelte    # open/edit/cut/copy/paste/move-top/bottom/default-page
       Pagination.svelte       # batch size + page nav
@@ -107,18 +107,18 @@ Confirmed locally available restapi services:
 
 - **Sort across whole result, not current batch:** `@querystring-search` sorts in the catalog via `sort_on`/`sort_order` *before* batching with `b_start`/`b_size`, so a column-sort re-queries the server and orders the entire result set. This is the core fix vs DataTables-sorts-current-page.
 - **Real date sort:** sort on the catalog date index (`effective`, `created`, `modified`, `expires`) — the catalog sorts dates as dates, not text.
-- **Customizable batch size:** `b_size` bound to `ContentsStore`, persisted via patternslib `utils.storage` (localStorage), replacing cookies.
+- **Customizable batch size:** `b_size` bound to `ContentsStore`, persisted in a cookie (`utils/storage.ts` `cookieStorage`), the same way legacy pat-structure stored it.
 - **Image column / preview:** new `image` column type rendering a thumbnail scale, driven by `image_scales` metadata.
 - **Drag-into-folder:** native DnD action; drop on a folderish row → `@move` selected sources into that folder.
 - **Multi-upload via drag/drop onto listing:** `UploadZone` overlay on `ContentTable`; drop files → `@tus-upload` to the current folder.
 - **Select "current batch" vs "all in query":** `SelectionStore` tracks a mode; "all" runs a UID-only `@querystring-search` sweep (paged loop, like the legacy `selectAll`).
-- **Persistent reorder:** ordering PATCH against the catalog `getObjPositionInParent`.
+- **Persistent reorder:** ordering PATCH against the catalog `getObjPositionInParent`. The rows reorder optimistically and animate into place with `animate:flip` (see §19).
 
 ## 5. Feature parity checklist (from pat-structure)
 
 - [x] Batched listing on content
 - [x] Customizable batch size
-- [x] Drag / drop sorting (persistent, catalog-index based)
+- [x] Drag / drop sorting (persistent, catalog-index based; flip-animated — §19)
 - [x] Visible columns configuration (toggle + reorder + persist)
 - [x] Select items: current batch or all-in-query
 - [x] Multi-upload button (P5 — `@tus-upload` + plain-POST fallback)
@@ -130,7 +130,7 @@ Confirmed locally available restapi services:
 - [x] Per-item actions: move to top, move to bottom, cut, copy, set as default page
 - [x] Breadcrumbs (with in-app folder browsing; syncs the Plone toolbar — §15; no add-new menu — adding content is out of scope)
 - [x] Status messages (P4)
-- [x] use coockie to store batch size, visible columns
+- [x] use a cookie to store batch size and visible columns (§19)
 
 New features:
 
@@ -291,10 +291,10 @@ Column configuration and filtering on top of the P1 read-only listing.
 - `src/stores/ColumnsStore.svelte.ts` — runes (`$state`) store for the visible
   columns: `active` keys + `$derived`-style getters `inactive`/`columns`;
   `toggle()` (refuses to hide the last column), `move(key, delta)` (clamped
-  reorder), `reset()`. Seeds from `ConfigStore.activeColumns`, persists to
-  localStorage via patternslib `store.local(storageKey)` (default key
+  reorder), `reset()`. Seeds from `ConfigStore.activeColumns`, persists to a
+  cookie via `utils/storage.ts` `cookieStorage(storageKey)` (default key
   `pat-filemanager`), and `sanitize()`s restored keys (drops unknown/duplicate).
-  `ContentTable`/`ContentRow` now read columns from this store, not `ConfigStore`.
+  `ContentTable` reads columns from this store, not `ConfigStore`.
 - `src/api/querystring.js` — `fetchQuerystringConfig()` (GET `@querystring`,
   replacing the legacy `indexOptionsUrl`) + `typeOptions()` flattening
   `indexes.portal_type.values` into `{value,label}` pairs.
@@ -489,8 +489,9 @@ for; pat-filemanager now mirrors it exactly.
 
 ## 16. What's left to implement
 
-Everything through P6 plus the toolbar sync (§15) is done (P5 deliverables in
-§17, P6 in §18). Remaining is live-instance verification only.
+Everything through P6 plus the toolbar sync (§15) and the post-P6 follow-ups
+(cookie persistence + reorder animations, §19) is done (P5 deliverables in §17,
+P6 in §18). Remaining is live-instance verification only.
 
 **Carried-over verifications (pending a live instance, not code work).**
 - `default_page` PATCH actually sets the container default page (§9/§13 flag).
@@ -597,3 +598,51 @@ layer; the work is i18n, accessibility, docs, and a styling decision.
 > Parity audit against §5 and manual UI verification (i18n catalog rendering,
 > popover dismiss, modal focus trap, menu arrow-keys) remain pending on a live
 > instance / running dev server — not code work.
+
+## 19. Post-P6: cookie persistence + reorder animations (done)
+
+Two follow-up changes after the P6 parity work. No new restapi calls.
+
+- **Cookie persistence (replaces localStorage).** `src/utils/storage.ts`
+  (`cookieStorage(prefix)` → a `KeyValueStore` of `get`/`set` over `js-cookie`,
+  JSON-encoded, path `/`) now backs both the visible-column config
+  (`ColumnsStore`) and the listing batch size (`ContentsStore`, key `batchSize`,
+  restored in the constructor when a positive number is stored). This matches how
+  legacy pat-structure persisted these, surviving reloads via a cookie rather than
+  the patternslib `store.local` (localStorage) used during P2. `js-cookie.d.ts`
+  is a local ambient type for the dependency.
+
+- **Flip-animated reordering.** Drag-reordering the listing rows and the
+  column-config list now animates with Svelte's built-in `animate:flip`
+  (`svelte/animate`) — no library. Two constraints shaped the implementation:
+  - `animate:flip` must sit on an element that is the **immediate child of a
+    keyed `{#each}`**, and it is invalid on a component. `ContentRow.svelte` was
+    therefore **removed** and its `<tr>` (checkbox, columns, row menu, drag
+    handlers, `is-selected`/`is-cut`/`dragging`/`drop-target` classes) inlined
+    into `ContentTable.svelte`'s keyed each, where the drag state already lived.
+    This also dropped the `onDragStart`/`onDragEnter`/`onDragEnd`/`onDrop`
+    prop-drilling. `ColumnsConfig.svelte`'s `<li>` (already a direct each child)
+    got `animate:flip` directly.
+  - The reorder used to `await this.load()`, which set `loading = true` and
+    swapped the listing for the "Loading…" placeholder — tearing down the keyed
+    rows, so flip never saw a *reorder* to animate. `ContentsStore.moveTo` now
+    **reorders `items` optimistically** (`reorderLocally`, mirroring the server's
+    `delta`/`top`/`bottom` semantics) so the rows flip immediately, then PATCHes
+    and reconciles with a **silent reload** (`load({ silent: true })` skips the
+    `loading` toggle, leaving the keyed rows mounted). On PATCH failure it does a
+    full `load()` to restore server truth and rethrows. `load()` gained the
+    `{ silent }` option; `objIdOf()` was factored out (shared by `currentIds` and
+    `reorderLocally`).
+  - Caveat: `move top`/`move bottom` from the row menu pass no `subset_ids`, so on
+    a multi-page listing the optimistic move only reorders within the visible
+    page; the silent reload then corrects it to the true folder-wide position. The
+    row-drag reorder (relative, with `subset_ids`) is exact.
+
+- Tests: `ContentsStore.test.ts` extended with optimistic-reorder, silent-reconcile
+  (no `loading` toggle), and failure-rollback cases; `ColumnsStore.test.ts` moved
+  to cookie-backed assertions. Full filemanager suite: 109 passing, 1 skipped
+  (component DOM mount — needs ESM jest, see §10).
+
+> Manual UI verification (row drag-reorder + column drag-reorder both flip
+> smoothly, batch size / columns persist across reload) is pending in the running
+> dev server.
