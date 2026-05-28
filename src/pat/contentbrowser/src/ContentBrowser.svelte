@@ -149,16 +149,6 @@
         );
     }
 
-    // Whether an item can still be added to the preview (preview + selected vs. limit).
-    // Used only for preventing over-selection, not for visual greying.
-    function isPreviewable(item) {
-        if ($previewUids.indexOf(item.UID) !== -1) return true; // already in preview
-        return (
-            $config.maximumSelectionSize <= 0 ||
-            $selectedUids.length + $previewUids.length < $config.maximumSelectionSize
-        );
-    }
-
     function showPreview(item) {
         if ($config.mode == "browse") {
             $previewUids = [item.UID];
