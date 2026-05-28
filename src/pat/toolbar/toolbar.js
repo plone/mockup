@@ -11,6 +11,13 @@ export default Base.extend({
     defaults: {},
 
     _fixDropdownStrategy: function () {
+        // bypass if toolbar position top:
+        if (document.body.classList.contains("plone-toolbar-top")) return;
+
+        // set container overflow
+        this.el.style.overflowY = "auto";
+        this.el.style.overflowX = "hidden";
+
         // Use Popper.js 'fixed' strategy for dropdowns so they are not clipped
         // by the overflow-y: auto scroll container on #edit-zone.
         this.$el
@@ -19,9 +26,8 @@ export default Base.extend({
     },
 
     init: function () {
+
         this._fixDropdownStrategy();
-        this.el.style.overflowY = "auto";
-        this.el.style.overflowX = "hidden";
 
         $("body").on("structure-url-changed", (e, path) => {
             $.ajax({
