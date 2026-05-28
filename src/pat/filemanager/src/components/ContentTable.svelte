@@ -27,7 +27,36 @@
     let dragIndex = $state(-1);
     let dropIndex = $state(-1);
 
+    // Anchor row for shift-click range selection.
+    let anchorIndex = $state(-1);
+
     const dragActive = $derived(dragIndex >= 0);
+
+    // Clicks on these controls (links, buttons, the checkbox, the row menu)
+    // keep their own behaviour and must not trigger row selection.
+    function isInteractive(target) {
+        return target.closest("a, button, input, label");
+    }
+
+    function onRowClick(event, item, index) {
+        if (isInteractive(event.target)) return;
+        if (event.shiftKey && anchorIndex >= 0) {
+            selection.selectRange(contents.items, anchorIndex, index);
+        } else if (event.ctrlKey || event.metaKey) {
+            selection.toggle(item);
+            anchorIndex = index;
+        } else {
+            selection.selectOnly(item);
+            anchorIndex = index;
+        }
+    }
+
+    // Stop shift-click from highlighting cell text while range-selecting.
+    function onRowMouseDown(event) {
+        if (event.shiftKey && !isInteractive(event.target)) {
+            event.preventDefault();
+        }
+    }
 
     function isCut(item) {
         return clipboard.op === "cut" && clipboard.sources.includes(item["@id"]);
@@ -141,6 +170,8 @@
                     class:drop-target={dropIndex === index}
                     draggable="true"
                     animate:flip={{ duration: 200 }}
+                    onclick={(e) => onRowClick(e, item, index)}
+                    onmousedown={onRowMouseDown}
                     ondragstart={() => onDragStart(index)}
                     ondragenter={() => dragActive && onDragEnter(index)}
                     ondragover={(e) => dragActive && e.preventDefault()}

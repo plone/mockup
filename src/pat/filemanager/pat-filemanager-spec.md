@@ -139,6 +139,7 @@ New features:
 - [x] Column visual (non-persistent) sort applied over whole result set (P1)
 - [x] Date columns sort by real date (P1 — catalog date index)
 - [x] New `image` column (P1)
+- [ ] Allow switching views for the listing (table, grid for organizing photos, later maybe pat-contentbrowser style)
 
 ## 6. Pattern registration & build (no build-system changes needed)
 

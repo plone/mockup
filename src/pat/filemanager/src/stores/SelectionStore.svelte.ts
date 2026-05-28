@@ -80,6 +80,26 @@ export class SelectionStore {
         this.mode = "page";
     }
 
+    /** Replace the selection with just this item (plain click). */
+    selectOnly(item: ContentItem): void {
+        const sel = toSelected(item);
+        this.selected = { [sel.uid]: sel };
+        this.mode = "page";
+    }
+
+    /** Add the inclusive index range to the selection (shift-click). */
+    selectRange(items: ContentItem[], from: number, to: number): void {
+        const start = Math.max(0, Math.min(from, to));
+        const end = Math.min(items.length - 1, Math.max(from, to));
+        const next = { ...this.selected };
+        for (let i = start; i <= end; i++) {
+            const sel = toSelected(items[i]);
+            next[sel.uid] = sel;
+        }
+        this.selected = next;
+        this.mode = "page";
+    }
+
     /** Select or deselect every item on the current page. */
     setPage(items: ContentItem[], checked: boolean): void {
         const next = { ...this.selected };

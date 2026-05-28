@@ -128,6 +128,20 @@ popover.
 - Column-config and type-filter popovers are `role="group"` with labels.
 - Decorative icons are `aria-hidden="true"`; thumbnails carry `alt` text.
 
+### Row selection
+
+Rows can be selected by clicking, in addition to their checkboxes:
+
+- **Click** selects just that row (replacing any existing selection).
+- **Ctrl/Cmd+click** toggles a row in or out of the selection (multi-select).
+- **Shift+click** selects the inclusive range from the last clicked row.
+
+Clicks on a row's links, buttons, checkbox, or the row-action menu keep their
+own behavior and never change the selection. The per-row and *Select all*
+checkboxes remain the keyboard/accessible path; click-selection is a
+mouse/pointer enhancement on top of them. Dragging a row that's part of a
+multi-selection moves the **whole** selection (into a folder, via drop).
+
 ### Drag-and-drop keyboard alternatives
 
 Drag interactions are mouse/pointer enhancements; each has a keyboard path:
