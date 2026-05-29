@@ -26,8 +26,16 @@
 </script>
 
 <div class="filemanager-columns-config" use:dismiss={{ enabled: open, onClose: () => (open = false) }}>
-    <button type="button" class="filemanager-columns-toggle" onclick={() => (open = !open)}>
-        {_t("Columns")}
+    <button
+        type="button"
+        class="filemanager-columns-toggle"
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-label={_t("Column settings")}
+        title={_t("Column settings")}
+        onclick={() => (open = !open)}
+    >
+        ⋮
     </button>
 
     {#if open}

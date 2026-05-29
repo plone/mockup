@@ -2,6 +2,7 @@
     import { getContext } from "svelte";
     import { flip } from "svelte/animate";
     import ColumnCell from "./ColumnCell.svelte";
+    import ColumnsConfig from "./ColumnsConfig.svelte";
     import RowActionMenu from "./RowActionMenu.svelte";
     import { _t } from "../utils/i18n.ts";
 
@@ -56,7 +57,9 @@
                     {/if}
                 </th>
             {/each}
-            <th class="filemanager-actions-col" aria-label={_t("Actions")}></th>
+            <th class="filemanager-actions-col">
+                <ColumnsConfig />
+            </th>
         </tr>
     </thead>
     <tbody>

@@ -73,6 +73,24 @@ body:has(.pat-filemanager) #portal-header {
     margin-left: auto;
 }
 
+.pat-filemanager-app .filemanager-columns-toggle {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.1rem 0.35rem;
+}
+
+/* In the actions column header the popover must open toward the table, not
+   off the right edge — and shed the inherited <th> bold / right alignment. */
+.pat-filemanager-app .filemanager-actions-col .filemanager-columns-popover {
+    left: auto;
+    right: 0;
+    font-weight: normal;
+    text-align: left;
+}
+
 .pat-filemanager-app .filemanager-viewswitcher {
     display: inline-flex;
     border: 1px solid var(--filemanager-border);

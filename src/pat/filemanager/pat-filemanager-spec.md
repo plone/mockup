@@ -895,3 +895,26 @@ untouched, and the store/component names are unchanged (`ModalStore`,
 - Validation: `BatchActionModal` passes `svelte-autofixer` with no issues; full
   filemanager jest suite green (16 suites, 137 passing, 1 skipped).
 
+## 22. Post-P7 UI refinements (done)
+
+Small follow-up tweaks to the upload feedback and the column-config entry point.
+No restapi, store-API, or test changes.
+
+- **Upload progress merged into the status block.** The per-file upload list
+  moved out of `UploadZone` and into `StatusMessages.svelte`, so it renders
+  inside the single `.filemanager-upload` block within `.filemanager-status`
+  (right below the breadcrumbs) instead of a separate panel under the listing.
+  The redundant `reportUpload()` status line is gone — `StatusMessages` derives
+  its own summary header from the entries (`Uploading N…` / `Uploaded N.` /
+  `Uploaded X of Y, Z failed`) and the per-file rows already show done/error.
+  A `×` button in the block's top-right corner and `Escape` both dismiss it
+  (only once `!upload.active`). `utils/batch.ts` keeps `reportBatch`;
+  `reportUpload` was removed.
+- **Column settings as a `⋮` header icon.** `ColumnsConfig` moved out of the
+  toolbar (where §20 had placed it, hidden in grid mode) into the **table's
+  actions-column header** (`ContentTable.svelte`): the toggle is now a 3-dots
+  `⋮` icon button labelled `_t("Column settings")` (`aria-haspopup` /
+  `aria-expanded` / `title`), and its popover opens toward the table
+  (`right: 0`) so it doesn't run off the right edge. Because it lives in the
+  table header it's table-only by construction — grid mode renders no columns —
+  so the §20 `view.mode !== "grid"` guard in `App.svelte` is gone.

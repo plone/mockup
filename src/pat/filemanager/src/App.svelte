@@ -15,7 +15,6 @@
     import Toolbar from "./components/Toolbar.svelte";
     import FilterBar from "./components/FilterBar.svelte";
     import ViewSwitcher from "./components/ViewSwitcher.svelte";
-    import ColumnsConfig from "./components/ColumnsConfig.svelte";
     import ContentTable from "./components/ContentTable.svelte";
     import ContentGrid from "./components/ContentGrid.svelte";
     import UploadZone from "./components/UploadZone.svelte";
@@ -87,7 +86,6 @@
     <div class="filemanager-toolbar">
         <FilterBar />
         <ViewSwitcher />
-        <ColumnsConfig />
     </div>
     <Toolbar />
     <BatchActionModal />
