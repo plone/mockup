@@ -125,7 +125,7 @@ Confirmed locally available restapi services:
 - [x] Batch actions: cut, copy, paste, delete (P3); rename, tagging (P4)
 - [x] Workflow status (with optional recursive application) (P4)
 - [x] Edit properties (with optional recursive): publication date, expiration date, copyright/rights, creators, contributors, exclude_from_nav, language (P4)
-- [x] Search + querystring filter (free-text + portal_type; further criteria later)
+- [x] Search + querystring filter (free-text + portal_type + advanced query builder: arbitrary `plone.app.querystring` criteria via `QueryBuilder.svelte`, like pat-structure)
 - [x] Image preview in item listing (P1 — `image` column type, `thumbnailUrl`)
 - [x] Per-item actions: move to top, move to bottom, cut, copy, set as default page
 - [x] Breadcrumbs (with in-app folder browsing; syncs the Plone toolbar — §15; no add-new menu — adding content is out of scope)
@@ -299,13 +299,21 @@ Column configuration and filtering on top of the P1 read-only listing.
   `ContentTable` reads columns from this store, not `ConfigStore`.
 - `src/api/querystring.js` — `fetchQuerystringConfig()` (GET `@querystring`,
   replacing the legacy `indexOptionsUrl`) + `typeOptions()` flattening
-  `indexes.portal_type.values` into `{value,label}` pairs.
-- `ContentsStore` filter state: `searchableText` + `selectedTypes` (`$state`),
-  wired into `buildCriteria` in `load()` (search text trimmed; falls back to
-  `config.portalTypes` when no type selected). New `applyFilters()`,
-  `clearFilters()`, `hasActiveFilters`.
+  `indexes.portal_type.values` into `{value,label}` pairs. Advanced-filter
+  helpers: `enabledIndexes()` (grouped index list), `operatorsForIndex()`,
+  `widgetFor()`, `selectionValues()`, `hasValue()`.
+- `ContentsStore` filter state: `searchableText` + `selectedTypes` +
+  `extraCriteria` (`$state`), wired into `buildCriteria` in `load()` (search
+  text trimmed; falls back to `config.portalTypes` when no type selected;
+  `extraCriteria` appended to the query). New `applyFilters()`,
+  `clearFilters()`, `hasActiveFilters` (all aware of `extraCriteria`).
 - Components: `FilterBar.svelte` (debounced 300ms free-text search + portal_type
-  multiselect popover sourced from `@querystring` + Clear), `ColumnsConfig.svelte`
+  multiselect popover sourced from `@querystring` + an advanced-filter popover
+  hosting `QueryBuilder.svelte` + Clear), `QueryBuilder.svelte` (native rows of
+  index/operation/value mirroring pat-structure's jQuery QueryString widget;
+  emits `plone.app.querystring` `{i,o,v}` criteria; widgets: String, Date,
+  DateRange, RelativeDate, MultipleSelection, Reference/RelativePath as text),
+  `ColumnsConfig.svelte`
   (popover: toggle checkboxes, ↑/↓ reorder buttons + native HTML5 drag-reorder,
   Reset). Wired into `App.svelte` via a `.filemanager-toolbar`; `ColumnsStore`
   provided through `setContext("columns", …)`. Both pass `svelte-autofixer`.

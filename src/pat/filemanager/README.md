@@ -13,8 +13,10 @@ It renders a batched, sortable listing of a folder's contents — switchable
 between a **table** view and a photo-organizing **grid** view — with selection,
 clipboard (cut/copy/paste), delete, drag-and-drop ordering, drag-into-folder,
 multi-upload, in-app folder browsing (breadcrumbs), column configuration,
-free-text/type filtering, and batch actions (workflow, tags, properties,
-rename). The view choice is persisted per user in a cookie.
+free-text/type filtering, advanced querystring filtering (build complex
+`plone.app.querystring` criteria like pat-structure), and batch actions
+(workflow, tags, properties, rename). The view choice is persisted per user in
+a cookie.
 
 ## How it works
 
@@ -132,7 +134,8 @@ popover.
 - Breadcrumbs use `<nav aria-label="Breadcrumbs">` + `<ol>`.
 - The upload zone is a `role="region"` whose label announces the drop
   affordance; each in-progress upload exposes a labelled `<progress>`.
-- Column-config and type-filter popovers are `role="group"` with labels.
+- Column-config, type-filter and advanced-filter popovers are `role="group"`
+  with labels; every query-builder control carries an `aria-label`.
 - Decorative icons are `aria-hidden="true"`; thumbnails carry `alt` text.
 
 ### Views

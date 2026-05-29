@@ -62,6 +62,9 @@ export class ContentsStore {
 
     searchableText = $state("");
     selectedTypes = $state<string[]>([]);
+    // Extra plone.app.querystring criteria from the advanced query builder, each
+    // a raw `{i, o, v}` triple appended to the catalog query (see buildCriteria).
+    extraCriteria = $state<Array<{ i: string; o: string; v?: unknown }>>([]);
 
     constructor(config: ConfigStore, storageKey = "pat-filemanager") {
         this.config = config;
@@ -92,6 +95,7 @@ export class ContentsStore {
         );
         this.searchableText = "";
         this.selectedTypes = [];
+        this.extraCriteria = [];
         this.bStart = 0;
         // Tell the Plone toolbar to re-render for the new context, the same way
         // pat-structure does it (toolbar.js listens on body for this event and
@@ -113,7 +117,11 @@ export class ContentsStore {
     }
 
     get hasActiveFilters(): boolean {
-        return this.searchableText.trim().length > 0 || this.selectedTypes.length > 0;
+        return (
+            this.searchableText.trim().length > 0 ||
+            this.selectedTypes.length > 0 ||
+            this.extraCriteria.length > 0
+        );
     }
 
     /** The querystring criteria for the current filter state. */
@@ -126,6 +134,7 @@ export class ContentsStore {
             portalTypes,
             searchableText: this.searchableText.trim(),
             searchIndex: this.config.searchIndex,
+            extraCriteria: this.extraCriteria,
         });
     }
 
@@ -185,12 +194,15 @@ export class ContentsStore {
     applyFilters({
         searchableText,
         selectedTypes,
+        extraCriteria,
     }: {
         searchableText?: string;
         selectedTypes?: string[];
+        extraCriteria?: Array<{ i: string; o: string; v?: unknown }>;
     }): Promise<void> {
         if (searchableText !== undefined) this.searchableText = searchableText;
         if (selectedTypes !== undefined) this.selectedTypes = selectedTypes;
+        if (extraCriteria !== undefined) this.extraCriteria = extraCriteria;
         this.bStart = 0;
         return this.load();
     }
@@ -198,6 +210,7 @@ export class ContentsStore {
     clearFilters(): Promise<void> {
         this.searchableText = "";
         this.selectedTypes = [];
+        this.extraCriteria = [];
         this.bStart = 0;
         return this.load();
     }

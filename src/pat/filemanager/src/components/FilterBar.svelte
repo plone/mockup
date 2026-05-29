@@ -3,6 +3,7 @@
     import { fetchQuerystringConfig, typeOptions } from "../api/querystring.js";
     import { _t } from "../utils/i18n.ts";
     import { dismiss } from "../utils/dismiss.ts";
+    import QueryBuilder from "./QueryBuilder.svelte";
 
     /** @type {import("../stores/ConfigStore.svelte").ConfigStore} */
     const config = getContext("config");
@@ -11,14 +12,17 @@
 
     let text = $state(contents.searchableText);
     let types = $state([]);
+    let qsConfig = $state(null);
     let typesOpen = $state(false);
+    let queryOpen = $state(false);
     let debounce;
 
     onMount(async () => {
         try {
-            const qsConfig = await fetchQuerystringConfig(config.contextUrl);
+            qsConfig = await fetchQuerystringConfig(config.contextUrl);
             types = typeOptions(qsConfig);
         } catch {
+            qsConfig = null;
             types = [];
         }
     });
@@ -36,6 +40,10 @@
             ? contents.selectedTypes.filter((v) => v !== value)
             : [...contents.selectedTypes, value];
         contents.applyFilters({ selectedTypes: next });
+    }
+
+    function applyQuery(criteria) {
+        contents.applyFilters({ extraCriteria: criteria });
     }
 
     function clearAll() {
@@ -77,6 +85,28 @@
                             {option.label}
                         </label>
                     {/each}
+                </div>
+            {/if}
+        </div>
+    {/if}
+
+    {#if qsConfig}
+        <div
+            class="filemanager-queryfilter"
+            use:dismiss={{ enabled: queryOpen, onClose: () => (queryOpen = false) }}
+        >
+            <button type="button" onclick={() => (queryOpen = !queryOpen)}>
+                {contents.extraCriteria.length
+                    ? _t("Filter (${count})", { count: contents.extraCriteria.length })
+                    : _t("Filter")}
+            </button>
+            {#if queryOpen}
+                <div class="filemanager-queryfilter-popover" role="group" aria-label={_t("Advanced filter")}>
+                    <QueryBuilder
+                        config={qsConfig}
+                        criteria={contents.extraCriteria}
+                        onApply={applyQuery}
+                    />
                 </div>
             {/if}
         </div>

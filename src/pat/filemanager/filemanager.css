@@ -51,11 +51,13 @@ body:has(.pat-filemanager) #portal-header {
 }
 
 .pat-filemanager-app .filemanager-typefilter,
+.pat-filemanager-app .filemanager-queryfilter,
 .pat-filemanager-app .filemanager-columns-config {
     position: relative;
 }
 
 .pat-filemanager-app .filemanager-typefilter-popover,
+.pat-filemanager-app .filemanager-queryfilter-popover,
 .pat-filemanager-app .filemanager-columns-popover {
     position: absolute;
     z-index: 10;
@@ -67,6 +69,69 @@ body:has(.pat-filemanager) #portal-header {
     border: 1px solid var(--filemanager-border);
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pat-filemanager-app .filemanager-queryfilter-popover {
+    min-width: 24rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-empty {
+    margin: 0 0 0.5rem;
+    color: var(--filemanager-muted);
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-row select,
+.pat-filemanager-app .filemanager-querybuilder-row input {
+    padding: 0.2rem 0.35rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 3px;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-value {
+    flex: 1 1 8rem;
+    min-width: 6rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-multi {
+    min-height: 4.5rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-range,
+.pat-filemanager-app .filemanager-querybuilder-relativedate {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 1 1 auto;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-remove {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--filemanager-muted);
+    padding: 0 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-add {
+    margin-top: 0.25rem;
+    border: 1px solid var(--filemanager-border);
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0.25rem 0.6rem;
+    font: inherit;
 }
 
 .pat-filemanager-app .filemanager-columns-config {

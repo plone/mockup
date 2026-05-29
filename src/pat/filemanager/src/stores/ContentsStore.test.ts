@@ -229,13 +229,31 @@ describe("ContentsStore", () => {
         );
     });
 
-    it("clearFilters resets search, types and page", async () => {
+    it("applyFilters feeds advanced extraCriteria into the catalog query", async () => {
         mockedSearch.mockResolvedValue({ items: [], total: 0 });
         const store = makeStore();
-        await store.applyFilters({ searchableText: "x", selectedTypes: ["Folder"] });
+        const extra = [{ i: "Subject", o: "op.selection.any", v: ["news"] }];
+        store.bStart = 30;
+        await store.applyFilters({ extraCriteria: extra });
+        expect(store.bStart).toBe(0);
+        expect(store.hasActiveFilters).toBe(true);
+        expect(mockedBuild).toHaveBeenLastCalledWith(
+            expect.objectContaining({ extraCriteria: extra })
+        );
+    });
+
+    it("clearFilters resets search, types, extraCriteria and page", async () => {
+        mockedSearch.mockResolvedValue({ items: [], total: 0 });
+        const store = makeStore();
+        await store.applyFilters({
+            searchableText: "x",
+            selectedTypes: ["Folder"],
+            extraCriteria: [{ i: "Subject", o: "op", v: ["a"] }],
+        });
         await store.clearFilters();
         expect(store.searchableText).toBe("");
         expect(store.selectedTypes).toEqual([]);
+        expect(store.extraCriteria).toEqual([]);
         expect(store.hasActiveFilters).toBe(false);
         expect(store.bStart).toBe(0);
     });
