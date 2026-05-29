@@ -55,20 +55,27 @@ function makeUpload() {
     return { uploadFiles: jest.fn().mockResolvedValue({ ok: 1, failed: [] }) };
 }
 
+/** A confirm-store mock whose ask() resolves to `accept` (default: confirmed). */
+function makeConfirm(accept = true) {
+    return { ask: jest.fn().mockResolvedValue(accept) };
+}
+
 function make(
     items: ReturnType<typeof item>[],
     selection = makeSelection(),
     clipboard = makeClipboard(),
-    upload = makeUpload()
+    upload = makeUpload(),
+    confirm: ReturnType<typeof makeConfirm> | undefined = undefined
 ) {
     const contents = makeContents(items);
     const interactions = new ListInteractions(
         contents as never,
         selection as never,
         clipboard as never,
-        upload as never
+        upload as never,
+        confirm as never
     );
-    return { interactions, contents, selection, clipboard, upload };
+    return { interactions, contents, selection, clipboard, upload, confirm };
 }
 
 // A minimal DragEvent carrying a `Files` payload (or not), with the bits the
@@ -194,6 +201,11 @@ describe("ListInteractions — drag state", () => {
 });
 
 describe("ListInteractions — onDrop", () => {
+    beforeEach(() => {
+        // Dropping into a folder confirms first; default to accepting.
+        window.confirm = jest.fn(() => true);
+    });
+
     it("moves a single dragged row into a folder and clears the selection", async () => {
         const { interactions, contents, selection } = make([
             item("a"),
@@ -207,6 +219,49 @@ describe("ListInteractions — onDrop", () => {
         );
         expect(selection.clear).toHaveBeenCalled();
         expect(interactions.dragIndex).toBe(-1);
+    });
+
+    it("does not move into a folder when the confirmation is declined", async () => {
+        window.confirm = jest.fn(() => false);
+        const { interactions, contents, selection } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0);
+        await interactions.onDrop(1);
+        expect(window.confirm).toHaveBeenCalled();
+        expect(contents.moveIntoFolder).not.toHaveBeenCalled();
+        expect(selection.clear).not.toHaveBeenCalled();
+    });
+
+    it("confirms the folder move through the dialog store when present", async () => {
+        const confirm = makeConfirm(true);
+        const { interactions, contents } = make(
+            [item("a"), item("f", { is_folderish: true })],
+            makeSelection(),
+            makeClipboard(),
+            makeUpload(),
+            confirm
+        );
+        interactions.onDragStart(0);
+        await interactions.onDrop(1);
+        expect(confirm.ask).toHaveBeenCalled();
+        expect(contents.moveIntoFolder).toHaveBeenCalled();
+    });
+
+    it("aborts the folder move when the dialog store is declined", async () => {
+        const confirm = makeConfirm(false);
+        const { interactions, contents } = make(
+            [item("a"), item("f", { is_folderish: true })],
+            makeSelection(),
+            makeClipboard(),
+            makeUpload(),
+            confirm
+        );
+        interactions.onDragStart(0);
+        await interactions.onDrop(1);
+        expect(confirm.ask).toHaveBeenCalled();
+        expect(contents.moveIntoFolder).not.toHaveBeenCalled();
     });
 
     it("moves the whole selection into a folder when the dragged row is selected", async () => {

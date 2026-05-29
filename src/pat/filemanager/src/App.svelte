@@ -7,6 +7,7 @@
     import { SelectionStore } from "./stores/SelectionStore.svelte.ts";
     import { ClipboardStore } from "./stores/ClipboardStore.svelte.ts";
     import { ModalStore } from "./stores/ModalStore.svelte.ts";
+    import { ConfirmStore } from "./stores/ConfirmStore.svelte.ts";
     import { StatusStore } from "./stores/StatusStore.svelte.ts";
     import { UploadStore } from "./stores/UploadStore.svelte.ts";
     import { ViewStore } from "./stores/ViewStore.svelte.ts";
@@ -21,6 +22,7 @@
     import Pagination from "./components/Pagination.svelte";
     import StatusMessages from "./components/StatusMessages.svelte";
     import BatchActionModal from "./components/BatchActionModal.svelte";
+    import ConfirmDialog from "./components/ConfirmDialog.svelte";
 
     let {
         contextUrl,
@@ -57,10 +59,17 @@
     const selection = new SelectionStore(contents);
     const clipboard = new ClipboardStore();
     const modal = new ModalStore();
+    const confirm = new ConfirmStore();
     const status = new StatusStore();
     const upload = new UploadStore(contents);
     const view = new ViewStore(config, storageKey);
-    const interactions = new ListInteractions(contents, selection, clipboard);
+    const interactions = new ListInteractions(
+        contents,
+        selection,
+        clipboard,
+        upload,
+        confirm
+    );
 
     setContext("config", config);
     setContext("contents", contents);
@@ -68,6 +77,7 @@
     setContext("selection", selection);
     setContext("clipboard", clipboard);
     setContext("modal", modal);
+    setContext("confirm", confirm);
     setContext("status", status);
     setContext("upload", upload);
     setContext("view", view);
@@ -84,11 +94,14 @@
     <Breadcrumbs />
     <StatusMessages />
     <div class="filemanager-toolbar">
-        <FilterBar />
         <ViewSwitcher />
     </div>
-    <Toolbar />
+    <div class="filemanager-actionbar">
+        <Toolbar />
+        <FilterBar />
+    </div>
     <BatchActionModal />
+    <ConfirmDialog />
     <UploadZone>
         {#if view.mode === "grid"}
             <ContentGrid />

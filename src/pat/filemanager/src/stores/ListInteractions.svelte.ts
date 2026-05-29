@@ -1,5 +1,7 @@
 import { objId } from "../api/operations.js";
+import { _t } from "../utils/i18n";
 import type { ClipboardStore } from "./ClipboardStore.svelte";
+import type { ConfirmStore } from "./ConfirmStore.svelte";
 import type { ContentsStore, ContentItem } from "./ContentsStore.svelte";
 import type { SelectionStore } from "./SelectionStore.svelte";
 import type { UploadStore } from "./UploadStore.svelte";
@@ -16,6 +18,7 @@ export class ListInteractions {
     selection: SelectionStore;
     clipboard: ClipboardStore;
     upload?: UploadStore;
+    confirm?: ConfirmStore;
 
     // `dragIndex >= 0` marks an internal drag in progress, so items claim the
     // drop instead of letting external file drags bubble to the upload zone;
@@ -45,12 +48,23 @@ export class ListInteractions {
         contents: ContentsStore,
         selection: SelectionStore,
         clipboard: ClipboardStore,
-        upload?: UploadStore
+        upload?: UploadStore,
+        confirm?: ConfirmStore
     ) {
         this.contents = contents;
         this.selection = selection;
         this.clipboard = clipboard;
         this.upload = upload;
+        this.confirm = confirm;
+    }
+
+    /**
+     * Ask the user to confirm an action. Uses the app's <dialog>-based
+     * ConfirmStore when available, falling back to the native window.confirm.
+     */
+    private async confirmAction(message: string, confirmLabel: string): Promise<boolean> {
+        if (this.confirm) return this.confirm.ask(message, { confirmLabel });
+        return window.confirm(message);
     }
 
     get dragActive(): boolean {
@@ -248,8 +262,21 @@ export class ListInteractions {
         if (target?.is_folderish && index !== from) {
             const dragged = this.contents.items.find((it) => it["@id"] === draggedId);
             if (dragged) {
-                await this.contents.moveIntoFolder(target["@id"], this.dragSources(dragged));
-                this.selection.clear();
+                const sources = this.dragSources(dragged);
+                const folder = (target.Title as string) || objId(target["@id"]);
+                // Moving into a folder takes the items out of the current listing,
+                // so confirm before committing it.
+                const ok = await this.confirmAction(
+                    _t('Move ${count} item(s) into "${folder}"?', {
+                        count: sources.length,
+                        folder,
+                    }),
+                    _t("Move")
+                );
+                if (ok) {
+                    await this.contents.moveIntoFolder(target["@id"], sources);
+                    this.selection.clear();
+                }
             }
             return;
         }

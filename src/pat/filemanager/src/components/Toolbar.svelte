@@ -1,6 +1,8 @@
 <script>
     import { getContext } from "svelte";
     import { _t } from "../utils/i18n.ts";
+    import Icon from "./Icon.svelte";
+    import SelectAll from "./SelectAll.svelte";
 
     /** @type {import("../stores/ContentsStore.svelte").ContentsStore} */
     const contents = getContext("contents");
@@ -78,103 +80,15 @@
     }
 </script>
 
+<!--
+    Toolbar layout mirrors pat-structure: the selection cluster (count + manage)
+    first, then Upload, then the main action group in the same order
+    (Cut, Copy, Paste, Delete, Workflow/State, Tags, Properties, Rename), with
+    Delete carrying the "danger" styling and the group rendered as one segmented
+    button bar.
+-->
 <div class="filemanager-actions">
-    <button
-        type="button"
-        class="filemanager-action-upload"
-        disabled={busy || upload.active}
-        onclick={() => fileInput.click()}
-    >
-        {_t("Upload")}
-    </button>
-    <input
-        bind:this={fileInput}
-        type="file"
-        multiple
-        class="filemanager-file-input"
-        hidden
-        onchange={onFilesPicked}
-    />
-
-    <span class="filemanager-selcount">
-        {_t("${count} selected", { count: selection.count })}
-    </span>
-
-    <button
-        type="button"
-        disabled={busy || selection.isEmpty}
-        onclick={cut}
-    >
-        {_t("Cut")}
-    </button>
-    <button
-        type="button"
-        disabled={busy || selection.isEmpty}
-        onclick={copy}
-    >
-        {_t("Copy")}
-    </button>
-    <button
-        type="button"
-        disabled={busy || clipboard.isEmpty}
-        onclick={paste}
-    >
-        {clipboard.isEmpty
-            ? _t("Paste")
-            : _t("Paste (${count} ${op})", { count: clipboard.count, op: clipboard.op })}
-    </button>
-    <button
-        type="button"
-        class="filemanager-action-delete"
-        disabled={busy || selection.isEmpty}
-        onclick={remove}
-    >
-        {_t("Delete")}
-    </button>
-
-    <button
-        type="button"
-        aria-pressed={modal.active === "workflow"}
-        disabled={busy || selection.isEmpty}
-        onclick={() => modal.toggle("workflow")}
-    >
-        {_t("State")}
-    </button>
-    <button
-        type="button"
-        aria-pressed={modal.active === "tags"}
-        disabled={busy || selection.isEmpty}
-        onclick={() => modal.toggle("tags")}
-    >
-        {_t("Tags")}
-    </button>
-    <button
-        type="button"
-        aria-pressed={modal.active === "properties"}
-        disabled={busy || selection.isEmpty}
-        onclick={() => modal.toggle("properties")}
-    >
-        {_t("Properties")}
-    </button>
-    <button
-        type="button"
-        aria-pressed={modal.active === "rename"}
-        disabled={busy || selection.isEmpty}
-        onclick={() => modal.toggle("rename")}
-    >
-        {_t("Rename")}
-    </button>
-
-    {#if selection.count > 0}
-        <button
-            type="button"
-            class="filemanager-action-clear"
-            disabled={busy}
-            onclick={() => selection.clear()}
-        >
-            {_t("Clear selection")}
-        </button>
-    {/if}
+    <SelectAll />
 
     {#if canSelectAllInQuery}
         <button
@@ -190,4 +104,106 @@
             >{_t("All ${count} in query selected", { count: selection.count })}</span
         >
     {/if}
+
+    <button
+        type="button"
+        class="filemanager-action-upload"
+        title={_t("Upload")}
+        aria-label={_t("Upload")}
+        disabled={busy || upload.active}
+        onclick={() => fileInput.click()}
+    >
+        <Icon name="upload" />
+        {_t("Upload")}
+    </button>
+    <input
+        bind:this={fileInput}
+        type="file"
+        multiple
+        class="filemanager-file-input"
+        hidden
+        onchange={onFilesPicked}
+    />
+
+    <div class="filemanager-action-group" role="group" aria-label={_t("Actions")}>
+        <button
+            type="button"
+            title={_t("Cut")}
+            aria-label={_t("Cut")}
+            disabled={busy || selection.isEmpty}
+            onclick={cut}
+        >
+            <Icon name="plone-cut" />
+        </button>
+        <button
+            type="button"
+            title={_t("Copy")}
+            aria-label={_t("Copy")}
+            disabled={busy || selection.isEmpty}
+            onclick={copy}
+        >
+            <Icon name="plone-copy" />
+        </button>
+        <button
+            type="button"
+            title={clipboard.isEmpty
+                ? _t("Paste")
+                : _t("Paste (${count} ${op})", { count: clipboard.count, op: clipboard.op })}
+            aria-label={_t("Paste")}
+            disabled={busy || clipboard.isEmpty}
+            onclick={paste}
+        >
+            <Icon name="plone-paste" />
+        </button>
+        <button
+            type="button"
+            class="filemanager-action-delete"
+            title={_t("Delete")}
+            aria-label={_t("Delete")}
+            disabled={busy || selection.isEmpty}
+            onclick={remove}
+        >
+            <Icon name="plone-delete" />
+        </button>
+        <button
+            type="button"
+            title={_t("State")}
+            aria-label={_t("State")}
+            aria-pressed={modal.active === "workflow"}
+            disabled={busy || selection.isEmpty}
+            onclick={() => modal.toggle("workflow")}
+        >
+            <Icon name="plone-lock" />
+        </button>
+        <button
+            type="button"
+            title={_t("Tags")}
+            aria-label={_t("Tags")}
+            aria-pressed={modal.active === "tags"}
+            disabled={busy || selection.isEmpty}
+            onclick={() => modal.toggle("tags")}
+        >
+            <Icon name="tags" />
+        </button>
+        <button
+            type="button"
+            title={_t("Properties")}
+            aria-label={_t("Properties")}
+            aria-pressed={modal.active === "properties"}
+            disabled={busy || selection.isEmpty}
+            onclick={() => modal.toggle("properties")}
+        >
+            <Icon name="plone-edit" />
+        </button>
+        <button
+            type="button"
+            title={_t("Rename")}
+            aria-label={_t("Rename")}
+            aria-pressed={modal.active === "rename"}
+            disabled={busy || selection.isEmpty}
+            onclick={() => modal.toggle("rename")}
+        >
+            <Icon name="plone-rename" />
+        </button>
+    </div>
 </div>
