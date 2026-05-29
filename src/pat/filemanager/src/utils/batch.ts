@@ -1,6 +1,5 @@
 import type { BatchResult } from "../stores/ContentsStore.svelte";
 import type { StatusStore } from "../stores/StatusStore.svelte";
-import type { UploadResult } from "../stores/UploadStore.svelte";
 import { _t } from "./i18n.ts";
 
 /**
@@ -24,17 +23,5 @@ export function reportBatch(
         const n = result.failed.length;
         const details = result.failed.map((f) => `${f.title} (${f.error})`).join("; ");
         status.error(_t(action, { count: n, details }));
-    }
-}
-
-/** Push success / failure status lines for a finished batch of uploads. */
-export function reportUpload(status: StatusStore, result: UploadResult): void {
-    if (result.ok > 0) {
-        status.success(_t("Uploaded ${count} files.", { count: result.ok }));
-    }
-    if (result.failed.length) {
-        const n = result.failed.length;
-        const details = result.failed.map((f) => `${f.name} (${f.error})`).join("; ");
-        status.error(_t("Could not upload ${count} files: ${details}", { count: n, details }));
     }
 }

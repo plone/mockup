@@ -1,6 +1,5 @@
 <script>
     import { getContext } from "svelte";
-    import { reportUpload } from "../utils/batch.ts";
     import { _t } from "../utils/i18n.ts";
 
     /** @type {import("../stores/ContentsStore.svelte").ContentsStore} */
@@ -13,8 +12,6 @@
     const modal = getContext("modal");
     /** @type {import("../stores/UploadStore.svelte").UploadStore} */
     const upload = getContext("upload");
-    /** @type {import("../stores/StatusStore.svelte").StatusStore} */
-    const status = getContext("status");
 
     let busy = $state(false);
     /** @type {HTMLInputElement} */
@@ -24,8 +21,7 @@
         const files = Array.from(event.currentTarget.files || []);
         event.currentTarget.value = "";
         if (files.length === 0) return;
-        const result = await upload.uploadFiles(files);
-        reportUpload(status, result);
+        await upload.uploadFiles(files);
     }
 
     const pageAllSelected = $derived(selection.allSelected(contents.items));

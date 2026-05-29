@@ -176,12 +176,26 @@ body:has(.pat-filemanager) #portal-header {
     pointer-events: none;
 }
 
-.pat-filemanager-app .filemanager-upload-panel {
-    margin-top: 0.5rem;
-    padding: 0.5rem 0.75rem;
+.pat-filemanager-app .filemanager-upload {
+    position: relative;
+    padding: 0.4rem 1.75rem 0.4rem 0.6rem;
     border: 1px solid var(--filemanager-border);
     border-radius: 4px;
     background: #f8f9fa;
+}
+
+.pat-filemanager-app .filemanager-upload-summary {
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+    color: #198754;
+}
+
+.pat-filemanager-app .filemanager-upload-summary.is-active {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-upload-summary.is-error {
+    color: #b02a37;
 }
 
 .pat-filemanager-app .filemanager-upload-list {
@@ -219,8 +233,17 @@ body:has(.pat-filemanager) #portal-header {
     color: #198754;
 }
 
-.pat-filemanager-app .filemanager-upload-clear {
-    margin-top: 0.5rem;
+.pat-filemanager-app .filemanager-upload-close {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+    color: var(--filemanager-muted);
 }
 
 .pat-filemanager-app .filemanager-table {
