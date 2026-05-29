@@ -9,11 +9,12 @@ A folder-contents management UI — a modern, Backbone-free reimplementation of
 `pat-structure`, built on Svelte 5 runes and talking only to
 [plone.restapi](https://6.docs.plone.org/plone.restapi/docs/index.html).
 
-It renders a batched, sortable table of a folder's contents with selection,
+It renders a batched, sortable listing of a folder's contents — switchable
+between a **table** view and a photo-organizing **grid** view — with selection,
 clipboard (cut/copy/paste), delete, drag-and-drop ordering, drag-into-folder,
 multi-upload, in-app folder browsing (breadcrumbs), column configuration,
 free-text/type filtering, and batch actions (workflow, tags, properties,
-rename).
+rename). The view choice is persisted per user in a cookie.
 
 ## How it works
 
@@ -50,6 +51,7 @@ required (it defaults to the current page URL with a trailing
 | defaultBatchSize     | integer | 25                                 | Initial page size (`b_size`). Selectable at runtime: 10/25/50/100.                            |
 | sortOn               | string  | "getObjPositionInParent"           | Initial sort index. Manual ordering (drag/move-top/bottom) is enabled only for this value.    |
 | sortOrder            | string  | "ascending"                        | Initial sort order: `"ascending"` or `"descending"`.                                          |
+| defaultView          | string  | "table"                            | Initial listing view: `"table"` or `"grid"`. Switchable at runtime; persisted per user in a cookie. |
 
 ### Column keys
 
@@ -128,18 +130,35 @@ popover.
 - Column-config and type-filter popovers are `role="group"` with labels.
 - Decorative icons are `aria-hidden="true"`; thumbnails carry `alt` text.
 
-### Row selection
+### Views
 
-Rows can be selected by clicking, in addition to their checkboxes:
+The toolbar offers a **Table** / **Grid** switch (the choice persists in a
+cookie). Both views share the same selection, drag (reorder + drag-into-folder),
+clipboard, filtering, pagination, upload, and batch actions — the only
+view-specific code is the rendered element, since `animate:flip` must sit on the
+immediate child of a keyed each. The grid is a photo-organizing view with larger
+previews; column configuration is table-only and hidden in grid mode. The grid
+is an ARIA `listbox` of `option` cards. Each card is a **single tab stop** — its
+checkbox and title link are removed from the tab order (`tabindex="-1"`), so
+**Tab** jumps from one card to the next, not into the controls within a card.
+With a card focused, **Space** toggles its selection (a second press deselects;
+Shift+Space extends a range) and **Enter** opens it (folders drill in-app, other
+items navigate to the object).
 
-- **Click** selects just that row (replacing any existing selection).
-- **Ctrl/Cmd+click** toggles a row in or out of the selection (multi-select).
-- **Shift+click** selects the inclusive range from the last clicked row.
+### Row / card selection
 
-Clicks on a row's links, buttons, checkbox, or the row-action menu keep their
-own behavior and never change the selection. The per-row and *Select all*
+Rows and grid cards can be selected by clicking, in addition to their checkboxes:
+
+- **Click** selects just that item (replacing any existing selection).
+- **Ctrl/Cmd+click** toggles an item in or out of the selection (multi-select).
+- **Shift+click** selects the inclusive range from the last clicked item.
+- **Space** (grid, card focused) toggles the focused card (second press
+  deselects); **Shift+Space** extends a range; **Enter** opens it.
+
+Clicks on an item's links, buttons, checkbox, or the row-action menu keep their
+own behavior and never change the selection. The per-item and *Select all*
 checkboxes remain the keyboard/accessible path; click-selection is a
-mouse/pointer enhancement on top of them. Dragging a row that's part of a
+mouse/pointer enhancement on top of them. Dragging an item that's part of a
 multi-selection moves the **whole** selection (into a folder, via drop).
 
 ### Drag-and-drop keyboard alternatives
@@ -155,6 +174,11 @@ Drag interactions are mouse/pointer enhancements; each has a keyboard path:
   page. Arbitrary cross-page placement still needs *Cut* → *Paste*.
 - **Move into a folder** — *Cut* the row(s) → browse into the target folder →
   *Paste*.
+
+The grid view has no per-item menu, so its keyboard reorder / move-to-top-bottom
+and set-as-default-page paths are the table view's row menu — switch to the table
+for those. Cut/copy/paste/delete and the batch actions (workflow, tags,
+properties, rename) work identically in both views via the toolbar.
 
 All user-facing strings are routed through the patternslib i18n bridge
 (`src/utils/i18n.ts`, `widgets` domain).

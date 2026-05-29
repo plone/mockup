@@ -139,7 +139,7 @@ New features:
 - [x] Column visual (non-persistent) sort applied over whole result set (P1)
 - [x] Date columns sort by real date (P1 — catalog date index)
 - [x] New `image` column (P1)
-- [ ] Allow switching views for the listing (table, grid for organizing photos, later maybe pat-contentbrowser style)
+- [x] Allow switching views for the listing (table, grid for organizing photos, later maybe pat-contentbrowser style) (P7 — see §20)
 
 ## 6. Pattern registration & build (no build-system changes needed)
 
@@ -163,6 +163,7 @@ New features:
 5. **P4 – Batch modals:** workflow (+recursive), tags, properties (+recursive), rename. **DONE — see section 14.**
 6. **P5 – Upload:** multi-upload button + drag/drop-to-listing via `@tus-upload`; drag-into-folder. **DONE — see section 17.**
 7. **P6 – Polish:** i18n, a11y, docs (styling stays pure CSS — no scss port), parity audit against section 5. **DONE — see section 18.**
+8. **P7 – Switchable views:** ViewStore + view switcher, extract shared selection/drag logic, add a grid view for organizing photos (table ⇄ grid; miller later). **DONE — see section 20.**
 
 ## 9. P0 spike results (verified against local plone.restapi source)
 
@@ -490,9 +491,10 @@ for; pat-filemanager now mirrors it exactly.
 
 ## 16. What's left to implement
 
-Everything through P6 plus the toolbar sync (§15) and the post-P6 follow-ups
-(cookie persistence + reorder animations, §19) is done (P5 deliverables in §17,
-P6 in §18). Remaining is live-instance verification only.
+Everything through P7 is done: P5 deliverables in §17, P6 in §18, the toolbar
+sync (§15), the post-P6 follow-ups (cookie persistence + reorder animations,
+§19), and **P7 – switchable views** (§20). All §5 parity + new-feature items are
+ticked; the remaining work is live-instance / dev-server verification only.
 
 **Carried-over verifications (pending a live instance, not code work).**
 - `default_page` PATCH actually sets the container default page (§9/§13 flag).
@@ -647,3 +649,213 @@ Two follow-up changes after the P6 parity work. No new restapi calls.
 > Manual UI verification (row drag-reorder + column drag-reorder both flip
 > smoothly, batch size / columns persist across reload) is pending in the running
 > dev server.
+
+## 20. P7: switchable views (table ⇄ grid) — DONE
+
+Adds a user-switchable listing view: the current **table** plus a new **grid**
+view for organizing photos (bigger previews, drag-reorder, all batch actions),
+with the **miller-column** view (reusing `pat-contentbrowser`) left as a later
+addition the architecture is shaped to accept. This ticks the one open item in
+§5 ("Allow switching views for the listing"). The subsections below were the
+plan; the deliverables (and the two deviations from it) are recorded in §20.9.
+
+### 20.1 Key observation — most of the app is already view-independent
+
+The batch layer does not depend on the table. `Toolbar.svelte`
+(cut/copy/paste/delete/state/tags/properties/rename), `FilterBar`, `Pagination`,
+`BatchActionModal`, `StatusMessages`, and `UploadZone` all operate on
+`ContentsStore` / `SelectionStore` — they never touch `ContentTable`. A second
+view therefore inherits **every batch action for free**. Likewise
+`ContentsStore.load()` requests `metadata_fields: ["_all"]`, so `image_scales`
+is delivered **regardless of which columns are visible** → grid previews work
+even when the `image` column is hidden.
+
+Only three things are genuinely table-bound (today inside `ContentTable.svelte`,
+roughly lines 27–113): **rendering**, **selection-click logic** (plain / ctrl /
+shift-range), and **drag** (reorder + move-into-folder + flip). Those are what
+P7 must share between the two views.
+
+### 20.2 The animate:flip constraint (carried from §19)
+
+`animate:flip` must sit on the **immediate child of a keyed `{#each}`** and is
+**invalid on a component** — exactly why §19 deleted `ContentRow` and inlined the
+`<tr>`. Consequence: the grid **cannot** reuse a shared `<ContentItem>` component
+for the animated card; it must inline its own card element. P7 therefore shares
+the *interaction logic*, not the rendered element.
+
+### 20.3 New / changed pieces
+
+- **`src/stores/ViewStore.svelte.ts` (new).** Runes store: `mode =
+  $state<"table" | "grid">(...)`, an `available` list (`["table", "grid"]`,
+  designed so `"miller"` slots in later) and `setMode(mode)`. Persists to the
+  existing `cookieStorage(storageKey)` under key `view` and restores in the
+  constructor — same mechanism as batch size (`ContentsStore` ctor) and columns.
+  Seed order: cookie → `config.defaultView` → `"table"`. Instantiated in
+  `App.svelte`, provided via `setContext("view", …)`.
+
+- **`src/stores/ListInteractions.svelte.ts` (new, extracted).** A runes class
+  constructed with `(contents, selection, clipboard)` that owns the drag state
+  (`dragIndex` / `dropIndex` / `anchorIndex`, `dragActive`, `canReorder`) and the
+  handlers currently embedded in `ContentTable`: `onItemClick`
+  (plain/ctrl/shift-range rules → `selectOnly`/`toggle`/`selectRange`),
+  `onItemMouseDown` (suppress shift text-selection), `isCut`, `dragSources`,
+  `onDragStart` / `onDragEnd` / `onDragEnter`, and `onDrop` (folder → `moveIntoFolder`;
+  non-folder + `canReorder` → `moveTo`; else no-op). Provided via
+  `setContext("interactions", …)`. **Net testing gain:** this logic is untested
+  today (component-embedded); as a class it becomes unit-testable.
+
+- **`ContentTable.svelte` (refactor, behaviour-neutral).** Replace the local
+  drag/selection state and handlers with the shared `ListInteractions` from
+  context. The `<tr>` markup, sortable headers, select-all, and `animate:flip`
+  stay. Verify the table is unchanged before building the grid.
+
+- **`src/components/ContentGrid.svelte` (new view).** Keyed `{#each
+  contents.items}` of **cards**, each the immediate each-child carrying
+  `animate:flip` (mirrors the table's inlined `<tr>`). Per card:
+  - **Bigger preview** via `thumbnailUrl` (see 20.4); folder/type placeholder for
+    non-images. A folder card's title drills in via `contents.navigateTo` (reuse
+    the `ColumnCell` title-click logic).
+  - A **selection checkbox overlay** (photo-manager style, top-left), plus
+    `is-selected` / `is-cut` / `dragging` / `drop-target` classes.
+  - `review_state` badge + title caption.
+  - `draggable`, wired to the **same** `ListInteractions` handlers; cards only
+    `preventDefault` / claim drops while `dragActive` so external **file** drags
+    still fall through to `UploadZone` (the §17 coexistence rule).
+  - **No `RowActionMenu`** (decided): no per-item menu in the grid. Reorder is by
+    drag; cut/copy/delete/tag/rename/state come from the toolbar. Accepted
+    reduction vs the table: per-item *move-top/bottom* and *set-as-default-page*
+    are table-only.
+  - **No sort control** (decided): the grid uses whatever sort is active,
+    defaulting to manual `getObjPositionInParent` order — which is exactly what
+    drag-organizing photos wants. (Switching to the table exposes column sort if
+    needed.)
+  - Loading / empty / error states mirror the table.
+
+- **`src/components/ViewSwitcher.svelte` (new).** Table / Grid buttons bound to
+  `ViewStore`, placed in the existing `.filemanager-toolbar` row.
+
+- **`App.svelte` (wire-up).** Instantiate + provide `ViewStore` and
+  `ListInteractions`; render the switcher; swap the view inside the existing
+  `UploadZone` children snippet:
+  ```
+  <UploadZone>
+    {#if view.mode === "grid"} <ContentGrid /> {:else} <ContentTable /> {/if}
+  </UploadZone>
+  ```
+  Hide `ColumnsConfig` in grid mode (columns are table-only).
+
+- **`ConfigStore` + `filemanager.js` (config).** Add a `default-view` parser arg
+  and `defaultView` prop/field. **No parser default** and camelCase key on the
+  data attribute (the §11 parser gotcha); the runtime default (`"table"`) lives
+  in `App.svelte` props.
+
+### 20.4 Preview scale resolution
+
+`utils/format.ts` `thumbnailUrl(item, scale="thumb", field="image")` currently
+falls back to the **full-size original** when the requested scale is absent —
+fine for a 2.5rem table thumb, wrong for a grid that should show a large *scale*,
+not the original. Extend it to take a **preferred-scale fallback chain** (e.g.
+`["preview", "mini", "thumb"]`) and pick the first present scale, only falling
+back to `download` if none exist. Table keeps requesting `"thumb"`.
+
+### 20.5 Styling (pure CSS, per §18 decision — no SCSS)
+
+Add to `filemanager.css`: `.filemanager-grid` (`display: grid;
+grid-template-columns: repeat(auto-fill, minmax(…, 1fr))`), `.filemanager-card`,
+card preview img, the checkbox overlay, and `is-selected` / `is-cut` / `dragging`
+/ `drop-target` card states (reuse the existing `--filemanager-*` color vars),
+plus the `ViewSwitcher` button styles.
+
+### 20.6 Tests
+
+- `src/stores/ViewStore.test.ts` — default, cookie restore, `setMode`
+  persistence, `defaultView` seeding.
+- `src/stores/ListInteractions.test.ts` — selection-click rules (plain / ctrl /
+  shift-range), `dragSources` (single vs whole-selection), and `onDrop` branching
+  (move-into-folder vs reorder vs no-op). This is the main correctness win.
+- `ContentGrid.svelte` — `svelte-autofixer` + manual UI verification (component
+  DOM tests remain skipped pending ESM jest, per §10).
+
+### 20.7 Sequencing (each step shippable)
+
+1. `ViewStore` + `ViewSwitcher` + `default-view` config + cookie persistence
+   (table still the only rendered view).
+2. Extract `ListInteractions`; refactor `ContentTable` onto it (behaviour-neutral;
+   verify the table is unchanged).
+3. Build `ContentGrid` + CSS + conditional render in `App`; extend `thumbnailUrl`.
+4. Polish: hide `ColumnsConfig` in grid mode, grid keyboard a11y (card focus +
+   space/enter to select), i18n strings, tests, README + this section updated to
+   "done", tick §5.
+
+### 20.8 Miller column (future, not P7)
+
+`ViewStore.mode` is a string with an `available` list and `App` switches on it, so
+adding `"miller"` later is a new value + a new view component that reuses
+`pat-contentbrowser`'s miller-column UI — no rework of the view-switching or
+interaction layers. Left out of P7 by decision; the design simply does not
+preclude it.
+
+## 20.9 P7 deliverables (done)
+
+Built as planned (§20.3–20.7) with two deviations, both noted below.
+
+- `src/stores/ViewStore.svelte.ts` — runes store: `mode` (`"table"|"grid"`),
+  `available` list, `setMode()`; cookie-persisted under key `view` via
+  `cookieStorage(storageKey)`; seed order cookie → `config.defaultView` →
+  `"table"`, invalid values rejected. Provided via `setContext("view", …)`.
+- `src/stores/ListInteractions.svelte.ts` — extracted runes class
+  `(contents, selection, clipboard)` owning the drag state (`dragIndex`/
+  `dropIndex`/`anchorIndex`, `dragActive`, `canReorder`) and the shared handlers
+  (`onItemClick`, `onItemMouseDown`, `isCut`, `onDragStart`/`End`/`Enter`,
+  `onDrop`). Provided via `setContext("interactions", …)`. **Now unit-tested**
+  (`ListInteractions.test.ts`, 16 cases — selection-click rules, drag state,
+  `onDrop` branching: move-into-folder single/whole-selection, reorder, the
+  no-ops).
+- `ContentTable.svelte` — refactored onto the shared `ListInteractions` from
+  context (drops its local drag/selection state + `objId`/`clipboard` imports);
+  `<tr>` markup, sortable headers, select-all, `animate:flip` unchanged.
+- `src/components/ContentGrid.svelte` — keyed `{#each}` of cards (each the
+  immediate each-child carrying `animate:flip`, per §20.2): preview via the
+  `thumbnailUrl` scale chain (§20.4), checkbox overlay, `review_state` badge,
+  navigable title (folder → `navigateTo`), same `ListInteractions` handlers,
+  loading/empty/error states. No row menu, no sort control (both by decision,
+  §20.3).
+- `src/components/ViewSwitcher.svelte` — Table/Grid buttons bound to `ViewStore`,
+  in the `.filemanager-toolbar`.
+- `App.svelte` — instantiates/provides `ViewStore` + `ListInteractions`, renders
+  the switcher, swaps `<ContentGrid>`/`<ContentTable>` inside `UploadZone`, hides
+  `ColumnsConfig` in grid mode. `ConfigStore.defaultView` + `default-view` parser
+  arg + `App` prop (`"table"` runtime default, per the §11 parser gotcha).
+- `utils/format.ts` `thumbnailUrl(item, scale, field)` — `scale` now accepts a
+  string **or fallback chain**; first present scale wins, else the original.
+  Backward-compatible (table still passes `"thumb"`).
+- `filemanager.css` — `.filemanager-grid`/`-card` (+ `is-selected`/`is-cut`/
+  `dragging`/`drop-target`/`:focus-visible`), card preview/checkbox/title, and
+  `.filemanager-viewswitcher` button styles. Pure CSS (§18).
+- Tests: `ViewStore.test.ts` (7), `ListInteractions.test.ts` (16). Full
+  filemanager suite **134 passing, 1 skipped** (component DOM mount — needs ESM
+  jest, §10). `tsc --noEmit` clean for the new sources; a dev webpack build
+  compiles the full tree; all touched components pass `svelte-autofixer`.
+
+### Deviations from the §20.3 plan
+
+1. **Grid a11y uses a `listbox`/`option`, not a bare clickable `<li>`.** A plain
+   `<li>` with click + drag handlers fails `svelte-autofixer` a11y rules
+   (`a11y_no_noninteractive_element_interactions`, then
+   `a11y_no_noninteractive_tabindex`). The grid is therefore a
+   `role="listbox" aria-multiselectable` `<ul>` of `role="option"
+   aria-selected tabindex="0"` cards. This is the correct semantics for a
+   multi-selectable grid, makes the card focusable, and passes the autofixer
+   with **zero** suppressions (the checkbox overlay and title link nest cleanly).
+2. **Added `ListInteractions.onItemKeydown` + `activate`, with the card as a
+   single tab stop.** Each grid card is one focusable element; its checkbox and
+   title link are `tabindex="-1"`, so **Tab** moves card→card (not into a card's
+   controls). With a card focused, **Space** selects (modifier-aware) and
+   **Enter** opens via `activate(item)` (folder → `navigateTo`; else
+   `location.assign`) — keyboard users keep the "open" the title link used to
+   provide. `onItemClick`/`onItemKeydown` share a private
+   `applySelection(item, index, {range, toggle})`, so the table's click behaviour
+   is unchanged (behaviour-neutral refactor). (The §20.7-step-4 plan said
+   "space/enter to select"; split into Space=select / Enter=open so a single tab
+   stop can still both select and open.)
+

@@ -22,6 +22,7 @@ parser.addArgument("search-index");
 parser.addArgument("default-batch-size");
 parser.addArgument("sort-on");
 parser.addArgument("sort-order");
+parser.addArgument("default-view");
 
 class Pattern extends BasePattern {
     static name = "filemanager";

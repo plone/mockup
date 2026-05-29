@@ -73,6 +73,30 @@ body:has(.pat-filemanager) #portal-header {
     margin-left: auto;
 }
 
+.pat-filemanager-app .filemanager-viewswitcher {
+    display: inline-flex;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pat-filemanager-app .filemanager-view-button {
+    border: 0;
+    background: #fff;
+    cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-view-button + .filemanager-view-button {
+    border-left: 1px solid var(--filemanager-border);
+}
+
+.pat-filemanager-app .filemanager-view-button.active {
+    background: #0d6efd;
+    color: #fff;
+}
+
 .pat-filemanager-app .filemanager-columns-heading {
     margin: 0.25rem 0;
     font-size: 0.8rem;
@@ -244,6 +268,168 @@ body:has(.pat-filemanager) #portal-header {
     line-height: 1;
     padding: 0 0.25rem;
     color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pat-filemanager-app .filemanager-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-card.is-selected {
+    background: #e7f1ff;
+    border-color: #9ec5fe;
+}
+
+.pat-filemanager-app .filemanager-card.is-cut {
+    opacity: 0.5;
+}
+
+.pat-filemanager-app .filemanager-card.dragging {
+    opacity: 0.4;
+}
+
+.pat-filemanager-app .filemanager-card.drop-target {
+    background: #d1e7dd;
+    box-shadow: inset 0 0 0 2px #198754;
+}
+
+.pat-filemanager-app .filemanager-card:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+.pat-filemanager-app .filemanager-card-select {
+    position: absolute;
+    top: 0.4rem;
+    left: 0.4rem;
+    z-index: 1;
+    margin: 0;
+    line-height: 0;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-card-select input {
+    appearance: none;
+    -webkit-appearance: none;
+    display: grid;
+    place-content: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-card-select input::after {
+    content: "";
+    width: 0.8rem;
+    height: 0.8rem;
+    transform: scale(0);
+    transition: transform 0.1s ease-in-out;
+    background: #198754;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.pat-filemanager-app .filemanager-card-select input:checked {
+    border-color: #198754;
+}
+
+.pat-filemanager-app .filemanager-card-select input:checked::after {
+    transform: scale(1);
+}
+
+.pat-filemanager-app .filemanager-card-select input:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 1px;
+}
+
+.pat-filemanager-app .filemanager-card-status {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    z-index: 1;
+    display: grid;
+    place-content: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.pat-filemanager-app .filemanager-card-status::after {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-card-status.state-published::after {
+    background: #198754;
+}
+
+.pat-filemanager-app .filemanager-card-status.state-private::after {
+    background: #dc3545;
+}
+
+.pat-filemanager-app .filemanager-card-status.state-pending::after {
+    background: #fd7e14;
+}
+
+.pat-filemanager-app .filemanager-card-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    background: #f1f3f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pat-filemanager-app .filemanager-card-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pat-filemanager-app .filemanager-card-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.pat-filemanager-app .filemanager-card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pat-filemanager-app .filemanager-card-title:hover {
+    text-decoration: underline;
 }
 
 .pat-filemanager-app .filemanager-table {

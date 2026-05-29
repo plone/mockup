@@ -3,7 +3,6 @@
     import { flip } from "svelte/animate";
     import ColumnCell from "./ColumnCell.svelte";
     import RowActionMenu from "./RowActionMenu.svelte";
-    import { objId } from "../api/operations.js";
     import { _t } from "../utils/i18n.ts";
 
     /** @type {import("../stores/ContentsStore.svelte").ContentsStore} */
@@ -12,55 +11,12 @@
     const columnsStore = getContext("columns");
     /** @type {import("../stores/SelectionStore.svelte").SelectionStore} */
     const selection = getContext("selection");
-    /** @type {import("../stores/ClipboardStore.svelte").ClipboardStore} */
-    const clipboard = getContext("clipboard");
+    /** @type {import("../stores/ListInteractions.svelte").ListInteractions} */
+    const interactions = getContext("interactions");
 
     const columns = $derived(columnsStore.columns);
     const colSpan = $derived(columns.length + 2);
     const pageAllSelected = $derived(selection.allSelected(contents.items));
-    const canReorder = $derived(contents.sortOn === "getObjPositionInParent");
-
-    // Native HTML5 drag state. `dragIndex` is the row being dragged (>= 0 means
-    // an internal drag is in progress, so rows claim the drop instead of letting
-    // it bubble to the upload zone); `dropIndex` is the folderish row currently
-    // highlighted as a move-into target.
-    let dragIndex = $state(-1);
-    let dropIndex = $state(-1);
-
-    // Anchor row for shift-click range selection.
-    let anchorIndex = $state(-1);
-
-    const dragActive = $derived(dragIndex >= 0);
-
-    // Clicks on these controls (links, buttons, the checkbox, the row menu)
-    // keep their own behaviour and must not trigger row selection.
-    function isInteractive(target) {
-        return target.closest("a, button, input, label");
-    }
-
-    function onRowClick(event, item, index) {
-        if (isInteractive(event.target)) return;
-        if (event.shiftKey && anchorIndex >= 0) {
-            selection.selectRange(contents.items, anchorIndex, index);
-        } else if (event.ctrlKey || event.metaKey) {
-            selection.toggle(item);
-            anchorIndex = index;
-        } else {
-            selection.selectOnly(item);
-            anchorIndex = index;
-        }
-    }
-
-    // Stop shift-click from highlighting cell text while range-selecting.
-    function onRowMouseDown(event) {
-        if (event.shiftKey && !isInteractive(event.target)) {
-            event.preventDefault();
-        }
-    }
-
-    function isCut(item) {
-        return clipboard.op === "cut" && clipboard.sources.includes(item["@id"]);
-    }
 
     function sortIndicator(column) {
         if (!column.sortIndex || contents.sortOn !== column.sortIndex) return "";
@@ -69,47 +25,6 @@
 
     function toggleAll(event) {
         selection.setPage(contents.items, event.currentTarget.checked);
-    }
-
-    function onDragStart(index) {
-        dragIndex = index;
-    }
-
-    function onDragEnd() {
-        dragIndex = -1;
-        dropIndex = -1;
-    }
-
-    function onDragEnter(index) {
-        const target = contents.items[index];
-        dropIndex = target?.is_folderish && index !== dragIndex ? index : -1;
-    }
-
-    // The urls to move when dragging a row: the whole selection if the dragged
-    // row is part of a multi-selection, otherwise just that row.
-    function dragSources(dragged) {
-        if (selection.isSelected(dragged) && selection.count > 1) {
-            return selection.urls;
-        }
-        return [dragged["@id"]];
-    }
-
-    async function onDrop(index) {
-        const from = dragIndex;
-        dragIndex = -1;
-        dropIndex = -1;
-        if (from < 0) return;
-        const target = contents.items[index];
-        const dragged = contents.items[from];
-        // Dropping onto a folderish row (other than itself) moves into it.
-        if (target?.is_folderish && index !== from) {
-            await contents.moveIntoFolder(target["@id"], dragSources(dragged));
-            selection.clear();
-            return;
-        }
-        // Otherwise reorder, when the listing is in manual-order mode.
-        if (from === index || !canReorder) return;
-        await contents.moveTo(objId(dragged["@id"]), index - from, contents.currentIds);
     }
 </script>
 
@@ -165,21 +80,21 @@
                     class="filemanager-row"
                     class:is-folder={item.is_folderish}
                     class:is-selected={selection.isSelected(item)}
-                    class:is-cut={isCut(item)}
-                    class:dragging={dragIndex === index}
-                    class:drop-target={dropIndex === index}
+                    class:is-cut={interactions.isCut(item)}
+                    class:dragging={interactions.dragIndex === index}
+                    class:drop-target={interactions.dropIndex === index}
                     draggable="true"
                     animate:flip={{ duration: 200 }}
-                    onclick={(e) => onRowClick(e, item, index)}
-                    onmousedown={onRowMouseDown}
-                    ondragstart={() => onDragStart(index)}
-                    ondragenter={() => dragActive && onDragEnter(index)}
-                    ondragover={(e) => dragActive && e.preventDefault()}
-                    ondragend={() => onDragEnd()}
+                    onclick={(e) => interactions.onItemClick(e, item, index)}
+                    onmousedown={(e) => interactions.onItemMouseDown(e)}
+                    ondragstart={() => interactions.onDragStart(index)}
+                    ondragenter={() => interactions.dragActive && interactions.onDragEnter(index)}
+                    ondragover={(e) => interactions.dragActive && e.preventDefault()}
+                    ondragend={() => interactions.onDragEnd()}
                     ondrop={(e) => {
-                        if (!dragActive) return;
+                        if (!interactions.dragActive) return;
                         e.preventDefault();
-                        onDrop(index);
+                        interactions.onDrop(index);
                     }}
                 >
                     <td class="filemanager-select">

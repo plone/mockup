@@ -9,11 +9,15 @@
     import { ModalStore } from "./stores/ModalStore.svelte.ts";
     import { StatusStore } from "./stores/StatusStore.svelte.ts";
     import { UploadStore } from "./stores/UploadStore.svelte.ts";
+    import { ViewStore } from "./stores/ViewStore.svelte.ts";
+    import { ListInteractions } from "./stores/ListInteractions.svelte.ts";
     import Breadcrumbs from "./components/Breadcrumbs.svelte";
     import Toolbar from "./components/Toolbar.svelte";
     import FilterBar from "./components/FilterBar.svelte";
+    import ViewSwitcher from "./components/ViewSwitcher.svelte";
     import ColumnsConfig from "./components/ColumnsConfig.svelte";
     import ContentTable from "./components/ContentTable.svelte";
+    import ContentGrid from "./components/ContentGrid.svelte";
     import UploadZone from "./components/UploadZone.svelte";
     import Pagination from "./components/Pagination.svelte";
     import StatusMessages from "./components/StatusMessages.svelte";
@@ -30,6 +34,7 @@
         defaultBatchSize = 25,
         sortOn = "getObjPositionInParent",
         sortOrder = "ascending",
+        defaultView = "table",
         storageKey = "pat-filemanager",
     } = $props();
 
@@ -46,6 +51,7 @@
         defaultBatchSize: Number(defaultBatchSize) || 25,
         sortOn,
         sortOrder,
+        defaultView,
     });
     const contents = new ContentsStore(config, storageKey);
     const columns = new ColumnsStore(config, storageKey);
@@ -54,6 +60,8 @@
     const modal = new ModalStore();
     const status = new StatusStore();
     const upload = new UploadStore(contents);
+    const view = new ViewStore(config, storageKey);
+    const interactions = new ListInteractions(contents, selection, clipboard);
 
     setContext("config", config);
     setContext("contents", contents);
@@ -63,6 +71,8 @@
     setContext("modal", modal);
     setContext("status", status);
     setContext("upload", upload);
+    setContext("view", view);
+    setContext("interactions", interactions);
 
     log.debug("Initialized pat-filemanager", config);
 
@@ -76,11 +86,16 @@
     <StatusMessages />
     <div class="filemanager-toolbar">
         <FilterBar />
+        <ViewSwitcher />
         <ColumnsConfig />
     </div>
     <Toolbar />
     <UploadZone>
-        <ContentTable />
+        {#if view.mode === "grid"}
+            <ContentGrid />
+        {:else}
+            <ContentTable />
+        {/if}
     </UploadZone>
     <Pagination />
     <BatchActionModal />

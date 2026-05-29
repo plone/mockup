@@ -31,19 +31,31 @@ export function formatSize(value: unknown): string {
 
 /**
  * Resolve a thumbnail url from an item's image_scales metadata.
+ *
+ * `scale` may be a single scale name or a fallback chain (first present wins):
+ * the table asks for "thumb", the grid for a larger ["preview","mini","thumb"].
+ * Falls back to the full-size original only when none of the wanted scales exist.
  * Returns null when the item has no preview image.
  */
 export function thumbnailUrl(
     item: Record<string, any>,
-    scale = "thumb",
+    scale: string | string[] = "thumb",
     field = "image"
 ): string | null {
     const scales = item?.image_scales as Record<string, any> | undefined;
     const entry = scales?.[field]?.[0];
     if (!entry) return null;
     const base = (item["@id"] as string)?.replace(/\/+$/, "") || "";
-    const scaled = entry.scales?.[scale];
-    const download = scaled?.download || entry.download;
+    const wanted = Array.isArray(scale) ? scale : [scale];
+    let download: string | undefined;
+    for (const name of wanted) {
+        const candidate = entry.scales?.[name]?.download;
+        if (candidate) {
+            download = candidate;
+            break;
+        }
+    }
+    if (!download) download = entry.download;
     if (!download) return null;
     return /^https?:\/\//.test(download) ? download : `${base}/${download}`;
 }

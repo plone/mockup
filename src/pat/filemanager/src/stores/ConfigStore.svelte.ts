@@ -43,6 +43,7 @@ export interface ConfigOptions {
     defaultBatchSize?: number;
     sortOn?: string;
     sortOrder?: "ascending" | "descending";
+    defaultView?: string;
 }
 
 export class ConfigStore {
@@ -56,6 +57,7 @@ export class ConfigStore {
     defaultBatchSize: number;
     sortOn: string;
     sortOrder: "ascending" | "descending";
+    defaultView: string;
 
     constructor(opts: ConfigOptions) {
         this.contextUrl = opts.contextUrl.replace(/\/+$/, "");
@@ -70,6 +72,7 @@ export class ConfigStore {
         this.defaultBatchSize = opts.defaultBatchSize || 25;
         this.sortOn = opts.sortOn || "getObjPositionInParent";
         this.sortOrder = opts.sortOrder || "ascending";
+        this.defaultView = opts.defaultView || "table";
     }
 
     column(key: string): ColumnDef {
