@@ -134,29 +134,33 @@
 
     <button
         type="button"
+        aria-pressed={modal.active === "workflow"}
         disabled={busy || selection.isEmpty}
-        onclick={() => modal.open("workflow")}
+        onclick={() => modal.toggle("workflow")}
     >
         {_t("State")}
     </button>
     <button
         type="button"
+        aria-pressed={modal.active === "tags"}
         disabled={busy || selection.isEmpty}
-        onclick={() => modal.open("tags")}
+        onclick={() => modal.toggle("tags")}
     >
         {_t("Tags")}
     </button>
     <button
         type="button"
+        aria-pressed={modal.active === "properties"}
         disabled={busy || selection.isEmpty}
-        onclick={() => modal.open("properties")}
+        onclick={() => modal.toggle("properties")}
     >
         {_t("Properties")}
     </button>
     <button
         type="button"
+        aria-pressed={modal.active === "rename"}
         disabled={busy || selection.isEmpty}
-        onclick={() => modal.open("rename")}
+        onclick={() => modal.toggle("rename")}
     >
         {_t("Rename")}
     </button>

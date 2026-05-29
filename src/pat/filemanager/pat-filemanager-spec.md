@@ -55,7 +55,7 @@ src/pat/filemanager/
       ColumnsConfig.svelte    # toggle + drag-reorder columns popover
       FilterBar.svelte        # text search + querystring criteria
       UploadZone.svelte       # multi-upload button + drag/drop to listing
-      BatchActionModal.svelte # generic modal host for workflow/tags/properties/rename
+      BatchActionModal.svelte # native <dialog> host for workflow/tags/properties/rename
       modals/
         WorkflowForm.svelte
         PropertiesForm.svelte
@@ -587,7 +587,7 @@ layer; the work is i18n, accessibility, docs, and a styling decision.
   - `BatchActionModal` got a focus trap (`Tab`/`Shift+Tab` cycle within the
     dialog), initial focus on open, and focus restoration to the trigger on
     close, via an `$effect` keyed on `modal.isOpen` (Escape/backdrop close were
-    already present).
+    already present). (Superseded by the native `<dialog>` in §21.)
   - Keyboard alternatives to drag exist already and are documented: reorder via
     *Move to top/bottom*, move-into-folder via *Cut* → browse in → *Paste*.
 - **README.** `src/pat/filemanager/README.md` — purpose, how-it-works, full
@@ -858,4 +858,40 @@ Built as planned (§20.3–20.7) with two deviations, both noted below.
    is unchanged (behaviour-neutral refactor). (The §20.7-step-4 plan said
    "space/enter to select"; split into Space=select / Enter=open so a single tab
    stop can still both select and open.)
+
+## 21. Batch actions as native `<dialog>` modals (done)
+
+The batch-action host upgrades from the P4/§18 hand-rolled `role="dialog"` div
+(a focus-trapped overlay) to the **native `<dialog>` element** (`showModal()`).
+No restapi or form changes; the four `modals/*Form.svelte` components are
+untouched, and the store/component names are unchanged (`ModalStore`,
+`BatchActionModal`).
+
+- **`ModalStore` gains `toggle()`.** The only store change: `toggle(name)` opens
+  the modal, or closes it if that same action is already open (a no-op while
+  `busy`). `active`, `busy`, `isOpen`, `open`, `close` are unchanged; `toggle`
+  drives the toolbar's new `aria-pressed`.
+- **Native dialog wins us the a11y for free.** `BatchActionModal` keeps one
+  always-mounted `<dialog>` and an `$effect` keyed on `modal.isOpen` calls
+  `.showModal()` / `.close()`. The browser then moves focus inside on open,
+  **traps Tab** within the dialog (so the §18 hand-rolled focus trap + manual
+  focus move/restore + `svelte:window` Escape handler are all gone), renders a
+  dimmed `::backdrop`, makes the rest of the page inert, and restores focus to
+  the trigger on close. The `cancel` event is `preventDefault`-ed while
+  `modal.busy`, and a backdrop click (target === dialog) closes it; `close`
+  syncs the store when dismissed via Escape.
+- **Toolbar.** State / Tags / Properties / Rename now call `modal.toggle()`
+  (was `modal.open()`) and reflect the open action via `aria-pressed`.
+- **`App.svelte`.** Because the `<dialog>` is always mounted and overlays via
+  `::backdrop`, `BatchActionModal` no longer needs to sit last in the DOM; it's
+  rendered right after the toolbar.
+- **CSS.** Replaces the old `.filemanager-modal-backdrop` fixed-overlay div with
+  native-dialog styling: `.filemanager-modal` sizes/centres the box (UA
+  `margin:auto`), `[open]` flips it to a flex column so the header is fixed and
+  the form scrolls (`max-height: calc(100vh - 4rem)`); `display` lives on
+  `[open]` so closed dialogs keep the UA `display:none`; `::backdrop` dims the
+  page. Opening animates with a short `filemanager-modal-in` keyframe (the
+  hand-rolled overlay had no open animation).
+- Validation: `BatchActionModal` passes `svelte-autofixer` with no issues; full
+  filemanager jest suite green (16 suites, 137 passing, 1 skipped).
 

@@ -106,15 +106,20 @@ popover.
 - `Escape` or an outside click closes the menu and **returns focus to the
   toggle**, so keyboard users aren't dropped to the top of the page.
 
-### Batch-action modal — `BatchActionModal.svelte` (dialog + focus trap)
+### Batch-action modal — `BatchActionModal.svelte` (native `<dialog>`)
 
-- `role="dialog"` + `aria-modal="true"`, labelled by the action title.
-- On open, focus moves to the first focusable control; on close it's restored to
-  the element that opened the modal.
-- `Tab` / `Shift+Tab` are trapped, cycling between the first and last focusable
-  controls (disabled and hidden controls are excluded).
-- `Escape` closes; the backdrop closes only when the backdrop itself is clicked
-  (not its content), and the backdrop is `role="presentation"`.
+- A single native `<dialog>` opened with `.showModal()`, so it **overlays** the
+  listing on a dimmed `::backdrop` and the rest of the page is inert while open.
+  It's labelled by the action title via `aria-label`.
+- The toolbar's State / Tags / Properties / Rename buttons **toggle** it: clicking
+  the open action closes the dialog, clicking another switches the form in place.
+  Each button reflects its state with `aria-pressed`.
+- The native dialog handles accessibility for us: it moves focus inside on open,
+  **traps** `Tab` within the dialog, restores focus to the trigger on close, and
+  closes on `Escape`. An `$effect` keyed on `modal.isOpen` calls
+  `.showModal()` / `.close()`; the `cancel` event is blocked while a batch
+  operation runs, and a backdrop click closes the dialog.
+- Opening animates with a short CSS keyframe (`filemanager-modal-in`).
 
 ### Labels, live regions, and icons
 

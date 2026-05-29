@@ -90,6 +90,7 @@
         <ColumnsConfig />
     </div>
     <Toolbar />
+    <BatchActionModal />
     <UploadZone>
         {#if view.mode === "grid"}
             <ContentGrid />
@@ -98,5 +99,4 @@
         {/if}
     </UploadZone>
     <Pagination />
-    <BatchActionModal />
 </div>

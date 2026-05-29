@@ -168,6 +168,12 @@ body:has(.pat-filemanager) #portal-header {
     color: #b02a37;
 }
 
+.pat-filemanager-app .filemanager-actions button[aria-pressed="true"] {
+    background: #f1f3f5;
+    box-shadow: inset 0 0 0 1px var(--filemanager-border);
+    font-weight: 600;
+}
+
 .pat-filemanager-app .filemanager-action-selectall,
 .pat-filemanager-app .filemanager-allselected {
     margin-left: 0.5rem;
@@ -656,37 +662,51 @@ body:has(.pat-filemanager) #portal-header {
     padding: 0 0.25rem;
 }
 
-.pat-filemanager-app .filemanager-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 3rem 1rem;
-    background: rgba(0, 0, 0, 0.4);
-    overflow-y: auto;
+.pat-filemanager-app .filemanager-modal {
+    width: min(640px, calc(100vw - 2rem));
+    max-height: calc(100vh - 4rem);
+    padding: 0;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    overflow: hidden;
 }
 
-.pat-filemanager-app .filemanager-modal {
-    width: 100%;
-    max-width: 32rem;
-    background: #fff;
-    border-radius: 6px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+/* Only lay out the box while open; closed dialogs keep the UA display:none. */
+.pat-filemanager-app .filemanager-modal[open] {
+    display: flex;
+    flex-direction: column;
+    animation: filemanager-modal-in 150ms ease-out;
+}
+
+.pat-filemanager-app .filemanager-modal::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+@keyframes filemanager-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 .pat-filemanager-app .filemanager-modal-header {
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
     border-bottom: 1px solid var(--filemanager-border);
+    background: #f1f3f5;
 }
 
 .pat-filemanager-app .filemanager-modal-header h2 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .pat-filemanager-app .filemanager-modal-close {
@@ -699,9 +719,12 @@ body:has(.pat-filemanager) #portal-header {
 
 .pat-filemanager-app .filemanager-modal-form {
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
     gap: 0.75rem;
+    min-height: 0;
     padding: 1rem;
+    overflow-y: auto;
 }
 
 .pat-filemanager-app .filemanager-modal-intro {
