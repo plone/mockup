@@ -15,6 +15,19 @@
     // smaller ones (and finally the original, handled inside thumbnailUrl).
     const PREVIEW_SCALES = ["preview", "mini", "thumb"];
 
+    // The grid has no column header, so this gives it the table's select-all
+    // affordance: a tri-state checkbox that selects the whole page when nothing
+    // is selected and resets the selection (deselects everything) otherwise.
+    const pageAllSelected = $derived(selection.allSelected(contents.items));
+    const someSelected = $derived(contents.items.some((it) => selection.isSelected(it)));
+
+    function toggleAll() {
+        // Reset to none when anything is selected (clears an all-in-query
+        // selection too), otherwise select the whole page.
+        if (someSelected) selection.clear();
+        else selection.setPage(contents.items, true);
+    }
+
     // Folderish cards drill into the folder in-app; everything else keeps the
     // plain link so the object opens normally (mirrors ColumnCell).
     function onTitleClick(event, item) {
@@ -32,8 +45,27 @@
 {:else if contents.items.length === 0}
     <p class="filemanager-message">{_t("No items in this folder.")}</p>
 {:else}
+    <div class="filemanager-grid-header">
+        <label class="filemanager-grid-selectall">
+            <input
+                type="checkbox"
+                checked={pageAllSelected}
+                indeterminate={someSelected && !pageAllSelected}
+                onchange={toggleAll}
+                aria-label={someSelected
+                    ? _t("Deselect all")
+                    : _t("Select all on this page")}
+            />
+            {#if someSelected}
+                {_t("${count} selected", { count: selection.count })}
+            {:else}
+                {_t("Select all")}
+            {/if}
+        </label>
+    </div>
     <ul
         class="filemanager-grid"
+        class:can-reorder={interactions.canReorder}
         role="listbox"
         aria-multiselectable="true"
         aria-label={_t("Folder contents")}
@@ -48,7 +80,8 @@
                 class:is-selected={selection.isSelected(item)}
                 class:is-cut={interactions.isCut(item)}
                 class:dragging={interactions.dragIndex === index}
-                class:drop-target={interactions.dropIndex === index}
+                class:drop-target={interactions.dropIndex === index ||
+                    interactions.fileDropIndex === index}
                 draggable="true"
                 tabindex="0"
                 animate:flip={{ duration: 200 }}
@@ -56,14 +89,10 @@
                 onkeydown={(e) => interactions.onItemKeydown(e, item, index)}
                 onmousedown={(e) => interactions.onItemMouseDown(e)}
                 ondragstart={() => interactions.onDragStart(index)}
-                ondragenter={() => interactions.dragActive && interactions.onDragEnter(index)}
-                ondragover={(e) => interactions.dragActive && e.preventDefault()}
+                ondragenter={(e) => interactions.onRowDragEnter(e, index)}
+                ondragover={(e) => interactions.onRowDragOver(e, index)}
                 ondragend={() => interactions.onDragEnd()}
-                ondrop={(e) => {
-                    if (!interactions.dragActive) return;
-                    e.preventDefault();
-                    interactions.onDrop(index);
-                }}
+                ondrop={(e) => interactions.onRowDrop(e, index)}
             >
                 <label class="filemanager-card-select">
                     <input

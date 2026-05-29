@@ -127,6 +127,21 @@ describe("ContentsStore", () => {
         expect(store.sortOrder).toBe("descending");
     });
 
+    it("sortBy reloads silently, never toggling loading", async () => {
+        // The silent reload keeps the keyed rows mounted so the re-sorted page
+        // flips into place instead of remounting behind a "Loading…" placeholder.
+        mockedSearch.mockResolvedValue({
+            items: [{ UID: "a", "@id": "http://nohost/plone/folder/a" }],
+            total: 1,
+        });
+        const store = makeStore();
+        await store.load();
+        const pending = store.sortBy("modified");
+        expect(store.loading).toBe(false);
+        await pending;
+        expect(store.loading).toBe(false);
+    });
+
     it("computes page count and clamps goToPage", async () => {
         mockedSearch.mockResolvedValue({ items: [], total: 0 });
         const store = makeStore();
@@ -380,6 +395,123 @@ describe("ContentsStore", () => {
         await expect(store.moveTo("a", 1, store.currentIds)).rejects.toThrow("nope");
         // The failed move reloaded the authoritative order from the server.
         expect(store.items.map((it) => it.UID)).toEqual(["a", "b"]);
+    });
+
+    it("movePreview splices an item to a new slot without touching the server", async () => {
+        mockedSearch.mockResolvedValue({
+            items: [
+                { UID: "a", "@id": "http://nohost/plone/folder/a" },
+                { UID: "b", "@id": "http://nohost/plone/folder/b" },
+                { UID: "c", "@id": "http://nohost/plone/folder/c" },
+            ],
+            total: 3,
+        });
+        const store = makeStore();
+        await store.load();
+        store.movePreview("a", 2);
+        expect(store.items.map((it) => it.UID)).toEqual(["b", "c", "a"]);
+        expect(mockedMove).not.toHaveBeenCalled();
+    });
+
+    it("commitReorder PATCHes the net shift and reconciles silently", async () => {
+        mockedSearch.mockResolvedValue({
+            items: [{ UID: "a", "@id": "http://nohost/plone/folder/a" }],
+            total: 1,
+        });
+        const store = makeStore();
+        await store.load();
+        const pending = store.commitReorder("a", 2, ["a", "b", "c"]);
+        expect(store.loading).toBe(false); // silent reconcile, rows stay mounted
+        await pending;
+        expect(mockedMove).toHaveBeenCalledWith({
+            containerUrl: "http://nohost/plone/folder",
+            id: "a",
+            delta: 2,
+            subsetIds: ["a", "b", "c"],
+        });
+    });
+
+    it("commitReorder is a no-op when the net shift is zero", async () => {
+        const store = makeStore();
+        await store.commitReorder("a", 0, ["a", "b"]);
+        expect(mockedMove).not.toHaveBeenCalled();
+    });
+
+    it("movePreviewBlock lifts a contiguous run and re-inserts it as one", async () => {
+        mockedSearch.mockResolvedValue({
+            items: ["a", "b", "c", "d", "e"].map((id) => ({
+                UID: id,
+                "@id": `http://nohost/plone/folder/${id}`,
+            })),
+            total: 5,
+        });
+        const store = makeStore();
+        await store.load();
+        store.movePreviewBlock(["b", "c"], 3);
+        expect(store.items.map((it) => it.UID)).toEqual(["a", "d", "e", "b", "c"]);
+        expect(mockedMove).not.toHaveBeenCalled();
+    });
+
+    it("commitReorderBlock moves a block down as a sequence of single moves", async () => {
+        mockedSearch.mockResolvedValue({
+            items: ["a", "b", "c", "d", "e"].map((id) => ({
+                UID: id,
+                "@id": `http://nohost/plone/folder/${id}`,
+            })),
+            total: 5,
+        });
+        const store = makeStore();
+        await store.load();
+        // Move {b, c} to start at index 3 → trailing item first so placed rows
+        // aren't disturbed, each subset matching the live server order.
+        await store.commitReorderBlock(["b", "c"], 3, ["a", "b", "c", "d", "e"]);
+        expect(mockedMove.mock.calls.map((c) => c[0])).toEqual([
+            {
+                containerUrl: "http://nohost/plone/folder",
+                id: "c",
+                delta: 2,
+                subsetIds: ["a", "b", "c", "d", "e"],
+            },
+            {
+                containerUrl: "http://nohost/plone/folder",
+                id: "b",
+                delta: 2,
+                subsetIds: ["a", "b", "d", "e", "c"],
+            },
+        ]);
+    });
+
+    it("commitReorderBlock moves a block up top-down", async () => {
+        mockedSearch.mockResolvedValue({
+            items: ["a", "b", "c", "d", "e"].map((id) => ({
+                UID: id,
+                "@id": `http://nohost/plone/folder/${id}`,
+            })),
+            total: 5,
+        });
+        const store = makeStore();
+        await store.load();
+        await store.commitReorderBlock(["c", "d"], 1, ["a", "b", "c", "d", "e"]);
+        expect(mockedMove.mock.calls.map((c) => c[0])).toEqual([
+            {
+                containerUrl: "http://nohost/plone/folder",
+                id: "c",
+                delta: -1,
+                subsetIds: ["a", "b", "c", "d", "e"],
+            },
+            {
+                containerUrl: "http://nohost/plone/folder",
+                id: "d",
+                delta: -1,
+                subsetIds: ["a", "c", "b", "d", "e"],
+            },
+        ]);
+    });
+
+    it("commitReorderBlock is a no-op when the block does not move", async () => {
+        const store = makeStore();
+        await store.commitReorderBlock(["b", "c"], 1, ["a", "b", "c", "d"]);
+        expect(mockedMove).not.toHaveBeenCalled();
     });
 
     it("makeDefaultPage sets the container default page", async () => {

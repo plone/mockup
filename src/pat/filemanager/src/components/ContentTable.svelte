@@ -29,7 +29,7 @@
     }
 </script>
 
-<table class="filemanager-table">
+<table class="filemanager-table" class:can-reorder={interactions.canReorder}>
     <thead>
         <tr>
             <th class="filemanager-select">
@@ -85,20 +85,17 @@
                     class:is-selected={selection.isSelected(item)}
                     class:is-cut={interactions.isCut(item)}
                     class:dragging={interactions.dragIndex === index}
-                    class:drop-target={interactions.dropIndex === index}
+                    class:drop-target={interactions.dropIndex === index ||
+                        interactions.fileDropIndex === index}
                     draggable="true"
                     animate:flip={{ duration: 200 }}
                     onclick={(e) => interactions.onItemClick(e, item, index)}
                     onmousedown={(e) => interactions.onItemMouseDown(e)}
                     ondragstart={() => interactions.onDragStart(index)}
-                    ondragenter={() => interactions.dragActive && interactions.onDragEnter(index)}
-                    ondragover={(e) => interactions.dragActive && e.preventDefault()}
+                    ondragenter={(e) => interactions.onRowDragEnter(e, index)}
+                    ondragover={(e) => interactions.onRowDragOver(e, index)}
                     ondragend={() => interactions.onDragEnd()}
-                    ondrop={(e) => {
-                        if (!interactions.dragActive) return;
-                        e.preventDefault();
-                        interactions.onDrop(index);
-                    }}
+                    ondrop={(e) => interactions.onRowDrop(e, index)}
                 >
                     <td class="filemanager-select">
                         <input

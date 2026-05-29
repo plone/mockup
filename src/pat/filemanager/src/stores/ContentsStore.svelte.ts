@@ -174,7 +174,11 @@ export class ContentsStore {
             this.sortOrder = "ascending";
         }
         this.bStart = 0;
-        return this.load();
+        // Silent so the keyed rows stay mounted while the re-sorted page arrives:
+        // the items that remain on the page flip from their old slot to the new
+        // one (sortable-style), instead of being torn down behind a "Loading…"
+        // placeholder and remounted with no movement to animate.
+        return this.load({ silent: true });
     }
 
     goToPage(page: number): Promise<void> {
@@ -299,6 +303,106 @@ export class ContentsStore {
         this.reorderLocally(id, delta);
         try {
             await moveItem({ containerUrl: this.contextUrl, id, delta, subsetIds });
+        } catch (e) {
+            await this.load();
+            throw e;
+        }
+        await this.load({ silent: true });
+    }
+
+    /**
+     * Live drag-preview reorder: move the item with `id` to `toIndex` in the
+     * visible page, no server call. Mutating the keyed array makes the displaced
+     * rows flip out of the way under the cursor (sortable-style), so the listing
+     * shows where the drop will land while the drag is still in progress.
+     * `commitReorder` persists whatever order the preview left behind.
+     */
+    movePreview(id: string, toIndex: number): void {
+        const from = this.items.findIndex((it) => this.objIdOf(it["@id"]) === id);
+        if (from < 0) return;
+        const to = Math.max(0, Math.min(this.items.length - 1, toIndex));
+        if (to === from) return;
+        const next = [...this.items];
+        const [moved] = next.splice(from, 1);
+        next.splice(to, 0, moved);
+        this.items = next;
+    }
+
+    /**
+     * Commit a drag-reorder whose new order is already reflected in `items` (the
+     * live `movePreview` calls moved the rows as the user dragged). Unlike
+     * `moveTo` we do NOT splice again — we only PATCH the server and reconcile.
+     * `subsetIds` is the server order snapshotted at drag start; `delta` is the
+     * dragged item's net shift within it. On failure we reload to undo the
+     * preview and restore the authoritative order.
+     */
+    async commitReorder(id: string, delta: number, subsetIds: string[]): Promise<void> {
+        if (delta === 0) return;
+        try {
+            await moveItem({ containerUrl: this.contextUrl, id, delta, subsetIds });
+        } catch (e) {
+            await this.load();
+            throw e;
+        }
+        await this.load({ silent: true });
+    }
+
+    /**
+     * Live drag-preview for a contiguous block of object-ids (a multi-row
+     * selection dragged as one): lift the whole run out and re-insert it so its
+     * first item lands at `toIndex`, keeping the rows' relative order. Mirrors
+     * `movePreview` but for several rows; `commitReorderBlock` persists it.
+     */
+    movePreviewBlock(blockObjIds: string[], toIndex: number): void {
+        const from = this.items.findIndex(
+            (it) => this.objIdOf(it["@id"]) === blockObjIds[0]
+        );
+        if (from < 0) return;
+        const k = blockObjIds.length;
+        const start = Math.max(0, Math.min(this.items.length - k, toIndex));
+        if (start === from) return;
+        const next = [...this.items];
+        const block = next.splice(from, k);
+        next.splice(start, 0, ...block);
+        this.items = next;
+    }
+
+    /**
+     * Commit a block reorder. The restapi ordering endpoint only moves one
+     * object per PATCH (and re-validates `subset_ids` against the live server
+     * order each time), so we replay the block as a short sequence of single
+     * moves against a working copy of the server order — placing each row at its
+     * final consecutive slot. Rows are placed from the trailing edge inward
+     * (bottom-up when moving down, top-down when moving up) so already-placed
+     * rows aren't disturbed. `subsetIds` is the order snapshotted at drag start.
+     */
+    async commitReorderBlock(
+        blockObjIds: string[],
+        finalStart: number,
+        subsetIds: string[]
+    ): Promise<void> {
+        const working = [...subsetIds];
+        const origStart = working.indexOf(blockObjIds[0]);
+        if (origStart < 0 || finalStart < 0 || finalStart === origStart) return;
+        const movingDown = finalStart > origStart;
+        const order = blockObjIds.map((_, j) => j);
+        if (movingDown) order.reverse();
+        try {
+            for (const j of order) {
+                const id = blockObjIds[j];
+                const current = working.indexOf(id);
+                const target = finalStart + j;
+                const delta = target - current;
+                if (delta === 0) continue;
+                await moveItem({
+                    containerUrl: this.contextUrl,
+                    id,
+                    delta,
+                    subsetIds: [...working],
+                });
+                working.splice(current, 1);
+                working.splice(target, 0, id);
+            }
         } catch (e) {
             await this.load();
             throw e;

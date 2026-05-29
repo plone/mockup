@@ -1,6 +1,10 @@
 .pat-filemanager-app {
     --filemanager-border: #dee2e6;
     --filemanager-muted: #6c757d;
+    /* Blue marks the live insertion bar while reordering (the gap where the
+       dragged item will land); green (drop-target) marks a move-into-folder
+       target. */
+    --filemanager-drop: #0d6efd;
 }
 
 body:has(.pat-filemanager) #portal-header {
@@ -359,6 +363,20 @@ body:has(.pat-filemanager) #portal-header {
     color: var(--filemanager-muted);
 }
 
+.pat-filemanager-app .filemanager-grid-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-grid-selectall {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--filemanager-muted);
+    cursor: pointer;
+}
+
 .pat-filemanager-app .filemanager-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
@@ -391,6 +409,26 @@ body:has(.pat-filemanager) #portal-header {
 
 .pat-filemanager-app .filemanager-card.dragging {
     opacity: 0.4;
+}
+
+/* In manual-order mode the dragged card keeps its image and stays put at the
+   slot the live reorder parked it in; a wider gap opens to the card before it
+   and the accent bar sits in that gap, so the insertion point shows between the
+   two siblings rather than tinting the card. */
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card.dragging {
+    opacity: 1;
+    margin-left: 1.25rem;
+}
+
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card.dragging::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1.15rem; /* centred in the widened gap to the previous card */
+    width: 3px;
+    border-radius: 3px;
+    background: var(--filemanager-drop);
 }
 
 .pat-filemanager-app .filemanager-card.drop-target {
@@ -536,6 +574,22 @@ body:has(.pat-filemanager) #portal-header {
 
 .pat-filemanager-app .filemanager-row.dragging {
     opacity: 0.4;
+}
+
+/* Table equivalent: the dragged row keeps its content and a wider gap opens
+   above it (extra top padding), with the accent line drawn inside that gap so
+   the insertion point shows between it and the row above rather than tinting the
+   row. */
+.pat-filemanager-app .filemanager-table.can-reorder .filemanager-row.dragging {
+    opacity: 1;
+}
+
+.pat-filemanager-app .filemanager-table.can-reorder .filemanager-row.dragging > td {
+    padding-top: 1.6rem;
+    background-image: linear-gradient(var(--filemanager-drop), var(--filemanager-drop));
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+    background-position: 0 0.75rem; /* line sits in the widened gap above the content */
 }
 
 .pat-filemanager-app .filemanager-row.drop-target > td {
