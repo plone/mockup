@@ -14,6 +14,8 @@
     const selection = getContext("selection");
     /** @type {import("../stores/ListInteractions.svelte").ListInteractions} */
     const interactions = getContext("interactions");
+    /** @type {import("../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
 
     const columns = $derived(columnsStore.columns);
     const colSpan = $derived(columns.length + 2);
@@ -122,12 +124,14 @@
             </tr>
         {:else}
             {#each contents.items as item, index (item.UID || item["@id"])}
+                {@const folderTask = progress.folderTask(item["@id"])}
                 <tr
                     class="filemanager-row"
                     class:is-folder={item.is_folderish}
                     class:is-selected={selection.isSelected(item)}
                     class:is-cut={interactions.isCut(item)}
                     class:dragging={interactions.dragIndex === index}
+                    class:is-busy={folderTask}
                     class:drop-target={interactions.dropIndex === index ||
                         interactions.fileDropIndex === index}
                     draggable="true"
@@ -155,6 +159,14 @@
                     {/each}
                     <td class="filemanager-actions-col">
                         <RowActionMenu {item} {index} />
+                        {#if folderTask}
+                            <div class="filemanager-row-progress" title={folderTask.label}>
+                                <span class="filemanager-row-progress-label">
+                                    {folderTask.label}
+                                </span>
+                                <progress aria-label={folderTask.label}></progress>
+                            </div>
+                        {/if}
                     </td>
                 </tr>
             {/each}

@@ -3,6 +3,7 @@ import { _t } from "../utils/i18n";
 import type { ClipboardStore } from "./ClipboardStore.svelte";
 import type { ConfirmStore } from "./ConfirmStore.svelte";
 import type { ContentsStore, ContentItem } from "./ContentsStore.svelte";
+import type { ProgressStore } from "./ProgressStore.svelte";
 import type { SelectionStore } from "./SelectionStore.svelte";
 import type { UploadStore } from "./UploadStore.svelte";
 
@@ -19,6 +20,7 @@ export class ListInteractions {
     clipboard: ClipboardStore;
     upload?: UploadStore;
     confirm?: ConfirmStore;
+    progress?: ProgressStore;
 
     // `dragIndex >= 0` marks an internal drag in progress, so items claim the
     // drop instead of letting external file drags bubble to the upload zone;
@@ -49,13 +51,15 @@ export class ListInteractions {
         selection: SelectionStore,
         clipboard: ClipboardStore,
         upload?: UploadStore,
-        confirm?: ConfirmStore
+        confirm?: ConfirmStore,
+        progress?: ProgressStore
     ) {
         this.contents = contents;
         this.selection = selection;
         this.clipboard = clipboard;
         this.upload = upload;
         this.confirm = confirm;
+        this.progress = progress;
     }
 
     /**

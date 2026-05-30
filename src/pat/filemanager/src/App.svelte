@@ -9,6 +9,7 @@
     import { ModalStore } from "./stores/ModalStore.svelte.ts";
     import { ConfirmStore } from "./stores/ConfirmStore.svelte.ts";
     import { StatusStore } from "./stores/StatusStore.svelte.ts";
+    import { ProgressStore } from "./stores/ProgressStore.svelte.ts";
     import { UploadStore } from "./stores/UploadStore.svelte.ts";
     import { ViewStore } from "./stores/ViewStore.svelte.ts";
     import { ListInteractions } from "./stores/ListInteractions.svelte.ts";
@@ -23,6 +24,7 @@
     import StatusMessages from "./components/StatusMessages.svelte";
     import BatchActionModal from "./components/BatchActionModal.svelte";
     import ConfirmDialog from "./components/ConfirmDialog.svelte";
+    import ProgressDialog from "./components/ProgressDialog.svelte";
 
     let {
         contextUrl,
@@ -61,6 +63,7 @@
     const modal = new ModalStore();
     const confirm = new ConfirmStore();
     const status = new StatusStore();
+    const progress = new ProgressStore();
     const upload = new UploadStore(contents);
     const view = new ViewStore(config, storageKey);
     const interactions = new ListInteractions(
@@ -68,7 +71,8 @@
         selection,
         clipboard,
         upload,
-        confirm
+        confirm,
+        progress
     );
 
     setContext("config", config);
@@ -79,6 +83,7 @@
     setContext("modal", modal);
     setContext("confirm", confirm);
     setContext("status", status);
+    setContext("progress", progress);
     setContext("upload", upload);
     setContext("view", view);
     setContext("interactions", interactions);
@@ -102,6 +107,7 @@
     </div>
     <BatchActionModal />
     <ConfirmDialog />
+    <ProgressDialog />
     <UploadZone>
         {#if view.mode === "grid"}
             <ContentGrid />

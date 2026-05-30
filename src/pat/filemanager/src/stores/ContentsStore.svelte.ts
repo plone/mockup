@@ -10,6 +10,7 @@ import {
 import { transitionItem } from "../api/workflow.js";
 import { cookieStorage, type KeyValueStore } from "../utils/storage";
 import type { ConfigStore } from "./ConfigStore.svelte";
+import type { ProgressFn } from "./ProgressStore.svelte";
 
 /** Minimal shape the batch actions need from a selected item. */
 export interface BatchItem {
@@ -283,8 +284,8 @@ export class ContentsStore {
     }
 
     /** Delete the given item urls, then reload. */
-    async removeItems(urls: string[]): Promise<void> {
-        await deleteItems(urls);
+    async removeItems(urls: string[], onProgress?: ProgressFn): Promise<void> {
+        await deleteItems(urls, onProgress);
         await this.reloadAfterMutation();
     }
 
@@ -464,9 +465,11 @@ export class ContentsStore {
      */
     async applyWorkflow(
         items: BatchItem[],
-        opts: { transition: string; comment?: string; includeChildren?: boolean }
+        opts: { transition: string; comment?: string; includeChildren?: boolean },
+        onProgress?: ProgressFn
     ): Promise<BatchResult> {
         const failed: BatchResult["failed"] = [];
+        let done = 0;
         for (const it of items) {
             try {
                 await transitionItem({
@@ -478,6 +481,7 @@ export class ContentsStore {
             } catch (e) {
                 failed.push({ title: it.title, error: (e as Error).message });
             }
+            onProgress?.(++done, items.length);
         }
         await this.load();
         return { ok: items.length - failed.length, failed };
@@ -489,9 +493,11 @@ export class ContentsStore {
      */
     async applyTags(
         items: BatchItem[],
-        { add = [], remove = [] }: { add?: string[]; remove?: string[] }
+        { add = [], remove = [] }: { add?: string[]; remove?: string[] },
+        onProgress?: ProgressFn
     ): Promise<BatchResult> {
         const failed: BatchResult["failed"] = [];
+        let done = 0;
         for (const it of items) {
             const subjects = [
                 ...new Set(
@@ -503,6 +509,7 @@ export class ContentsStore {
             } catch (e) {
                 failed.push({ title: it.title, error: (e as Error).message });
             }
+            onProgress?.(++done, items.length);
         }
         await this.load();
         return { ok: items.length - failed.length, failed };
@@ -515,14 +522,17 @@ export class ContentsStore {
     async applyProperties(
         items: BatchItem[],
         props: Record<string, unknown>,
-        recursive = false
+        recursive = false,
+        onProgress?: ProgressFn
     ): Promise<BatchResult> {
         const failed: BatchResult["failed"] = [];
+        let done = 0;
         for (const it of items) {
             try {
                 await patchItem(it.url, props);
             } catch (e) {
                 failed.push({ title: it.title, error: (e as Error).message });
+                onProgress?.(++done, items.length);
                 continue;
             }
             if (recursive && it.isFolderish) {
@@ -535,6 +545,7 @@ export class ContentsStore {
                     }
                 }
             }
+            onProgress?.(++done, items.length);
         }
         await this.load();
         return { ok: items.length - failed.length, failed };
@@ -546,15 +557,18 @@ export class ContentsStore {
      * the recommended plone.restapi bulk-rename improvement.
      */
     async renameItems(
-        renames: Array<{ url: string; id: string; title: string }>
+        renames: Array<{ url: string; id: string; title: string }>,
+        onProgress?: ProgressFn
     ): Promise<BatchResult> {
         const failed: BatchResult["failed"] = [];
+        let done = 0;
         for (const r of renames) {
             try {
                 await patchItem(r.url, { id: r.id, title: r.title });
             } catch (e) {
                 failed.push({ title: r.title, error: (e as Error).message });
             }
+            onProgress?.(++done, renames.length);
         }
         await this.load();
         return { ok: renames.length - failed.length, failed };

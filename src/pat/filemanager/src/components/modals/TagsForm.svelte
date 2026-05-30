@@ -11,6 +11,8 @@
     const modal = getContext("modal");
     /** @type {import("../../stores/StatusStore.svelte").StatusStore} */
     const status = getContext("status");
+    /** @type {import("../../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
 
     const items = selection.items;
 
@@ -44,7 +46,10 @@
         }
         modal.busy = true;
         try {
-            const result = await contents.applyTags(items, { add, remove });
+            const result = await progress.track(
+                _t("Updating tags on ${count} items…", { count: items.length }),
+                (onProgress) => contents.applyTags(items, { add, remove }, onProgress)
+            );
             reportBatch(
                 status,
                 result,

@@ -11,6 +11,8 @@
     const modal = getContext("modal");
     /** @type {import("../../stores/StatusStore.svelte").StatusStore} */
     const status = getContext("status");
+    /** @type {import("../../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
 
     // Editable per-item rows, seeded from the current short name + title.
     let rows = $state(
@@ -34,7 +36,10 @@
         }
         modal.busy = true;
         try {
-            const result = await contents.renameItems(renames);
+            const result = await progress.track(
+                _t("Renaming ${count} items…", { count: renames.length }),
+                (onProgress) => contents.renameItems(renames, onProgress)
+            );
             reportBatch(
                 status,
                 result,

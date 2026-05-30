@@ -14,6 +14,8 @@
     const modal = getContext("modal");
     /** @type {import("../stores/UploadStore.svelte").UploadStore} */
     const upload = getContext("upload");
+    /** @type {import("../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
 
     let busy = $state(false);
     /** @type {HTMLInputElement} */
@@ -58,8 +60,20 @@
 
     function paste() {
         return run(async () => {
-            await contents.paste(clipboard.op, clipboard.sources);
-            if (clipboard.op === "cut") clipboard.clear();
+            const op = clipboard.op;
+            const count = clipboard.count;
+            // @copy / @move are single server requests, so the bar is
+            // indeterminate (the client can't see per-item progress).
+            const label =
+                op === "cut"
+                    ? _t("Moving ${count} items…", { count })
+                    : _t("Copying ${count} items…", { count });
+            await progress.track(
+                label,
+                () => contents.paste(op, clipboard.sources),
+                { surface: "dialog" }
+            );
+            if (op === "cut") clipboard.clear();
         });
     }
 
@@ -70,7 +84,10 @@
         );
         if (!ok) return;
         return run(async () => {
-            await contents.removeItems(selection.urls);
+            await progress.track(
+                _t("Deleting ${count} items…", { count }),
+                (onProgress) => contents.removeItems(selection.urls, onProgress)
+            );
             selection.clear();
         });
     }

@@ -333,7 +333,10 @@ describe("ContentsStore", () => {
         const store = makeStore();
         store.bStart = 10;
         await store.removeItems(["http://nohost/plone/a"]);
-        expect(mockedDelete).toHaveBeenCalledWith(["http://nohost/plone/a"]);
+        expect(mockedDelete).toHaveBeenCalledWith(
+            ["http://nohost/plone/a"],
+            undefined
+        );
         expect(store.bStart).toBe(0);
     });
 

@@ -37,11 +37,14 @@ export function deleteItem(itemUrl) {
 
 /**
  * Delete several items, sequentially (one DELETE each — restapi has no bulk
- * delete). Resolves once all are gone.
+ * delete). Resolves once all are gone. `onStep(done, total)` (optional) is
+ * called after each delete so callers can show progress.
  */
-export async function deleteItems(itemUrls) {
+export async function deleteItems(itemUrls, onStep) {
+    let done = 0;
     for (const url of itemUrls) {
         await deleteItem(url);
+        onStep?.(++done, itemUrls.length);
     }
 }
 
@@ -81,10 +84,13 @@ export function patchItem(itemUrl, data) {
 
 /**
  * PATCH the same body into several items sequentially (no bulk PATCH in
- * restapi). Resolves once all are done.
+ * restapi). Resolves once all are done. `onStep(done, total)` (optional) is
+ * called after each PATCH so callers can show progress.
  */
-export async function patchItems(itemUrls, data) {
+export async function patchItems(itemUrls, data, onStep) {
+    let done = 0;
     for (const url of itemUrls) {
         await patchItem(url, data);
+        onStep?.(++done, itemUrls.length);
     }
 }

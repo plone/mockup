@@ -12,6 +12,8 @@
     const modal = getContext("modal");
     /** @type {import("../../stores/StatusStore.svelte").StatusStore} */
     const status = getContext("status");
+    /** @type {import("../../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
 
     const items = selection.items;
     const hasFolders = items.some((it) => it.isFolderish);
@@ -39,11 +41,15 @@
         if (!transition) return;
         modal.busy = true;
         try {
-            const result = await contents.applyWorkflow(items, {
-                transition,
-                comment,
-                includeChildren,
-            });
+            const result = await progress.track(
+                _t("Changing the state of ${count} items…", { count: items.length }),
+                (onProgress) =>
+                    contents.applyWorkflow(
+                        items,
+                        { transition, comment, includeChildren },
+                        onProgress
+                    )
+            );
             reportBatch(
                 status,
                 result,

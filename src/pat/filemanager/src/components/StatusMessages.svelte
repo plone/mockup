@@ -5,6 +5,8 @@
 
     /** @type {import("../stores/StatusStore.svelte").StatusStore} */
     const status = getContext("status");
+    /** @type {import("../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
     /** @type {import("../stores/UploadStore.svelte").UploadStore} */
     const upload = getContext("upload");
 
@@ -38,7 +40,7 @@
 
 <svelte:window onkeydown={onKeydown} />
 
-{#if status.messages.length || upload.entries.length}
+{#if status.messages.length || progress.statusTasks.length || upload.entries.length}
     <div class="filemanager-status" role="status" aria-live="polite">
         {#each status.messages as message (message.id)}
             <div class="filemanager-status-message is-{message.kind}">
@@ -53,6 +55,30 @@
                 </button>
             </div>
         {/each}
+
+        {#if progress.statusTasks.length}
+            <div class="filemanager-progress">
+                <ul class="filemanager-progress-list">
+                    {#each progress.statusTasks as task (task.id)}
+                        <li class="filemanager-progress-item">
+                            <span class="filemanager-progress-label">{task.label}</span>
+                            {#if task.total > 0}
+                                <progress
+                                    max={task.total}
+                                    value={task.current}
+                                    aria-label={task.label}
+                                ></progress>
+                                <span class="filemanager-progress-count">
+                                    {task.current} / {task.total}
+                                </span>
+                            {:else}
+                                <progress aria-label={task.label}></progress>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+        {/if}
 
         {#if upload.entries.length}
             <div class="filemanager-upload">

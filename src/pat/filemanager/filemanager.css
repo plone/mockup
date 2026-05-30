@@ -507,6 +507,153 @@ body:has(.pat-filemanager) #portal-header {
     color: var(--filemanager-muted);
 }
 
+.pat-filemanager-app .filemanager-progress {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: #f8f9fa;
+}
+
+.pat-filemanager-app .filemanager-progress-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.pat-filemanager-app .filemanager-progress-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-progress-label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-progress-count {
+    color: var(--filemanager-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Self-closing dialog shown while a copy/paste runs. A compact, near-square
+   card centred over a darker backdrop. */
+.pat-filemanager-app + .filemanager-progress-dialog,
+.filemanager-progress-dialog {
+    width: 16rem;
+    min-width: 16rem;
+    min-height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filemanager-progress-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.filemanager-progress-dialog .filemanager-progress-list {
+    width: 100%;
+}
+
+.filemanager-progress-dialog .filemanager-progress-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.filemanager-progress-dialog .filemanager-progress-label {
+    color: var(--filemanager-muted);
+}
+
+.filemanager-progress-dialog progress {
+    width: 100%;
+    height: 0.9rem;
+}
+
+/* Busy folder (drag-into-folder target while the @move runs). A dark green
+   overlay covers the whole item (row or card) so it's obvious which folder is
+   receiving the items and that work is in progress. */
+.pat-filemanager-app .filemanager-row.is-busy,
+.pat-filemanager-app .filemanager-card.is-busy {
+    pointer-events: none;
+}
+
+.pat-filemanager-app .filemanager-row.is-busy {
+    position: relative;
+}
+
+/* Overlay spans the whole row: the cell stays static so `inset: 0` resolves to
+   the position:relative row. */
+.pat-filemanager-app .filemanager-row-progress {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    background: rgba(15, 81, 50, 0.88);
+    border-radius: 4px;
+}
+
+.pat-filemanager-app .filemanager-row-progress-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pat-filemanager-app .filemanager-row-progress progress {
+    flex: 1 1 auto;
+    max-width: 16rem;
+    height: 0.9rem;
+    accent-color: #75b798;
+}
+
+/* A full-card overlay with the label and a chunky bar. */
+.pat-filemanager-app .filemanager-card-progress {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(15, 81, 50, 0.88);
+    border: 2px solid #0f5132;
+    border-radius: 6px;
+}
+
+.pat-filemanager-app .filemanager-card-progress-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-card-progress progress {
+    width: 90%;
+    height: 0.9rem;
+    accent-color: #75b798;
+}
+
 .pat-filemanager-app .filemanager-grid-selectall {
     display: inline-flex;
     align-items: center;

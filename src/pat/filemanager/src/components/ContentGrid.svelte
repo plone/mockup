@@ -10,6 +10,8 @@
     const selection = getContext("selection");
     /** @type {import("../stores/ListInteractions.svelte").ListInteractions} */
     const interactions = getContext("interactions");
+    /** @type {import("../stores/ProgressStore.svelte").ProgressStore} */
+    const progress = getContext("progress");
 
     // Bigger previews than the table thumb: prefer a large scale, fall back to
     // smaller ones (and finally the original, handled inside thumbnailUrl).
@@ -49,6 +51,7 @@
                 class:is-selected={selection.isSelected(item)}
                 class:is-cut={interactions.isCut(item)}
                 class:dragging={interactions.dragIndex === index}
+                class:is-busy={folderTask}
                 class:drop-target={interactions.dropIndex === index ||
                     interactions.fileDropIndex === index}
                 draggable="true"
