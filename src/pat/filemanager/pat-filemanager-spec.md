@@ -110,7 +110,7 @@ Confirmed locally available restapi services:
 - **Customizable batch size:** `b_size` bound to `ContentsStore`, persisted in a cookie (`utils/storage.ts` `cookieStorage`), the same way legacy pat-structure stored it.
 - **Image column / preview:** new `image` column type rendering a thumbnail scale, driven by `image_scales` metadata.
 - **Drag-into-folder:** native DnD action; drop on a folderish row → `@move` selected sources into that folder.
-- **Multi-upload via drag/drop onto listing:** `UploadZone` overlay on `ContentTable`; drop files → `@tus-upload` to the current folder.
+- **Multi-upload via drag/drop onto listing:** `UploadZone` overlay on `ContentTable`; drop files → `@tus-upload` to the current folder. Dropping files **directly onto a subfolder** row/card uploads into that folder instead (the row claims the drop and the zone skips it).
 - **Select "current batch" vs "all in query":** `SelectionStore` tracks a mode; "all" runs a UID-only `@querystring-search` sweep (paged loop, like the legacy `selectAll`).
 - **Persistent reorder:** ordering PATCH against the catalog `getObjPositionInParent`. The rows reorder optimistically and animate into place with `animate:flip` (see §19).
 
@@ -504,6 +504,10 @@ sync (§15), the post-P6 follow-ups (cookie persistence + reorder animations,
 §19), and **P7 – switchable views** (§20). All §5 parity + new-feature items are
 ticked; the remaining work is live-instance / dev-server verification only.
 
+**Planned features (not yet implemented).**
+- Link-integrity check when moving or deleting referenced content — warn the user
+  before breaking incoming links to the affected objects.
+
 **Carried-over verifications (pending a live instance, not code work).**
 - `default_page` PATCH actually sets the container default page (§9/§13 flag).
 - Short-name **rename** is a known weak spot — title-only is safe; `id` change is a
@@ -543,16 +547,26 @@ custom views.
   `UploadStore`, provides it via `setContext`, and renders `<UploadZone>` around
   the table.
 - **Drag-into-folder vs reorder coexistence** (`ContentTable`/`ContentRow`): rows
-  are always `draggable`. `dragIndex >= 0` marks an internal drag in progress;
-  rows only `preventDefault`/claim the drop while an internal drag is active, so
-  external **file** drags fall through to `UploadZone`. Dropping a row onto a
-  **folderish** row (≠ itself) → `moveIntoFolder` (the whole selection if the
-  dragged row is part of a multi-selection, else just that row) + clear
-  selection; dropping onto a **non-folder** row → reorder (only when
-  `sortOn === getObjPositionInParent`). Trade-off: you can't reorder *onto* a
+  are always `draggable`. `dragIndex >= 0` marks an internal drag in progress.
+  `ListInteractions` routes both kinds of drag through one set of row handlers
+  (`onRowDragEnter`/`onRowDragOver`/`onRowDrop`): while an internal drag is active
+  they drive reorder/move-into-folder; otherwise they handle **external file**
+  drags. Dropping a row onto a **folderish** row (≠ itself) → `moveIntoFolder`
+  (the whole selection if the dragged row is part of a multi-selection, else just
+  that row) + clear selection; dropping onto a **non-folder** row → reorder (only
+  when `sortOn === getObjPositionInParent`). Trade-off: you can't reorder *onto* a
   folder row (it always means move-into) — reorder relative to folders is done by
   dropping on neighbouring non-folder rows. Folder drop target is highlighted via
   a `drop-target` class.
+- **File drop into a subfolder:** dragging external **files** over a folderish
+  row claims the drop (`onRowDragOver` `preventDefault`s and sets `fileDropIndex`,
+  highlighted with the same `drop-target` class); `onFileDrop` then
+  `upload.uploadFiles(files, folder["@id"])` into that subfolder. It only
+  `preventDefault`s — no `stopPropagation` — so the drop still bubbles to
+  `UploadZone`, which checks `event.defaultPrevented` and uploads to the *current*
+  folder only when no subfolder claimed it. Files dropped anywhere else fall
+  through to `UploadZone` as before. The zone hides its "Drop files to upload"
+  overlay while `fileDropIndex >= 0` so the subfolder highlight reads cleanly.
 - Tests: `src/api/upload.test.js` (6 — tus open/patch/return, create-failure,
   missing-Location, POST File/Image fallback, tus→POST fallback;
   jsdom needs a `TextEncoder` polyfill from `util`), `src/stores/UploadStore.test.ts`
@@ -702,15 +716,17 @@ the *interaction logic*, not the rendered element.
   `App.svelte`, provided via `setContext("view", …)`.
 
 - **`src/stores/ListInteractions.svelte.ts` (new, extracted).** A runes class
-  constructed with `(contents, selection, clipboard)` that owns the drag state
-  (`dragIndex` / `dropIndex` / `anchorIndex`, `dragActive`, `canReorder`) and the
-  handlers currently embedded in `ContentTable`: `onItemClick`
+  constructed with `(contents, selection, clipboard, upload?)` that owns the drag
+  state (`dragIndex` / `dropIndex` / `fileDropIndex` / `anchorIndex`, `dragActive`,
+  `canReorder`) and the handlers currently embedded in `ContentTable`: `onItemClick`
   (plain/ctrl/shift-range rules → `selectOnly`/`toggle`/`selectRange`),
   `onItemMouseDown` (suppress shift text-selection), `isCut`, `dragSources`,
   `onDragStart` / `onDragEnd` / `onDragEnter`, and `onDrop` (folder → `moveIntoFolder`;
-  non-folder + `canReorder` → `moveTo`; else no-op). Provided via
-  `setContext("interactions", …)`. **Net testing gain:** this logic is untested
-  today (component-embedded); as a class it becomes unit-testable.
+  non-folder + `canReorder` → `moveTo`; else no-op). The unified row dispatchers
+  `onRowDragEnter` / `onRowDragOver` / `onRowDrop` route internal vs external (file)
+  drags, with `onFileDrop` uploading dropped files into a subfolder (see §17).
+  Provided via `setContext("interactions", …)`. **Net testing gain:** this logic
+  is untested today (component-embedded); as a class it becomes unit-testable.
 
 - **`ContentTable.svelte` (refactor, behaviour-neutral).** Replace the local
   drag/selection state and handlers with the shared `ListInteractions` from
@@ -726,9 +742,10 @@ the *interaction logic*, not the rendered element.
   - A **selection checkbox overlay** (photo-manager style, top-left), plus
     `is-selected` / `is-cut` / `dragging` / `drop-target` classes.
   - `review_state` badge + title caption.
-  - `draggable`, wired to the **same** `ListInteractions` handlers; cards only
-    `preventDefault` / claim drops while `dragActive` so external **file** drags
-    still fall through to `UploadZone` (the §17 coexistence rule).
+  - `draggable`, wired to the **same** `ListInteractions` row dispatchers; while
+    `dragActive` they drive reorder/move-into-folder, otherwise external **file**
+    drags upload into a subfolder card or fall through to `UploadZone` (the §17
+    coexistence rule).
   - **No `RowActionMenu`** (decided): no per-item menu in the grid. Reorder is by
     drag; cut/copy/delete/tag/rename/state come from the toolbar. Accepted
     reduction vs the table: per-item *move-top/bottom* and *set-as-default-page*

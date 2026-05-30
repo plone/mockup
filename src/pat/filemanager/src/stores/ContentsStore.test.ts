@@ -77,6 +77,24 @@ describe("ContentsStore", () => {
         expect(store.sortOrder).toBe("descending");
     });
 
+    it("canGoUp / parentUrl reflect the folder's position below the portal root", () => {
+        const config = new ConfigStore({
+            contextUrl: "http://nohost/plone/folder",
+            portalUrl: "http://nohost/plone",
+        });
+        const store = new ContentsStore(config);
+        // One level down: parent is the portal root.
+        expect(store.canGoUp).toBe(true);
+        expect(store.parentUrl).toBe("http://nohost/plone");
+        // Deeper: parent is the folder one level up (trailing slash ignored).
+        store.contextUrl = "http://nohost/plone/folder/sub/";
+        expect(store.parentUrl).toBe("http://nohost/plone/folder");
+        // At the portal root: no parent.
+        store.contextUrl = "http://nohost/plone";
+        expect(store.canGoUp).toBe(false);
+        expect(store.parentUrl).toBeNull();
+    });
+
     it("loads items and total, toggling loading", async () => {
         mockedSearch.mockResolvedValue({
             items: [{ UID: "a" }, { UID: "b" }],

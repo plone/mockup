@@ -50,13 +50,15 @@ export class UploadStore {
     }
 
     /**
-     * Upload the given files into the current folder, one after another, then
-     * reload the listing. Per-file failures are collected rather than aborting
-     * the batch.
+     * Upload the given files, one after another, then reload the listing.
+     * Per-file failures are collected rather than aborting the batch. Targets
+     * the current folder unless `targetUrl` names another container — e.g. a
+     * subfolder the files were dropped directly onto.
      */
-    async uploadFiles(files: File[]): Promise<UploadResult> {
+    async uploadFiles(files: File[], targetUrl?: string): Promise<UploadResult> {
         const list = Array.from(files);
         if (list.length === 0) return { ok: 0, failed: [] };
+        const folderUrl = targetUrl ?? this.contents.contextUrl;
 
         const created: UploadEntry[] = list.map((file) => ({
             id: (this.seq += 1),
@@ -74,7 +76,7 @@ export class UploadStore {
                 const file = list[i];
                 const entry = created[i];
                 try {
-                    await uploadFile(this.contents.contextUrl, file, {
+                    await uploadFile(folderUrl, file, {
                         onProgress: (loaded: number) => this.patch(entry.id, { loaded }),
                     });
                     this.patch(entry.id, { status: "done", loaded: file.size });

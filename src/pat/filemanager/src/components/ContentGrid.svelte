@@ -25,14 +25,20 @@
         selection.clear();
         contents.navigateTo(item["@id"]);
     }
+
+    // Browse up into the parent container (the "up to parent" placeholder card).
+    function goUp(event) {
+        event.preventDefault();
+        if (!contents.parentUrl) return;
+        selection.clear();
+        contents.navigateTo(contents.parentUrl);
+    }
 </script>
 
 {#if contents.loading}
     <p class="filemanager-message">{_t("Loading…")}</p>
 {:else if contents.error}
     <p class="filemanager-message filemanager-error">{contents.error.message}</p>
-{:else if contents.items.length === 0}
-    <p class="filemanager-message">{_t("No items in this folder.")}</p>
 {:else}
     <ul
         class="filemanager-grid"
@@ -41,8 +47,41 @@
         aria-multiselectable="true"
         aria-label={_t("Folder contents")}
     >
+        {#if contents.parentUrl}
+            {@const parentTask = progress.folderTask(contents.parentUrl)}
+            <li
+                class="filemanager-card filemanager-card-up"
+                class:drop-target={interactions.parentDrop}
+                class:is-busy={parentTask}
+                ondragenter={(e) => interactions.onParentDragEnter(e)}
+                ondragover={(e) => interactions.onParentDragOver(e)}
+                ondragleave={() => interactions.onParentDragLeave()}
+                ondrop={(e) => interactions.onParentDrop(e)}
+            >
+                <a
+                    class="filemanager-card-preview filemanager-card-up-link"
+                    href={contents.parentUrl}
+                    aria-label={_t("Up to parent folder")}
+                    onclick={goUp}
+                >
+                    <span class="filemanager-card-icon" aria-hidden="true">↰</span>
+                </a>
+                <span class="filemanager-card-title">{_t("Up to parent")}</span>
+
+                {#if parentTask}
+                    <div class="filemanager-card-progress" title={parentTask.label}>
+                        <span class="filemanager-card-progress-label">
+                            {parentTask.label}
+                        </span>
+                        <progress aria-label={parentTask.label}></progress>
+                    </div>
+                {/if}
+            </li>
+        {/if}
+
         {#each contents.items as item, index (item.UID || item["@id"])}
             {@const thumb = thumbnailUrl(item, PREVIEW_SCALES)}
+            {@const folderTask = progress.folderTask(item["@id"])}
             <li
                 class="filemanager-card"
                 role="option"
@@ -102,7 +141,20 @@
                 >
                     {item.Title || item.id || item["@id"]}
                 </a>
+
+                {#if folderTask}
+                    <div class="filemanager-card-progress" title={folderTask.label}>
+                        <span class="filemanager-card-progress-label">
+                            {folderTask.label}
+                        </span>
+                        <progress aria-label={folderTask.label}></progress>
+                    </div>
+                {/if}
             </li>
         {/each}
     </ul>
+
+    {#if contents.items.length === 0}
+        <p class="filemanager-message">{_t("No items in this folder.")}</p>
+    {/if}
 {/if}

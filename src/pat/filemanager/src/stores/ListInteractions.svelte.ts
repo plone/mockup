@@ -32,6 +32,9 @@ export class ListInteractions {
     dropIndex = $state(-1);
     fileDropIndex = $state(-1);
     anchorIndex = $state(-1);
+    // Highlight for the grid's "up to parent" placeholder while an item drag or
+    // an external file drag hovers it (drop = move/upload into the parent).
+    parentDrop = $state(false);
 
     // Drag-reorder bookkeeping for the live preview: where the drag began, the
     // dragged item's url (stable while the rows shuffle under it), and the
@@ -341,6 +344,84 @@ export class ListInteractions {
             return this.onDrop(index);
         }
         return this.onFileDrop(event, index);
+    }
+
+    // The grid's "up to parent" placeholder card. An internal item drag dropped
+    // onto it moves the dragged sources into the parent container; an external
+    // file drag uploads into the parent. Mirrors the subfolder handlers but the
+    // target is `contents.parentUrl` rather than a listed item.
+
+    onParentDragEnter(event: DragEvent): void {
+        if (this.dragActive) {
+            this.parentDrop = true;
+            this.dropIndex = -1;
+            return;
+        }
+        if (this.hasFiles(event)) this.parentDrop = true;
+    }
+
+    onParentDragOver(event: DragEvent): void {
+        if (this.dragActive) {
+            event.preventDefault();
+            // Re-affirm the highlight every dragover: dragleave fires when the
+            // pointer crosses onto the placeholder's own children, clearing it,
+            // so the steady stream of dragover events is what keeps it lit.
+            this.parentDrop = true;
+            this.dropIndex = -1;
+            return;
+        }
+        if (!this.hasFiles(event)) return;
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
+        this.parentDrop = true;
+    }
+
+    onParentDragLeave(): void {
+        this.parentDrop = false;
+    }
+
+    async onParentDrop(event: DragEvent): Promise<void> {
+        const parentUrl = this.contents.parentUrl;
+        // Internal item drag → move the dragged sources into the parent.
+        if (this.dragActive) {
+            event.preventDefault();
+            const draggedId = this.draggedId;
+            const dragged = draggedId
+                ? this.contents.items.find((it) => it["@id"] === draggedId)
+                : null;
+            const sources = dragged ? this.dragSources(dragged) : [];
+            this.resetDrag();
+            this.parentDrop = false;
+            if (!parentUrl || sources.length === 0) return;
+            const ok = await this.confirmAction(
+                _t("Move ${count} item(s) to the parent folder?", {
+                    count: sources.length,
+                }),
+                _t("Move")
+            );
+            if (!ok) return;
+            const move = () => this.contents.moveIntoFolder(parentUrl, sources);
+            if (this.progress) {
+                await this.progress.track(
+                    _t("Moving ${count} item(s) to the parent folder…", {
+                        count: sources.length,
+                    }),
+                    move,
+                    { surface: "folder", targetUrl: parentUrl }
+                );
+            } else {
+                await move();
+            }
+            this.selection.clear();
+            return;
+        }
+        // External file drag → upload into the parent folder.
+        this.parentDrop = false;
+        if (!this.hasFiles(event) || !parentUrl) return;
+        event.preventDefault();
+        const files = Array.from(event.dataTransfer?.files ?? []);
+        if (files.length === 0 || !this.upload) return;
+        await this.upload.uploadFiles(files, parentUrl);
     }
 
     /**

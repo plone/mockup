@@ -832,6 +832,21 @@ body:has(.pat-filemanager) #portal-header {
     line-height: 1;
 }
 
+/* "Up to parent" placeholder card: a dashed, muted tile that browses up on
+   click and accepts drops (move/upload) into the parent container. It is not
+   draggable or selectable — just navigate + drop. */
+.pat-filemanager-app .filemanager-card-up {
+    border-style: dashed;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-card-up-link {
+    width: 100%;
+    text-decoration: none;
+    color: var(--filemanager-muted);
+    cursor: pointer;
+}
+
 .pat-filemanager-app .filemanager-card-title {
     overflow: hidden;
     text-overflow: ellipsis;

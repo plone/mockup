@@ -12,7 +12,8 @@ A folder-contents management UI — a modern, Backbone-free reimplementation of
 It renders a batched, sortable listing of a folder's contents — switchable
 between a **table** view and a photo-organizing **grid** view — with selection,
 clipboard (cut/copy/paste), delete, drag-and-drop ordering, drag-into-folder,
-multi-upload, in-app folder browsing (breadcrumbs), column configuration,
+multi-upload (including dropping files directly onto a subfolder to upload into
+it), in-app folder browsing (breadcrumbs), column configuration,
 free-text/type filtering, advanced querystring filtering (build complex
 `plone.app.querystring` criteria like pat-structure), and batch actions
 (workflow, tags, properties, rename). The view choice is persisted per user in

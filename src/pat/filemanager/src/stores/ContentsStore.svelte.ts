@@ -109,6 +109,25 @@ export class ContentsStore {
         return this.load();
     }
 
+    /**
+     * Whether the current folder has a parent we may browse up into — true for
+     * any folder below the portal root, false at the root itself (the
+     * filemanager is scoped to the portal, so we never go above portalUrl).
+     */
+    get canGoUp(): boolean {
+        const ctx = this.contextUrl.replace(/\/+$/, "");
+        const portal = this.config.portalUrl.replace(/\/+$/, "");
+        return ctx !== portal && ctx.length > portal.length && ctx.startsWith(portal);
+    }
+
+    /** The parent container url (one level up), or null at the portal root. */
+    get parentUrl(): string | null {
+        if (!this.canGoUp) return null;
+        const ctx = this.contextUrl.replace(/\/+$/, "");
+        const parent = ctx.slice(0, ctx.lastIndexOf("/"));
+        return parent || null;
+    }
+
     get currentPage(): number {
         return Math.floor(this.bStart / this.bSize) + 1;
     }

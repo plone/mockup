@@ -41,6 +41,17 @@ describe("UploadStore", () => {
         expect(store.entries.every((e) => e.status === "done")).toBe(true);
     });
 
+    it("uploads into a given target folder instead of the current one", async () => {
+        const contents = makeContents();
+        const store = new UploadStore(contents as never);
+        await store.uploadFiles(
+            [makeFile("a.txt", 10)],
+            "http://nohost/plone/folder/sub"
+        );
+        expect(mockedUpload.mock.calls[0][0]).toBe("http://nohost/plone/folder/sub");
+        expect(contents.load).toHaveBeenCalledTimes(1);
+    });
+
     it("records per-file failures without aborting the batch", async () => {
         mockedUpload
             .mockRejectedValueOnce(new Error("boom"))
