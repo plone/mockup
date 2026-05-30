@@ -208,17 +208,39 @@ export class ListInteractions {
         this.dragIndex = -1;
         this.dropIndex = -1;
         this.fileDropIndex = -1;
+        this.parentDrop = false;
         this.dragStartIndex = -1;
         this.draggedId = null;
         this.dragSubset = [];
         this.dragBlock = null;
     }
 
-    onDragEnter(index: number): void {
+    /**
+     * Decide what an internal drag hovering row `index` should do. `intoFolder`
+     * is true when the pointer sits in a folder's central move-into band (the
+     * caller derives it from the dragover geometry); it is always false for
+     * non-folder rows and for the reorder bands at a folder's edges.
+     *
+     * A central-band hover over a folder highlights it as a move-into target and
+     * snaps any live preview back, so the listing rests and only the green
+     * highlight shows. Every other hover live-reorders, sliding the dragged row
+     * (or block) into `index` so the rows make room under the cursor and the
+     * insertion marker tracks the drop point — for folders and non-folders alike.
+     */
+    onInternalHover(index: number, intoFolder: boolean): void {
         const target = this.contents.items[index];
-        // Hovering a folder (other than the dragged row) offers a move-into-folder
-        // drop: highlight it and leave the order untouched.
-        if (target?.is_folderish && index !== this.dragIndex) {
+        // A central-band hover over any folder but the dragged item itself is a
+        // move-into. We compare the dragged *id* (not `dragIndex`): a reorder
+        // hover on this folder's edge sets `dragIndex = index`, so guarding on
+        // `index !== dragIndex` would wrongly veto the move-into once the pointer
+        // crossed the edge on its way to the centre.
+        if (
+            target?.is_folderish &&
+            intoFolder &&
+            target["@id"] !== this.draggedId &&
+            !this.inDragBlock(index)
+        ) {
+            this.revertPreview();
             this.dropIndex = index;
             return;
         }
@@ -226,13 +248,25 @@ export class ListInteractions {
         if (!this.canReorder || !this.draggedId || index === this.dragIndex) return;
         // Hovering another row in our own block is a no-op (you can't drop a block
         // inside itself).
-        if (this.dragBlock && this.dragBlock.includes(objId(this.contents.items[index]?.["@id"] ?? ""))) {
-            return;
-        }
-        // Live-reorder so the rows make room as the cursor passes over them — flip
-        // animates the shift. A contiguous selection moves as one block; a single
-        // row lands on `index`. Subsequent enters on the dragged row's new slot
-        // are a no-op (the guard above), so the rows don't oscillate.
+        if (this.inDragBlock(index)) return;
+        this.previewReorder(index);
+    }
+
+    /** Whether row `index` belongs to the contiguous block currently dragged. */
+    private inDragBlock(index: number): boolean {
+        return Boolean(
+            this.dragBlock?.includes(objId(this.contents.items[index]?.["@id"] ?? ""))
+        );
+    }
+
+    /**
+     * Live-reorder so the rows make room as the cursor passes over them — flip
+     * animates the shift. A contiguous selection moves as one block; a single
+     * row lands on `index`. Subsequent calls for the dragged row's new slot are
+     * guarded by the caller, so the rows don't oscillate.
+     */
+    private previewReorder(index: number): void {
+        if (!this.draggedId) return;
         if (this.dragBlock) {
             this.contents.movePreviewBlock(this.dragBlock, index);
             this.dragIndex = this.contents.currentIds.indexOf(objId(this.draggedId));
@@ -240,6 +274,28 @@ export class ListInteractions {
             this.contents.movePreview(this.draggedId, index);
             this.dragIndex = index;
         }
+    }
+
+    /**
+     * Undo a live preview, returning the dragged row (or block) to the slot it
+     * started in. `movePreview` only ever moves the dragged item, so the other
+     * rows kept their relative order and re-inserting at the start index rebuilds
+     * the original listing exactly. Used when the pointer enters a folder's
+     * move-into band so the rows stop making room and rest behind the highlight.
+     */
+    private revertPreview(): void {
+        if (this.dragIndex === this.dragStartIndex || !this.draggedId) return;
+        if (this.dragBlock) {
+            // The grabbed row may sit mid-block, so restore from the block's own
+            // original start (its first id's slot in the drag-start snapshot).
+            this.contents.movePreviewBlock(
+                this.dragBlock,
+                this.dragSubset.indexOf(this.dragBlock[0])
+            );
+        } else {
+            this.contents.movePreview(this.draggedId, this.dragStartIndex);
+        }
+        this.dragIndex = this.dragStartIndex;
     }
 
     // The urls to move when dragging an item: the whole selection if the dragged
@@ -258,15 +314,21 @@ export class ListInteractions {
         const block = this.dragBlock;
         // Where the dragged row sits now, after any live preview reorder.
         const to = this.dragIndex;
+        // The folder highlighted as a move-into target (central band), or -1 when
+        // the last hover was a reorder (edge band / non-folder). This — not which
+        // row the pointer happens to be over at release — decides the gesture, so
+        // an edge-band drop between folders commits the reorder instead of being
+        // mistaken for a move-into.
+        const intoIndex = this.dropIndex;
         // Clear synchronously so the dragend that follows this drop knows the drop
         // was handled and doesn't undo the committed reorder.
         this.resetDrag();
         if (from < 0 || !draggedId) return;
-        const target = this.contents.items[index];
-        // Dropping onto a folderish item (other than the dragged one) moves into
-        // it (the whole selection, when the dragged row is selected). No live
-        // preview runs while hovering a folder, so commit nothing here.
-        if (target?.is_folderish && index !== from) {
+        const target = intoIndex >= 0 ? this.contents.items[intoIndex] : undefined;
+        // A move-into drop: the dragged row (or whole selection) goes into the
+        // highlighted folder. No live preview is in effect here, so commit nothing
+        // for the reorder.
+        if (target?.is_folderish && intoIndex !== from) {
             const dragged = this.contents.items.find((it) => it["@id"] === draggedId);
             if (dragged) {
                 const sources = this.dragSources(dragged);
@@ -281,7 +343,23 @@ export class ListInteractions {
                     _t("Move")
                 );
                 if (ok) {
-                    await this.contents.moveIntoFolder(target["@id"], sources);
+                    // @move is a single server request, so the bar is
+                    // indeterminate (no per-item progress to report). Surface it
+                    // as a busy overlay on the target folder row/card.
+                    const move = () =>
+                        this.contents.moveIntoFolder(target["@id"], sources);
+                    if (this.progress) {
+                        await this.progress.track(
+                            _t('Moving ${count} item(s) into "${folder}"…', {
+                                count: sources.length,
+                                folder,
+                            }),
+                            move,
+                            { surface: "folder", targetUrl: target["@id"] }
+                        );
+                    } else {
+                        await move();
+                    }
                     this.selection.clear();
                 }
             }
@@ -304,6 +382,29 @@ export class ListInteractions {
         return Boolean(types && Array.from(types).includes("Files"));
     }
 
+    // The central fraction of a folder row/card that reads as "drop into this
+    // folder"; the bands outside it (above/below for the table, left/right for
+    // the grid) read as "reorder past this folder".
+    private static readonly INTO_BAND = { start: 0.3, end: 0.7 };
+
+    /**
+     * Whether the dragover pointer sits in the central move-into band of the
+     * hovered row/card. `axis` is "y" for the stacked table rows and "x" for the
+     * side-by-side grid cards (whose insertion marker is a vertical line beside
+     * the card). Falls back to "into" when the element geometry is unavailable.
+     */
+    private isIntoZone(event: DragEvent, axis: "x" | "y"): boolean {
+        const el = event.currentTarget as HTMLElement | null;
+        const rect = el?.getBoundingClientRect?.();
+        if (!rect) return true;
+        const fraction =
+            axis === "x"
+                ? (event.clientX - rect.left) / (rect.width || 1)
+                : (event.clientY - rect.top) / (rect.height || 1);
+        const { start, end } = ListInteractions.INTO_BAND;
+        return fraction >= start && fraction <= end;
+    }
+
     // Internal item drags (reorder / move-into-folder) and external file drags
     // (upload into a subfolder) travel through the same DOM events on a row or
     // card, so these dispatchers route each event by whether an internal drag
@@ -311,7 +412,9 @@ export class ListInteractions {
 
     onRowDragEnter(event: DragEvent, index: number): void {
         if (this.dragActive) {
-            this.onDragEnter(index);
+            // Just mark the event handled; dragover (which carries the pointer
+            // position needed for folder zone detection) drives the hover state.
+            event.preventDefault();
             return;
         }
         if (!this.hasFiles(event)) return;
@@ -319,9 +422,13 @@ export class ListInteractions {
         this.fileDropIndex = item?.is_folderish ? index : -1;
     }
 
-    onRowDragOver(event: DragEvent, index: number): void {
+    onRowDragOver(event: DragEvent, index: number, axis: "x" | "y" = "y"): void {
         if (this.dragActive) {
             event.preventDefault();
+            // A folder offers two drops: its central band moves the dragged item
+            // into it, its edges reorder past it. Non-folders always reorder.
+            const item = this.contents.items[index];
+            this.onInternalHover(index, Boolean(item?.is_folderish) && this.isIntoZone(event, axis));
             return;
         }
         if (!this.hasFiles(event)) return;

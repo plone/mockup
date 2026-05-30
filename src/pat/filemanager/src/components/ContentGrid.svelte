@@ -101,7 +101,7 @@
                 onmousedown={(e) => interactions.onItemMouseDown(e)}
                 ondragstart={() => interactions.onDragStart(index)}
                 ondragenter={(e) => interactions.onRowDragEnter(e, index)}
-                ondragover={(e) => interactions.onRowDragOver(e, index)}
+                ondragover={(e) => interactions.onRowDragOver(e, index, "x")}
                 ondragend={() => interactions.onDragEnd()}
                 ondrop={(e) => interactions.onRowDrop(e, index)}
             >

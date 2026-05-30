@@ -8,6 +8,7 @@ function makeContents(items: ReturnType<typeof item>[]) {
     return {
         items,
         sortOn: "getObjPositionInParent",
+        parentUrl: "http://nohost/plone" as string | null,
         get currentIds() {
             return items.map((it) => it["@id"].split("/").pop());
         },
@@ -186,10 +187,60 @@ describe("ListInteractions — drag state", () => {
     it("highlights a folder drop target, but not itself or a non-folder", () => {
         const { interactions } = make([item("a"), item("f", { is_folderish: true })]);
         interactions.onDragStart(0);
-        interactions.onDragEnter(1);
+        interactions.onInternalHover(1, true); // central band of the folder
         expect(interactions.dropIndex).toBe(1);
-        interactions.onDragEnter(0); // non-folder
+        interactions.onInternalHover(0, false); // non-folder
         expect(interactions.dropIndex).toBe(-1);
+    });
+
+    it("reorders past a folder when hovering its edge band, not its centre", () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0);
+        interactions.onInternalHover(1, false); // edge band of the folder → reorder
+        expect(contents.movePreview).toHaveBeenCalledWith(
+            "http://nohost/plone/folder/a",
+            1
+        );
+        expect(interactions.dropIndex).toBe(-1);
+        expect(interactions.dragIndex).toBe(1);
+    });
+
+    it("snaps a live preview back when the pointer enters a folder's centre band", () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("b"),
+            item("f", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0);
+        interactions.onInternalHover(1, false); // preview moves the dragged row to slot 1
+        expect(interactions.dragIndex).toBe(1);
+        interactions.onInternalHover(2, true); // into the folder's centre band
+        // The dragged row is restored to its start slot and the folder lights up.
+        expect(contents.movePreview).toHaveBeenLastCalledWith(
+            "http://nohost/plone/folder/a",
+            0
+        );
+        expect(interactions.dragIndex).toBe(0);
+        expect(interactions.dropIndex).toBe(2);
+    });
+
+    it("still moves into a folder after its edge band set the reorder preview", () => {
+        // Regression: entering a folder through its edge sets dragIndex=index;
+        // the move-into guard must key off the dragged id, not dragIndex, or the
+        // centre band can never light up once the pointer crossed the edge.
+        const { interactions } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0);
+        interactions.onInternalHover(1, false); // edge of the folder → reorder preview
+        expect(interactions.dragIndex).toBe(1);
+        interactions.onInternalHover(1, true); // same folder, now the centre band
+        expect(interactions.dropIndex).toBe(1);
+        expect(interactions.dragIndex).toBe(0); // preview snapped back
     });
 
     it("canReorder only in manual-order mode", () => {
@@ -212,6 +263,7 @@ describe("ListInteractions — onDrop", () => {
             item("f", { is_folderish: true }),
         ]);
         interactions.onDragStart(0);
+        interactions.onInternalHover(1, true); // highlight the folder (central band)
         await interactions.onDrop(1);
         expect(contents.moveIntoFolder).toHaveBeenCalledWith(
             "http://nohost/plone/folder/f",
@@ -228,6 +280,7 @@ describe("ListInteractions — onDrop", () => {
             item("f", { is_folderish: true }),
         ]);
         interactions.onDragStart(0);
+        interactions.onInternalHover(1, true);
         await interactions.onDrop(1);
         expect(window.confirm).toHaveBeenCalled();
         expect(contents.moveIntoFolder).not.toHaveBeenCalled();
@@ -244,6 +297,7 @@ describe("ListInteractions — onDrop", () => {
             confirm
         );
         interactions.onDragStart(0);
+        interactions.onInternalHover(1, true);
         await interactions.onDrop(1);
         expect(confirm.ask).toHaveBeenCalled();
         expect(contents.moveIntoFolder).toHaveBeenCalled();
@@ -259,6 +313,7 @@ describe("ListInteractions — onDrop", () => {
             confirm
         );
         interactions.onDragStart(0);
+        interactions.onInternalHover(1, true);
         await interactions.onDrop(1);
         expect(confirm.ask).toHaveBeenCalled();
         expect(contents.moveIntoFolder).not.toHaveBeenCalled();
@@ -274,6 +329,7 @@ describe("ListInteractions — onDrop", () => {
             selection
         );
         interactions.onDragStart(0);
+        interactions.onInternalHover(1, true);
         await interactions.onDrop(1);
         expect(contents.moveIntoFolder).toHaveBeenCalledWith("http://nohost/plone/folder/f", [
             "u1",
@@ -282,10 +338,76 @@ describe("ListInteractions — onDrop", () => {
         ]);
     });
 
+    it("moves the dragged item into the parent on a parent-placeholder drop, then clears selection", async () => {
+        const confirm = makeConfirm(true);
+        const { interactions, contents, selection } = make(
+            [item("a"), item("b")],
+            makeSelection(),
+            makeClipboard(),
+            makeUpload(),
+            confirm
+        );
+        interactions.onDragStart(0);
+        interactions.onParentDragEnter(dragEvent());
+        expect(interactions.parentDrop).toBe(true);
+        await interactions.onParentDrop(dragEvent());
+        expect(confirm.ask).toHaveBeenCalled();
+        expect(contents.moveIntoFolder).toHaveBeenCalledWith("http://nohost/plone", [
+            "http://nohost/plone/folder/a",
+        ]);
+        expect(selection.clear).toHaveBeenCalled();
+        expect(interactions.parentDrop).toBe(false);
+    });
+
+    it("aborts the parent move when the confirmation is declined", async () => {
+        const confirm = makeConfirm(false);
+        const { interactions, contents } = make(
+            [item("a"), item("b")],
+            makeSelection(),
+            makeClipboard(),
+            makeUpload(),
+            confirm
+        );
+        interactions.onDragStart(0);
+        await interactions.onParentDrop(dragEvent());
+        expect(contents.moveIntoFolder).not.toHaveBeenCalled();
+    });
+
+    it("uploads dropped files into the parent folder (no internal drag)", async () => {
+        const { interactions, upload } = make([item("a")]);
+        await interactions.onParentDrop(dragEvent([{ name: "x.txt" }]));
+        expect(upload.uploadFiles).toHaveBeenCalledWith(
+            [{ name: "x.txt" }],
+            "http://nohost/plone"
+        );
+    });
+
+    it("clears the parent highlight on drag leave", () => {
+        const { interactions } = make([item("a")]);
+        interactions.onDragStart(0);
+        interactions.onParentDragEnter(dragEvent());
+        interactions.onParentDragLeave();
+        expect(interactions.parentDrop).toBe(false);
+    });
+
+    it("keeps the parent highlight lit across dragover (re-affirmed each event)", () => {
+        // A dragleave onto the placeholder's children clears parentDrop; the
+        // continuous dragover stream must restore it so the target stays lit.
+        const { interactions } = make([item("a")]);
+        interactions.onDragStart(0);
+        interactions.onParentDragEnter(dragEvent());
+        interactions.onParentDragLeave(); // crossed onto a child → cleared
+        expect(interactions.parentDrop).toBe(false);
+        const event = dragEvent();
+        interactions.onParentDragOver(event);
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(interactions.parentDrop).toBe(true);
+    });
+
     it("live-previews the reorder as the drag passes a non-folder row", () => {
         const { interactions, contents } = make([item("a"), item("b"), item("c")]);
         interactions.onDragStart(0);
-        interactions.onDragEnter(2);
+        interactions.onInternalHover(2, false);
         // The dragged row glides to slot 2 (flip animates the displaced rows) and
         // the drop will commit from there.
         expect(contents.movePreview).toHaveBeenCalledWith(
@@ -298,9 +420,22 @@ describe("ListInteractions — onDrop", () => {
     it("commits the previewed reorder on drop in manual-order mode", async () => {
         const { interactions, contents } = make([item("a"), item("b")]);
         interactions.onDragStart(0);
-        interactions.onDragEnter(1); // live preview moves the dragged row to slot 1
+        interactions.onInternalHover(1, false); // live preview moves the dragged row to slot 1
         await interactions.onDrop(1);
         expect(contents.commitReorder).toHaveBeenCalledWith("a", 1, ["a", "b"]);
+        expect(contents.moveIntoFolder).not.toHaveBeenCalled();
+    });
+
+    it("commits a reorder (not a move-into) when dropped between folders", async () => {
+        const { interactions, contents } = make([
+            item("a", { is_folderish: true }),
+            item("b", { is_folderish: true }),
+            item("c", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0); // drag folder a
+        interactions.onInternalHover(2, false); // edge band of folder c → reorder
+        await interactions.onDrop(2);
+        expect(contents.commitReorder).toHaveBeenCalledWith("a", 2, ["a", "b", "c"]);
         expect(contents.moveIntoFolder).not.toHaveBeenCalled();
     });
 
@@ -308,7 +443,7 @@ describe("ListInteractions — onDrop", () => {
         const { interactions, contents } = make([item("a"), item("b")]);
         contents.sortOn = "modified";
         interactions.onDragStart(0);
-        interactions.onDragEnter(1);
+        interactions.onInternalHover(1, false);
         await interactions.onDrop(1);
         expect(contents.movePreview).not.toHaveBeenCalled();
         expect(contents.commitReorder).not.toHaveBeenCalled();
@@ -332,7 +467,7 @@ describe("ListInteractions — onDrop", () => {
     it("restores the real order when a previewed drag is abandoned", () => {
         const { interactions, contents } = make([item("a"), item("b"), item("c")]);
         interactions.onDragStart(0);
-        interactions.onDragEnter(2); // preview moved the rows
+        interactions.onInternalHover(2, false); // preview moved the rows
         interactions.onDragEnd(); // dropped outside / Esc — no commit
         expect(contents.commitReorder).not.toHaveBeenCalled();
         expect(contents.load).toHaveBeenCalledWith({ silent: true });
@@ -353,7 +488,7 @@ describe("ListInteractions — onDrop", () => {
             selection
         );
         interactions.onDragStart(1); // grab the selected run {b, c}
-        interactions.onDragEnter(3); // drag past d
+        interactions.onInternalHover(3, false); // drag past d
         expect(contents.movePreviewBlock).toHaveBeenCalledWith(["b", "c"], 3);
         await interactions.onDrop(3);
         expect(contents.commitReorderBlock).toHaveBeenCalledWith(
@@ -371,7 +506,7 @@ describe("ListInteractions — onDrop", () => {
             selection
         );
         interactions.onDragStart(0);
-        interactions.onDragEnter(2);
+        interactions.onInternalHover(2, false);
         await interactions.onDrop(2);
         expect(contents.movePreviewBlock).not.toHaveBeenCalled();
         expect(contents.commitReorderBlock).not.toHaveBeenCalled();
@@ -385,8 +520,81 @@ describe("ListInteractions — onDrop", () => {
             selection
         );
         interactions.onDragStart(1);
-        interactions.onDragEnter(2); // hover the other selected row in the block
+        interactions.onInternalHover(2, false); // hover the other selected row in the block
         expect(contents.movePreviewBlock).not.toHaveBeenCalled();
+    });
+});
+
+// A dragover event over an element of the given rect, with the pointer at the
+// given fraction along an axis (the bits isIntoZone reads).
+function overEvent(
+    fraction: number,
+    axis: "x" | "y",
+    rect = { left: 0, top: 0, width: 100, height: 40 }
+) {
+    const clientX = axis === "x" ? rect.left + fraction * rect.width : 0;
+    const clientY = axis === "y" ? rect.top + fraction * rect.height : 0;
+    return {
+        preventDefault: jest.fn(),
+        clientX,
+        clientY,
+        currentTarget: { getBoundingClientRect: () => rect },
+        dataTransfer: { types: ["text/plain"], files: [], dropEffect: "none" },
+    } as unknown as DragEvent;
+}
+
+describe("ListInteractions — folder drop zones (dragover geometry)", () => {
+    it("treats the centre of a folder row as move-into (table, y axis)", () => {
+        const { interactions } = make([item("a"), item("f", { is_folderish: true })]);
+        interactions.onDragStart(0);
+        interactions.onRowDragOver(overEvent(0.5, "y"), 1, "y");
+        expect(interactions.dropIndex).toBe(1);
+    });
+
+    it("treats the top edge of a folder row as reorder (table, y axis)", () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0);
+        interactions.onRowDragOver(overEvent(0.05, "y"), 1, "y");
+        expect(interactions.dropIndex).toBe(-1);
+        expect(contents.movePreview).toHaveBeenCalledWith(
+            "http://nohost/plone/folder/a",
+            1
+        );
+    });
+
+    it("uses the x axis for grid cards: the left edge reorders", () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+        ]);
+        interactions.onDragStart(0);
+        interactions.onRowDragOver(overEvent(0.05, "x"), 1, "x"); // left edge
+        expect(contents.movePreview).toHaveBeenCalledWith(
+            "http://nohost/plone/folder/a",
+            1
+        );
+        expect(interactions.dropIndex).toBe(-1);
+    });
+
+    it("uses the x axis for grid cards: the centre moves into the folder", () => {
+        const { interactions } = make([item("a"), item("f", { is_folderish: true })]);
+        interactions.onDragStart(0);
+        interactions.onRowDragOver(overEvent(0.5, "x"), 1, "x"); // centre
+        expect(interactions.dropIndex).toBe(1);
+    });
+
+    it("always reorders over a non-folder row regardless of pointer position", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.onDragStart(0);
+        interactions.onRowDragOver(overEvent(0.5, "y"), 2, "y"); // dead centre
+        expect(interactions.dropIndex).toBe(-1);
+        expect(contents.movePreview).toHaveBeenCalledWith(
+            "http://nohost/plone/folder/a",
+            2
+        );
     });
 });
 
