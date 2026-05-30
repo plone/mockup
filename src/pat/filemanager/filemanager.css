@@ -821,6 +821,20 @@ body:has(.pat-filemanager) #portal-header {
     color: #0d6efd;
 }
 
+/* Drag a column header onto another to reorder the columns. */
+.pat-filemanager-app .filemanager-header[draggable="true"] {
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-header.col-dragging {
+    opacity: 0.4;
+}
+
+/* Accent bar on the header the dragged column will drop onto. */
+.pat-filemanager-app .filemanager-header.col-drop-target {
+    box-shadow: inset 3px 0 0 var(--filemanager-drop);
+}
+
 .pat-filemanager-app .filemanager-thumb {
     width: 2.5rem;
     height: 2.5rem;

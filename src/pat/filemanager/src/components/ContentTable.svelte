@@ -27,6 +27,39 @@
     function toggleAll(event) {
         selection.setPage(contents.items, event.currentTarget.checked);
     }
+
+    // Drag a column header onto another to reorder the visible columns (the
+    // ColumnsConfig popover offers the same via keyboard). `dragColKey` is the
+    // header being dragged, `dropColKey` the one currently hovered.
+    let dragColKey = $state(null);
+    let dropColKey = $state(null);
+
+    function onColDragStart(key) {
+        dragColKey = key;
+    }
+
+    function onColDragEnter(key) {
+        if (dragColKey && key !== dragColKey) dropColKey = key;
+    }
+
+    function onColDragOver(event) {
+        if (dragColKey) event.preventDefault();
+    }
+
+    function onColDrop(targetKey) {
+        if (dragColKey && dragColKey !== targetKey) {
+            const from = columnsStore.active.indexOf(dragColKey);
+            const to = columnsStore.active.indexOf(targetKey);
+            if (from >= 0 && to >= 0) columnsStore.move(dragColKey, to - from);
+        }
+        dragColKey = null;
+        dropColKey = null;
+    }
+
+    function onColDragEnd() {
+        dragColKey = null;
+        dropColKey = null;
+    }
 </script>
 
 <table class="filemanager-table" class:can-reorder={interactions.canReorder}>
@@ -42,7 +75,17 @@
                 />
             </th>
             {#each columns as column (column.key)}
-                <th class="filemanager-header filemanager-header-{column.type}">
+                <th
+                    class="filemanager-header filemanager-header-{column.type}"
+                    class:col-dragging={dragColKey === column.key}
+                    class:col-drop-target={dropColKey === column.key}
+                    draggable="true"
+                    ondragstart={() => onColDragStart(column.key)}
+                    ondragenter={() => onColDragEnter(column.key)}
+                    ondragover={onColDragOver}
+                    ondrop={() => onColDrop(column.key)}
+                    ondragend={onColDragEnd}
+                >
                     {#if column.sortIndex}
                         <button
                             type="button"
