@@ -1019,6 +1019,52 @@ body:has(.pat-filemanager) #portal-header {
     border-radius: 2px;
 }
 
+/* Loading skeletons: muted blocks that occupy the same space the loaded rows
+   and cards will, so swapping in the real content doesn't shift the layout. A
+   slow opacity pulse hints that work is in progress; disabled for users who
+   prefer reduced motion. Pure CSS, no JS. */
+.pat-filemanager-app .filemanager-skeleton {
+    background: #e9ecef;
+    border-radius: 4px;
+    animation: filemanager-skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes filemanager-skeleton-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pat-filemanager-app .filemanager-skeleton {
+        animation: none;
+    }
+}
+
+/* Grid skeleton cards reuse the real card/preview boxes, so the grid reserves
+   the exact 4:3 tiles — just greyed out and non-interactive. */
+.pat-filemanager-app .filemanager-card-skeleton {
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-card-skeleton .filemanager-card-title {
+    height: 0.9rem;
+    width: 70%;
+}
+
+/* Table skeleton bar fills the cell at text height (capped so it reads as a
+   placeholder rather than stretching across wide columns). */
+.pat-filemanager-app .filemanager-skeleton-bar {
+    display: block;
+    height: 0.9rem;
+    width: 100%;
+    max-width: 12rem;
+}
+
 .pat-filemanager-app .filemanager-state {
     display: inline-block;
     padding: 0.1rem 0.45rem;

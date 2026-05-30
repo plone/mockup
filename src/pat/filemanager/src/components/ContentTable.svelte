@@ -64,7 +64,11 @@
     }
 </script>
 
-<table class="filemanager-table" class:can-reorder={interactions.canReorder}>
+<table
+    class="filemanager-table"
+    class:can-reorder={interactions.canReorder}
+    aria-busy={contents.loading}
+>
     <thead>
         <tr>
             <th class="filemanager-select">
@@ -109,9 +113,21 @@
     </thead>
     <tbody use:sortableList={{ interactions }}>
         {#if contents.loading}
-            <tr>
-                <td class="filemanager-message" colspan={colSpan}>{_t("Loading…")}</td>
-            </tr>
+            {#each { length: contents.placeholderCount } as _, i (i)}
+                <tr class="filemanager-row filemanager-row-skeleton" aria-hidden="true">
+                    <td class="filemanager-select"></td>
+                    {#each columns as column (column.key)}
+                        <td class="filemanager-cell filemanager-cell-{column.type}">
+                            {#if column.type === "image"}
+                                <span class="filemanager-thumb-placeholder filemanager-skeleton"></span>
+                            {:else}
+                                <span class="filemanager-skeleton filemanager-skeleton-bar"></span>
+                            {/if}
+                        </td>
+                    {/each}
+                    <td class="filemanager-actions-col"></td>
+                </tr>
+            {/each}
         {:else if contents.error}
             <tr>
                 <td class="filemanager-message filemanager-error" colspan={colSpan}>

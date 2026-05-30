@@ -45,7 +45,18 @@
 </script>
 
 {#if contents.loading}
-    <p class="filemanager-message">{_t("Loading…")}</p>
+    <ul
+        class="filemanager-grid grid-size-{view.gridScale} filemanager-grid-skeleton"
+        aria-busy="true"
+        aria-label={_t("Loading…")}
+    >
+        {#each { length: contents.placeholderCount } as _, i (i)}
+            <li class="filemanager-card filemanager-card-skeleton" aria-hidden="true">
+                <span class="filemanager-card-preview filemanager-skeleton"></span>
+                <span class="filemanager-card-title filemanager-skeleton"></span>
+            </li>
+        {/each}
+    </ul>
 {:else if contents.error}
     <p class="filemanager-message filemanager-error">{contents.error.message}</p>
 {:else}

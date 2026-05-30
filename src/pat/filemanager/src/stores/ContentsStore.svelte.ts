@@ -136,6 +136,20 @@ export class ContentsStore {
         return Math.max(1, Math.ceil(this.total / this.bSize));
     }
 
+    /**
+     * How many skeleton rows/cards the loading state should render. `load()`
+     * keeps the previous page's items until the response arrives, so their
+     * count predicts the next page exactly when paging/sorting/filtering within
+     * a folder — reserving the same space and avoiding layout shift. On a fresh
+     * load (no prior items) fall back to a modest screenful, clamped to the
+     * batch size so we never over-reserve for tiny folders.
+     */
+    get placeholderCount(): number {
+        const known = this.items.length;
+        if (known > 0) return Math.min(known, this.bSize);
+        return Math.min(this.bSize, 8);
+    }
+
     get hasActiveFilters(): boolean {
         return (
             this.searchableText.trim().length > 0 ||
