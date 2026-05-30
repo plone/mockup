@@ -382,12 +382,23 @@ body:has(.pat-filemanager) #portal-header {
     border-bottom-right-radius: 6px;
 }
 
-.pat-filemanager-app .filemanager-action-delete {
-    color: #b02a37;
+/* Scoped under .filemanager-actions so it wins over the generic
+   `.filemanager-actions button` rule (more specific than a lone class): a red
+   background with a white icon (the icon inherits #fff via fill: currentColor). */
+.pat-filemanager-app .filemanager-actions .filemanager-action-delete {
+    border-color: #b02a37;
+    background: #b02a37;
+    color: #fff;
 }
 
-.pat-filemanager-app .filemanager-action-delete:hover:not(:disabled) {
-    background: #f8d7da;
+.pat-filemanager-app .filemanager-actions .filemanager-action-delete:hover:not(:disabled) {
+    background: #9a2530;
+}
+
+/* Keep the icon white when disabled too (the shared :disabled rule otherwise
+   tints it muted grey); it just fades via the inherited opacity. */
+.pat-filemanager-app .filemanager-actions .filemanager-action-delete:disabled {
+    color: #fff;
 }
 
 .pat-filemanager-app .filemanager-actions button[aria-pressed="true"] {
