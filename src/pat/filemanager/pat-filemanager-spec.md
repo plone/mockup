@@ -8,7 +8,7 @@ plone.restapi.
 
 - **Pattern name:** `pat-filemanager` (trigger `.pat-filemanager`, dir `src/pat/filemanager/`)
 - **State management:** runes in `.svelte.ts` store classes (`$state`/`$derived`), provided to components via `setContext`
-- **Grid / drag & drop:** custom Svelte table + native HTML5 drag-and-drop (no DataTables, no DnD library); reordering is animated with Svelte's built-in `animate:flip` (no animation library)
+- **Grid / drag & drop:** custom Svelte table + [sortablejs](https://github.com/SortableJS/Sortable) for the drag gesture (the same library pat-contentbrowser uses), wrapped in a small Svelte `use:` action; the decision logic (reorder vs move-into-folder vs move-into-parent) lives in the shared `ListInteractions` controller. sortablejs animates the reorder; external file-drop (upload) stays on native DOM events. See §21. _(Earlier iterations used hand-rolled native HTML5 DnD with `animate:flip`; replaced by sortablejs — §21.)_
 - **API gaps (rename, recursive workflow, bulk PATCH):** pure restapi with client-side loops, **no backend additions**
 - no scss, use pure css or bootstrap, which is present by default in plone
 ## 1. Goals & non-goals
@@ -966,3 +966,80 @@ No restapi, store-API, or test changes.
   (`right: 0`) so it doesn't run off the right edge. Because it lives in the
   table header it's table-only by construction — grid mode renders no columns —
   so the §20 `view.mode !== "grid"` guard in `App.svelte` is gone.
+
+## 23. Drag & drop on sortablejs (done)
+
+The hand-rolled native HTML5 reorder (the live `movePreview`/`animate:flip`
+preview, the per-row `onDragStart`/`onInternalHover`/`onDrop` machinery, the
+three-band folder-zone geometry, and the grid's wrap-marker measurement) is
+replaced by **[sortablejs](https://github.com/SortableJS/Sortable)** — the same
+library pat-contentbrowser uses for its selected-items reorder. sortablejs owns
+the drag gesture and its animation; the filemanager keeps all the *decisions*.
+
+- **`utils/sortable.ts` — a Svelte `use:` action.** `sortableList(node, {interactions})` calls `Sortable.create` on the listing container (table
+  `<tbody>`, grid `<ul>`). `draggable: "[data-fm-item]"` so only listing items
+  drag — the grid's "up to parent" placeholder and any loading/empty message
+  rows are excluded. `filter: "a, button, input, label"` keeps links, buttons
+  and the checkbox clickable. Because Svelte owns the listing via a keyed
+  `{#each}`, `onEnd` **reverts sortablejs's DOM move** (re-inserting the dragged
+  node before the sibling captured at `onStart`) *before* the controller mutates
+  the model — the re-render then lays the rows out in committed order, so
+  Svelte's view of the DOM never drifts from the real DOM.
+- **`ListInteractions` drag hooks.** The action drives three methods:
+  - `dragStart(index)` — snapshots the dragged row, its url, and (in
+    manual-order mode) the server order for a relative-move commit. The index is
+    sortablejs's **`oldDraggableIndex`** (counted over `[data-fm-item]` only), so
+    the grid's non-draggable up-card doesn't offset it.
+  - `dragMove(relatedIndex)` → `boolean` — the hover decision: over the parent
+    placeholder, or over **any folder but the dragged item itself**, it returns
+    `false` (sortablejs must not reorder-swap) and lights the target (`dropIndex`
+    / `parentDrop`); otherwise it returns `canReorder` (reorder allowed only in
+    manual-order mode).
+  - `dragEnd(delta)` — commits: a parent move, a move-into-folder, or, in
+    manual-order mode, `contents.moveTo(id, delta, subset)` where
+    `delta = newDraggableIndex − oldDraggableIndex`.
+- **Folders are *solid* drop targets (the fix for drag-into-folder).** The first
+  cut copied the old §17 three-band geometry (central 0.3–0.7 = move-into, edges
+  = reorder-around-the-folder). That broke drag-into-folder in practice —
+  especially in the **vertical table**, where sortablejs swaps the dragged row
+  with every row it crosses, so the folder slid out from under the pointer
+  ("chasing") and you could never land in its central band. The fix: `dragMove`
+  returns `false` for *any* hover over a folder, so sortablejs never swaps the
+  dragged item with a folder — the folder stays put and the whole card/row is a
+  reliable move-into target. Reordering past a folder still works by hovering the
+  next non-folder item beyond it. Trade-off: you can no longer reorder an item to
+  sit *between* a folder and its neighbour by aiming at the folder, and dropping
+  one folder onto another moves it *into* that folder rather than reordering the
+  two; reordering among non-folder items is unaffected. The band geometry
+  (`relatedRect`/`INTO_BAND`) and the action's `axis` param were removed.
+- **Move-into-folder & move-into-parent preserved (the hard requirement).**
+  Move-into-folder runs entirely through sortablejs's `onMove` (folder
+  highlight) + `onEnd`. The parent "up" card stays a native-DnD drop target
+  (sortablejs uses native HTML5 DnD, so the card's `ondrag*` handlers still fire
+  during an item drag); its handlers set `parentDrop`, `dragMove` suppresses any
+  reorder while it's lit, and `dragEnd` commits the parent move. Multi-selection
+  moves still work: `dragSources` uses the whole selection when the dragged row
+  is part of it. All three gestures were verified end-to-end in a live Plone
+  Classic listing (drag-into-folder in both table and grid, drag-into-parent in
+  the grid).
+- **External file drags (uploads) unchanged in spirit.** They never start
+  sortablejs (no mousedown on a draggable), so the row/parent `on*Drag*`/`on*Drop`
+  handlers are now **file-only** — they stand down while `dragActive` and
+  otherwise route an OS file drop into the hovered subfolder / parent / current
+  folder exactly as before.
+- **CSS.** The live-preview marker rules (`.dragging` margins + `::before`/`::after` accent bars, `.wrapped-start`, `.reorder-after`, the table reorder
+  gradient) are gone; sortablejs's drop placeholder is styled via
+  `chosenClass: "dragging"` (the faded source) and `ghostClass: "filemanager-drag-ghost"` (an accent-outlined slot).
+- **Trade-off — multi-row *block reorder* dropped.** The old code could drag a
+  contiguous multi-selection as one block when **reordering**; the sortablejs
+  baseline reorders a single row at a time (sortablejs's MultiDrag plugin would
+  conflict with the app's own `SelectionStore`). Multi-selection move-into-folder
+  and move-into-parent are unaffected. `ContentsStore.movePreview*` /
+  `commitReorder*` are now unused by the UI (kept, still unit-tested, available
+  if block reorder returns via MultiDrag).
+- **Validation.** Full filemanager jest suite green (20 suites, 214 passing, 1
+  skipped); `ListInteractions.test.ts` rewritten to the new
+  `dragStart`/`dragMove`/`dragEnd` API; both views compile clean under the Svelte
+  compiler; no new TypeScript errors. **Interactive drag in a real Plone listing
+  is the recommended manual check** (native-DnD gestures can't be exercised by
+  the jest unit layer).

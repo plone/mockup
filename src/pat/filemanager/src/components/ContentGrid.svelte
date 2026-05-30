@@ -1,7 +1,7 @@
 <script>
     import { getContext } from "svelte";
-    import { flip } from "svelte/animate";
     import { thumbnailUrl } from "../utils/format.ts";
+    import { sortableList } from "../utils/sortable.ts";
     import { _t } from "../utils/i18n.ts";
     import Icon from "./Icon.svelte";
 
@@ -42,45 +42,6 @@
         selection.clear();
         contents.navigateTo(contents.parentUrl);
     }
-
-    // The grid element, so we can measure where the live reorder parked the
-    // dragged card relative to its neighbours.
-    let gridEl = $state();
-    // The item index whose trailing (right) edge should carry the insertion
-    // marker, or -1 when the marker belongs on the dragged card's own left edge.
-    let trailingIndex = $state(-1);
-
-    // The dragged card's left-edge marker reads as "insert before this card". On
-    // a forward (left-to-right) drag that appends after a row's last image, the
-    // card lands in the *next* row's first cell, so that gap would wrongly show at
-    // the start of the following row. Detect the wrap — the dragged card sits
-    // lower than its previous sibling — and, only when the drag moved forward,
-    // move the marker onto the trailing edge of the previous row's last card so it
-    // reads "after the last image in the row". A backward (right-to-left) drag
-    // that lands in the same first cell genuinely means "before this card", so its
-    // marker stays put. flip animates via transform, so offsetTop reports the
-    // final cell position and is reliable even mid-animation.
-    $effect(() => {
-        // Touch the reactive inputs that can change the parked slot or the
-        // column layout, so the measurement re-runs whenever they do.
-        const forward = interactions.canReorder && interactions.dragMovedForward;
-        const di = interactions.dragIndex;
-        view.gridScale;
-        contents.items.length;
-        if (!forward || di < 1 || !gridEl) {
-            trailingIndex = -1;
-            return;
-        }
-        const dragged = gridEl.querySelector(".filemanager-card.dragging");
-        const prev = dragged?.previousElementSibling;
-        // Only listed items carry an index; the "up to parent" placeholder is not
-        // a reorder slot, so a wrap onto the first real row keeps the left marker.
-        if (!prev || prev.classList.contains("filemanager-card-up")) {
-            trailingIndex = -1;
-            return;
-        }
-        trailingIndex = dragged.offsetTop > prev.offsetTop ? di - 1 : -1;
-    });
 </script>
 
 {#if contents.loading}
@@ -89,7 +50,7 @@
     <p class="filemanager-message filemanager-error">{contents.error.message}</p>
 {:else}
     <ul
-        bind:this={gridEl}
+        use:sortableList={{ interactions }}
         class="filemanager-grid grid-size-{view.gridScale}"
         class:can-reorder={interactions.canReorder}
         role="listbox"
@@ -138,23 +99,17 @@
                 class:is-folder={item.is_folderish}
                 class:is-selected={selection.isSelected(item)}
                 class:is-cut={interactions.isCut(item)}
-                class:dragging={interactions.dragIndex === index}
-                class:wrapped-start={interactions.dragIndex === index &&
-                    trailingIndex >= 0}
-                class:reorder-after={trailingIndex === index}
                 class:is-busy={folderTask}
                 class:drop-target={interactions.dropIndex === index ||
                     interactions.fileDropIndex === index}
-                draggable="true"
+                data-fm-item
+                data-fm-index={index}
                 tabindex="0"
-                animate:flip={{ duration: 200 }}
                 onclick={(e) => interactions.onCardClick(e, item, index)}
                 onkeydown={(e) => interactions.onItemKeydown(e, item, index)}
                 onmousedown={(e) => interactions.onItemMouseDown(e)}
-                ondragstart={() => interactions.onDragStart(index)}
                 ondragenter={(e) => interactions.onRowDragEnter(e, index)}
-                ondragover={(e) => interactions.onRowDragOver(e, index, "x")}
-                ondragend={() => interactions.onDragEnd()}
+                ondragover={(e) => interactions.onRowDragOver(e, index)}
                 ondrop={(e) => interactions.onRowDrop(e, index)}
             >
                 <label

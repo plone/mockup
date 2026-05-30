@@ -1,9 +1,9 @@
 <script>
     import { getContext } from "svelte";
-    import { flip } from "svelte/animate";
     import ColumnCell from "./ColumnCell.svelte";
     import ColumnsConfig from "./ColumnsConfig.svelte";
     import RowActionMenu from "./RowActionMenu.svelte";
+    import { sortableList } from "../utils/sortable.ts";
     import { _t } from "../utils/i18n.ts";
 
     /** @type {import("../stores/ContentsStore.svelte").ContentsStore} */
@@ -107,7 +107,7 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody use:sortableList={{ interactions }}>
         {#if contents.loading}
             <tr>
                 <td class="filemanager-message" colspan={colSpan}>{_t("Loading…")}</td>
@@ -130,18 +130,15 @@
                     class:is-folder={item.is_folderish}
                     class:is-selected={selection.isSelected(item)}
                     class:is-cut={interactions.isCut(item)}
-                    class:dragging={interactions.dragIndex === index}
                     class:is-busy={folderTask}
                     class:drop-target={interactions.dropIndex === index ||
                         interactions.fileDropIndex === index}
-                    draggable="true"
-                    animate:flip={{ duration: 200 }}
+                    data-fm-item
+                    data-fm-index={index}
                     onclick={(e) => interactions.onItemClick(e, item, index)}
                     onmousedown={(e) => interactions.onItemMouseDown(e)}
-                    ondragstart={() => interactions.onDragStart(index)}
                     ondragenter={(e) => interactions.onRowDragEnter(e, index)}
                     ondragover={(e) => interactions.onRowDragOver(e, index)}
-                    ondragend={() => interactions.onDragEnd()}
                     ondrop={(e) => interactions.onRowDrop(e, index)}
                 >
                     <td class="filemanager-select">

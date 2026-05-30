@@ -143,9 +143,10 @@ popover.
 
 The toolbar offers a **Table** / **Grid** switch (the choice persists in a
 cookie). Both views share the same selection, drag (reorder + drag-into-folder),
-clipboard, filtering, pagination, upload, and batch actions — the only
-view-specific code is the rendered element, since `animate:flip` must sit on the
-immediate child of a keyed each. The grid is a photo-organizing view with larger
+clipboard, filtering, pagination, upload, and batch actions — the shared drag
+logic lives in `ListInteractions`, driven by a [sortablejs](https://github.com/SortableJS/Sortable)
+`use:` action (`utils/sortable.ts`), so each view only differs in the rendered
+element. The grid is a photo-organizing view with larger
 previews; column configuration is table-only and hidden in grid mode. The grid
 is an ARIA `listbox` of `option` cards. Each card is a **single tab stop** — its
 checkbox and title link are removed from the tab order (`tabindex="-1"`), so

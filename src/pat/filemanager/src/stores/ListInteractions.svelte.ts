@@ -7,12 +7,16 @@ import type { ProgressStore } from "./ProgressStore.svelte";
 import type { SelectionStore } from "./SelectionStore.svelte";
 import type { UploadStore } from "./UploadStore.svelte";
 
-// Shared list-interaction logic (selection clicks + native HTML5 drag) for any
-// view that renders the listing. Extracted from ContentTable so the grid reuses
-// exactly the same selection and drag-into-folder/reorder behaviour. The
-// rendered element (a <tr> in the table, a card in the grid) still lives in each
-// view because animate:flip must sit on the immediate child of a keyed each and
-// is invalid on a component (spec §20.2) — only the behaviour is shared.
+// Shared list-interaction logic (selection clicks + drag) for any view that
+// renders the listing. Extracted from ContentTable so the grid reuses exactly
+// the same selection and drag-into-folder/reorder behaviour.
+//
+// The drag gesture itself is owned by sortablejs (see utils/sortable.ts); this
+// controller only makes the decisions. sortablejs calls `dragStart`, `dragMove`
+// and `dragEnd`, which translate a drag into one of three outcomes: a reorder
+// within the listing, a move into a hovered folder, or a move into the parent
+// container. External file drags (uploads) never involve sortablejs and are
+// handled by the separate `on*Drag*`/`on*Drop` file handlers below.
 
 export class ListInteractions {
     contents: ContentsStore;
@@ -22,13 +26,13 @@ export class ListInteractions {
     confirm?: ConfirmStore;
     progress?: ProgressStore;
 
-    // `dragIndex >= 0` marks an internal drag in progress, so items claim the
-    // drop instead of letting external file drags bubble to the upload zone;
+    // `dragActive` is true while a sortablejs item drag is in progress, so the
+    // file handlers below stand down and let sortablejs own the gesture.
     // `dropIndex` is the folderish item currently highlighted as a move-into
     // target; `fileDropIndex` is the folderish item highlighted while dragging
     // external files over it (upload into that subfolder); `anchorIndex` is the
     // pivot for shift-click range selection.
-    dragIndex = $state(-1);
+    dragActive = $state(false);
     dropIndex = $state(-1);
     fileDropIndex = $state(-1);
     anchorIndex = $state(-1);
@@ -36,18 +40,12 @@ export class ListInteractions {
     // an external file drag hovers it (drop = move/upload into the parent).
     parentDrop = $state(false);
 
-    // Drag-reorder bookkeeping for the live preview: where the drag began, the
-    // dragged item's url (stable while the rows shuffle under it), and the
-    // server order snapshotted at drag start so the drop can be committed as a
-    // single relative move. `dragIndex` tracks the dragged row's *current* slot
-    // as `movePreview` shuffles it; `dragStartIndex` stays put for the delta.
+    // Drag bookkeeping captured at drag start: the dragged row's model index,
+    // its url, and the server order snapshotted then so a reorder drop commits a
+    // single relative move against the order the server still has.
     private dragStartIndex = -1;
     private draggedId: string | null = null;
     private dragSubset: string[] = [];
-    // When the dragged row is part of a contiguous run of selected rows, the
-    // object-ids of that whole run (in listing order) so the drag moves them as
-    // one block; null for a plain single-row drag.
-    private dragBlock: string[] | null = null;
 
     constructor(
         contents: ContentsStore,
@@ -69,24 +67,12 @@ export class ListInteractions {
      * Ask the user to confirm an action. Uses the app's <dialog>-based
      * ConfirmStore when available, falling back to the native window.confirm.
      */
-    private async confirmAction(message: string, confirmLabel: string): Promise<boolean> {
+    private async confirmAction(
+        message: string,
+        confirmLabel: string
+    ): Promise<boolean> {
         if (this.confirm) return this.confirm.ask(message, { confirmLabel });
         return window.confirm(message);
-    }
-
-    get dragActive(): boolean {
-        return this.dragIndex >= 0;
-    }
-
-    // True once the live reorder has carried the dragged row past its start slot
-    // toward a higher index (a forward / left-to-right drag). The grid uses this
-    // to tell an "append after the previous row" wrap — where the row lands in
-    // the next row's first cell and the marker belongs on that previous row's
-    // trailing edge — from a plain "insert before this row's first card", where
-    // the marker stays on the dragged card's own leading edge. Both look identical
-    // in the DOM (dragged card in a row's first cell), so direction disambiguates.
-    get dragMovedForward(): boolean {
-        return this.dragActive && this.dragIndex > this.dragStartIndex;
     }
 
     /** Reorder only makes sense while the listing is in manual-order mode. */
@@ -97,7 +83,9 @@ export class ListInteractions {
     // Clicks on these controls (links, buttons, the checkbox, its label) keep
     // their own behaviour and must not trigger row/card selection.
     private isInteractive(target: EventTarget | null): boolean {
-        return Boolean((target as HTMLElement | null)?.closest("a, button, input, label"));
+        return Boolean(
+            (target as HTMLElement | null)?.closest("a, button, input, label")
+        );
     }
 
     // Plain → replace selection; ctrl/meta → toggle; shift → range from anchor.
@@ -179,173 +167,96 @@ export class ListInteractions {
     }
 
     isCut(item: ContentItem): boolean {
-        return this.clipboard.op === "cut" && this.clipboard.sources.includes(item["@id"]);
+        return (
+            this.clipboard.op === "cut" && this.clipboard.sources.includes(item["@id"])
+        );
     }
 
-    onDragStart(index: number): void {
-        this.dragIndex = index;
+    // ── sortablejs drag hooks ────────────────────────────────────────────────
+    // The action in utils/sortable.ts calls these; they hold no DOM references.
+
+    /** A drag began on the listing item at model index `index`. */
+    dragStart(index: number): void {
+        this.dragActive = true;
         this.dragStartIndex = index;
         this.draggedId = this.contents.items[index]?.["@id"] ?? null;
-        // Snapshot the server order now, before any live preview shuffles it, so
-        // the drop commits a relative move against the order the server still has.
+        // Snapshot the server order now so a reorder drop commits a relative move
+        // against the order the server still has.
         this.dragSubset = this.canReorder ? [...this.contents.currentIds] : [];
-        // If the whole selection is a contiguous run that includes this row, drag
-        // it as one block; otherwise fall back to a single-row drag.
-        this.dragBlock = this.canReorder ? this.contiguousBlock(index) : null;
+        this.dropIndex = -1;
+        this.parentDrop = false;
         this.fileDropIndex = -1;
     }
 
     /**
-     * The object-ids (in listing order) of a contiguous run of selected rows
-     * that includes `index`, but only when that run is the entire selection and
-     * holds at least two rows. Returns null otherwise, so non-contiguous or
-     * partly off-page selections drop back to moving just the dragged row.
+     * A hover during the drag, over the listing item at model index
+     * `relatedIndex` (-1 when not over an item). Returns whether sortablejs may
+     * reorder-swap for this hover:
+     *
+     *  - over the parent placeholder (tracked by the native handlers) → false,
+     *    keep the list still so only the placeholder highlights;
+     *  - over any folder but the dragged item itself → false, and highlight the
+     *    whole folder as a move-into target. Folders are *solid* drop targets:
+     *    never swapping the dragged item with a folder keeps the folder still
+     *    under the pointer, so aiming at it to drop inside is reliable (a
+     *    swapping folder would slide away as you approached it — especially in
+     *    the vertical table, where every crossed row swaps). Reordering past a
+     *    folder still works by hovering the next non-folder item beyond it;
+     *  - otherwise reorder, but only in manual-order mode.
      */
-    private contiguousBlock(index: number): string[] | null {
-        const items = this.contents.items;
-        const dragged = items[index];
-        if (!dragged || !this.selection.isSelected(dragged) || this.selection.count < 2) {
-            return null;
+    dragMove(relatedIndex: number): boolean {
+        if (this.parentDrop) {
+            this.dropIndex = -1;
+            return false;
         }
-        const selected: number[] = [];
-        items.forEach((it, i) => {
-            if (this.selection.isSelected(it)) selected.push(i);
-        });
-        // Every selected item must be on this page and form one unbroken run.
-        if (selected.length !== this.selection.count) return null;
-        const min = selected[0];
-        const max = selected[selected.length - 1];
-        if (max - min + 1 !== selected.length) return null;
-        return items.slice(min, max + 1).map((it) => objId(it["@id"]));
+        const target = relatedIndex >= 0 ? this.contents.items[relatedIndex] : undefined;
+        if (target?.is_folderish && target["@id"] !== this.draggedId) {
+            this.dropIndex = relatedIndex;
+            return false;
+        }
+        this.dropIndex = -1;
+        return this.canReorder;
     }
 
-    onDragEnd(): void {
-        // `onDrop` clears `dragStartIndex` synchronously, so reaching here with it
-        // still set means the drag was abandoned (Esc / dropped outside). If a
-        // live preview had reordered the rows, reload to restore the real order.
-        const abandoned = this.dragStartIndex >= 0;
-        const previewed = abandoned && this.dragIndex !== this.dragStartIndex;
+    /**
+     * The drag ended. `delta` is the dragged row's net index shift within the
+     * listing (sortablejs's newIndex − oldIndex). The last hover decided the
+     * gesture: a parent-placeholder or folder move takes precedence over a
+     * reorder; otherwise, in manual-order mode, commit the reorder.
+     */
+    async dragEnd(delta: number): Promise<void> {
+        const active = this.dragActive;
+        const into = this.dropIndex;
+        const parent = this.parentDrop;
+        const from = this.dragStartIndex;
+        const draggedId = this.draggedId;
+        const subset = this.dragSubset;
         this.resetDrag();
-        if (previewed) void this.contents.load({ silent: true });
+        if (!active || from < 0 || !draggedId) return;
+        const dragged = this.contents.items[from];
+        if (!dragged) return;
+        if (parent) {
+            await this.moveToParent(dragged);
+            return;
+        }
+        if (into >= 0 && into !== from) {
+            const target = this.contents.items[into];
+            if (target?.is_folderish) await this.moveToFolder(target, dragged);
+            return;
+        }
+        if (!this.canReorder || delta === 0) return;
+        await this.contents.moveTo(objId(draggedId), delta, subset);
     }
 
     /** Clear all drag bookkeeping (shared by a committed drop and a cancel). */
     private resetDrag(): void {
-        this.dragIndex = -1;
+        this.dragActive = false;
         this.dropIndex = -1;
         this.fileDropIndex = -1;
         this.parentDrop = false;
         this.dragStartIndex = -1;
         this.draggedId = null;
         this.dragSubset = [];
-        this.dragBlock = null;
-    }
-
-    /**
-     * Decide what an internal drag hovering row `index` should do. `intoFolder`
-     * is true when the pointer sits in a folder's central move-into band (the
-     * caller derives it from the dragover geometry); it is always false for
-     * non-folder rows and for the reorder bands at a folder's edges.
-     *
-     * A central-band hover over a folder highlights it as a move-into target and
-     * snaps any live preview back, so the listing rests and only the green
-     * highlight shows. Every other hover live-reorders, sliding the dragged row
-     * (or block) into `index` so the rows make room under the cursor and the
-     * insertion marker tracks the drop point — for folders and non-folders alike.
-     */
-    onInternalHover(index: number, zone: "before" | "into" | "after" | "reorder"): void {
-        const target = this.contents.items[index];
-        // A central-band hover over any folder but the dragged item itself is a
-        // move-into. We compare the dragged *id* (not `dragIndex`): a reorder
-        // hover on this folder's edge sets `dragIndex`, so guarding on
-        // `index !== dragIndex` would wrongly veto the move-into once the pointer
-        // crossed the edge on its way to the centre.
-        if (
-            target?.is_folderish &&
-            zone === "into" &&
-            target["@id"] !== this.draggedId &&
-            !this.inDragBlock(index)
-        ) {
-            this.revertPreview();
-            this.dropIndex = index;
-            return;
-        }
-        this.dropIndex = -1;
-        if (!this.canReorder || !this.draggedId) return;
-        // Hovering another row in our own block is a no-op (you can't drop a block
-        // inside itself).
-        if (this.inDragBlock(index)) return;
-        const to = this.reorderTarget(index, zone);
-        if (to < 0 || to === this.dragIndex) return;
-        this.previewReorder(to);
-    }
-
-    /**
-     * The insertion *gap* a reorder hover points at — the marker is drawn just
-     * before the card currently at this index. A folder's trailing band inserts
-     * after the folder (gap `index + 1`); every other reorder hover inserts
-     * before the hovered card (gap `index`). This is a display-space gap with the
-     * dragged item still in place; the shift from removing it is applied when the
-     * drop commits (see `onDrop`), so the marker and the landing slot agree in
-     * both drag directions.
-     */
-    private reorderTarget(index: number, zone: "before" | "into" | "after" | "reorder"): number {
-        if (zone === "after") return index + 1; // folder trailing band → gap after it
-        if (zone === "before") return index; //    folder leading band → gap before it
-        // A block drag uses the live block preview + block commit, which work in
-        // the hovered-index space directly, so leave its target untouched.
-        if (this.dragBlock) return index;
-        // Single non-folder row: the drop lands on the side the drag is heading
-        // toward — the gap after the hovered card when moving to higher indices,
-        // before it when moving to lower — so the marker sits where it will land.
-        const cur = this.contents.items.findIndex((it) => it["@id"] === this.draggedId);
-        return cur >= 0 && cur < index ? index + 1 : index;
-    }
-
-    /** Whether row `index` belongs to the contiguous block currently dragged. */
-    private inDragBlock(index: number): boolean {
-        return Boolean(
-            this.dragBlock?.includes(objId(this.contents.items[index]?.["@id"] ?? ""))
-        );
-    }
-
-    /**
-     * Live-reorder so the rows make room as the cursor passes over them — flip
-     * animates the shift. A contiguous selection moves as one block; a single
-     * row lands on `index`. Subsequent calls for the dragged row's new slot are
-     * guarded by the caller, so the rows don't oscillate.
-     */
-    private previewReorder(index: number): void {
-        if (!this.draggedId) return;
-        if (this.dragBlock) {
-            this.contents.movePreviewBlock(this.dragBlock, index);
-            this.dragIndex = this.contents.currentIds.indexOf(objId(this.draggedId));
-        } else {
-            this.contents.movePreview(this.draggedId, index);
-            this.dragIndex = index;
-        }
-    }
-
-    /**
-     * Undo a live preview, returning the dragged row (or block) to the slot it
-     * started in. `movePreview` only ever moves the dragged item, so the other
-     * rows kept their relative order and re-inserting at the start index rebuilds
-     * the original listing exactly. Used when the pointer enters a folder's
-     * move-into band so the rows stop making room and rest behind the highlight.
-     */
-    private revertPreview(): void {
-        if (this.dragIndex === this.dragStartIndex || !this.draggedId) return;
-        if (this.dragBlock) {
-            // The grabbed row may sit mid-block, so restore from the block's own
-            // original start (its first id's slot in the drag-start snapshot).
-            this.contents.movePreviewBlock(
-                this.dragBlock,
-                this.dragSubset.indexOf(this.dragBlock[0])
-            );
-        } else {
-            this.contents.movePreview(this.draggedId, this.dragStartIndex);
-        }
-        this.dragIndex = this.dragStartIndex;
     }
 
     // The urls to move when dragging an item: the whole selection if the dragged
@@ -357,140 +268,85 @@ export class ListInteractions {
         return [dragged["@id"]];
     }
 
-    async onDrop(index: number): Promise<void> {
-        const from = this.dragStartIndex;
-        const draggedId = this.draggedId;
-        const subset = this.dragSubset;
-        const block = this.dragBlock;
-        // Where the dragged row sits now, after any live preview reorder.
-        const to = this.dragIndex;
-        // The folder highlighted as a move-into target (central band), or -1 when
-        // the last hover was a reorder (edge band / non-folder). This — not which
-        // row the pointer happens to be over at release — decides the gesture, so
-        // an edge-band drop between folders commits the reorder instead of being
-        // mistaken for a move-into.
-        const intoIndex = this.dropIndex;
-        // Clear synchronously so the dragend that follows this drop knows the drop
-        // was handled and doesn't undo the committed reorder.
-        this.resetDrag();
-        if (from < 0 || !draggedId) return;
-        const target = intoIndex >= 0 ? this.contents.items[intoIndex] : undefined;
-        // A move-into drop: the dragged row (or whole selection) goes into the
-        // highlighted folder. No live preview is in effect here, so commit nothing
-        // for the reorder.
-        if (target?.is_folderish && intoIndex !== from) {
-            const dragged = this.contents.items.find((it) => it["@id"] === draggedId);
-            if (dragged) {
-                const sources = this.dragSources(dragged);
-                const folder = (target.Title as string) || objId(target["@id"]);
-                // Moving into a folder takes the items out of the current listing,
-                // so confirm before committing it.
-                const ok = await this.confirmAction(
-                    _t('Move ${count} item(s) into "${folder}"?', {
-                        count: sources.length,
-                        folder,
-                    }),
-                    _t("Move")
-                );
-                if (ok) {
-                    // @move is a single server request, so the bar is
-                    // indeterminate (no per-item progress to report). Surface it
-                    // as a busy overlay on the target folder row/card.
-                    const move = () =>
-                        this.contents.moveIntoFolder(target["@id"], sources);
-                    if (this.progress) {
-                        await this.progress.track(
-                            _t('Moving ${count} item(s) into "${folder}"…', {
-                                count: sources.length,
-                                folder,
-                            }),
-                            move,
-                            { surface: "folder", targetUrl: target["@id"] }
-                        );
-                    } else {
-                        await move();
-                    }
-                    this.selection.clear();
-                }
-            }
-            return;
-        }
-        if (!this.canReorder) return;
-        // Persist the reorder against the order the server still had at drag start.
-        // A contiguous selection commits as a block (one move per row).
-        if (block) {
-            const finalStart = this.contents.currentIds.indexOf(block[0]);
-            await this.contents.commitReorderBlock(block, finalStart, subset);
+    /** Move the dragged sources (or whole selection) into `target` folder. */
+    private async moveToFolder(
+        target: ContentItem,
+        dragged: ContentItem
+    ): Promise<void> {
+        const sources = this.dragSources(dragged);
+        const folder = (target.Title as string) || objId(target["@id"]);
+        // Moving into a folder takes the items out of the current listing, so
+        // confirm before committing it.
+        const ok = await this.confirmAction(
+            _t('Move ${count} item(s) into "${folder}"?', {
+                count: sources.length,
+                folder,
+            }),
+            _t("Move")
+        );
+        if (!ok) return;
+        // @move is a single server request, so the bar is indeterminate (no
+        // per-item progress). Surface it as a busy overlay on the target row/card.
+        const move = () => this.contents.moveIntoFolder(target["@id"], sources);
+        if (this.progress) {
+            await this.progress.track(
+                _t('Moving ${count} item(s) into "${folder}"…', {
+                    count: sources.length,
+                    folder,
+                }),
+                move,
+                { surface: "folder", targetUrl: target["@id"] }
+            );
         } else {
-            // `to` is the insertion gap the marker pointed at (before the card now
-            // at that index). Removing the dragged item shifts that gap left by
-            // one when the item sat before it, so the landing slot — and thus the
-            // committed delta — matches the marker in both drag directions.
-            const landing = from < to ? to - 1 : to;
-            if (landing !== from) {
-                await this.contents.commitReorder(objId(draggedId), landing - from, subset);
-            }
+            await move();
         }
+        this.selection.clear();
     }
+
+    /** Move the dragged sources (or whole selection) into the parent container. */
+    private async moveToParent(dragged: ContentItem): Promise<void> {
+        const parentUrl = this.contents.parentUrl;
+        const sources = this.dragSources(dragged);
+        if (!parentUrl || sources.length === 0) return;
+        const ok = await this.confirmAction(
+            _t("Move ${count} item(s) to the parent folder?", { count: sources.length }),
+            _t("Move")
+        );
+        if (!ok) return;
+        const move = () => this.contents.moveIntoFolder(parentUrl, sources);
+        if (this.progress) {
+            await this.progress.track(
+                _t("Moving ${count} item(s) to the parent folder…", {
+                    count: sources.length,
+                }),
+                move,
+                { surface: "folder", targetUrl: parentUrl }
+            );
+        } else {
+            await move();
+        }
+        this.selection.clear();
+    }
+
+    // ── external file drags (uploads) ────────────────────────────────────────
+    // These travel through native DOM events on a row/card. While a sortablejs
+    // item drag is active they stand down (`dragActive`); otherwise they route
+    // an OS file drop into the hovered subfolder, or let it bubble to the upload
+    // zone (current folder) for non-folder rows.
 
     private hasFiles(event: DragEvent): boolean {
         const types = event.dataTransfer?.types;
         return Boolean(types && Array.from(types).includes("Files"));
     }
 
-    // A folder row/card splits into three bands: the central one reads as "drop
-    // into this folder", the leading/trailing ones (above/below for the table,
-    // left/right for the grid) as "reorder before / after this folder".
-    private static readonly INTO_BAND = { start: 0.3, end: 0.7 };
-
-    /**
-     * Which band of a folder row/card the dragover pointer sits in. `axis` is
-     * "y" for the stacked table rows and "x" for the side-by-side grid cards.
-     * Falls back to "into" when the element geometry is unavailable.
-     */
-    private folderZone(event: DragEvent, axis: "x" | "y"): "before" | "into" | "after" {
-        const el = event.currentTarget as HTMLElement | null;
-        const rect = el?.getBoundingClientRect?.();
-        if (!rect) return "into";
-        const fraction =
-            axis === "x"
-                ? (event.clientX - rect.left) / (rect.width || 1)
-                : (event.clientY - rect.top) / (rect.height || 1);
-        const { start, end } = ListInteractions.INTO_BAND;
-        if (fraction < start) return "before";
-        if (fraction > end) return "after";
-        return "into";
-    }
-
-    // Internal item drags (reorder / move-into-folder) and external file drags
-    // (upload into a subfolder) travel through the same DOM events on a row or
-    // card, so these dispatchers route each event by whether an internal drag
-    // is in progress, keeping both views' markup to a single set of handlers.
-
     onRowDragEnter(event: DragEvent, index: number): void {
-        if (this.dragActive) {
-            // Just mark the event handled; dragover (which carries the pointer
-            // position needed for folder zone detection) drives the hover state.
-            event.preventDefault();
-            return;
-        }
-        if (!this.hasFiles(event)) return;
+        if (this.dragActive || !this.hasFiles(event)) return;
         const item = this.contents.items[index];
         this.fileDropIndex = item?.is_folderish ? index : -1;
     }
 
-    onRowDragOver(event: DragEvent, index: number, axis: "x" | "y" = "y"): void {
-        if (this.dragActive) {
-            event.preventDefault();
-            // A folder offers three drops: its central band moves the dragged
-            // item into it, its leading/trailing bands reorder before/after it.
-            // Non-folder rows always reorder (to that row's slot).
-            const item = this.contents.items[index];
-            const zone = item?.is_folderish ? this.folderZone(event, axis) : "reorder";
-            this.onInternalHover(index, zone);
-            return;
-        }
-        if (!this.hasFiles(event)) return;
+    onRowDragOver(event: DragEvent, index: number): void {
+        if (this.dragActive || !this.hasFiles(event)) return;
         const item = this.contents.items[index];
         if (!item?.is_folderish) {
             // A non-folder row lets the drop bubble to the upload zone (current
@@ -505,17 +361,14 @@ export class ListInteractions {
     }
 
     onRowDrop(event: DragEvent, index: number): void | Promise<void> {
-        if (this.dragActive) {
-            event.preventDefault();
-            return this.onDrop(index);
-        }
+        if (this.dragActive) return;
         return this.onFileDrop(event, index);
     }
 
-    // The grid's "up to parent" placeholder card. An internal item drag dropped
-    // onto it moves the dragged sources into the parent container; an external
-    // file drag uploads into the parent. Mirrors the subfolder handlers but the
-    // target is `contents.parentUrl` rather than a listed item.
+    // The grid's "up to parent" placeholder card. While a sortablejs item drag
+    // is active, hovering it marks `parentDrop` so the drop commits a move into
+    // the parent (sortablejs's onEnd reads the flag); an external file drag
+    // uploads into the parent instead.
 
     onParentDragEnter(event: DragEvent): void {
         if (this.dragActive) {
@@ -547,41 +400,15 @@ export class ListInteractions {
     }
 
     async onParentDrop(event: DragEvent): Promise<void> {
-        const parentUrl = this.contents.parentUrl;
-        // Internal item drag → move the dragged sources into the parent.
+        // Internal sortablejs drag → the move into the parent is committed by
+        // dragEnd via the parentDrop flag; just accept the drop here so the
+        // browser doesn't treat it as a navigation/file drop.
         if (this.dragActive) {
             event.preventDefault();
-            const draggedId = this.draggedId;
-            const dragged = draggedId
-                ? this.contents.items.find((it) => it["@id"] === draggedId)
-                : null;
-            const sources = dragged ? this.dragSources(dragged) : [];
-            this.resetDrag();
-            this.parentDrop = false;
-            if (!parentUrl || sources.length === 0) return;
-            const ok = await this.confirmAction(
-                _t("Move ${count} item(s) to the parent folder?", {
-                    count: sources.length,
-                }),
-                _t("Move")
-            );
-            if (!ok) return;
-            const move = () => this.contents.moveIntoFolder(parentUrl, sources);
-            if (this.progress) {
-                await this.progress.track(
-                    _t("Moving ${count} item(s) to the parent folder…", {
-                        count: sources.length,
-                    }),
-                    move,
-                    { surface: "folder", targetUrl: parentUrl }
-                );
-            } else {
-                await move();
-            }
-            this.selection.clear();
             return;
         }
         // External file drag → upload into the parent folder.
+        const parentUrl = this.contents.parentUrl;
         this.parentDrop = false;
         if (!this.hasFiles(event) || !parentUrl) return;
         event.preventDefault();
