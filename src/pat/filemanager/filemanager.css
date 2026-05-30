@@ -659,6 +659,8 @@ body:has(.pat-filemanager) #portal-header {
     accent-color: #75b798;
 }
 
+/* Border + padding match the toolbar action buttons so the select-all control
+   reads as one of the actions rather than a bare checkbox + label. */
 .pat-filemanager-app .filemanager-grid-selectall {
     display: inline-flex;
     align-items: center;
@@ -666,6 +668,10 @@ body:has(.pat-filemanager) #portal-header {
     color: var(--filemanager-muted);
     cursor: pointer;
     font-size: 0.85rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
 }
 
 .pat-filemanager-app .filemanager-grid {
