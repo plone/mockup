@@ -19,6 +19,17 @@ function makeContents(items: ReturnType<typeof item>[]) {
         },
         moveIntoFolder: jest.fn().mockResolvedValue(undefined),
         moveTo: jest.fn().mockResolvedValue(undefined),
+        commitReorder: jest.fn().mockResolvedValue(undefined),
+        // Mirror the real store: a local-only reorder of the items array, so
+        // currentIds reflects the preview and a later commit can read the delta.
+        movePreview: jest.fn((id: string, toIndex: number) => {
+            const from = items.findIndex((it) => it["@id"].split("/").pop() === id);
+            if (from < 0) return;
+            const to = Math.max(0, Math.min(items.length - 1, toIndex));
+            if (to === from) return;
+            const [moved] = items.splice(from, 1);
+            items.splice(to, 0, moved);
+        }),
         load: jest.fn().mockResolvedValue(undefined),
         navigateTo: jest.fn().mockResolvedValue(undefined),
     };
@@ -104,6 +115,13 @@ const clickEvent = (opts: Record<string, unknown> = {}) =>
     ({ target: null, ...opts } as unknown as MouseEvent);
 const keyEvent = (opts: Record<string, unknown> = {}) =>
     ({ target: null, preventDefault: jest.fn(), ...opts } as unknown as KeyboardEvent);
+// A blur event whose relatedTarget is `next` (the element gaining focus) and
+// whose currentTarget (the card) reports `containsNext` for contains(next).
+const blurEvent = (next: object | null, containsNext = false) =>
+    ({
+        relatedTarget: next,
+        currentTarget: { contains: () => containsNext },
+    } as unknown as FocusEvent);
 
 describe("ListInteractions — selection clicks", () => {
     it("plain click selects only that item and sets the anchor", () => {
@@ -452,18 +470,21 @@ describe("ListInteractions — keyboard move-mode", () => {
         expect(interactions.isMoving(item("b"))).toBe(true);
     });
 
-    it("ArrowDown steps the move-mode card one slot forward", () => {
+    it("ArrowDown previews the move-mode card one slot forward (no server call)", () => {
         const { interactions, contents } = make([item("a"), item("b"), item("c")]);
         interactions.toggleMoveMode(item("a"));
         interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
-        expect(contents.moveTo).toHaveBeenCalledWith("a", 1, ["a", "b", "c"]);
+        expect(contents.movePreview).toHaveBeenCalledWith("a", 1);
+        expect(contents.commitReorder).not.toHaveBeenCalled();
+        expect(contents.currentIds).toEqual(["b", "a", "c"]);
     });
 
-    it("ArrowUp steps the move-mode card one slot backward", () => {
+    it("ArrowUp previews the move-mode card one slot backward", () => {
         const { interactions, contents } = make([item("a"), item("b"), item("c")]);
         interactions.toggleMoveMode(item("c"));
         interactions.onItemKeydown(keyEvent({ key: "ArrowUp" }), item("c"), 2);
-        expect(contents.moveTo).toHaveBeenCalledWith("c", -1, ["a", "b", "c"]);
+        expect(contents.movePreview).toHaveBeenCalledWith("c", 1);
+        expect(contents.currentIds).toEqual(["a", "c", "b"]);
     });
 
     it("ArrowLeft/ArrowRight mirror Up/Down in the 2-D grid", () => {
@@ -471,8 +492,40 @@ describe("ListInteractions — keyboard move-mode", () => {
         interactions.toggleMoveMode(item("b"));
         interactions.onItemKeydown(keyEvent({ key: "ArrowRight" }), item("b"), 1);
         interactions.onItemKeydown(keyEvent({ key: "ArrowLeft" }), item("b"), 1);
-        expect(contents.moveTo).toHaveBeenNthCalledWith(1, "b", 1, ["a", "b", "c"]);
-        expect(contents.moveTo).toHaveBeenNthCalledWith(2, "b", -1, ["a", "b", "c"]);
+        expect(contents.movePreview).toHaveBeenNthCalledWith(1, "b", 2);
+        expect(contents.movePreview).toHaveBeenNthCalledWith(2, "b", 1);
+    });
+
+    it("steps live across repeated presses (the reported once-or-twice case)", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("a"));
+        // Three forward presses must keep landing — a never gets stuck.
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0); // at end
+        expect(contents.movePreview).toHaveBeenCalledTimes(2); // 3rd is past the end
+        expect(contents.currentIds).toEqual(["b", "c", "a"]);
+    });
+
+    it("commits the accumulated reorder once, on exit", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        expect(contents.commitReorder).not.toHaveBeenCalled(); // nothing yet
+        interactions.onItemKeydown(keyEvent({ key: "Escape" }), item("a"), 0);
+        // One relative move (+2) against the order snapshotted on entry.
+        expect(contents.commitReorder).toHaveBeenCalledTimes(1);
+        expect(contents.commitReorder).toHaveBeenCalledWith("a", 2, ["a", "b", "c"]);
+    });
+
+    it("switching to another card commits the first", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        interactions.toggleMoveMode(item("b"));
+        expect(contents.commitReorder).toHaveBeenCalledWith("a", 1, ["a", "b", "c"]);
+        expect(interactions.isMoving(item("b"))).toBe(true);
     });
 
     it("ignores a step past either end of the listing", () => {
@@ -481,10 +534,10 @@ describe("ListInteractions — keyboard move-mode", () => {
         interactions.onItemKeydown(keyEvent({ key: "ArrowUp" }), item("a"), 0); // already first
         interactions.toggleMoveMode(item("b"));
         interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("b"), 1); // already last
-        expect(contents.moveTo).not.toHaveBeenCalled();
+        expect(contents.movePreview).not.toHaveBeenCalled();
     });
 
-    it("Escape and Enter leave move-mode without moving", () => {
+    it("Escape and Enter leave move-mode; an unmoved card commits nothing", () => {
         const { interactions, contents } = make([item("a"), item("b")]);
         interactions.toggleMoveMode(item("a"));
         interactions.onItemKeydown(keyEvent({ key: "Escape" }), item("a"), 0);
@@ -492,7 +545,32 @@ describe("ListInteractions — keyboard move-mode", () => {
         interactions.toggleMoveMode(item("b"));
         interactions.onItemKeydown(keyEvent({ key: "Enter" }), item("b"), 1);
         expect(interactions.isMoving(item("b"))).toBe(false);
-        expect(contents.moveTo).not.toHaveBeenCalled();
+        expect(contents.commitReorder).not.toHaveBeenCalled();
+    });
+
+    it("commits the pending reorder when the moving card loses focus", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        interactions.onCardBlur(blurEvent(null), item("a")); // clicked away, no Escape
+        expect(contents.commitReorder).toHaveBeenCalledWith("a", 1, ["a", "b", "c"]);
+        expect(interactions.isMoving(item("a"))).toBe(false);
+    });
+
+    it("keeps move-mode when focus stays within the card (e.g. its move button)", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        // relatedTarget is inside the card → not a real blur, no commit yet.
+        interactions.onCardBlur(blurEvent({}, true), item("a"));
+        expect(contents.commitReorder).not.toHaveBeenCalled();
+        expect(interactions.isMoving(item("a"))).toBe(true);
+    });
+
+    it("a blur on a card that is not moving is a no-op", () => {
+        const { interactions, contents } = make([item("a"), item("b")]);
+        interactions.onCardBlur(blurEvent(null), item("a"));
+        expect(contents.commitReorder).not.toHaveBeenCalled();
     });
 
     it("does not select or open while a card is in move-mode", () => {

@@ -130,6 +130,7 @@
                 onclick={(e) => interactions.onCardClick(e, item, index)}
                 onkeydown={(e) => interactions.onItemKeydown(e, item, index)}
                 onmousedown={(e) => interactions.onItemMouseDown(e)}
+                onblur={(e) => interactions.onCardBlur(e, item)}
                 ondragenter={(e) => interactions.onRowDragEnter(e, index)}
                 ondragover={(e) => interactions.onRowDragOver(e, index)}
                 ondrop={(e) => interactions.onRowDrop(e, index)}
