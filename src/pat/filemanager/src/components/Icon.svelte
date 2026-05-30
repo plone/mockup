@@ -12,8 +12,11 @@
     const svg = $derived(Promise.resolve(utils.resolveIcon(name)));
 </script>
 
-{#await svg then markup}
-    {#if markup}
-        <span class="filemanager-icon" aria-hidden="true">{@html markup}</span>
-    {/if}
-{/await}
+<!-- Always render the (fixed-size) container so it reserves its final footprint
+     immediately. The SVG fills that box once resolveIcon settles, so the icon
+     fades in without shifting the surrounding layout. -->
+<span class="filemanager-icon" aria-hidden="true">
+    {#await svg then markup}
+        {#if markup}{@html markup}{/if}
+    {/await}
+</span>
