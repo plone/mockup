@@ -93,9 +93,22 @@
     onMount(() => {
         contents.load();
     });
+
+    // Browsing into a folder (or up, or via a breadcrumb) all funnel through
+    // contents.navigateTo, which re-points contextUrl. When it changes, scroll
+    // the app back to the top so a deep scroll position from the previous
+    // listing doesn't leave the new folder's contents starting off-screen.
+    let appEl;
+    let lastContext = contents.contextUrl;
+    $effect(() => {
+        const ctx = contents.contextUrl;
+        if (ctx === lastContext) return;
+        lastContext = ctx;
+        appEl?.scrollIntoView({ block: "start", behavior: "smooth" });
+    });
 </script>
 
-<div class="pat-filemanager-app">
+<div class="pat-filemanager-app" bind:this={appEl}>
     <Breadcrumbs />
     <StatusMessages />
     <div class="filemanager-toolbar">
