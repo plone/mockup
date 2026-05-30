@@ -1072,11 +1072,66 @@ body:has(.pat-filemanager) #portal-header {
     gap: 0.5rem;
 }
 
+/* Icon-only prev/next buttons, matching the small-button look of the toolbar. */
+.pat-filemanager-app .filemanager-pager-button {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    color: inherit;
+}
+
+.pat-filemanager-app .filemanager-pager-button:hover:not(:disabled) {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-pager-button:disabled {
+    color: var(--filemanager-muted);
+    cursor: default;
+    opacity: 0.65;
+}
+
+.pat-filemanager-app .filemanager-pager-button .filemanager-icon svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Batch-size choices render as a segmented button group like the ViewSwitcher
+   and pat-structure's paging "Show:" buttons, with the active size highlighted. */
 .pat-filemanager-app .filemanager-batchsize {
     margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
+    display: inline-flex;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button {
+    border: 0;
+    background: #fff;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button + .filemanager-batchsize-button {
+    border-left: 1px solid var(--filemanager-border);
+}
+
+.pat-filemanager-app .filemanager-batchsize-button:hover:not(:disabled):not(.active) {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button.active {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button:disabled {
+    cursor: default;
 }
 
 .pat-filemanager-app .filemanager-status {
