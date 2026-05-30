@@ -1,4 +1,5 @@
 !devsrc/.gitkeep
+.claude/
 .env
 .vscode
 /docs/external/pat-*
