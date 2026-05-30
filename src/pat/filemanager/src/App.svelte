@@ -109,7 +109,6 @@
 </script>
 
 <div class="pat-filemanager-app" bind:this={appEl}>
-    <Breadcrumbs />
     <StatusMessages />
     <div class="filemanager-toolbar">
         <ViewSwitcher />
@@ -118,6 +117,7 @@
         <Toolbar />
         <FilterBar />
     </div>
+    <Breadcrumbs />
     <BatchActionModal />
     <ConfirmDialog />
     <ProgressDialog />

@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { fetchBreadcrumbs } from "../api/breadcrumbs.js";
+    import { fetchBreadcrumbs, buildBreadcrumbTrail } from "../api/breadcrumbs.js";
     import { _t } from "../utils/i18n.ts";
 
     /** @type {import("../stores/ConfigStore.svelte").ConfigStore} */
@@ -11,21 +11,32 @@
     const selection = getContext("selection");
 
     let items = $state([]);
-    let root = $state(null);
+    let home = $state(config.portalUrl);
 
     // Refetch the trail whenever the browsed folder changes (drill-down or a
-    // breadcrumb jump), so the crumbs always mirror the current listing.
+    // breadcrumb jump), so the crumbs always mirror the current listing. The raw
+    // @breadcrumbs trail stops at the navigation root, so buildBreadcrumbTrail
+    // fills in the crumbs up to the portal root (e.g. the /en language folder in
+    // a multilingual site) and rebases Home there.
     $effect(() => {
         const url = contents.contextUrl;
         let cancelled = false;
         fetchBreadcrumbs(url)
             .then((data) => {
                 if (cancelled) return;
-                items = data.items;
-                root = data.root;
+                const trail = buildBreadcrumbTrail({
+                    items: data.items,
+                    root: data.root,
+                    portalUrl: config.portalUrl,
+                });
+                items = trail.items;
+                home = trail.home;
             })
             .catch(() => {
-                if (!cancelled) items = [];
+                if (!cancelled) {
+                    items = [];
+                    home = config.portalUrl;
+                }
             });
         return () => {
             cancelled = true;
@@ -42,10 +53,7 @@
 <nav class="filemanager-breadcrumbs" aria-label={_t("Breadcrumbs")}>
     <ol>
         <li>
-            <a
-                href={root || config.portalUrl}
-                onclick={(e) => navigate(e, root || config.portalUrl)}>{_t("Home")}</a
-            >
+            <a href={home} onclick={(e) => navigate(e, home)}>{_t("Home")}</a>
         </li>
         {#each items as crumb, i (crumb["@id"])}
             <li class:active={i === items.length - 1}>

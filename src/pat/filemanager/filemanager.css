@@ -34,6 +34,7 @@ body:has(.pat-filemanager) #portal-header {
 .pat-filemanager-app .filemanager-toolbar {
     display: flex;
     align-items: flex-start;
+    justify-content: flex-end;
     gap: 1rem;
     margin-bottom: 0.75rem;
     flex-wrap: wrap;

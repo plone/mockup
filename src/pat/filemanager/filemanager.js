@@ -49,6 +49,16 @@ class Pattern extends BasePattern {
                 .replace(/\/(?:@@)?folder_contents\/?$/, "")
                 .replace(/\/+$/, "");
 
+        // Scope navigation (breadcrumbs / "go up") to the portal root. The
+        // folder_contents view (shared with pat-structure) exposes it as
+        // urlStructure.base — i.e. get_top_site_from_url(), the topmost TTW site.
+        // Honouring it lets the user climb out of a navigation root such as a
+        // plone.app.multilingual language folder (/en, /de, which are
+        // INavigationRoot) back to the portal root, instead of being trapped at
+        // the language root the way a context-only fallback would leave them.
+        const portalUrl =
+            this.options.portalUrl || this.options.urlStructure?.base || "";
+
         const App = (await import("./src/App.svelte")).default;
 
         this.component = mount(App, {
@@ -56,6 +66,7 @@ class Pattern extends BasePattern {
             props: {
                 ...this.options,
                 contextUrl,
+                portalUrl,
             },
         });
     }
