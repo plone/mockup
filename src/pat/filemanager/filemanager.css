@@ -788,43 +788,6 @@ body:has(.pat-filemanager) #portal-header {
     outline-offset: 2px;
 }
 
-/* A card in keyboard move-mode: a steady accent ring so it stays obvious which
-   card the Arrow keys will reposition, plus a grabbing cursor like a live drag. */
-.pat-filemanager-app .filemanager-card.is-moving {
-    cursor: grabbing;
-    box-shadow: inset 0 0 0 2px var(--filemanager-drop);
-}
-
-.pat-filemanager-app .filemanager-card.is-moving:focus-visible {
-    outline: none;
-}
-
-/* The move handle mirrors the select control but sits in the opposite (top
-   right) corner. Idle it is muted; pressed (move-mode) it takes the accent. */
-.pat-filemanager-app .filemanager-card-move {
-    position: absolute;
-    top: 0.85rem;
-    right: 0.85rem;
-    z-index: 1;
-    display: inline-flex;
-    padding: 0;
-    border: 0;
-    line-height: 0;
-    color: var(--filemanager-muted);
-    background: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.pat-filemanager-app .filemanager-card-move.is-active {
-    color: var(--filemanager-drop);
-}
-
-.pat-filemanager-app .filemanager-card-move:focus-visible {
-    outline: 2px solid #0d6efd;
-    outline-offset: 1px;
-}
-
 /* A check-circle / check-circle-fill icon stands in for the select checkbox.
    The native input stays for accessibility and keyboard toggling but is hidden
    behind the icon; a little inset keeps the icon clear of the card border. */

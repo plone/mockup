@@ -36,10 +36,6 @@ export class ListInteractions {
     dropIndex = $state(-1);
     fileDropIndex = $state(-1);
     anchorIndex = $state(-1);
-    // The `@id` of the card currently in keyboard move-mode (grid view), or null.
-    // In move-mode the card captures Arrow keys to step its position within the
-    // listing; the move button toggles it and Escape/Enter leaves it.
-    moveModeId = $state<string | null>(null);
     // Highlight for the grid's "up to parent" placeholder while an item drag or
     // an external file drag hovers it (drop = move/upload into the parent).
     parentDrop = $state(false);
@@ -139,12 +135,6 @@ export class ListInteractions {
      */
     onItemKeydown(event: KeyboardEvent, item: ContentItem, index: number): void {
         if (this.isInteractive(event.target)) return;
-        // While a card is in move-mode the Arrow keys reposition it; Space/Enter
-        // open behaviour is suspended until the user leaves the mode.
-        if (this.isMoving(item)) {
-            this.onMoveKeydown(event, item);
-            return;
-        }
         if (event.key === " ") {
             event.preventDefault();
             // Space toggles the focused card (like its checkbox), so a second
@@ -167,121 +157,6 @@ export class ListInteractions {
             return;
         }
         window.location.assign(item["@id"]);
-    }
-
-    // ── keyboard move-mode (grid cards) ──────────────────────────────────────
-    // A pointer-free alternative to drag-reorder: a card's move button puts it
-    // into move-mode, after which the Arrow keys step it one slot backward
-    // (Up/Left) or forward (Down/Right) through the listing. Only meaningful in
-    // manual-order mode, so the button and the steps are gated on `canReorder`.
-    //
-    // Move-mode reuses the drag mechanism rather than persisting each keystroke:
-    // every step is a local-only `movePreview` (instant, no request — the card
-    // flips to its new slot while keeping focus), and the accumulated reorder is
-    // PATCHed once via `commitReorder` when the user leaves the mode. Committing
-    // per keystroke instead raced — a fast second press fired before the prior
-    // reload sent a `subset_ids` from the not-yet-committed order, the server
-    // rejected it, and the error path's full reload swapped in the loading
-    // skeleton, destroying the focused card so the keys stopped landing.
-    //
-    // `moveBaseline` is the server order snapshotted when the mode is entered, so
-    // the commit (like a drag drop) is one relative move against the order the
-    // server still has.
-    private moveBaseline: string[] = [];
-
-    /** Whether `item` is the card currently in keyboard move-mode. */
-    isMoving(item: ContentItem): boolean {
-        return this.moveModeId === item["@id"];
-    }
-
-    /** Toggle move-mode for a card (no-op unless the listing is manually ordered). */
-    toggleMoveMode(item: ContentItem): void {
-        if (!this.canReorder) {
-            this.moveModeId = null;
-            return;
-        }
-        if (this.isMoving(item)) {
-            void this.exitMoveMode();
-            return;
-        }
-        // Switching straight to another card commits the one we were moving.
-        void this.exitMoveMode();
-        this.moveModeId = item["@id"];
-        this.moveBaseline = [...this.contents.currentIds];
-    }
-
-    /**
-     * Leave move-mode (Escape/Enter, the button, or switching cards) and persist
-     * the net reorder the arrow steps built up as a single relative move against
-     * the order snapshotted on entry — exactly how a drag commits on drop.
-     */
-    async exitMoveMode(): Promise<void> {
-        const id = this.moveModeId;
-        const baseline = this.moveBaseline;
-        this.moveModeId = null;
-        this.moveBaseline = [];
-        if (!id) return;
-        const objid = objId(id);
-        const from = baseline.indexOf(objid);
-        const to = this.contents.currentIds.indexOf(objid);
-        if (from < 0 || to < 0 || to === from) return;
-        await this.contents.commitReorder(objid, to - from, baseline);
-    }
-
-    /**
-     * The move-mode card lost focus (clicked away, tabbed off) without an
-     * explicit Escape/Enter — commit the pending reorder so a click-away saves
-     * rather than silently reverting on the next reload. Reordering the keyed
-     * card under the cursor moves the focused node without blurring it, so this
-     * never fires mid-step. Focus moving *within* the card (e.g. onto its own
-     * move button, which is how the button toggles the mode off) is ignored, so
-     * the toggle isn't pre-empted by an early commit-and-clear.
-     */
-    onCardBlur(event: FocusEvent, item: ContentItem): void {
-        if (!this.isMoving(item)) return;
-        const next = event.relatedTarget as Node | null;
-        const card = event.currentTarget as HTMLElement | null;
-        if (next && card?.contains(next)) return;
-        void this.exitMoveMode();
-    }
-
-    /** Keyboard handling while a card is in move-mode. */
-    private onMoveKeydown(event: KeyboardEvent, item: ContentItem): void {
-        switch (event.key) {
-            case "ArrowUp":
-            case "ArrowLeft":
-                event.preventDefault();
-                this.moveStep(item, -1);
-                break;
-            case "ArrowDown":
-            case "ArrowRight":
-                event.preventDefault();
-                this.moveStep(item, 1);
-                break;
-            case "Escape":
-            case "Enter":
-                event.preventDefault();
-                void this.exitMoveMode();
-                break;
-        }
-    }
-
-    /**
-     * Step the move-mode card one slot in `dir` (-1 backward, +1 forward) with a
-     * local-only preview: the card's index is read live (not from the keydown
-     * closure) so rapid presses keep stepping from where the last step left it, a
-     * step past either end is ignored, and the displaced cards flip out of the
-     * way while the moving card keeps focus. The server move is deferred to
-     * `exitMoveMode`.
-     */
-    private moveStep(item: ContentItem, dir: -1 | 1): void {
-        if (!this.canReorder) return;
-        const objid = objId(item["@id"]);
-        const from = this.contents.currentIds.indexOf(objid);
-        if (from < 0) return;
-        const to = from + dir;
-        if (to < 0 || to > this.contents.items.length - 1) return;
-        this.contents.movePreview(objid, to);
     }
 
     /** Stop shift-click from highlighting cell text while range-selecting. */
