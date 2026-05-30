@@ -673,6 +673,59 @@ body:has(.pat-filemanager) #portal-header {
     list-style: none;
 }
 
+/* Five image-size stages driven by the grid size slider. Only the card's
+   minimum width changes; the cards keep their 4:3 preview and flow to fill. */
+.pat-filemanager-app .filemanager-grid.grid-size-xs {
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+}
+
+.pat-filemanager-app .filemanager-grid.grid-size-s {
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.pat-filemanager-app .filemanager-grid.grid-size-m {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+}
+
+.pat-filemanager-app .filemanager-grid.grid-size-l {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+
+/* Largest stage: cards as wide as Plone's 600px "teaser" scale so images show
+   at their native size. minmax caps at that width (no stretching past it). */
+.pat-filemanager-app .filemanager-grid.grid-size-xl {
+    grid-template-columns: repeat(auto-fill, minmax(min(600px, 100%), 600px));
+    justify-content: start;
+}
+
+/* Image-size slider, shown left of search/filter while the grid view is
+   active. Sits inline with the search row and stays compact. */
+.pat-filemanager-app .filemanager-grid-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-grid-size input[type="range"] {
+    width: 6rem;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-grid-size-icon {
+    line-height: 1;
+    /* Render the color emoji monochrome so it blends with the muted UI. */
+    filter: grayscale(1);
+}
+
+.pat-filemanager-app .filemanager-grid-size-small {
+    font-size: 1.26rem;
+}
+
+.pat-filemanager-app .filemanager-grid-size-large {
+    font-size: 2.1rem;
+}
+
 .pat-filemanager-app .filemanager-card {
     position: relative;
     display: flex;

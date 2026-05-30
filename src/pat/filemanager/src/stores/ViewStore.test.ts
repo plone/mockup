@@ -59,4 +59,31 @@ describe("ViewStore", () => {
         const store = new ViewStore(makeConfig(), "pat-filemanager");
         expect(store.mode).toBe("table");
     });
+
+    it("defaults the grid scale to medium", () => {
+        const store = new ViewStore(makeConfig(), "");
+        expect(store.gridScale).toBe("m");
+        expect(store.scales).toEqual(["xs", "s", "m", "l", "xl"]);
+    });
+
+    it("setGridScale switches and ignores unknown scales", () => {
+        const store = new ViewStore(makeConfig(), "");
+        store.setGridScale("xl");
+        expect(store.gridScale).toBe("xl");
+        store.setGridScale("huge" as never);
+        expect(store.gridScale).toBe("xl");
+    });
+
+    it("persists and restores the grid scale from a cookie", () => {
+        const first = new ViewStore(makeConfig(), "pat-filemanager");
+        first.setGridScale("xs");
+        const second = new ViewStore(makeConfig(), "pat-filemanager");
+        expect(second.gridScale).toBe("xs");
+    });
+
+    it("ignores a stale or invalid grid-scale cookie value", () => {
+        Cookies.set("pat-filemanager:gridScale", JSON.stringify("huge"), { path: "/" });
+        const store = new ViewStore(makeConfig(), "pat-filemanager");
+        expect(store.gridScale).toBe("m");
+    });
 });

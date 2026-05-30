@@ -4,12 +4,15 @@
     import { _t } from "../utils/i18n.ts";
     import { dismiss } from "../utils/dismiss.ts";
     import QueryBuilder from "./QueryBuilder.svelte";
+    import GridSizeSlider from "./GridSizeSlider.svelte";
     import Icon from "./Icon.svelte";
 
     /** @type {import("../stores/ConfigStore.svelte").ConfigStore} */
     const config = getContext("config");
     /** @type {import("../stores/ContentsStore.svelte").ContentsStore} */
     const contents = getContext("contents");
+    /** @type {import("../stores/ViewStore.svelte").ViewStore} */
+    const view = getContext("view");
 
     let text = $state(contents.searchableText);
     let qsConfig = $state(null);
@@ -44,6 +47,10 @@
 </script>
 
 <div class="filemanager-filterbar">
+    {#if view.mode === "grid"}
+        <GridSizeSlider />
+    {/if}
+
     <div class="filemanager-search-group">
         <input
             type="search"
