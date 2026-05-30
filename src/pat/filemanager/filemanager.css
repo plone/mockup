@@ -63,11 +63,56 @@ body:has(.pat-filemanager) #portal-header {
     justify-content: flex-end;
 }
 
+/* Search + Filter joined as one input group (like pat-structure). */
+.pat-filemanager-app .filemanager-search-group {
+    display: inline-flex;
+    align-items: stretch;
+}
+
 .pat-filemanager-app .filemanager-search {
     padding: 0.3rem 0.5rem;
     border: 1px solid var(--filemanager-border);
-    border-radius: 3px;
+    border-radius: 6px;
     min-width: 12rem;
+}
+
+/* When followed by the Filter button, drop the search's right edge so the two
+   read as a single control. */
+.pat-filemanager-app .filemanager-search-group:has(.filemanager-queryfilter) .filemanager-search {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font: inherit;
+    cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: #fff;
+    color: inherit;
+    white-space: nowrap;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-toggle:hover {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-toggle.has-filter {
+    font-weight: 600;
+}
+
+/* Filter icon sized to the label, not the larger toolbar action icons. */
+.pat-filemanager-app .filemanager-queryfilter-toggle .filemanager-icon svg {
+    width: 1rem;
+    height: 1rem;
 }
 
 .pat-filemanager-app .filemanager-queryfilter,

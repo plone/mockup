@@ -4,6 +4,7 @@
     import { _t } from "../utils/i18n.ts";
     import { dismiss } from "../utils/dismiss.ts";
     import QueryBuilder from "./QueryBuilder.svelte";
+    import Icon from "./Icon.svelte";
 
     /** @type {import("../stores/ConfigStore.svelte").ConfigStore} */
     const config = getContext("config");
@@ -43,36 +44,44 @@
 </script>
 
 <div class="filemanager-filterbar">
-    <input
-        type="search"
-        class="filemanager-search"
-        placeholder={_t("Search…")}
-        value={text}
-        oninput={onInput}
-        aria-label={_t("Search")}
-    />
+    <div class="filemanager-search-group">
+        <input
+            type="search"
+            class="filemanager-search"
+            placeholder={_t("Search…")}
+            value={text}
+            oninput={onInput}
+            aria-label={_t("Search")}
+        />
 
-    {#if qsConfig}
-        <div
-            class="filemanager-queryfilter"
-            use:dismiss={{ enabled: queryOpen, onClose: () => (queryOpen = false) }}
-        >
-            <button type="button" onclick={() => (queryOpen = !queryOpen)}>
-                {contents.extraCriteria.length
-                    ? _t("Filter (${count})", { count: contents.extraCriteria.length })
-                    : _t("Filter")}
-            </button>
-            {#if queryOpen}
-                <div class="filemanager-queryfilter-popover" role="group" aria-label={_t("Advanced filter")}>
-                    <QueryBuilder
-                        config={qsConfig}
-                        criteria={contents.extraCriteria}
-                        onApply={applyQuery}
-                    />
-                </div>
-            {/if}
-        </div>
-    {/if}
+        {#if qsConfig}
+            <div
+                class="filemanager-queryfilter"
+                use:dismiss={{ enabled: queryOpen, onClose: () => (queryOpen = false) }}
+            >
+                <button
+                    type="button"
+                    class="filemanager-queryfilter-toggle"
+                    class:has-filter={contents.extraCriteria.length}
+                    onclick={() => (queryOpen = !queryOpen)}
+                >
+                    <Icon name="filter" />
+                    {contents.extraCriteria.length
+                        ? _t("Filter (${count})", { count: contents.extraCriteria.length })
+                        : _t("Filter")}
+                </button>
+                {#if queryOpen}
+                    <div class="filemanager-queryfilter-popover" role="group" aria-label={_t("Advanced filter")}>
+                        <QueryBuilder
+                            config={qsConfig}
+                            criteria={contents.extraCriteria}
+                            onApply={applyQuery}
+                        />
+                    </div>
+                {/if}
+            </div>
+        {/if}
+    </div>
 
     {#if contents.hasActiveFilters}
         <button type="button" class="filemanager-filter-clear" onclick={clearAll}>{_t("Clear")}</button>
