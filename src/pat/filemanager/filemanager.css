@@ -771,6 +771,34 @@ body:has(.pat-filemanager) #portal-header {
     background: var(--filemanager-drop);
 }
 
+/* At a row boundary the dragged card lands in the first cell of the next row, so
+   its left-edge marker would read as "before the first card of the new row".
+   Drop that marker and instead open a trailing gap on the previous row's last
+   card, drawing the accent bar there so it reads "after the last image in the
+   row". */
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card.dragging.wrapped-start {
+    margin-left: 0;
+}
+
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card.dragging.wrapped-start::before {
+    content: none;
+}
+
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card.reorder-after {
+    margin-right: 1.25rem;
+}
+
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card.reorder-after::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1.15rem; /* centred in the widened gap to the next card */
+    width: 3px;
+    border-radius: 3px;
+    background: var(--filemanager-drop);
+}
+
 .pat-filemanager-app .filemanager-card.drop-target {
     background: #d1e7dd;
     box-shadow: inset 0 0 0 2px #198754;
@@ -781,10 +809,13 @@ body:has(.pat-filemanager) #portal-header {
     outline-offset: 2px;
 }
 
+/* A check-circle / check-circle-fill icon stands in for the select checkbox.
+   The native input stays for accessibility and keyboard toggling but is hidden
+   behind the icon; a little inset keeps the icon clear of the card border. */
 .pat-filemanager-app .filemanager-card-select {
     position: absolute;
-    top: 0.4rem;
-    left: 0.4rem;
+    top: 0.85rem;
+    left: 0.85rem;
     z-index: 1;
     margin: 0;
     line-height: 0;
@@ -792,76 +823,29 @@ body:has(.pat-filemanager) #portal-header {
 }
 
 .pat-filemanager-app .filemanager-card-select input {
-    appearance: none;
-    -webkit-appearance: none;
-    display: grid;
-    place-content: center;
-    width: 1.3rem;
-    height: 1.3rem;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     margin: 0;
-    border: 1px solid var(--filemanager-border);
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    opacity: 0;
     cursor: pointer;
 }
 
-.pat-filemanager-app .filemanager-card-select input::after {
-    content: "";
-    width: 0.8rem;
-    height: 0.8rem;
-    transform: scale(0);
-    transition: transform 0.1s ease-in-out;
-    background: #198754;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+.pat-filemanager-app .filemanager-card-select .filemanager-icon {
+    color: var(--filemanager-muted);
+    background: #fff;
+    border-radius: 50%;
 }
 
-.pat-filemanager-app .filemanager-card-select input:checked {
-    border-color: #198754;
+.pat-filemanager-app .filemanager-card-select.is-checked .filemanager-icon {
+    color: #198754;
 }
 
-.pat-filemanager-app .filemanager-card-select input:checked::after {
-    transform: scale(1);
-}
-
-.pat-filemanager-app .filemanager-card-select input:focus-visible {
+.pat-filemanager-app .filemanager-card-select input:focus-visible + .filemanager-icon {
     outline: 2px solid #0d6efd;
     outline-offset: 1px;
-}
-
-.pat-filemanager-app .filemanager-card-status {
-    position: absolute;
-    top: 0.4rem;
-    right: 0.4rem;
-    z-index: 1;
-    display: grid;
-    place-content: center;
-    width: 1.3rem;
-    height: 1.3rem;
-    border: 1px solid var(--filemanager-border);
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-}
-
-.pat-filemanager-app .filemanager-card-status::after {
-    content: "";
-    width: 0.7rem;
-    height: 0.7rem;
     border-radius: 50%;
-    background: var(--filemanager-muted);
-}
-
-.pat-filemanager-app .filemanager-card-status.state-published::after {
-    background: #198754;
-}
-
-.pat-filemanager-app .filemanager-card-status.state-private::after {
-    background: #dc3545;
-}
-
-.pat-filemanager-app .filemanager-card-status.state-pending::after {
-    background: #fd7e14;
 }
 
 .pat-filemanager-app .filemanager-card-preview {

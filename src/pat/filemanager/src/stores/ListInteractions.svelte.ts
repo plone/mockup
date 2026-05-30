@@ -78,6 +78,17 @@ export class ListInteractions {
         return this.dragIndex >= 0;
     }
 
+    // True once the live reorder has carried the dragged row past its start slot
+    // toward a higher index (a forward / left-to-right drag). The grid uses this
+    // to tell an "append after the previous row" wrap — where the row lands in
+    // the next row's first cell and the marker belongs on that previous row's
+    // trailing edge — from a plain "insert before this row's first card", where
+    // the marker stays on the dragged card's own leading edge. Both look identical
+    // in the DOM (dragged card in a row's first cell), so direction disambiguates.
+    get dragMovedForward(): boolean {
+        return this.dragActive && this.dragIndex > this.dragStartIndex;
+    }
+
     /** Reorder only makes sense while the listing is in manual-order mode. */
     get canReorder(): boolean {
         return this.contents.sortOn === "getObjPositionInParent";
@@ -111,6 +122,21 @@ export class ListInteractions {
         this.applySelection(item, index, {
             range: event.shiftKey,
             toggle: event.ctrlKey || event.metaKey,
+        });
+    }
+
+    /**
+     * Grid cards act like big checkboxes: a plain click toggles the card's
+     * selection, so clicking it again deselects it (mirroring Space and the
+     * card's own checkbox); Shift extends the range from the anchor. The table
+     * keeps onItemClick's click-to-replace model, where clicking a row selects
+     * only it.
+     */
+    onCardClick(event: MouseEvent, item: ContentItem, index: number): void {
+        if (this.isInteractive(event.target)) return;
+        this.applySelection(item, index, {
+            range: event.shiftKey,
+            toggle: !event.shiftKey,
         });
     }
 
@@ -227,16 +253,16 @@ export class ListInteractions {
      * (or block) into `index` so the rows make room under the cursor and the
      * insertion marker tracks the drop point — for folders and non-folders alike.
      */
-    onInternalHover(index: number, intoFolder: boolean): void {
+    onInternalHover(index: number, zone: "before" | "into" | "after" | "reorder"): void {
         const target = this.contents.items[index];
         // A central-band hover over any folder but the dragged item itself is a
         // move-into. We compare the dragged *id* (not `dragIndex`): a reorder
-        // hover on this folder's edge sets `dragIndex = index`, so guarding on
+        // hover on this folder's edge sets `dragIndex`, so guarding on
         // `index !== dragIndex` would wrongly veto the move-into once the pointer
         // crossed the edge on its way to the centre.
         if (
             target?.is_folderish &&
-            intoFolder &&
+            zone === "into" &&
             target["@id"] !== this.draggedId &&
             !this.inDragBlock(index)
         ) {
@@ -245,11 +271,35 @@ export class ListInteractions {
             return;
         }
         this.dropIndex = -1;
-        if (!this.canReorder || !this.draggedId || index === this.dragIndex) return;
+        if (!this.canReorder || !this.draggedId) return;
         // Hovering another row in our own block is a no-op (you can't drop a block
         // inside itself).
         if (this.inDragBlock(index)) return;
-        this.previewReorder(index);
+        const to = this.reorderTarget(index, zone);
+        if (to < 0 || to === this.dragIndex) return;
+        this.previewReorder(to);
+    }
+
+    /**
+     * The insertion *gap* a reorder hover points at — the marker is drawn just
+     * before the card currently at this index. A folder's trailing band inserts
+     * after the folder (gap `index + 1`); every other reorder hover inserts
+     * before the hovered card (gap `index`). This is a display-space gap with the
+     * dragged item still in place; the shift from removing it is applied when the
+     * drop commits (see `onDrop`), so the marker and the landing slot agree in
+     * both drag directions.
+     */
+    private reorderTarget(index: number, zone: "before" | "into" | "after" | "reorder"): number {
+        if (zone === "after") return index + 1; // folder trailing band → gap after it
+        if (zone === "before") return index; //    folder leading band → gap before it
+        // A block drag uses the live block preview + block commit, which work in
+        // the hovered-index space directly, so leave its target untouched.
+        if (this.dragBlock) return index;
+        // Single non-folder row: the drop lands on the side the drag is heading
+        // toward — the gap after the hovered card when moving to higher indices,
+        // before it when moving to lower — so the marker sits where it will land.
+        const cur = this.contents.items.findIndex((it) => it["@id"] === this.draggedId);
+        return cur >= 0 && cur < index ? index + 1 : index;
     }
 
     /** Whether row `index` belongs to the contiguous block currently dragged. */
@@ -366,14 +416,20 @@ export class ListInteractions {
             return;
         }
         if (!this.canReorder) return;
-        // Persist the previewed reorder. The rows already moved; the commit only
-        // PATCHes the net shift against the order the server still had at drag
-        // start. A contiguous selection commits as a block (one move per row).
+        // Persist the reorder against the order the server still had at drag start.
+        // A contiguous selection commits as a block (one move per row).
         if (block) {
             const finalStart = this.contents.currentIds.indexOf(block[0]);
             await this.contents.commitReorderBlock(block, finalStart, subset);
-        } else if (to !== from) {
-            await this.contents.commitReorder(objId(draggedId), to - from, subset);
+        } else {
+            // `to` is the insertion gap the marker pointed at (before the card now
+            // at that index). Removing the dragged item shifts that gap left by
+            // one when the item sat before it, so the landing slot — and thus the
+            // committed delta — matches the marker in both drag directions.
+            const landing = from < to ? to - 1 : to;
+            if (landing !== from) {
+                await this.contents.commitReorder(objId(draggedId), landing - from, subset);
+            }
         }
     }
 
@@ -382,27 +438,28 @@ export class ListInteractions {
         return Boolean(types && Array.from(types).includes("Files"));
     }
 
-    // The central fraction of a folder row/card that reads as "drop into this
-    // folder"; the bands outside it (above/below for the table, left/right for
-    // the grid) read as "reorder past this folder".
+    // A folder row/card splits into three bands: the central one reads as "drop
+    // into this folder", the leading/trailing ones (above/below for the table,
+    // left/right for the grid) as "reorder before / after this folder".
     private static readonly INTO_BAND = { start: 0.3, end: 0.7 };
 
     /**
-     * Whether the dragover pointer sits in the central move-into band of the
-     * hovered row/card. `axis` is "y" for the stacked table rows and "x" for the
-     * side-by-side grid cards (whose insertion marker is a vertical line beside
-     * the card). Falls back to "into" when the element geometry is unavailable.
+     * Which band of a folder row/card the dragover pointer sits in. `axis` is
+     * "y" for the stacked table rows and "x" for the side-by-side grid cards.
+     * Falls back to "into" when the element geometry is unavailable.
      */
-    private isIntoZone(event: DragEvent, axis: "x" | "y"): boolean {
+    private folderZone(event: DragEvent, axis: "x" | "y"): "before" | "into" | "after" {
         const el = event.currentTarget as HTMLElement | null;
         const rect = el?.getBoundingClientRect?.();
-        if (!rect) return true;
+        if (!rect) return "into";
         const fraction =
             axis === "x"
                 ? (event.clientX - rect.left) / (rect.width || 1)
                 : (event.clientY - rect.top) / (rect.height || 1);
         const { start, end } = ListInteractions.INTO_BAND;
-        return fraction >= start && fraction <= end;
+        if (fraction < start) return "before";
+        if (fraction > end) return "after";
+        return "into";
     }
 
     // Internal item drags (reorder / move-into-folder) and external file drags
@@ -425,10 +482,12 @@ export class ListInteractions {
     onRowDragOver(event: DragEvent, index: number, axis: "x" | "y" = "y"): void {
         if (this.dragActive) {
             event.preventDefault();
-            // A folder offers two drops: its central band moves the dragged item
-            // into it, its edges reorder past it. Non-folders always reorder.
+            // A folder offers three drops: its central band moves the dragged
+            // item into it, its leading/trailing bands reorder before/after it.
+            // Non-folder rows always reorder (to that row's slot).
             const item = this.contents.items[index];
-            this.onInternalHover(index, Boolean(item?.is_folderish) && this.isIntoZone(event, axis));
+            const zone = item?.is_folderish ? this.folderZone(event, axis) : "reorder";
+            this.onInternalHover(index, zone);
             return;
         }
         if (!this.hasFiles(event)) return;
