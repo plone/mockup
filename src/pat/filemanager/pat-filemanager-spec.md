@@ -109,7 +109,7 @@ Confirmed locally available restapi services:
 - **Real date sort:** sort on the catalog date index (`effective`, `created`, `modified`, `expires`) — the catalog sorts dates as dates, not text.
 - **Customizable batch size:** `b_size` bound to `ContentsStore`, persisted in a cookie (`utils/storage.ts` `cookieStorage`), the same way legacy pat-structure stored it.
 - **Image column / preview:** new `image` column type rendering a thumbnail scale, driven by `image_scales` metadata.
-- **Drag-into-folder:** native DnD action; drop on a folderish row → `@move` selected sources into that folder.
+- **Drag-into-folder:** native DnD action; a folder row/card splits into drop **zones** — dropping on its central band → `@move` selected sources into that folder; dropping on its edge bands reorders relative to it (see §17). The grid also renders an **"up to parent"** placeholder that accepts a drop to move the sources into the parent container (or upload files there).
 - **Multi-upload via drag/drop onto listing:** `UploadZone` overlay on `ContentTable`; drop files → `@tus-upload` to the current folder. Dropping files **directly onto a subfolder** row/card uploads into that folder instead (the row claims the drop and the zone skips it).
 - **Select "current batch" vs "all in query":** `SelectionStore` tracks a mode; "all" runs a UID-only `@querystring-search` sweep (paged loop, like the legacy `selectAll`).
 - **Persistent reorder:** ordering PATCH against the catalog `getObjPositionInParent`. The rows reorder optimistically and animate into place with `animate:flip` (see §19).
@@ -496,6 +496,11 @@ for; pat-filemanager now mirrors it exactly.
   the start folder.
 - **Test:** `ContentsStore.test.ts` asserts `navigateTo` fires `structure-url-changed`
   once with the portal-relative path. Full store suite green (27 in that file).
+- **Scroll-to-top on context change:** `App.svelte` runs an `$effect` watching
+  `contents.contextUrl`; when it changes (any `navigateTo` — breadcrumb, drill-in,
+  or "up to parent") it `scrollIntoView`s the app root, so a deep scroll position
+  from the previous listing doesn't leave the new folder's contents off-screen.
+  Skipped on the initial render (a guard against the seed value).
 
 ## 16. What's left to implement
 
@@ -546,18 +551,36 @@ custom views.
   driving a hidden `<input type="file" multiple>`. `App.svelte` instantiates
   `UploadStore`, provides it via `setContext`, and renders `<UploadZone>` around
   the table.
-- **Drag-into-folder vs reorder coexistence** (`ContentTable`/`ContentRow`): rows
+- **Drag-into-folder vs reorder coexistence** (`ContentTable`/`ContentGrid`): rows
   are always `draggable`. `dragIndex >= 0` marks an internal drag in progress.
   `ListInteractions` routes both kinds of drag through one set of row handlers
   (`onRowDragEnter`/`onRowDragOver`/`onRowDrop`): while an internal drag is active
   they drive reorder/move-into-folder; otherwise they handle **external file**
-  drags. Dropping a row onto a **folderish** row (≠ itself) → `moveIntoFolder`
-  (the whole selection if the dragged row is part of a multi-selection, else just
-  that row) + clear selection; dropping onto a **non-folder** row → reorder (only
-  when `sortOn === getObjPositionInParent`). Trade-off: you can't reorder *onto* a
-  folder row (it always means move-into) — reorder relative to folders is done by
-  dropping on neighbouring non-folder rows. Folder drop target is highlighted via
-  a `drop-target` class.
+  drags. **Folder rows offer two drops via zones** (`isIntoZone` reads the
+  dragover pointer position against the row/card rect — the central `INTO_BAND`
+  fraction 0.3–0.7 along the **y** axis for the stacked table rows, the **x** axis
+  for the side-by-side grid cards): the central band → `moveIntoFolder` (the whole
+  selection if the dragged row is part of a multi-selection, else just that row) +
+  clear selection; the edge bands → reorder, exactly like a non-folder row.
+  Non-folder rows always reorder. Reorder only runs when
+  `sortOn === getObjPositionInParent`. Two guards matter: the move-into decision
+  keys off the dragged item's **id** (not `dragIndex`, which the edge-band reorder
+  preview sets to the hovered index — so crossing the edge on the way in must not
+  veto the centre); and `onDrop` decides the gesture from `dropIndex` (set only in
+  the central band), not from which row the pointer happens to be over at release,
+  so an edge-band drop between folders commits the reorder. Entering the central
+  band snaps any live reorder preview back (`revertPreview`) so the listing rests
+  behind the green move-into highlight. Folder/target highlight uses a
+  `drop-target` class.
+- **Move into the parent folder** (`ContentGrid` "up to parent" placeholder):
+  when the current folder is below the portal root (`contents.canGoUp` /
+  `parentUrl`), the grid renders a placeholder card whose
+  `onParentDragEnter`/`onParentDragOver`/`onParentDragLeave`/`onParentDrop`
+  handlers accept an internal drag (→ `moveIntoFolder(parentUrl, sources)` after a
+  confirm) or an external file drag (→ upload into the parent). Its highlight
+  (`parentDrop`) is re-affirmed on every `onParentDragOver`, because a `dragleave`
+  fires whenever the pointer crosses onto the placeholder's child elements and
+  would otherwise clear it. A plain click on the placeholder browses up.
 - **File drop into a subfolder:** dragging external **files** over a folderish
   row claims the drop (`onRowDragOver` `preventDefault`s and sets `fileDropIndex`,
   highlighted with the same `drop-target` class); `onFileDrop` then
