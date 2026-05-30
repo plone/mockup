@@ -426,6 +426,84 @@ describe("ListInteractions — dragEnd (moves & reorder)", () => {
     });
 });
 
+describe("ListInteractions — keyboard move-mode", () => {
+    it("toggles move-mode for a card, but only in manual-order mode", () => {
+        const { interactions } = make([item("a"), item("b")]);
+        expect(interactions.isMoving(item("a"))).toBe(false);
+        interactions.toggleMoveMode(item("a"));
+        expect(interactions.isMoving(item("a"))).toBe(true);
+        // A second toggle leaves move-mode again.
+        interactions.toggleMoveMode(item("a"));
+        expect(interactions.isMoving(item("a"))).toBe(false);
+    });
+
+    it("does not enter move-mode when the listing is not manually ordered", () => {
+        const { interactions, contents } = make([item("a"), item("b")]);
+        contents.sortOn = "modified";
+        interactions.toggleMoveMode(item("a"));
+        expect(interactions.isMoving(item("a"))).toBe(false);
+    });
+
+    it("only one card is in move-mode at a time", () => {
+        const { interactions } = make([item("a"), item("b")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.toggleMoveMode(item("b"));
+        expect(interactions.isMoving(item("a"))).toBe(false);
+        expect(interactions.isMoving(item("b"))).toBe(true);
+    });
+
+    it("ArrowDown steps the move-mode card one slot forward", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("a"), 0);
+        expect(contents.moveTo).toHaveBeenCalledWith("a", 1, ["a", "b", "c"]);
+    });
+
+    it("ArrowUp steps the move-mode card one slot backward", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("c"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowUp" }), item("c"), 2);
+        expect(contents.moveTo).toHaveBeenCalledWith("c", -1, ["a", "b", "c"]);
+    });
+
+    it("ArrowLeft/ArrowRight mirror Up/Down in the 2-D grid", () => {
+        const { interactions, contents } = make([item("a"), item("b"), item("c")]);
+        interactions.toggleMoveMode(item("b"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowRight" }), item("b"), 1);
+        interactions.onItemKeydown(keyEvent({ key: "ArrowLeft" }), item("b"), 1);
+        expect(contents.moveTo).toHaveBeenNthCalledWith(1, "b", 1, ["a", "b", "c"]);
+        expect(contents.moveTo).toHaveBeenNthCalledWith(2, "b", -1, ["a", "b", "c"]);
+    });
+
+    it("ignores a step past either end of the listing", () => {
+        const { interactions, contents } = make([item("a"), item("b")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowUp" }), item("a"), 0); // already first
+        interactions.toggleMoveMode(item("b"));
+        interactions.onItemKeydown(keyEvent({ key: "ArrowDown" }), item("b"), 1); // already last
+        expect(contents.moveTo).not.toHaveBeenCalled();
+    });
+
+    it("Escape and Enter leave move-mode without moving", () => {
+        const { interactions, contents } = make([item("a"), item("b")]);
+        interactions.toggleMoveMode(item("a"));
+        interactions.onItemKeydown(keyEvent({ key: "Escape" }), item("a"), 0);
+        expect(interactions.isMoving(item("a"))).toBe(false);
+        interactions.toggleMoveMode(item("b"));
+        interactions.onItemKeydown(keyEvent({ key: "Enter" }), item("b"), 1);
+        expect(interactions.isMoving(item("b"))).toBe(false);
+        expect(contents.moveTo).not.toHaveBeenCalled();
+    });
+
+    it("does not select or open while a card is in move-mode", () => {
+        const { interactions, selection } = make([item("a"), item("b")]);
+        interactions.toggleMoveMode(item("a"));
+        // Space would normally toggle selection; in move-mode it is suspended.
+        interactions.onItemKeydown(keyEvent({ key: " " }), item("a"), 0);
+        expect(selection.toggle).not.toHaveBeenCalled();
+    });
+});
+
 describe("ListInteractions — parent placeholder highlight", () => {
     it("clears the parent highlight on drag leave", () => {
         const { interactions } = make([item("a")]);

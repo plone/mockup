@@ -35,6 +35,16 @@
         contents.navigateTo(item["@id"]);
     }
 
+    // Toggle keyboard move-mode for a card. On entering, move focus from the
+    // button to the card itself so its Arrow-key handler receives the keystrokes
+    // (the button would otherwise swallow them as an interactive control).
+    function onMoveClick(event, item) {
+        interactions.toggleMoveMode(item);
+        if (interactions.isMoving(item)) {
+            event.currentTarget.closest("[data-fm-item]")?.focus();
+        }
+    }
+
     // Browse up into the parent container (the "up to parent" placeholder card).
     function goUp(event) {
         event.preventDefault();
@@ -110,6 +120,7 @@
                 class:is-folder={item.is_folderish}
                 class:is-selected={selection.isSelected(item)}
                 class:is-cut={interactions.isCut(item)}
+                class:is-moving={interactions.isMoving(item)}
                 class:is-busy={folderTask}
                 class:drop-target={interactions.dropIndex === index ||
                     interactions.fileDropIndex === index}
@@ -137,9 +148,28 @@
                     <Icon
                         name={selection.isSelected(item)
                             ? "check-circle-fill"
-                            : "check-circle"}
+                            : "circle"}
                     />
                 </label>
+
+                {#if interactions.canReorder}
+                    <button
+                        type="button"
+                        class="filemanager-card-move"
+                        class:is-active={interactions.isMoving(item)}
+                        aria-pressed={interactions.isMoving(item)}
+                        aria-keyshortcuts="ArrowUp ArrowDown"
+                        title={interactions.isMoving(item)
+                            ? _t("Done moving (Esc)")
+                            : _t("Move with arrow keys")}
+                        aria-label={interactions.isMoving(item)
+                            ? _t("Done moving ${name}", { name: item.Title || item["@id"] })
+                            : _t("Move ${name} with arrow keys", { name: item.Title || item["@id"] })}
+                        onclick={(e) => onMoveClick(e, item)}
+                    >
+                        <Icon name="arrows-move" />
+                    </button>
+                {/if}
 
                 <div class="filemanager-card-preview">
                     {#if thumb}

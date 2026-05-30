@@ -36,6 +36,10 @@ export class ListInteractions {
     dropIndex = $state(-1);
     fileDropIndex = $state(-1);
     anchorIndex = $state(-1);
+    // The `@id` of the card currently in keyboard move-mode (grid view), or null.
+    // In move-mode the card captures Arrow keys to step its position within the
+    // listing; the move button toggles it and Escape/Enter leaves it.
+    moveModeId = $state<string | null>(null);
     // Highlight for the grid's "up to parent" placeholder while an item drag or
     // an external file drag hovers it (drop = move/upload into the parent).
     parentDrop = $state(false);
@@ -135,6 +139,12 @@ export class ListInteractions {
      */
     onItemKeydown(event: KeyboardEvent, item: ContentItem, index: number): void {
         if (this.isInteractive(event.target)) return;
+        // While a card is in move-mode the Arrow keys reposition it; Space/Enter
+        // open behaviour is suspended until the user leaves the mode.
+        if (this.isMoving(item)) {
+            this.onMoveKeydown(event, item);
+            return;
+        }
         if (event.key === " ") {
             event.preventDefault();
             // Space toggles the focused card (like its checkbox), so a second
@@ -157,6 +167,69 @@ export class ListInteractions {
             return;
         }
         window.location.assign(item["@id"]);
+    }
+
+    // ── keyboard move-mode (grid cards) ──────────────────────────────────────
+    // A pointer-free alternative to drag-reorder: a card's move button puts it
+    // into move-mode, after which the Arrow keys step it one slot backward
+    // (Up/Left) or forward (Down/Right) through the listing. Only meaningful in
+    // manual-order mode, so the button and the steps are gated on `canReorder`.
+
+    /** Whether `item` is the card currently in keyboard move-mode. */
+    isMoving(item: ContentItem): boolean {
+        return this.moveModeId === item["@id"];
+    }
+
+    /** Toggle move-mode for a card (no-op unless the listing is manually ordered). */
+    toggleMoveMode(item: ContentItem): void {
+        if (!this.canReorder) {
+            this.moveModeId = null;
+            return;
+        }
+        this.moveModeId = this.isMoving(item) ? null : item["@id"];
+    }
+
+    /** Leave move-mode (Escape/Enter, or after the mode no longer applies). */
+    exitMoveMode(): void {
+        this.moveModeId = null;
+    }
+
+    /** Keyboard handling while a card is in move-mode. */
+    private onMoveKeydown(event: KeyboardEvent, item: ContentItem): void {
+        switch (event.key) {
+            case "ArrowUp":
+            case "ArrowLeft":
+                event.preventDefault();
+                this.moveStep(item, -1);
+                break;
+            case "ArrowDown":
+            case "ArrowRight":
+                event.preventDefault();
+                this.moveStep(item, 1);
+                break;
+            case "Escape":
+            case "Enter":
+                event.preventDefault();
+                this.exitMoveMode();
+                break;
+        }
+    }
+
+    /**
+     * Step the move-mode card one slot in `dir` (-1 backward, +1 forward),
+     * committing a single relative move against the current server order. The
+     * card's index is read live (not from the keydown closure) so rapid presses
+     * keep stepping from where the optimistic reorder just left it; a step past
+     * either end is ignored. The moved card keeps focus and stays in move-mode.
+     */
+    private moveStep(item: ContentItem, dir: -1 | 1): void {
+        if (!this.canReorder) return;
+        const id = item["@id"];
+        const from = this.contents.items.findIndex((it) => it["@id"] === id);
+        if (from < 0) return;
+        const to = from + dir;
+        if (to < 0 || to > this.contents.items.length - 1) return;
+        void this.contents.moveTo(objId(id), dir, [...this.contents.currentIds]);
     }
 
     /** Stop shift-click from highlighting cell text while range-selecting. */
