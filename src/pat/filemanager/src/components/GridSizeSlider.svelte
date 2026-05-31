@@ -1,6 +1,7 @@
 <script>
     import { getContext } from "svelte";
     import { _t } from "../utils/i18n.ts";
+    import Icon from "./Icon.svelte";
 
     /** @type {import("../stores/ViewStore.svelte").ViewStore} */
     const view = getContext("view");
@@ -18,9 +19,9 @@
 </script>
 
 <label class="filemanager-grid-size" title={_t("Image size")}>
-    <span class="filemanager-grid-size-icon filemanager-grid-size-small" aria-hidden="true"
-        >🌄</span
-    >
+    <span class="filemanager-grid-size-icon filemanager-grid-size-small" aria-hidden="true">
+        <Icon name="image" />
+    </span>
     <input
         type="range"
         min="0"
@@ -30,7 +31,7 @@
         oninput={onInput}
         aria-label={_t("Image size")}
     />
-    <span class="filemanager-grid-size-icon filemanager-grid-size-large" aria-hidden="true"
-        >🌄</span
-    >
+    <span class="filemanager-grid-size-icon filemanager-grid-size-large" aria-hidden="true">
+        <Icon name="image" />
+    </span>
 </label>

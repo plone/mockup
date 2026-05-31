@@ -49,6 +49,22 @@ export async function deleteItems(itemUrls, onStep) {
 }
 
 /**
+ * Check link integrity for a set of items (by UID) before deletion.
+ * Returns an array of items; each entry has a `breaches` array listing the
+ * sources that reference it — only items with breaches need to be surfaced.
+ *
+ * @param {string} contextUrl - base URL for the /@linkintegrity endpoint
+ * @param {string[]} uids
+ * @returns {Promise<Array<{title:string, "@id":string, breaches:Array}>>}
+ */
+export function checkLinkIntegrity(contextUrl, uids) {
+    if (uids.length === 0) return Promise.resolve([]);
+    const params = new URLSearchParams();
+    for (const uid of uids) params.append("uids", uid);
+    return request(`${contextUrl}/@linkintegrity?${params}`);
+}
+
+/**
  * Reorder one item within its container via the OrderingMixin deserializer.
  *
  * @param {object} args

@@ -85,7 +85,9 @@
                     aria-label={_t("Up to parent folder")}
                     onclick={goUp}
                 >
-                    <span class="filemanager-card-icon" aria-hidden="true">↰</span>
+                        <span class="filemanager-card-icon" aria-hidden="true">
+                            <Icon name="arrow-90deg-left" />
+                        </span>
                 </a>
                 <span class="filemanager-card-title">{_t("Up to parent")}</span>
 
@@ -146,7 +148,7 @@
                         <img src={thumb} alt={item.Title || ""} loading="lazy" />
                     {:else}
                         <span class="filemanager-card-icon" aria-hidden="true">
-                            {item.is_folderish ? "📁" : "📄"}
+                            <Icon name={`contenttype/${(item.portal_type ?? "document").toLowerCase().replace(/\.| /g, "-")}`} />
                         </span>
                     {/if}
                 </div>

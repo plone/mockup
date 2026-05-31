@@ -3,6 +3,7 @@
     import ColumnCell from "./ColumnCell.svelte";
     import ColumnsConfig from "./ColumnsConfig.svelte";
     import RowActionMenu from "./RowActionMenu.svelte";
+    import Icon from "./Icon.svelte";
     import { sortableList } from "../utils/sortable.ts";
     import { _t } from "../utils/i18n.ts";
 
@@ -62,6 +63,13 @@
         dragColKey = null;
         dropColKey = null;
     }
+
+    function goUp(event) {
+        event.preventDefault();
+        if (!contents.parentUrl) return;
+        selection.clear();
+        contents.navigateTo(contents.parentUrl);
+    }
 </script>
 
 <table
@@ -112,6 +120,36 @@
         </tr>
     </thead>
     <tbody use:sortableList={{ interactions }}>
+        {#if contents.parentUrl}
+            {@const parentTask = progress.folderTask(contents.parentUrl)}
+            <tr
+                class="filemanager-row filemanager-row-up"
+                class:drop-target={interactions.parentDrop}
+                class:is-busy={parentTask}
+                ondragenter={(e) => interactions.onParentDragEnter(e)}
+                ondragover={(e) => interactions.onParentDragOver(e)}
+                ondragleave={() => interactions.onParentDragLeave()}
+                ondrop={(e) => interactions.onParentDrop(e)}
+            >
+                <td colspan={colSpan}>
+                    <a
+                        class="filemanager-row-up-link"
+                        href={contents.parentUrl}
+                        aria-label={_t("Up to parent folder")}
+                        onclick={goUp}
+                    >
+                        <Icon name="arrow-90deg-left" />
+                        {_t("Up to parent")}
+                    </a>
+                    {#if parentTask}
+                        <div class="filemanager-row-progress" title={parentTask.label}>
+                            <span class="filemanager-row-progress-label">{parentTask.label}</span>
+                            <progress aria-label={parentTask.label}></progress>
+                        </div>
+                    {/if}
+                </td>
+            </tr>
+        {/if}
         {#if contents.loading}
             {#each { length: contents.placeholderCount } as _, i (i)}
                 <tr class="filemanager-row filemanager-row-skeleton" aria-hidden="true">

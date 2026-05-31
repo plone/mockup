@@ -5,6 +5,7 @@
     import PropertiesForm from "./modals/PropertiesForm.svelte";
     import RenameForm from "./modals/RenameForm.svelte";
     import RearrangeForm from "./modals/RearrangeForm.svelte";
+    import LinkIntegrityForm from "./modals/LinkIntegrityForm.svelte";
     import { _t } from "../utils/i18n.ts";
 
     /** @type {import("../stores/ModalStore.svelte").ModalStore} */
@@ -16,6 +17,7 @@
         properties: _t("Edit properties"),
         rename: _t("Rename items"),
         rearrange: _t("Rearrange folder contents"),
+        linkintegrity: _t("Link integrity warning"),
     };
 
     /** @type {HTMLDialogElement | undefined} */
@@ -55,16 +57,14 @@
 >
     {#if modal.active}
         <header class="filemanager-modal-header">
-            <h2>{TITLES[modal.active]}</h2>
+            <h2 class="filemanager-modal-title">{TITLES[modal.active]}</h2>
             <button
                 type="button"
                 class="filemanager-modal-close"
                 aria-label={_t("Close")}
                 disabled={modal.busy}
                 onclick={() => modal.close()}
-            >
-                ×
-            </button>
+            >&times;</button>
         </header>
         {#if modal.active === "workflow"}
             <WorkflowForm />
@@ -76,6 +76,8 @@
             <RenameForm />
         {:else if modal.active === "rearrange"}
             <RearrangeForm />
+        {:else if modal.active === "linkintegrity"}
+            <LinkIntegrityForm />
         {/if}
     {/if}
 </dialog>

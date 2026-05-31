@@ -12,12 +12,8 @@
     // Sort fields available for a full-folder rearrange. These mirror the
     // catalog indices plone.restapi's OrderingMixin accepts for `sort.on`.
     const SORT_FIELDS = [
-        { value: "sortable_title", label: _t("Title (alphabetical)") },
-        { value: "id", label: _t("Short name (id)") },
-        { value: "created", label: _t("Date created") },
-        { value: "modified", label: _t("Date modified") },
-        { value: "effective", label: _t("Publication date") },
-        { value: "portal_type", label: _t("Content type") },
+        { value: "sortable_title", label: _t("Title") },
+        { value: "id", label: _t("ID") },
     ];
 
     let sortOn = $state("sortable_title");

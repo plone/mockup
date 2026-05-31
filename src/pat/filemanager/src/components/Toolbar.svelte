@@ -3,6 +3,7 @@
     import { _t } from "../utils/i18n.ts";
     import Icon from "./Icon.svelte";
     import SelectAll from "./SelectAll.svelte";
+    import { checkLinkIntegrity } from "../api/operations.js";
 
     /** @type {import("../stores/ContentsStore.svelte").ContentsStore} */
     const contents = getContext("contents");
@@ -78,15 +79,44 @@
     }
 
     function remove() {
-        const count = selection.count;
-        const ok = window.confirm(
-            _t("Delete ${count} items? This cannot be undone.", { count })
-        );
-        if (!ok) return;
+        const items = selection.items;
+        const urls = selection.urls;
+        const count = items.length;
         return run(async () => {
+            const uids = items.map((it) => it.uid).filter(Boolean);
+            let allBreaches = [];
+            if (uids.length > 0) {
+                try {
+                    allBreaches = await checkLinkIntegrity(contents.config.portalUrl, uids);
+                } catch {
+                    // integrity check failed — proceed with normal confirm
+                }
+            }
+            const withBreaches = allBreaches.filter((b) => b.breaches?.length > 0);
+            const subItemsTotal = allBreaches.reduce((sum, b) => sum + (b.items_total ?? 0), 0);
+            if (withBreaches.length > 0) {
+                modal.open("linkintegrity", {
+                    breaches: withBreaches,
+                    subItemsTotal,
+                    onConfirm: async () => {
+                        await progress.track(
+                            _t("Deleting ${count} items…", { count }),
+                            (onProgress) => contents.removeItems(urls, onProgress)
+                        );
+                        selection.clear();
+                    },
+                });
+                return;
+            }
+            const ok = window.confirm(
+                subItemsTotal > 0
+                    ? _t("Delete ${count} items (including ${subItemsTotal} subitems)? This cannot be undone.", { count, subItemsTotal })
+                    : _t("Delete ${count} items? This cannot be undone.", { count })
+            );
+            if (!ok) return;
             await progress.track(
                 _t("Deleting ${count} items…", { count }),
-                (onProgress) => contents.removeItems(selection.urls, onProgress)
+                (onProgress) => contents.removeItems(urls, onProgress)
             );
             selection.clear();
         });
@@ -141,6 +171,17 @@
         hidden
         onchange={onFilesPicked}
     />
+
+    <button
+        type="button"
+        title={_t("Rearrange")}
+        aria-label={_t("Rearrange")}
+        aria-pressed={modal.active === "rearrange"}
+        disabled={busy}
+        onclick={() => modal.toggle("rearrange")}
+    >
+        <Icon name="plone-rearrange" />
+    </button>
 
     <div class="filemanager-action-group" role="group" aria-label={_t("Actions")}>
         <button
@@ -223,15 +264,4 @@
             <Icon name="plone-rename" />
         </button>
     </div>
-
-    <button
-        type="button"
-        title={_t("Rearrange")}
-        aria-label={_t("Rearrange")}
-        aria-pressed={modal.active === "rearrange"}
-        disabled={busy}
-        onclick={() => modal.toggle("rearrange")}
-    >
-        <Icon name="plone-rearrange" />
-    </button>
 </div>

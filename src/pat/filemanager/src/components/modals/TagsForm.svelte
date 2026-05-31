@@ -16,8 +16,6 @@
 
     const items = selection.items;
 
-    // Union of the tags currently set on the selected items, for the
-    // remove-list (mirrors Volto's currentSetTags).
     const currentTags = [
         ...new Set(items.flatMap((it) => it.subjects || [])),
     ].sort();
@@ -85,7 +83,11 @@
             <legend>{_t("Tags to remove")}</legend>
             {#each currentTags as tag (tag)}
                 <label class="filemanager-field-check">
-                    <input type="checkbox" value={tag} bind:group={removeSet} />
+                    <input
+                        type="checkbox"
+                        value={tag}
+                        bind:group={removeSet}
+                    />
                     <span>{tag}</span>
                 </label>
             {/each}
@@ -96,7 +98,11 @@
         <button type="button" disabled={modal.busy} onclick={() => modal.close()}>
             {_t("Cancel")}
         </button>
-        <button type="submit" class="filemanager-modal-submit" disabled={modal.busy}>
+        <button
+            type="submit"
+            class="filemanager-modal-submit"
+            disabled={modal.busy}
+        >
             {modal.busy ? _t("Saving…") : _t("Save")}
         </button>
     </footer>

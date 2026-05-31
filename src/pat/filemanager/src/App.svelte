@@ -90,8 +90,35 @@
 
     log.debug("Initialized pat-filemanager", config);
 
+    // The "view suffix" is the part of the initial page URL that comes after
+    // the context path — e.g. "/folder_contents". Pushed URLs reuse it so that
+    // reloading a deep-navigated URL still loads the correct Plone view.
+    const initialCtxPath = new URL(contents.contextUrl).pathname.replace(/\/+$/, "");
+    const viewSuffix =
+        window.location.pathname.startsWith(initialCtxPath)
+            ? window.location.pathname.slice(initialCtxPath.length)
+            : "";
+
+    // Stamp the initial history entry with state so popstate fires correctly
+    // even on the very first back-navigation away from the initial folder.
+    history.replaceState({ contextUrl: contents.contextUrl }, "");
+
+    let isRestoringHistory = false;
+
     onMount(() => {
         contents.load();
+
+        function onPopState(event) {
+            const ctx = event.state?.contextUrl;
+            if (ctx && ctx !== contents.contextUrl) {
+                isRestoringHistory = true;
+                contents.navigateTo(ctx).finally(() => {
+                    isRestoringHistory = false;
+                });
+            }
+        }
+        window.addEventListener("popstate", onPopState);
+        return () => window.removeEventListener("popstate", onPopState);
     });
 
     // Browsing into a folder (or up, or via a breadcrumb) all funnel through
@@ -105,17 +132,21 @@
         if (ctx === lastContext) return;
         lastContext = ctx;
         appEl?.scrollIntoView({ block: "start", behavior: "smooth" });
+        if (!isRestoringHistory) {
+            const ctxPath = new URL(ctx).pathname.replace(/\/+$/, "");
+            history.pushState({ contextUrl: ctx }, "", ctxPath + viewSuffix);
+        }
     });
 </script>
 
 <div class="pat-filemanager-app" bind:this={appEl}>
     <StatusMessages />
-    <div class="filemanager-toolbar">
-        <ViewSwitcher />
-    </div>
-    <div class="filemanager-actionbar">
-        <Toolbar />
-        <FilterBar />
+    <div class="filemanager-stickybar">
+        <div class="filemanager-actionbar">
+            <Toolbar />
+            <FilterBar />
+            <ViewSwitcher />
+        </div>
     </div>
     <Breadcrumbs />
     <BatchActionModal />
