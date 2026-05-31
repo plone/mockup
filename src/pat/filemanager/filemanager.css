@@ -746,11 +746,9 @@ body:has(.pat-filemanager) #portal-header {
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 }
 
-/* Largest stage: cards as wide as Plone's 600px "teaser" scale so images show
-   at their native size. minmax caps at that width (no stretching past it). */
+/* Largest stage: fixed 2-column layout. */
 .pat-filemanager-app .filemanager-grid.grid-size-xl {
-    grid-template-columns: repeat(auto-fill, minmax(min(600px, 100%), 600px));
-    justify-content: start;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 /* Image-size slider, shown left of search/filter while the grid view is
@@ -807,6 +805,10 @@ body:has(.pat-filemanager) #portal-header {
 .pat-filemanager-app .filemanager-card.is-selected {
     background: #e7f1ff;
     border-color: #9ec5fe;
+}
+
+.pat-filemanager-app .filemanager-card:hover:not(.is-selected) {
+    background: var(--bs-tertiary-bg, #f8f9fa);
 }
 
 .pat-filemanager-app .filemanager-card.is-cut {
@@ -975,6 +977,10 @@ body:has(.pat-filemanager) #portal-header {
 
 .pat-filemanager-app .filemanager-row.is-selected {
     background: #e7f1ff;
+}
+
+.pat-filemanager-app .filemanager-row:hover:not(.is-selected) > td {
+    background: var(--bs-tertiary-bg, #f8f9fa);
 }
 
 .pat-filemanager-app .filemanager-row.is-cut {
