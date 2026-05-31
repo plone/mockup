@@ -6,6 +6,7 @@ import {
     moveItem,
     setDefaultPage,
     patchItem,
+    rearrangeFolder,
 } from "../api/operations.js";
 import { transitionItem } from "../api/workflow.js";
 import { cookieStorage, type KeyValueStore } from "../utils/storage";
@@ -462,6 +463,25 @@ export class ContentsStore {
     /** Set one child as this folder's default page. */
     async makeDefaultPage(id: string): Promise<void> {
         await setDefaultPage({ containerUrl: this.contextUrl, id });
+    }
+
+    /**
+     * Sort all items in the folder by a catalog index in one server call
+     * (replaces the legacy `/rearrange` endpoint). The `sort` key in the PATCH
+     * body drives the OrderingMixin's full-resort path. After the call the
+     * folder's `getObjPositionInParent` index reflects the new order, so the
+     * listing switches to manual-order mode and reloads with the rearranged
+     * items at the top of page 1.
+     */
+    async rearrange(
+        sortOn: string,
+        sortOrder: "ascending" | "descending"
+    ): Promise<void> {
+        await rearrangeFolder({ containerUrl: this.contextUrl, sortOn, sortOrder });
+        this.sortOn = "getObjPositionInParent";
+        this.sortOrder = "ascending";
+        this.bStart = 0;
+        await this.load();
     }
 
     /**

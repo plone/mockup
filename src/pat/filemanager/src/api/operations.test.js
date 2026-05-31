@@ -7,6 +7,7 @@ import {
     setDefaultPage,
     patchItem,
     patchItems,
+    rearrangeFolder,
 } from "./operations.js";
 import { request } from "./client.js";
 
@@ -126,6 +127,32 @@ describe("patchItem / patchItems", () => {
         expect(mockedRequest).toHaveBeenNthCalledWith(2, "http://nohost/plone/b", {
             method: "PATCH",
             body: { rights: "r" },
+        });
+    });
+});
+
+describe("rearrangeFolder", () => {
+    it("PATCHes the container with a sort payload (ascending)", async () => {
+        await rearrangeFolder({
+            containerUrl: "http://nohost/plone/folder",
+            sortOn: "sortable_title",
+            sortOrder: "ascending",
+        });
+        expect(mockedRequest).toHaveBeenCalledWith("http://nohost/plone/folder", {
+            method: "PATCH",
+            body: { sort: { on: "sortable_title", order: "ascending" } },
+        });
+    });
+
+    it("PATCHes the container with a sort payload (descending)", async () => {
+        await rearrangeFolder({
+            containerUrl: "http://nohost/plone/folder",
+            sortOn: "modified",
+            sortOrder: "descending",
+        });
+        expect(mockedRequest).toHaveBeenCalledWith("http://nohost/plone/folder", {
+            method: "PATCH",
+            body: { sort: { on: "modified", order: "descending" } },
         });
     });
 });

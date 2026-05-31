@@ -4,6 +4,7 @@
     import TagsForm from "./modals/TagsForm.svelte";
     import PropertiesForm from "./modals/PropertiesForm.svelte";
     import RenameForm from "./modals/RenameForm.svelte";
+    import RearrangeForm from "./modals/RearrangeForm.svelte";
     import { _t } from "../utils/i18n.ts";
 
     /** @type {import("../stores/ModalStore.svelte").ModalStore} */
@@ -14,6 +15,7 @@
         tags: _t("Edit tags"),
         properties: _t("Edit properties"),
         rename: _t("Rename items"),
+        rearrange: _t("Rearrange folder contents"),
     };
 
     /** @type {HTMLDialogElement | undefined} */
@@ -72,6 +74,8 @@
             <PropertiesForm />
         {:else if modal.active === "rename"}
             <RenameForm />
+        {:else if modal.active === "rearrange"}
+            <RearrangeForm />
         {/if}
     {/if}
 </dialog>

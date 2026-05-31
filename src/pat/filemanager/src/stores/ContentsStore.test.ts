@@ -9,6 +9,7 @@ import {
     moveItem,
     setDefaultPage,
     patchItem,
+    rearrangeFolder,
 } from "../api/operations.js";
 import { transitionItem } from "../api/workflow.js";
 
@@ -24,6 +25,7 @@ jest.mock("../api/operations.js", () => ({
     moveItem: jest.fn().mockResolvedValue(undefined),
     setDefaultPage: jest.fn().mockResolvedValue(undefined),
     patchItem: jest.fn().mockResolvedValue(undefined),
+    rearrangeFolder: jest.fn().mockResolvedValue(undefined),
 }));
 
 jest.mock("../api/workflow.js", () => ({
@@ -37,6 +39,7 @@ const mockedDelete = deleteItems as jest.Mock;
 const mockedMove = moveItem as jest.Mock;
 const mockedDefaultPage = setDefaultPage as jest.Mock;
 const mockedPatch = patchItem as jest.Mock;
+const mockedRearrange = rearrangeFolder as jest.Mock;
 const mockedTransition = transitionItem as jest.Mock;
 
 function makeStore() {
@@ -59,6 +62,7 @@ beforeEach(() => {
     mockedDefaultPage.mockClear();
     mockedPatch.mockClear();
     mockedPatch.mockResolvedValue(undefined);
+    mockedRearrange.mockClear();
     mockedTransition.mockClear();
     mockedTransition.mockResolvedValue(undefined);
 });
@@ -541,6 +545,33 @@ describe("ContentsStore", () => {
         expect(mockedDefaultPage).toHaveBeenCalledWith({
             containerUrl: "http://nohost/plone/folder",
             id: "doc-1",
+        });
+    });
+
+    it("rearrange PATCHes the container and reloads in manual-order mode", async () => {
+        mockedSearch.mockResolvedValue({ items: [], total: 0 });
+        const store = makeStore();
+        store.sortOn = "Title";
+        await store.rearrange("sortable_title", "ascending");
+        expect(mockedRearrange).toHaveBeenCalledWith({
+            containerUrl: "http://nohost/plone/folder",
+            sortOn: "sortable_title",
+            sortOrder: "ascending",
+        });
+        expect(store.sortOn).toBe("getObjPositionInParent");
+        expect(store.sortOrder).toBe("ascending");
+        expect(store.bStart).toBe(0);
+        expect(mockedSearch).toHaveBeenCalled();
+    });
+
+    it("rearrange supports descending order", async () => {
+        mockedSearch.mockResolvedValue({ items: [], total: 0 });
+        const store = makeStore();
+        await store.rearrange("modified", "descending");
+        expect(mockedRearrange).toHaveBeenCalledWith({
+            containerUrl: "http://nohost/plone/folder",
+            sortOn: "modified",
+            sortOrder: "descending",
         });
     });
 

@@ -94,3 +94,21 @@ export async function patchItems(itemUrls, data, onStep) {
         onStep?.(++done, itemUrls.length);
     }
 }
+
+/**
+ * Sort all items in a folder by a catalog index in one server call, via the
+ * OrderingMixin `sort` deserializer (replaces the legacy `/rearrange` endpoint).
+ * After the call the folder's `getObjPositionInParent` index reflects the new
+ * order, so switching to manual-order mode shows the rearranged listing.
+ *
+ * @param {object} args
+ * @param {string} args.containerUrl
+ * @param {string} args.sortOn  - catalog index, e.g. "sortable_title" or "modified"
+ * @param {"ascending"|"descending"} args.sortOrder
+ */
+export function rearrangeFolder({ containerUrl, sortOn, sortOrder }) {
+    return request(containerUrl, {
+        method: "PATCH",
+        body: { sort: { on: sortOn, order: sortOrder } },
+    });
+}

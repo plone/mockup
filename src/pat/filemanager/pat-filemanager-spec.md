@@ -86,7 +86,7 @@ rune-based (no `svelte/store` writables).
 | `/workflow` (+recursive) | `POST {item}/@workflow/{transition}`; recursive = walk descendants via `@search` then loop |
 | `/tags` | `PATCH {item}` `{Subject:[...]}`, looped |
 | `/properties` (+recursive) | `PATCH {item}` `{effective, expires, rights, creators, contributors, exclude_from_nav, language}`, looped (recursive walks descendants) |
-| `/rearrange` (sort folder) | `PATCH {folder}` `{sort_order_field, reversed}` via ordering, or per-item `{ordering:{obj_id, delta}}` |
+| `/rearrange` (sort folder) | `PATCH {folder}` `{"sort":{"on":"<index>","order":"ascending"|"descending"}}` — full resort in one call; per-item: `{ordering:{obj_id, delta}}` |
 | `moveUrl` move top/bottom | `PATCH {folder}` `{ordering:{obj_id:<id>, delta:"top"|"bottom"}}` |
 | `setDefaultPageUrl` | `PATCH {folder}` `{default_page:<id>}` |
 | workflow states / languages vocab | `GET @vocabularies/{name}` |
@@ -119,6 +119,7 @@ Confirmed locally available restapi services:
 - [x] Batched listing on content
 - [x] Customizable batch size
 - [x] Drag / drop sorting (persistent, catalog-index based; flip-animated — §19)
+- [x] Rearrange folder (full-sort by criterion via `OrderingMixin sort` PATCH — §24)
 - [x] Visible columns configuration (toggle + reorder + persist)
 - [x] Select items: current batch or all-in-query
 - [x] Multi-upload button (P5 — `@tus-upload` + plain-POST fallback)
@@ -1043,3 +1044,30 @@ the drag gesture and its animation; the filemanager keeps all the *decisions*.
   compiler; no new TypeScript errors. **Interactive drag in a real Plone listing
   is the recommended manual check** (native-DnD gestures can't be exercised by
   the jest unit layer).
+
+## 24. Rearrange (done)
+
+Full-folder sort via the restapi `OrderingMixin` `sort` deserializer — replaces
+the legacy `/rearrange` custom Plone JSON view (§3).
+
+- **`src/api/operations.js`** — added `rearrangeFolder({ containerUrl, sortOn,
+  sortOrder })`: PATCHes the container with `{ sort: { on, order } }`, the
+  single-call form from §9 that re-sorts the folder's `getObjPositionInParent`
+  index in one request.
+- **`ContentsStore.rearrange(sortOn, sortOrder)`** — calls `rearrangeFolder`,
+  then switches the listing to manual-order mode (`sortOn =
+  "getObjPositionInParent"`, `sortOrder = "ascending"`, `bStart = 0`) and
+  reloads so the rearranged items appear at the top of page 1. After rearranging,
+  drag-drop reorder starts from the new order.
+- **`src/components/modals/RearrangeForm.svelte`** — a native-dialog form with:
+  a "Sort by" `<select>` (Title, Short name, Date created, Date modified,
+  Publication date, Content type) and an ascending/descending radio group.
+  On submit calls `contents.rearrange`, shows a success status and closes the
+  modal.
+- **`BatchActionModal`** — wired in the `"rearrange"` case (title + `<RearrangeForm />`).
+- **`Toolbar`** — a **Rearrange** button (`plone-rearrange` icon, always enabled,
+  not gated on selection) that calls `modal.toggle("rearrange")`.
+- Tests: `operations.test.js` extended with 2 `rearrangeFolder` cases;
+  `ContentsStore.test.ts` extended with 2 `rearrange` cases (PATCH call, mode
+  switch to manual order). Full filemanager suite: **20 suites, 217 passing,
+  1 skipped**.

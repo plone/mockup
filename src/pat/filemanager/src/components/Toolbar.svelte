@@ -223,4 +223,15 @@
             <Icon name="plone-rename" />
         </button>
     </div>
+
+    <button
+        type="button"
+        title={_t("Rearrange")}
+        aria-label={_t("Rearrange")}
+        aria-pressed={modal.active === "rearrange"}
+        disabled={busy}
+        onclick={() => modal.toggle("rearrange")}
+    >
+        <Icon name="plone-rearrange" />
+    </button>
 </div>
