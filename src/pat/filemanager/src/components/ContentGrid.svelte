@@ -162,6 +162,12 @@
                     {item.Title || item.id || item["@id"]}
                 </a>
 
+                {#if item.exclude_from_nav}
+                    <span class="filemanager-card-badge" title={_t("Excluded from navigation")} aria-label={_t("Excluded from navigation")}>
+                        <Icon name="eye-slash" />
+                    </span>
+                {/if}
+
                 {#if folderTask}
                     <div class="filemanager-card-progress" title={folderTask.label}>
                         <span class="filemanager-card-progress-label">

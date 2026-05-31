@@ -1199,6 +1199,27 @@ body:has(.pat-filemanager) #portal-header {
     background: #e7f1ff;
 }
 
+/* Inline indicator in the title cell for exclude_from_nav */
+.pat-filemanager-app .filemanager-nav-excluded {
+    display: inline-flex;
+    align-items: center;
+    color: var(--bs-secondary-color, #6c757d);
+    opacity: 0.7;
+    margin-left: 0.2rem;
+}
+
+/* Grid card badge for boolean indicators */
+.pat-filemanager-app .filemanager-card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: var(--filemanager-ui-size, 0.875rem);
+    color: var(--bs-secondary-color, #6c757d);
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--bs-border-radius-sm, 0.25rem);
+    background: var(--bs-secondary-bg-subtle, #e9ecef);
+}
+
 .pat-filemanager-app .filemanager-message {
     padding: 1rem;
     text-align: center;

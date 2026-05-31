@@ -2,6 +2,7 @@
     import { getContext } from "svelte";
     import { formatDate, formatSize, thumbnailUrl } from "../utils/format.ts";
     import Icon from "./Icon.svelte";
+    import { _t } from "../utils/i18n.ts";
 
     /** @type {{ item: Record<string, any>, column: import("../stores/ConfigStore.svelte").ColumnDef }} */
     let { item, column } = $props();
@@ -35,6 +36,11 @@
     <a class="filemanager-title" href={item["@id"]} onclick={onTitleClick}>
         <Icon name={typeIcon} />
         {value || item.id || item["@id"]}
+        {#if item.exclude_from_nav}
+            <span class="filemanager-nav-excluded" title={_t("Excluded from navigation")} aria-label={_t("Excluded from navigation")}>
+                <Icon name="eye-slash" />
+            </span>
+        {/if}
     </a>
 {:else if column.type === "image"}
     {#if thumb}
