@@ -1,5 +1,5 @@
 import { buildCriteria, searchContents } from "./contents";
-import { request, RestapiError } from "./client";
+import { request } from "./client";
 
 function mockFetch({ status = 200, json = {}, text } = {}) {
     const body = text !== undefined ? text : JSON.stringify(json);
