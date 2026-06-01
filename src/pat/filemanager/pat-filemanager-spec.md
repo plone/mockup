@@ -507,12 +507,9 @@ for; pat-filemanager now mirrors it exactly.
 
 Everything through P7 is done: P5 deliverables in §17, P6 in §18, the toolbar
 sync (§15), the post-P6 follow-ups (cookie persistence + reorder animations,
-§19), and **P7 – switchable views** (§20). All §5 parity + new-feature items are
+§19), **P7 – switchable views** (§20), the rearrange feature (§24), and the
+link-integrity warning on delete (§25). All §5 parity + new-feature items are
 ticked; the remaining work is live-instance / dev-server verification only.
-
-**Planned features (not yet implemented).**
-- Link-integrity check when moving or deleting referenced content — warn the user
-  before breaking incoming links to the affected objects.
 
 **Carried-over verifications (pending a live instance, not code work).**
 - `default_page` PATCH actually sets the container default page (§9/§13 flag).
@@ -1059,11 +1056,13 @@ the legacy `/rearrange` custom Plone JSON view (§3).
   "getObjPositionInParent"`, `sortOrder = "ascending"`, `bStart = 0`) and
   reloads so the rearranged items appear at the top of page 1. After rearranging,
   drag-drop reorder starts from the new order.
-- **`src/components/modals/RearrangeForm.svelte`** — a native-dialog form with:
-  a "Sort by" `<select>` (Title, Short name, Date created, Date modified,
-  Publication date, Content type) and an ascending/descending radio group.
-  On submit calls `contents.rearrange`, shows a success status and closes the
-  modal.
+- **`src/components/modals/RearrangeForm.svelte`** — a native-dialog form with
+  a "Sort by" `<select>` (**Title** = `sortable_title`, **ID** = `id`) and an
+  ascending/descending radio group. On submit calls `contents.rearrange`, shows
+  a success status and closes the modal. _(Earlier iteration also offered
+  Date created / modified / Publication date / Content type — trimmed to the
+  two manual-organization cases that match how editors actually rearrange
+  folders; the other indices remain available via column-sort in the table.)_
 - **`BatchActionModal`** — wired in the `"rearrange"` case (title + `<RearrangeForm />`).
 - **`Toolbar`** — a **Rearrange** button (`plone-rearrange` icon, always enabled,
   not gated on selection) that calls `modal.toggle("rearrange")`.
@@ -1071,3 +1070,58 @@ the legacy `/rearrange` custom Plone JSON view (§3).
   `ContentsStore.test.ts` extended with 2 `rearrange` cases (PATCH call, mode
   switch to manual order). Full filemanager suite: **20 suites, 217 passing,
   1 skipped**.
+
+## 25. Link integrity on delete (done)
+
+Warns the user before deleting items that are referenced from elsewhere in the
+site. Uses plone.restapi's `@linkintegrity` service — no backend additions, no
+pat-structure custom views.
+
+- **`src/api/operations.js` — `checkLinkIntegrity(contextUrl, uids)`.** GET
+  `{contextUrl}/@linkintegrity?uids=<uid>&uids=<uid>…` (one `uids` param per
+  selected item). Returns an array of items; each entry carries the item's
+  `title` / `@id` / `items_total` (recursive descendant count) and a `breaches`
+  array of `{title, "@id", uid}` sources that reference it. Items with no
+  inbound references are still returned (with `breaches: []`); the caller
+  filters. `contextUrl` is the **portal root** (`config.portalUrl`) — the
+  service runs portal-wide regardless of context.
+- **`ModalStore` — typed `linkintegrity` modal with a data payload.** Added
+  modal name `"linkintegrity"`, exported types `LinkIntegrityBreach` /
+  `LinkIntegrityItem` / `LinkIntegrityData`, and a generic `data` field
+  (`open(name, data?)` / `close()` / `toggle()` all manage it). The
+  `LinkIntegrityData` payload carries `breaches[]`, `subItemsTotal` (sum of
+  `items_total` across **all** selected items, not just those with breaches —
+  so the "N subitems will also be deleted" warning is accurate), and an
+  `onConfirm` callback the modal invokes when the user proceeds.
+- **`Toolbar.svelte` — delete flow gains a pre-flight check.** The Delete
+  button now (1) collects UIDs from the selection, (2) calls
+  `checkLinkIntegrity` (errors are swallowed → fall through to plain confirm),
+  (3) filters items with `breaches.length > 0`, (4) sums `items_total` across
+  the full result for the subitem count. Branches:
+  - **Breaches found** → `modal.open("linkintegrity", { breaches, subItemsTotal,
+    onConfirm })`; `onConfirm` runs the actual delete (via the existing
+    `progress.track` + `contents.removeItems`) only after the user clicks
+    "Delete anyway".
+  - **No breaches** → the original `window.confirm` ("Delete N items? This
+    cannot be undone." / "…including N subitems…" when descendants exist) and
+    delete proceed as before.
+- **`src/components/modals/LinkIntegrityForm.svelte`.** Lists each referenced
+  item with its title (linked, `target="_blank"`), recursive child count when
+  `items_total > 0`, and a nested list of the sources that link to it.
+  Footer: **Cancel** / **Delete anyway** (the destructive submit styled with
+  the `filemanager-action-delete` accent). The submit button awaits
+  `data.onConfirm()` under the standard `modal.busy` gate, surfaces errors
+  through `StatusStore`, and closes the modal on success.
+- **`BatchActionModal.svelte`.** Adds the `"linkintegrity"` case (title
+  "Link integrity warning" + renders `<LinkIntegrityForm />`). Reused without
+  changes: native `<dialog>` host, focus trap, Escape/backdrop close (§21).
+- **Scope (today).** The warning fires on **delete only**. The pre-existing
+  spec §4 hint about drag/move warnings is **not** implemented — move-into-folder
+  via DnD or paste does not trigger a link-integrity prompt (a move within the
+  same site does not break inbound links by URL anyway; it would only matter if
+  the move changed the path-based references in source pages, which is a
+  separate concern).
+- **No new unit tests yet.** `checkLinkIntegrity` is straightforward URL
+  assembly + a `request()` call; the delete-flow branching lives in
+  `Toolbar.svelte` (component-level test, blocked by §10). Manual verification
+  on a live Plone instance with cross-linked content is the recommended check.
