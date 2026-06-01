@@ -5,8 +5,6 @@
     /** @type {{ children?: import("svelte").Snippet }} */
     let { children } = $props();
 
-    /** @type {import("../stores/UploadStore.svelte").UploadStore} */
-    const upload = getContext("upload");
     /** @type {import("../stores/ListInteractions.svelte").ListInteractions} */
     const interactions = getContext("interactions");
 
@@ -41,15 +39,15 @@
     async function onDrop(event) {
         if (!hasFiles(event)) return;
         // A subfolder row that claimed the drop already called preventDefault
-        // and uploaded into itself; only reset state in that case.
+        // and handled it itself; only reset state in that case.
         const claimed = event.defaultPrevented;
         event.preventDefault();
         dragDepth = 0;
         interactions.fileDropIndex = -1;
         if (claimed) return;
-        const files = Array.from(event.dataTransfer.files);
-        if (files.length === 0) return;
-        await upload.uploadFiles(files);
+        // Route through the shared orchestrator: a plain file drop uploads to
+        // the current folder; a folder drop is previewed/approved then recreated.
+        await interactions.handleExternalDrop(event.dataTransfer);
     }
 </script>
 

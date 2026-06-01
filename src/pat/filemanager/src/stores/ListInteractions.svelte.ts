@@ -1,8 +1,14 @@
 import { objId } from "../api/operations.js";
 import { _t } from "../utils/i18n";
+import {
+    captureDropEntries,
+    entriesHaveDirectory,
+    readDropManifest,
+} from "../utils/dropentries";
 import type { ClipboardStore } from "./ClipboardStore.svelte";
 import type { ConfirmStore } from "./ConfirmStore.svelte";
 import type { ContentsStore, ContentItem } from "./ContentsStore.svelte";
+import type { FolderDropStore } from "./FolderDropStore.svelte";
 import type { ProgressStore } from "./ProgressStore.svelte";
 import type { SelectionStore } from "./SelectionStore.svelte";
 import type { UploadStore } from "./UploadStore.svelte";
@@ -25,6 +31,7 @@ export class ListInteractions {
     upload?: UploadStore;
     confirm?: ConfirmStore;
     progress?: ProgressStore;
+    folderDrop?: FolderDropStore;
 
     // `dragActive` is true while a sortablejs item drag is in progress, so the
     // file handlers below stand down and let sortablejs own the gesture.
@@ -53,7 +60,8 @@ export class ListInteractions {
         clipboard: ClipboardStore,
         upload?: UploadStore,
         confirm?: ConfirmStore,
-        progress?: ProgressStore
+        progress?: ProgressStore,
+        folderDrop?: FolderDropStore
     ) {
         this.contents = contents;
         this.selection = selection;
@@ -61,6 +69,7 @@ export class ListInteractions {
         this.upload = upload;
         this.confirm = confirm;
         this.progress = progress;
+        this.folderDrop = folderDrop;
     }
 
     /**
@@ -339,6 +348,40 @@ export class ListInteractions {
         return Boolean(types && Array.from(types).includes("Files"));
     }
 
+    /**
+     * The single entry point for an external (OS) file/folder drop, used by the
+     * upload zone, subfolder rows and the parent placeholder. A plain file drop
+     * takes today's path (immediate upload, no prompt). A drop that contains a
+     * folder is read into a manifest, previewed for approval, and on approval
+     * recreated + uploaded as a tree. `targetUrl` defaults to the current folder.
+     *
+     * `captureDropEntries` and the `files` read MUST stay in the synchronous
+     * prefix (before the first await): the DataTransfer is only live while the
+     * drop event is being dispatched, and this method is entered straight from
+     * the native handler.
+     */
+    async handleExternalDrop(
+        dataTransfer: DataTransfer | null,
+        targetUrl?: string
+    ): Promise<void> {
+        const target = targetUrl ?? this.contents.contextUrl;
+        const entries = captureDropEntries(dataTransfer);
+        const files = Array.from(dataTransfer?.files ?? []);
+        if (!this.upload) return;
+        if (!entriesHaveDirectory(entries)) {
+            // Flat file drop (or a browser without the entries API): unchanged.
+            if (files.length) await this.upload.uploadFiles(files, targetUrl);
+            return;
+        }
+        const manifest = await readDropManifest(entries);
+        if (manifest.fileCount === 0 && manifest.folderCount === 0) return;
+        const name = objId(target) || target;
+        if (this.folderDrop && !(await this.folderDrop.preview(manifest, name))) {
+            return;
+        }
+        await this.upload.uploadTree(target, manifest, this.contents.config.folderType);
+    }
+
     onRowDragEnter(event: DragEvent, index: number): void {
         if (this.dragActive || !this.hasFiles(event)) return;
         const item = this.contents.items[index];
@@ -407,21 +450,19 @@ export class ListInteractions {
             event.preventDefault();
             return;
         }
-        // External file drag → upload into the parent folder.
+        // External file/folder drag → upload into the parent folder.
         const parentUrl = this.contents.parentUrl;
         this.parentDrop = false;
         if (!this.hasFiles(event) || !parentUrl) return;
         event.preventDefault();
-        const files = Array.from(event.dataTransfer?.files ?? []);
-        if (files.length === 0 || !this.upload) return;
-        await this.upload.uploadFiles(files, parentUrl);
+        await this.handleExternalDrop(event.dataTransfer, parentUrl);
     }
 
     /**
-     * Upload files dropped directly onto a subfolder row/card into that folder.
-     * Calling preventDefault (without stopPropagation) marks the event handled;
-     * the upload zone sees the same bubbling drop and uploads to the current
-     * folder only when no subfolder claimed it.
+     * Upload files/folders dropped directly onto a subfolder row/card into that
+     * folder. Calling preventDefault (without stopPropagation) marks the event
+     * handled; the upload zone sees the same bubbling drop and uploads to the
+     * current folder only when no subfolder claimed it.
      */
     async onFileDrop(event: DragEvent, index: number): Promise<void> {
         if (!this.hasFiles(event)) return;
@@ -429,8 +470,6 @@ export class ListInteractions {
         if (!item?.is_folderish) return;
         event.preventDefault();
         this.fileDropIndex = -1;
-        const files = Array.from(event.dataTransfer?.files ?? []);
-        if (files.length === 0 || !this.upload) return;
-        await this.upload.uploadFiles(files, item["@id"]);
+        await this.handleExternalDrop(event.dataTransfer, item["@id"]);
     }
 }

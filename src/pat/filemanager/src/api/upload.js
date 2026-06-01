@@ -143,6 +143,26 @@ export async function uploadFilePost(folderUrl, file) {
 }
 
 /**
+ * Create an (empty) folderish container inside `parentUrl` via a stock content
+ * POST. `type` is the portal type to create (default "Folder"); restapi derives
+ * the id from the title. Returns the created object — its `@id` is the url
+ * children get added to.
+ *
+ * @param {string} parentUrl - container the folder is created in
+ * @param {object} opts
+ * @param {string} opts.title - folder title (and id source)
+ * @param {string} [opts.type="Folder"] - portal type of the created container
+ * @returns {Promise<{"@id":string}>}
+ */
+export function createFolder(parentUrl, { title, type = "Folder" } = {}) {
+    log.debug(`POST ${parentUrl} (create ${type} "${title}")`);
+    return request(parentUrl, {
+        method: "POST",
+        body: { "@type": type, title },
+    });
+}
+
+/**
  * Upload one file, preferring resumable tus and falling back to a plain content
  * POST if tus is unavailable. A failed tus attempt creates no content (the
  * object is only added once the final chunk lands), so the fallback is safe.

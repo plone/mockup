@@ -137,6 +137,7 @@ New features:
 
 - [x] Drag into folder (single or multiple selected items) (P5)
 - [x] Multi-upload directly to listing via drag/drop (P5)
+- [x] Drop a folder to recreate it + upload its contents, with preview/approval (§26)
 - [x] Column visual (non-persistent) sort applied over whole result set (P1)
 - [x] Date columns sort by real date (P1 — catalog date index)
 - [x] New `image` column (P1)
@@ -1125,3 +1126,77 @@ pat-structure custom views.
   assembly + a `request()` call; the delete-flow branching lives in
   `Toolbar.svelte` (component-level test, blocked by §10). Manual verification
   on a live Plone instance with cross-linked content is the recommended check.
+
+## 26. Folder drop — recreate + upload, with preview & approval (done)
+
+Dropping an OS **folder** (not just loose files) onto the listing, a subfolder
+row, or the "up to parent" card recreates the folder tree in Plone and uploads
+every nested file. Because a deep folder is a large, hard-to-undo bulk import,
+the drop is **calculated and previewed**, and nothing is written until the user
+approves. Plain file drops keep their prior behaviour (immediate upload, no
+preview). All stock restapi (content `POST {@type: Folder}` + the existing
+`@tus-upload`/POST-fallback `uploadFile`); no pat-structure custom views.
+
+- **Why it was needed.** `event.dataTransfer.files` is a flat `FileList` that
+  silently omits dropped directories — so before this, dragging a folder
+  uploaded nothing (or only the loose files the browser happened to expose).
+
+- **`src/utils/dropentries.ts`** — reads dropped directories via the
+  (non-standard but universally shipped) `DataTransferItem.webkitGetAsEntry()` /
+  `FileSystemEntry` API. `captureDropEntries(dataTransfer)` grabs the top-level
+  entries **synchronously** during the drop event (the items list is only live
+  then; the entry objects stay valid for the async walk). `entriesHaveDirectory`
+  gates the folder vs flat path. `readDropManifest(entries)` recursively walks
+  into a `DropManifest` — `files: {path[], file}[]`, `dirs[]` (relative folder
+  paths recorded **parents-before-children**), `fileCount`/`folderCount`/
+  `totalSize`/`hasDirectories`. Promisifies `FileEntry.file()` and **drains the
+  paginated** `DirectoryReader.readEntries()` (call until an empty batch).
+  Degrades safely: no entries API → `[]` → caller takes the flat path.
+
+- **`src/api/upload.js` — `createFolder(parentUrl, {title, type="Folder"})`** —
+  `POST {parentUrl} {@type, title}`; the caller reads the created object's real
+  `@id` (so a Plone-normalised id never breaks child mapping).
+
+- **`src/stores/UploadStore.svelte.ts` — `uploadTree(targetUrl, manifest,
+  folderType)`** — creates folders parents-first, mapping each relative path to
+  the created url (`urlByPath`, seeded `"" → targetUrl`); then uploads each file
+  into its mapped folder url, reusing the same per-file `entries`/`onProgress`
+  progress model as `uploadFiles` (so the StatusMessages upload panel just
+  works). A folder-create failure pushes a synthetic **error entry** and orphans
+  its descendants (those files error out too) without aborting the batch.
+  Single `contents.load()` at the end. `uploadFiles` is unchanged.
+
+- **`src/stores/FolderDropStore.svelte.ts` + `FolderDropPreview.svelte`** — the
+  approval gate, modelled on `ConfirmStore`/`ConfirmDialog`. `preview(manifest,
+  targetName): Promise<boolean>` opens a native `<dialog>` (Escape/backdrop =
+  cancel) showing the summary (`{folders} folders, {files} files, {size}`) and an
+  indented folder tree (each folder line shows its direct file count; loose
+  root files shown as a "(this folder)" line), with Cancel / **Upload** buttons;
+  resolves true on approve. A new preview supersedes a pending one (resolves it
+  false), like `ConfirmStore.ask`.
+
+- **Orchestration — `ListInteractions.handleExternalDrop(dataTransfer,
+  targetUrl?)`** — the single entry point for every external drop. Captures
+  entries + files synchronously (before the first `await`), then: no directory →
+  today's `upload.uploadFiles`; directory → `readDropManifest` →
+  `folderDrop.preview` → on approval `upload.uploadTree(target, manifest,
+  config.folderType)`. `UploadZone.onDrop`, `onFileDrop` (subfolder row) and the
+  external branch of `onParentDrop` all route through it, so the folder-vs-flat
+  decision and the preview live in exactly one place.
+
+- **Config.** New `folderType` option (parser arg `folder-type`, `ConfigStore`,
+  default `"Folder"`) chooses the recreated container's portal type.
+
+- **Tests.** `src/utils/dropentries.test.ts` (capture/skip-nulls, no-API
+  fallback, nested walk with parents-first dirs + file paths, paginated reader
+  drain, loose-root files), `UploadStore.test.ts` (uploadTree: parents-first
+  creation with mapped parent urls, files into the right urls, single reload,
+  custom folderType, folder-failure orphaning), `upload.test.js` (`createFolder`
+  POST shape + custom type), `FolderDropStore.test.ts` (approve/cancel/supersede).
+  Full filemanager suite green; a dev webpack build compiles the component tree.
+
+> Manual UI verification (drag a real nested folder onto the listing / a
+> subfolder / the parent card → preview counts/size/tree → Cancel writes
+> nothing, Upload recreates the tree and uploads into the right subfolders;
+> plain file drop still skips the preview; a non-default `folder-type` is
+> honoured) is pending on the running dev server.

@@ -1,5 +1,5 @@
 import { TextEncoder } from "util";
-import { uploadFileTus, uploadFilePost, uploadFile } from "./upload.js";
+import { uploadFileTus, uploadFilePost, uploadFile, createFolder } from "./upload.js";
 import { request } from "./client.js";
 
 // jsdom does not expose TextEncoder (browsers and Node do); polyfill it so the
@@ -122,5 +122,28 @@ describe("uploadFile", () => {
         await uploadFile("http://nohost/plone/folder", file);
         expect(mockedRequest).toHaveBeenCalledTimes(1);
         expect(mockedRequest.mock.calls[0][1].body["@type"]).toBe("File");
+    });
+});
+
+describe("createFolder", () => {
+    it("POSTs a Folder with the given title into the parent", async () => {
+        mockedRequest.mockResolvedValueOnce({ "@id": "http://nohost/plone/folder/sub" });
+        const result = await createFolder("http://nohost/plone/folder", {
+            title: "Sub",
+        });
+        expect(mockedRequest.mock.calls[0][0]).toBe("http://nohost/plone/folder");
+        const init = mockedRequest.mock.calls[0][1];
+        expect(init.method).toBe("POST");
+        expect(init.body).toEqual({ "@type": "Folder", title: "Sub" });
+        expect(result["@id"]).toBe("http://nohost/plone/folder/sub");
+    });
+
+    it("honours a custom folder type", async () => {
+        mockedRequest.mockResolvedValueOnce({ "@id": "x" });
+        await createFolder("http://nohost/plone/folder", {
+            title: "Sub",
+            type: "myfolder",
+        });
+        expect(mockedRequest.mock.calls[0][1].body["@type"]).toBe("myfolder");
     });
 });

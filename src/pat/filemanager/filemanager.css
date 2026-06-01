@@ -1658,3 +1658,93 @@ body:has(.pat-filemanager) #portal-header {
     background: var(--bs-danger, #dc3545);
     color: var(--bs-white, #fff);
 }
+
+/* ── Folder-drop preview/approval dialog ─────────────────────────────────── */
+
+.pat-filemanager-app .filemanager-folderdrop {
+    width: min(520px, calc(100vw - 2rem));
+    padding: 1.25rem;
+    color: #212529;
+}
+
+.pat-filemanager-app .filemanager-folderdrop-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-folderdrop-summary {
+    margin: 0 0 0.75rem;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-tree {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0.5rem;
+    max-height: 40vh;
+    overflow: auto;
+    border: 1px solid var(--bs-border-color, var(--filemanager-border));
+    border-radius: var(--bs-border-radius, 0.375rem);
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+    padding-inline-start: calc(var(--depth, 0) * 1.25rem);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-name::before {
+    content: "📁 ";
+}
+
+.pat-filemanager-app .filemanager-folderdrop-row.is-root .filemanager-folderdrop-name {
+    font-style: italic;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-row.is-root .filemanager-folderdrop-name::before {
+    content: "";
+}
+
+.pat-filemanager-app .filemanager-folderdrop-count {
+    font-size: 0.85em;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions button {
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
+    cursor: pointer;
+    padding: var(--bs-btn-padding-y, 0.375rem) var(--bs-btn-padding-x, 0.75rem);
+    border: 1px solid var(--bs-border-color, var(--filemanager-border));
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions button:hover {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions .filemanager-folderdrop-ok {
+    font-weight: 600;
+    border-color: var(--bs-primary, #0d6efd);
+    background: var(--bs-primary, #0d6efd);
+    color: var(--bs-white, #fff);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions .filemanager-folderdrop-ok:hover {
+    background: var(--bs-btn-hover-bg, #0b5ed7);
+    border-color: var(--bs-btn-hover-border-color, #0a58ca);
+}

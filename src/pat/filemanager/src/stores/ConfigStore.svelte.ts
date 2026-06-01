@@ -44,6 +44,8 @@ export interface ConfigOptions {
     sortOn?: string;
     sortOrder?: "ascending" | "descending";
     defaultView?: string;
+    /** Portal type created for folders recreated from an OS folder drop. */
+    folderType?: string;
 }
 
 export class ConfigStore {
@@ -58,6 +60,7 @@ export class ConfigStore {
     sortOn: string;
     sortOrder: "ascending" | "descending";
     defaultView: string;
+    folderType: string;
 
     constructor(opts: ConfigOptions) {
         this.contextUrl = opts.contextUrl.replace(/\/+$/, "");
@@ -73,6 +76,7 @@ export class ConfigStore {
         this.sortOn = opts.sortOn || "getObjPositionInParent";
         this.sortOrder = opts.sortOrder || "ascending";
         this.defaultView = opts.defaultView || "table";
+        this.folderType = opts.folderType || "Folder";
     }
 
     column(key: string): ColumnDef {

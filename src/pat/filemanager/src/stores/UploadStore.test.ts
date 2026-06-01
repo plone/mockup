@@ -1,11 +1,14 @@
 import { UploadStore } from "./UploadStore.svelte";
-import { uploadFile } from "../api/upload.js";
+import { uploadFile, createFolder } from "../api/upload.js";
+import type { DropManifest } from "../utils/dropentries";
 
 jest.mock("../api/upload.js", () => ({
     uploadFile: jest.fn().mockResolvedValue(null),
+    createFolder: jest.fn(),
 }));
 
 const mockedUpload = uploadFile as jest.Mock;
+const mockedCreateFolder = createFolder as jest.Mock;
 
 function makeContents() {
     return {
@@ -21,7 +24,23 @@ function makeFile(name: string, size: number, type = "text/plain") {
 beforeEach(() => {
     mockedUpload.mockReset();
     mockedUpload.mockResolvedValue(null);
+    mockedCreateFolder.mockReset();
+    // Default: echo a created folder url derived from parent + title.
+    mockedCreateFolder.mockImplementation((parent: string, { title }) =>
+        Promise.resolve({ "@id": `${parent}/${title}` })
+    );
 });
+
+function makeManifest(files: DropManifest["files"], dirs: string[]): DropManifest {
+    return {
+        files,
+        dirs,
+        fileCount: files.length,
+        folderCount: dirs.length,
+        totalSize: files.reduce((s, f) => s + f.file.size, 0),
+        hasDirectories: dirs.length > 0,
+    };
+}
 
 describe("UploadStore", () => {
     it("uploads each file to the current folder and reloads", async () => {
@@ -99,5 +118,69 @@ describe("UploadStore", () => {
         expect(store.entries).toHaveLength(1);
         store.clearFinished();
         expect(store.entries).toHaveLength(0);
+    });
+});
+
+describe("UploadStore.uploadTree", () => {
+    it("creates folders parents-first and uploads files into them", async () => {
+        const contents = makeContents();
+        const store = new UploadStore(contents as never);
+        const target = "http://nohost/plone/folder";
+        const manifest = makeManifest(
+            [
+                { path: ["MyFolder"], file: makeFile("readme.txt", 10) },
+                { path: ["MyFolder", "img"], file: makeFile("a.png", 20) },
+            ],
+            ["MyFolder", "MyFolder/img"]
+        );
+
+        const result = await store.uploadTree(target, manifest);
+
+        // Folders created parents-first, each under its mapped parent url.
+        expect(mockedCreateFolder).toHaveBeenCalledTimes(2);
+        expect(mockedCreateFolder.mock.calls[0][0]).toBe(target);
+        expect(mockedCreateFolder.mock.calls[0][1]).toEqual({
+            title: "MyFolder",
+            type: "Folder",
+        });
+        expect(mockedCreateFolder.mock.calls[1][0]).toBe(`${target}/MyFolder`);
+
+        // Files uploaded into their recreated folder urls.
+        expect(mockedUpload.mock.calls[0][0]).toBe(`${target}/MyFolder`);
+        expect(mockedUpload.mock.calls[1][0]).toBe(`${target}/MyFolder/img`);
+
+        expect(contents.load).toHaveBeenCalledTimes(1);
+        expect(result).toEqual({ ok: 4, failed: [] });
+        expect(store.active).toBe(false);
+    });
+
+    it("passes a custom folder type through to createFolder", async () => {
+        const store = new UploadStore(makeContents() as never);
+        const manifest = makeManifest([], ["F"]);
+        await store.uploadTree("http://nohost/plone/folder", manifest, "myfolder");
+        expect(mockedCreateFolder.mock.calls[0][1].type).toBe("myfolder");
+    });
+
+    it("orphans descendants when a folder fails, without aborting the batch", async () => {
+        // "MyFolder" fails to create → its child folder and files can't be placed.
+        mockedCreateFolder.mockImplementation((parent: string, { title }) => {
+            if (title === "MyFolder") return Promise.reject(new Error("boom"));
+            return Promise.resolve({ "@id": `${parent}/${title}` });
+        });
+        const store = new UploadStore(makeContents() as never);
+        const manifest = makeManifest(
+            [{ path: ["MyFolder"], file: makeFile("readme.txt", 10) }],
+            ["MyFolder", "MyFolder/img"]
+        );
+
+        const result = await store.uploadTree("http://nohost/plone/folder", manifest);
+
+        // No file upload attempted (its folder never existed).
+        expect(mockedUpload).not.toHaveBeenCalled();
+        // Both the failed folder, its orphaned child folder, and the file fail.
+        expect(result.ok).toBe(0);
+        expect(result.failed).toHaveLength(3);
+        // The failure still surfaced as error entries in the progress panel.
+        expect(store.entries.some((e) => e.status === "error")).toBe(true);
     });
 });

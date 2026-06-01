@@ -8,6 +8,7 @@
     import { ClipboardStore } from "./stores/ClipboardStore.svelte.ts";
     import { ModalStore } from "./stores/ModalStore.svelte.ts";
     import { ConfirmStore } from "./stores/ConfirmStore.svelte.ts";
+    import { FolderDropStore } from "./stores/FolderDropStore.svelte.ts";
     import { StatusStore } from "./stores/StatusStore.svelte.ts";
     import { ProgressStore } from "./stores/ProgressStore.svelte.ts";
     import { UploadStore } from "./stores/UploadStore.svelte.ts";
@@ -24,6 +25,7 @@
     import StatusMessages from "./components/StatusMessages.svelte";
     import BatchActionModal from "./components/BatchActionModal.svelte";
     import ConfirmDialog from "./components/ConfirmDialog.svelte";
+    import FolderDropPreview from "./components/FolderDropPreview.svelte";
     import ProgressDialog from "./components/ProgressDialog.svelte";
 
     let {
@@ -38,6 +40,7 @@
         sortOn = "getObjPositionInParent",
         sortOrder = "ascending",
         defaultView = "table",
+        folderType = "Folder",
         storageKey = "pat-filemanager",
     } = $props();
 
@@ -55,6 +58,7 @@
         sortOn,
         sortOrder,
         defaultView,
+        folderType,
     });
     const contents = new ContentsStore(config, storageKey);
     const columns = new ColumnsStore(config, storageKey);
@@ -65,6 +69,7 @@
     const status = new StatusStore();
     const progress = new ProgressStore();
     const upload = new UploadStore(contents);
+    const folderDrop = new FolderDropStore();
     const view = new ViewStore(config, storageKey);
     const interactions = new ListInteractions(
         contents,
@@ -72,7 +77,8 @@
         clipboard,
         upload,
         confirm,
-        progress
+        progress,
+        folderDrop
     );
 
     setContext("config", config);
@@ -85,6 +91,7 @@
     setContext("status", status);
     setContext("progress", progress);
     setContext("upload", upload);
+    setContext("folderDrop", folderDrop);
     setContext("view", view);
     setContext("interactions", interactions);
 
@@ -151,6 +158,7 @@
     <Breadcrumbs />
     <BatchActionModal />
     <ConfirmDialog />
+    <FolderDropPreview />
     <ProgressDialog />
     <UploadZone>
         {#if view.mode === "grid"}
