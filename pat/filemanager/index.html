@@ -350,7 +350,8 @@
 between a <strong>table</strong> view and a photo-organizing <strong>grid</strong> view — with selection,
 clipboard (cut/copy/paste), delete, drag-and-drop ordering, drag-into-folder,
 multi-upload (including dropping files directly onto a subfolder to upload into
-it), in-app folder browsing (breadcrumbs), column configuration,
+it, or dropping a whole <strong>folder</strong> to recreate it — see <em>Folder drop</em> below),
+in-app folder browsing (breadcrumbs), column configuration,
 free-text/type filtering, advanced querystring filtering (build complex
 <code>plone.app.querystring</code> criteria like pat-structure), and batch actions
 (workflow, tags, properties, rename). The view choice is persisted per user in
@@ -448,6 +449,12 @@ required (it defaults to the current page URL with a trailing
 <td style="text-align:center">string</td>
 <td style="text-align:center">&quot;table&quot;</td>
 <td style="text-align:center">Initial listing view: <code>&quot;table&quot;</code> or <code>&quot;grid&quot;</code>. Switchable at runtime; persisted per user in a cookie.</td>
+</tr>
+<tr>
+<td style="text-align:center">folderType</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;Folder&quot;</td>
+<td style="text-align:center">Portal type created for folders recreated from an OS folder drop (see <em>Folder drop</em> below).</td>
 </tr>
 </tbody>
 </table>
@@ -632,6 +639,17 @@ page. Arbitrary cross-page placement still needs <em>Cut</em> → <em>Paste</em>
 and set-as-default-page paths are the table view's row menu — switch to the table
 for those. Cut/copy/paste/delete and the batch actions (workflow, tags,
 properties, rename) work identically in both views via the toolbar.</p>
+<h3>Folder drop</h3>
+<p>Dropping a <strong>folder</strong> from the OS (onto the listing, a subfolder row, or the
+&quot;up to parent&quot; card) recreates the folder structure in Plone and uploads every
+file inside it, recursively. Because a deep folder can be a large, hard-to-undo
+import, the drop is first <strong>calculated and previewed</strong>: a dialog shows the
+folder count, file count, total size and the folder tree, and nothing is written
+until you approve it (Cancel discards the drop entirely). Plain file drops are
+unaffected — they upload immediately with no preview. The recreated containers
+use the <code>folderType</code> option (default <code>&quot;Folder&quot;</code>). Folders are read via the
+browser's <code>DataTransferItem.webkitGetAsEntry()</code> entries API; browsers without it
+fall back to flat-file uploads.</p>
 <p>All user-facing strings are routed through the patternslib i18n bridge
 (<code>src/utils/i18n.ts</code>, <code>widgets</code> domain).</p>
 <h2>Default</h2>
