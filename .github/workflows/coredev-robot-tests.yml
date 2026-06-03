@@ -161,7 +161,7 @@ jobs:
 
   update-check:
     needs: [create-check, robot-tests]
-    if: always()
+    if: needs.create-check.outputs.check_run_id
     runs-on: ubuntu-latest
     steps:
       - name: Update Check Run
