@@ -373,7 +373,15 @@ export class ListInteractions {
             if (files.length) await this.upload.uploadFiles(files, targetUrl);
             return;
         }
-        const manifest = await readDropManifest(entries);
+        // Walking a large dropped tree is slow; flag it so the dialog can show a
+        // loading indicator while the manifest is read (before any preview/entry).
+        this.upload.preparing = true;
+        let manifest;
+        try {
+            manifest = await readDropManifest(entries);
+        } finally {
+            this.upload.preparing = false;
+        }
         if (manifest.fileCount === 0 && manifest.folderCount === 0) return;
         const name = objId(target) || target;
         if (this.folderDrop && !(await this.folderDrop.preview(manifest, name))) {

@@ -26,10 +26,19 @@ export class UploadStore {
     contents: ContentsStore;
     entries = $state<UploadEntry[]>([]);
     active = $state(false);
+    // True while the file list is still being gathered — e.g. walking a dropped
+    // folder tree, which can take a noticeable moment before any entry exists.
+    // The dialog uses this to show a loading indicator instead of an empty list.
+    preparing = $state(false);
     private seq = 0;
 
     constructor(contents: ContentsStore) {
         this.contents = contents;
+    }
+
+    /** Whether an upload is in progress or its file list is still being read. */
+    get busy(): boolean {
+        return this.active || this.preparing;
     }
 
     get totalSize(): number {

@@ -27,6 +27,7 @@
     import ConfirmDialog from "./components/ConfirmDialog.svelte";
     import FolderDropPreview from "./components/FolderDropPreview.svelte";
     import ProgressDialog from "./components/ProgressDialog.svelte";
+    import UploadDialog from "./components/UploadDialog.svelte";
 
     let {
         contextUrl,
@@ -160,6 +161,7 @@
     <ConfirmDialog />
     <FolderDropPreview />
     <ProgressDialog />
+    <UploadDialog />
     <UploadZone>
         {#if view.mode === "grid"}
             <ContentGrid />

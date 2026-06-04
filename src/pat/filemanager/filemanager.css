@@ -481,17 +481,17 @@ body:has(.pat-filemanager) #portal-header {
     pointer-events: none;
 }
 
+/* Upload progress/result dialog. The list lives in a scrollable modal body so a
+   long batch stays contained instead of pushing the listing down. */
+.filemanager-upload-dialog {
+    width: min(560px, calc(100vw - 2rem));
+}
+
 .pat-filemanager-app .filemanager-upload {
-    position: relative;
-    padding: 0.4rem 1.75rem 0.4rem 0.6rem;
-    border: 1px solid var(--filemanager-border);
-    border-radius: 4px;
-    background: #f8f9fa;
+    gap: 0.4rem;
 }
 
 .pat-filemanager-app .filemanager-upload-summary {
-    margin: 0 0 0.4rem;
-    font-weight: 600;
     color: #198754;
 }
 
@@ -501,6 +501,27 @@ body:has(.pat-filemanager) #portal-header {
 
 .pat-filemanager-app .filemanager-upload-summary.is-error {
     color: #b02a37;
+}
+
+/* Indeterminate loading state shown while the file list is still being read —
+   a long dropped-folder walk can take a moment before the first entry appears. */
+.pat-filemanager-app .filemanager-upload-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+.pat-filemanager-app .filemanager-upload-loading progress {
+    width: 60%;
+    height: 0.9rem;
+}
+
+.pat-filemanager-app .filemanager-upload-loading-text {
+    color: var(--filemanager-muted);
+    font-size: 0.9rem;
 }
 
 .pat-filemanager-app .filemanager-upload-list {
@@ -536,19 +557,6 @@ body:has(.pat-filemanager) #portal-header {
 
 .pat-filemanager-app .filemanager-upload-item.is-done .filemanager-upload-done {
     color: #198754;
-}
-
-.pat-filemanager-app .filemanager-upload-close {
-    position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    font-size: 1.1rem;
-    line-height: 1;
-    padding: 0 0.25rem;
-    color: var(--filemanager-muted);
 }
 
 .pat-filemanager-app .filemanager-progress {
