@@ -93,6 +93,24 @@ body:has(.pat-filemanager) #portal-header {
     border-right: 0;
 }
 
+.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font: inherit;
+    cursor: pointer;
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    color: inherit;
+}
+.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear:hover:not(:disabled) {
+    background: #f1f3f5;
+}
+
 .pat-filemanager-app .filemanager-queryfilter-toggle {
     display: inline-flex;
     align-items: center;
@@ -1567,7 +1585,6 @@ body:has(.pat-filemanager) #portal-header {
 .pat-filemanager-app .filemanager-modal-actions button:hover:not(:disabled) {
     background: var(--bs-secondary-bg, #adb5bd);
     border-color: var(--bs-secondary, #6c757d);
-    color: #fff;
 }
 
 .pat-filemanager-app .filemanager-modal-actions button:disabled {
