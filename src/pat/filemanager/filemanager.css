@@ -1530,7 +1530,6 @@ body:has(.pat-filemanager) #portal-header {
 .pat-filemanager-app .filemanager-modal-actions button:hover:not(:disabled) {
     background: var(--bs-secondary-bg, #adb5bd);
     border-color: var(--bs-secondary, #6c757d);
-    color: #fff;
 }
 
 .pat-filemanager-app .filemanager-modal-actions button:disabled {
