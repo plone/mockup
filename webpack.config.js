@@ -155,9 +155,18 @@ module.exports = () => {
         loader: "babel-loader",
     });
 
-    config.resolve.extensions = [".js", ".ts", ".json", ".wasm", ".svelte"];
-    config.resolve.mainFields = ["browser", "module", "main"];
-    config.resolve.conditionNames = ["svelte", "browser", "require"];
+    // NOTE: Use object-literal (colon) syntax here, not `config.resolve.x = ...`
+    // assignments. Because this webpack config is exported as a function,
+    // svelte-loader cannot read the runtime value and instead regex-scans this
+    // file's source for an array assigned with colon syntax. Assignment syntax
+    // wouldn't match and svelte-loader would emit a spurious warning telling you
+    // to add "svelte" to resolve.conditionNames.
+    config.resolve = {
+        ...config.resolve,
+        extensions: [".js", ".ts", ".json", ".wasm", ".svelte"],
+        mainFields: ["browser", "module", "main"],
+        conditionNames: ["svelte", "browser", "require"],
+    };
 
     // NOTE: above doesn't work.
     // Currently, webpack needs the pnpm setting "shamefully-hoist=true" in
