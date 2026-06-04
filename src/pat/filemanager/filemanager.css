@@ -841,6 +841,17 @@ body:has(.pat-filemanager) #portal-header {
     box-shadow: inset 0 0 0 2px var(--filemanager-drop);
 }
 
+/* Reorder drop line at a *solid* folder card's leading (before) / trailing
+   (after) edge. The grid flows horizontally, so the line sits on the left or
+   right edge — matching the axis the before/into/after zones are split on. */
+.pat-filemanager-app .filemanager-card.reorder-before {
+    box-shadow: inset 3px 0 0 0 var(--filemanager-drop);
+}
+
+.pat-filemanager-app .filemanager-card.reorder-after {
+    box-shadow: inset -3px 0 0 0 var(--filemanager-drop);
+}
+
 .pat-filemanager-app .filemanager-card.drop-target {
     background: #d1e7dd;
     box-shadow: inset 0 0 0 2px #198754;
@@ -1006,6 +1017,24 @@ body:has(.pat-filemanager) #portal-header {
     background-repeat: no-repeat;
     background-size: 100% 3px;
     background-position: 0 0;
+}
+
+/* Reorder drop line at a *solid* folder's leading (before) / trailing (after)
+   edge — the folder itself never moves, so this accent line is the only cue
+   that a drop here re-sorts rather than moves into the folder. */
+.pat-filemanager-app .filemanager-row.reorder-before > td,
+.pat-filemanager-app .filemanager-row.reorder-after > td {
+    background-image: linear-gradient(var(--filemanager-drop), var(--filemanager-drop));
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+}
+
+.pat-filemanager-app .filemanager-row.reorder-before > td {
+    background-position: 0 0;
+}
+
+.pat-filemanager-app .filemanager-row.reorder-after > td {
+    background-position: 0 100%;
 }
 
 .pat-filemanager-app .filemanager-row.drop-target > td {

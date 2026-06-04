@@ -115,6 +115,10 @@
                 class:is-busy={folderTask}
                 class:drop-target={interactions.dropIndex === index ||
                     interactions.fileDropIndex === index}
+                class:reorder-before={interactions.reorderIndex === index &&
+                    !interactions.reorderAfter}
+                class:reorder-after={interactions.reorderIndex === index &&
+                    interactions.reorderAfter}
                 data-fm-item
                 data-fm-index={index}
                 tabindex="0"

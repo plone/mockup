@@ -216,13 +216,43 @@ describe("ListInteractions — drag state", () => {
 });
 
 describe("ListInteractions — dragMove (hover decisions)", () => {
-    it("highlights a hovered folder as a move-into target and never swaps with it", () => {
+    it("highlights a hovered folder's middle band as a move-into target and never swaps with it", () => {
         const { interactions } = make([item("a"), item("f", { is_folderish: true })]);
         interactions.dragStart(0);
-        const allow = interactions.dragMove(1); // hovering the folder
+        const allow = interactions.dragMove(1, "into"); // over the folder's middle
         expect(interactions.dropIndex).toBe(1);
-        // Folders are solid drop targets: sortablejs must not reorder-swap with
-        // one, so it stays put under the pointer and dropping in is reliable.
+        // The wide middle band holds the folder still under the pointer, so it
+        // stays solid as a drop target and aiming at it to drop in is reliable.
+        expect(allow).toBe(false);
+    });
+
+    it("marks a reorder at a folder's leading/trailing edge but keeps the folder solid", () => {
+        const { interactions } = make([item("a"), item("f", { is_folderish: true })]);
+        interactions.dragStart(0);
+        // Leading edge → drop line before the folder.
+        let allow = interactions.dragMove(1, "before");
+        expect(interactions.dropIndex).toBe(-1);
+        expect(interactions.reorderIndex).toBe(1);
+        expect(interactions.reorderAfter).toBe(false);
+        // The folder is never swapped away, so sortablejs must not reorder.
+        expect(allow).toBe(false);
+        // Trailing edge → drop line after the folder.
+        allow = interactions.dragMove(1, "after");
+        expect(interactions.reorderIndex).toBe(1);
+        expect(interactions.reorderAfter).toBe(true);
+        expect(allow).toBe(false);
+    });
+
+    it("does not mark a folder edge reorder when reordering is disabled", () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+        ]);
+        contents.sortOn = "modified";
+        interactions.dragStart(0);
+        const allow = interactions.dragMove(1, "before");
+        expect(interactions.dropIndex).toBe(-1);
+        expect(interactions.reorderIndex).toBe(-1);
         expect(allow).toBe(false);
     });
 
@@ -407,6 +437,44 @@ describe("ListInteractions — dragEnd (moves & reorder)", () => {
         contents.sortOn = "modified";
         interactions.dragStart(0);
         await interactions.dragEnd(1);
+        expect(contents.moveTo).not.toHaveBeenCalled();
+    });
+
+    it("commits a reorder after a solid folder's trailing edge from its own delta", async () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+            item("b"),
+        ]);
+        interactions.dragStart(0); // grab a
+        interactions.dragMove(1, "after"); // trailing edge of the folder
+        // The folder never swapped, so sortablejs reports delta 0; we compute it.
+        await interactions.dragEnd(0);
+        expect(contents.moveTo).toHaveBeenCalledWith("a", 1, ["a", "f", "b"]);
+        expect(contents.moveIntoFolder).not.toHaveBeenCalled();
+    });
+
+    it("commits a reorder before a solid folder's leading edge from its own delta", async () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+            item("b"),
+        ]);
+        interactions.dragStart(2); // grab b
+        interactions.dragMove(1, "before"); // leading edge of the folder
+        await interactions.dragEnd(0);
+        expect(contents.moveTo).toHaveBeenCalledWith("b", -1, ["a", "f", "b"]);
+    });
+
+    it("is a no-op when a folder-edge reorder lands the row where it already is", async () => {
+        const { interactions, contents } = make([
+            item("a"),
+            item("f", { is_folderish: true }),
+            item("b"),
+        ]);
+        interactions.dragStart(0); // grab a (already right before the folder)
+        interactions.dragMove(1, "before");
+        await interactions.dragEnd(0);
         expect(contents.moveTo).not.toHaveBeenCalled();
     });
 

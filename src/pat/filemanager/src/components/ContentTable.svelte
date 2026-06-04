@@ -22,6 +22,19 @@
     const colSpan = $derived(columns.length + 2);
     const pageAllSelected = $derived(selection.allSelected(contents.items));
 
+    // i18n extraction markers: column labels are defined as plain strings in
+    // ConfigStore (a .svelte.ts module the extractor doesn't scan) and translated
+    // at render via `_t(column.label)`. List here only the labels with no other
+    // literal `_t()` usage in the codebase so `pnpm run i18n` (src/i18n.js, scans
+    // .svelte/.js only) picks up their msgids. The remaining labels (Preview,
+    // Title, State, Tags, Size) are already extracted from their existing call
+    // sites, so listing them here would only steal their source reference. Never
+    // called.
+    // eslint-disable-next-line no-unused-vars
+    function _i18nColumnLabels() {
+        return [_t("Type"), _t("Modified"), _t("Created"), _t("Published"), _t("Expires")];
+    }
+
     function sortIndicator(column) {
         if (!column.sortIndex || contents.sortOn !== column.sortIndex) return "";
         return contents.sortOrder === "ascending" ? " ▲" : " ▼";
@@ -107,10 +120,10 @@
                             class:active={contents.sortOn === column.sortIndex}
                             onclick={() => contents.sortBy(column.sortIndex)}
                         >
-                            {column.label}{sortIndicator(column)}
+                            {_t(column.label)}{sortIndicator(column)}
                         </button>
                     {:else}
-                        {column.label}
+                        {_t(column.label)}
                     {/if}
                 </th>
             {/each}
@@ -187,6 +200,10 @@
                     class:is-busy={folderTask}
                     class:drop-target={interactions.dropIndex === index ||
                         interactions.fileDropIndex === index}
+                    class:reorder-before={interactions.reorderIndex === index &&
+                        !interactions.reorderAfter}
+                    class:reorder-after={interactions.reorderIndex === index &&
+                        interactions.reorderAfter}
                     data-fm-item
                     data-fm-index={index}
                     onclick={(e) => interactions.onItemClick(e, item, index)}

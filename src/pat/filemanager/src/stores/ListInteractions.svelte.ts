@@ -12,6 +12,7 @@ import type { FolderDropStore } from "./FolderDropStore.svelte";
 import type { ProgressStore } from "./ProgressStore.svelte";
 import type { SelectionStore } from "./SelectionStore.svelte";
 import type { UploadStore } from "./UploadStore.svelte";
+import type { DropZone } from "../utils/sortable";
 
 // Shared list-interaction logic (selection clicks + drag) for any view that
 // renders the listing. Extracted from ContentTable so the grid reuses exactly
@@ -46,6 +47,14 @@ export class ListInteractions {
     // Highlight for the grid's "up to parent" placeholder while an item drag or
     // an external file drag hovers it (drop = move/upload into the parent).
     parentDrop = $state(false);
+    // A folder is a *solid* drop target: sortablejs never swaps it away, so its
+    // three zones read reliably. When the pointer is on a folder's leading or
+    // trailing edge (a reorder, not a move-into), `reorderIndex` marks that
+    // folder's row and `reorderAfter` whether the drop line sits after it (else
+    // before). The drop is committed by us in `dragEnd`, since sortablejs isn't
+    // moving anything for a solid folder.
+    reorderIndex = $state(-1);
+    reorderAfter = $state(false);
 
     // Drag bookkeeping captured at drag start: the dragged row's model index,
     // its url, and the server order snapshotted then so a reorder drop commits a
@@ -193,45 +202,61 @@ export class ListInteractions {
         // against the order the server still has.
         this.dragSubset = this.canReorder ? [...this.contents.currentIds] : [];
         this.dropIndex = -1;
+        this.reorderIndex = -1;
         this.parentDrop = false;
         this.fileDropIndex = -1;
     }
 
     /**
      * A hover during the drag, over the listing item at model index
-     * `relatedIndex` (-1 when not over an item). Returns whether sortablejs may
-     * reorder-swap for this hover:
+     * `relatedIndex` (-1 when not over an item). `zone` is where the pointer
+     * sits over that item (only meaningful for a folder). Returns whether
+     * sortablejs may reorder-swap for this hover:
      *
      *  - over the parent placeholder (tracked by the native handlers) → false,
      *    keep the list still so only the placeholder highlights;
-     *  - over any folder but the dragged item itself → false, and highlight the
-     *    whole folder as a move-into target. Folders are *solid* drop targets:
-     *    never swapping the dragged item with a folder keeps the folder still
-     *    under the pointer, so aiming at it to drop inside is reliable (a
-     *    swapping folder would slide away as you approached it — especially in
-     *    the vertical table, where every crossed row swaps). Reordering past a
-     *    folder still works by hovering the next non-folder item beyond it;
-     *  - otherwise reorder, but only in manual-order mode.
+     *  - over a folder (but the dragged item itself) → always false. A folder
+     *    is a *solid* drop target: never letting sortablejs swap it keeps it
+     *    still under the pointer, so its three zones read reliably (a swapping
+     *    folder slides out from under you as you aim, which made the move-into
+     *    highlight flicker). The wide middle `into` band highlights it as a
+     *    move-into target; the thin `before`/`after` edge bands mark a reorder
+     *    that `dragEnd` commits itself (sortablejs moved nothing);
+     *  - otherwise reorder via sortablejs, but only in manual-order mode.
      */
-    dragMove(relatedIndex: number): boolean {
+    dragMove(relatedIndex: number, zone: DropZone = "into"): boolean {
         if (this.parentDrop) {
             this.dropIndex = -1;
+            this.reorderIndex = -1;
             return false;
         }
         const target = relatedIndex >= 0 ? this.contents.items[relatedIndex] : undefined;
         if (target?.is_folderish && target["@id"] !== this.draggedId) {
-            this.dropIndex = relatedIndex;
+            if (zone === "into") {
+                this.dropIndex = relatedIndex;
+                this.reorderIndex = -1;
+            } else if (this.canReorder) {
+                this.dropIndex = -1;
+                this.reorderIndex = relatedIndex;
+                this.reorderAfter = zone === "after";
+            } else {
+                this.dropIndex = -1;
+                this.reorderIndex = -1;
+            }
             return false;
         }
         this.dropIndex = -1;
+        this.reorderIndex = -1;
         return this.canReorder;
     }
 
     /**
      * The drag ended. `delta` is the dragged row's net index shift within the
      * listing (sortablejs's newIndex − oldIndex). The last hover decided the
-     * gesture: a parent-placeholder or folder move takes precedence over a
-     * reorder; otherwise, in manual-order mode, commit the reorder.
+     * gesture, in precedence order: a parent-placeholder move, a move into a
+     * folder, a reorder relative to a (solid) folder's edge, or — over a
+     * non-folder — the plain sortablejs reorder. The last three only apply in
+     * manual-order mode.
      */
     async dragEnd(delta: number): Promise<void> {
         const active = this.dragActive;
@@ -240,6 +265,8 @@ export class ListInteractions {
         const from = this.dragStartIndex;
         const draggedId = this.draggedId;
         const subset = this.dragSubset;
+        const edgeIndex = this.reorderIndex;
+        const edgeAfter = this.reorderAfter;
         this.resetDrag();
         if (!active || from < 0 || !draggedId) return;
         const dragged = this.contents.items[from];
@@ -253,14 +280,37 @@ export class ListInteractions {
             if (target?.is_folderish) await this.moveToFolder(target, dragged);
             return;
         }
-        if (!this.canReorder || delta === 0) return;
+        if (!this.canReorder) return;
+        // Reorder against a folder's edge: the folder stayed solid (sortablejs
+        // moved nothing), so compute the dragged row's target slot ourselves
+        // rather than trusting the sortablejs delta, which would be 0 here.
+        if (edgeIndex >= 0 && edgeIndex !== from) {
+            const edgeDelta = this.edgeReorderDelta(from, edgeIndex, edgeAfter);
+            if (edgeDelta !== 0) {
+                await this.contents.moveTo(objId(draggedId), edgeDelta, subset);
+            }
+            return;
+        }
+        if (delta === 0) return;
         await this.contents.moveTo(objId(draggedId), delta, subset);
+    }
+
+    /**
+     * The net index shift to drop the dragged row (at model index `from`) just
+     * before or after the folder at model index `folder`. Accounts for the gap
+     * the dragged row leaves behind when it sits above the folder.
+     */
+    private edgeReorderDelta(from: number, folder: number, after: boolean): number {
+        const adjusted = from < folder ? folder - 1 : folder;
+        const target = after ? adjusted + 1 : adjusted;
+        return target - from;
     }
 
     /** Clear all drag bookkeeping (shared by a committed drop and a cancel). */
     private resetDrag(): void {
         this.dragActive = false;
         this.dropIndex = -1;
+        this.reorderIndex = -1;
         this.fileDropIndex = -1;
         this.parentDrop = false;
         this.dragStartIndex = -1;
@@ -373,15 +423,7 @@ export class ListInteractions {
             if (files.length) await this.upload.uploadFiles(files, targetUrl);
             return;
         }
-        // Walking a large dropped tree is slow; flag it so the dialog can show a
-        // loading indicator while the manifest is read (before any preview/entry).
-        this.upload.preparing = true;
-        let manifest;
-        try {
-            manifest = await readDropManifest(entries);
-        } finally {
-            this.upload.preparing = false;
-        }
+        const manifest = await readDropManifest(entries);
         if (manifest.fileCount === 0 && manifest.folderCount === 0) return;
         const name = objId(target) || target;
         if (this.folderDrop && !(await this.folderDrop.preview(manifest, name))) {
