@@ -222,6 +222,26 @@ msgid "No items in this folder."
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/ContentTable.svelte
+msgid "Type"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentTable.svelte
+msgid "Modified"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentTable.svelte
+msgid "Created"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentTable.svelte
+msgid "Published"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentTable.svelte
+msgid "Expires"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentTable.svelte
 msgid "Select all on this page"
 msgstr ""
 
@@ -398,27 +418,7 @@ msgid "Select all"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/StatusMessages.svelte
-msgid "Uploading ${count} files…"
-msgstr ""
-
-#: ./src/pat/filemanager/src/components/StatusMessages.svelte
-msgid "Uploaded ${done} of ${total} files, ${failed} failed."
-msgstr ""
-
-#: ./src/pat/filemanager/src/components/StatusMessages.svelte
-msgid "Uploaded ${count} files."
-msgstr ""
-
-#: ./src/pat/filemanager/src/components/StatusMessages.svelte
 msgid "Dismiss message"
-msgstr ""
-
-#: ./src/pat/filemanager/src/components/StatusMessages.svelte
-msgid "done"
-msgstr ""
-
-#: ./src/pat/filemanager/src/components/StatusMessages.svelte
-msgid "Uploading ${name}"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/Toolbar.svelte
@@ -483,6 +483,38 @@ msgstr ""
 
 #: ./src/pat/filemanager/src/components/Toolbar.svelte
 msgid "Rename"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "Reading dropped files…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "Starting upload…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "Uploading ${count} files…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "Uploaded ${done} of ${total} files, ${failed} failed."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "Uploaded ${count} files."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "File upload"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "done"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadDialog.svelte
+msgid "Uploading ${name}"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/UploadZone.svelte

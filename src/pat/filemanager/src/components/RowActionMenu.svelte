@@ -140,23 +140,23 @@
             tabindex="-1"
             onkeydown={onMenuKeydown}
         >
-            <a role="menuitem" href={url} onclick={close}>{_t("Open")}</a>
-            <a role="menuitem" href="{url}/edit" onclick={close}>{_t("Edit")}</a>
-            <button type="button" role="menuitem" onclick={cut}>{_t("Cut")}</button>
-            <button type="button" role="menuitem" onclick={copy}>{_t("Copy")}</button>
-            <button type="button" role="menuitem" disabled={!canReorder || isFirst} onclick={moveUp}>
+            <a role="menuitem" href={url} title={_t("Open")} onclick={close}>{_t("Open")}</a>
+            <a role="menuitem" href="{url}/edit" title={_t("Edit")} onclick={close}>{_t("Edit")}</a>
+            <button type="button" role="menuitem" title={_t("Cut")} onclick={cut}>{_t("Cut")}</button>
+            <button type="button" role="menuitem" title={_t("Copy")} onclick={copy}>{_t("Copy")}</button>
+            <button type="button" role="menuitem" title={_t("Move up")} disabled={!canReorder || isFirst} onclick={moveUp}>
                 {_t("Move up")}
             </button>
-            <button type="button" role="menuitem" disabled={!canReorder || isLast} onclick={moveDown}>
+            <button type="button" role="menuitem" title={_t("Move down")} disabled={!canReorder || isLast} onclick={moveDown}>
                 {_t("Move down")}
             </button>
-            <button type="button" role="menuitem" disabled={!canReorder || isFirst} onclick={moveTop}>
+            <button type="button" role="menuitem" title={_t("Move to top")} disabled={!canReorder || isFirst} onclick={moveTop}>
                 {_t("Move to top")}
             </button>
-            <button type="button" role="menuitem" disabled={!canReorder || isLast} onclick={moveBottom}>
+            <button type="button" role="menuitem" title={_t("Move to bottom")} disabled={!canReorder || isLast} onclick={moveBottom}>
                 {_t("Move to bottom")}
             </button>
-            <button type="button" role="menuitem" onclick={setDefault}>
+            <button type="button" role="menuitem" title={_t("Set as default page")} onclick={setDefault}>
                 {_t("Set as default page")}
             </button>
         </div>

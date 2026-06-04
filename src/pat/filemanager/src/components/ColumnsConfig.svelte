@@ -60,18 +60,20 @@
                                 disabled={columns.active.length <= 1}
                                 onchange={() => columns.toggle(column.key)}
                             />
-                            {column.label}
+                            {_t(column.label)}
                         </label>
                         <span class="filemanager-columns-reorder">
                             <button
                                 type="button"
-                                aria-label={_t("Move ${name} up", { name: column.label })}
+                                title={_t("Move ${name} up", { name: _t(column.label) })}
+                                aria-label={_t("Move ${name} up", { name: _t(column.label) })}
                                 disabled={i === 0}
                                 onclick={() => columns.move(column.key, -1)}>↑</button
                             >
                             <button
                                 type="button"
-                                aria-label={_t("Move ${name} down", { name: column.label })}
+                                title={_t("Move ${name} down", { name: _t(column.label) })}
+                                aria-label={_t("Move ${name} down", { name: _t(column.label) })}
                                 disabled={i === activeDefs.length - 1}
                                 onclick={() => columns.move(column.key, 1)}>↓</button
                             >
@@ -90,7 +92,7 @@
                                     type="checkbox"
                                     onchange={() => columns.toggle(column.key)}
                                 />
-                                {column.label}
+                                {_t(column.label)}
                             </label>
                         </li>
                     {/each}

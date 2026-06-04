@@ -174,6 +174,7 @@
                 type="button"
                 class="filemanager-querybuilder-remove"
                 onclick={() => removeRow(index)}
+                title={_t("Remove criteria")}
                 aria-label={_t("Remove criteria")}
             >×</button>
         </div>

@@ -16,6 +16,7 @@
                 <button
                     type="button"
                     class="filemanager-status-dismiss"
+                    title={_t("Dismiss message")}
                     aria-label={_t("Dismiss message")}
                     onclick={() => status.dismiss(message.id)}
                 >

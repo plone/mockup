@@ -61,6 +61,7 @@
             <button
                 type="button"
                 class="filemanager-modal-close"
+                title={_t("Close")}
                 aria-label={_t("Close")}
                 disabled={modal.busy}
                 onclick={() => modal.close()}
