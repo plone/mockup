@@ -14,11 +14,23 @@ msgstr ""
 "Domain: widgets\n"
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "clear search"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "upload to ${current_path}"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "close"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
 msgid "loading content items"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/ContentBrowser.svelte
+msgid "home"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/ContentBrowser.svelte
@@ -94,11 +106,607 @@ msgid "loading selected items"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/SelectedItems.svelte
+msgid "You can only select ${max} items"
+msgstr ""
+
+#: ./src/pat/contentbrowser/src/SelectedItems.svelte
 msgid "Select or Upload"
 msgstr ""
 
 #: ./src/pat/contentbrowser/src/SelectedItems.svelte
 msgid "Select"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Change workflow state"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Edit tags"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Edit properties"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Rename items"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Rearrange folder contents"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Link integrity warning"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/BatchActionModal.svelte
+msgid "Close"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Breadcrumbs.svelte
+msgid "Breadcrumbs"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Breadcrumbs.svelte
+msgid "Home"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "Excluded from navigation"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Column settings"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Configure columns"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Visible columns"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Move ${name} up"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Move ${name} down"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Hidden columns"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Reset"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
+msgid "Done"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ConfirmDialog.svelte
+msgid "Cancel"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ConfirmDialog.svelte
+msgid "OK"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentGrid.svelte
+msgid "Loading…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentGrid.svelte
+msgid "Folder contents"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentGrid.svelte
+msgid "Up to parent folder"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentGrid.svelte
+msgid "Up to parent"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentGrid.svelte
+msgid "Select ${name}"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentGrid.svelte
+msgid "No items in this folder."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ContentTable.svelte
+msgid "Select all on this page"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Search…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Search"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Filter (${count})"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Filter"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Advanced filter"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Clear"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
+msgid "(this folder)"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
+msgid "${folders} folders, ${files} files, ${size}"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
+msgid "Confirm folder upload"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
+msgid "Upload folder into ${target}?"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
+msgid "${count} files"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
+msgid "Upload"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/GridSizeSlider.svelte
+msgid "Image size"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Pagination.svelte
+msgid "Previous"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Pagination.svelte
+msgid "Page ${current} / ${total}"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Pagination.svelte
+msgid "Next"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Pagination.svelte
+msgid "Per page"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ProgressDialog.svelte
+msgid "Operation in progress"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "No filters yet."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Criteria"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Select criteria"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Operator"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Value"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "From"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "to"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "To"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "days"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Path"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Remove criteria"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/QueryBuilder.svelte
+msgid "Add criteria"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Actions for ${name}"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Open"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Edit"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Cut"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Copy"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Move up"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Move down"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Move to top"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Move to bottom"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/RowActionMenu.svelte
+msgid "Set as default page"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/SelectAll.svelte
+msgid "Deselect all"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/SelectAll.svelte
+msgid "${count} selected"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/SelectAll.svelte
+msgid "Select all"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/StatusMessages.svelte
+msgid "Uploading ${count} files…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/StatusMessages.svelte
+msgid "Uploaded ${done} of ${total} files, ${failed} failed."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/StatusMessages.svelte
+msgid "Uploaded ${count} files."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/StatusMessages.svelte
+msgid "Dismiss message"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/StatusMessages.svelte
+msgid "done"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/StatusMessages.svelte
+msgid "Uploading ${name}"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Moving ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Copying ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Deleting ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Delete ${count} items (including ${subItemsTotal} subitems)? This cannot be undone."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Delete ${count} items? This cannot be undone."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Select all ${count} in query"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "All ${count} in query selected"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Rearrange"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Actions"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Paste"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Paste (${count} ${op})"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Delete"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "State"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Tags"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Properties"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/Toolbar.svelte
+msgid "Rename"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadZone.svelte
+msgid "Folder contents — drop files to upload"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadZone.svelte
+msgid "Drop files to upload"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ViewSwitcher.svelte
+msgid "Table"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ViewSwitcher.svelte
+msgid "Grid"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ViewSwitcher.svelte
+msgid "Switch view"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/LinkIntegrityForm.svelte
+msgid "The following items have incoming links. Deleting them may break those links."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/LinkIntegrityForm.svelte
+msgid "${subItemsTotal} subitems will also be permanently deleted."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/LinkIntegrityForm.svelte
+msgid "(contains ${n} items)"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/LinkIntegrityForm.svelte
+msgid "is referenced by:"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/LinkIntegrityForm.svelte
+msgid "Deleting…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/LinkIntegrityForm.svelte
+msgid "Delete anyway"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "No property changes were specified."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Updating properties on ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Set properties on ${count} selected items. Empty fields are left unchanged."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Publishing date"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Expiration date"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Rights"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Creators"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "comma, separated"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Contributors"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Exclude from navigation"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "No change"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Exclude"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Include"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Language"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Also apply to contained items (recursive)"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Saving…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/PropertiesForm.svelte
+msgid "Save"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "ID"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Folder contents have been rearranged."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Sort all items in this folder by a chosen criterion. The new order becomes the manual (drag-and-drop) order."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Sort by"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Order"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Ascending (A → Z, oldest first)"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Descending (Z → A, newest first)"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RearrangeForm.svelte
+msgid "Rearranging…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RenameForm.svelte
+msgid "No names were changed."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RenameForm.svelte
+msgid "Renaming ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RenameForm.svelte
+msgid "Edit the title and short name (URL segment) of each item."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RenameForm.svelte
+msgid "Short name"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/RenameForm.svelte
+msgid "Renaming…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/TagsForm.svelte
+msgid "No tag changes were specified."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/TagsForm.svelte
+msgid "Updating tags on ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/TagsForm.svelte
+msgid "Add or remove tags on ${count} selected items."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/TagsForm.svelte
+msgid "Tags to add"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/TagsForm.svelte
+msgid "comma, separated, tags"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/TagsForm.svelte
+msgid "Tags to remove"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Changing the state of ${count} items…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Apply a transition to ${count} selected items."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Loading available transitions…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "No transitions are available for the selected items."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Transition"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Select a transition…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Comment"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Applying…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
+msgid "Apply"
 msgstr ""
 
 #: ./src/pat/formunloadalert/formunloadalert.js
@@ -129,14 +737,6 @@ msgstr ""
 msgid "results"
 msgstr ""
 
-#: ./src/pat/livesearch/livesearch.js
-msgid "Previous"
-msgstr ""
-
-#: ./src/pat/livesearch/livesearch.js
-msgid "Next"
-msgstr ""
-
 #: ./src/pat/manageportlets/manageportlets.js
 msgid "Portlet changes saved"
 msgstr ""
@@ -157,24 +757,8 @@ msgstr ""
 msgid "There was an error loading modal."
 msgstr ""
 
-#: ./src/pat/modal/modal.js
-msgid "Close"
-msgstr ""
-
 #: ./src/pat/preventdoublesubmit/preventdoublesubmit.js
 msgid "You already clicked the submit button. Do you really want to submit this form again?"
-msgstr ""
-
-#: ./src/pat/querystring/querystring.js
-msgid "Select criteria"
-msgstr ""
-
-#: ./src/pat/querystring/querystring.js
-msgid "to"
-msgstr ""
-
-#: ./src/pat/querystring/querystring.js
-msgid "days"
 msgstr ""
 
 #: ./src/pat/querystring/querystring.js
@@ -218,35 +802,7 @@ msgid "Current path:"
 msgstr ""
 
 #: ./src/pat/relateditems/relateditems.js
-msgid "Search"
-msgstr ""
-
-#: ./src/pat/relateditems/relateditems.js
 msgid "Browse"
-msgstr ""
-
-#: ./src/pat/relateditems/relateditems.js
-msgid "Upload"
-msgstr ""
-
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Open"
-msgstr ""
-
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Edit"
-msgstr ""
-
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Cut"
-msgstr ""
-
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Copy"
-msgstr ""
-
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Paste"
 msgstr ""
 
 #: ./src/pat/structure/js/actionmenu.js
@@ -255,10 +811,6 @@ msgstr ""
 
 #: ./src/pat/structure/js/actionmenu.js
 msgid "Move to bottom of folder"
-msgstr ""
-
-#: ./src/pat/structure/js/actionmenu.js
-msgid "Set as default page"
 msgstr ""
 
 #: ./src/pat/structure/js/actions.js
@@ -302,14 +854,6 @@ msgid "Manage selection"
 msgstr ""
 
 #: ./src/pat/structure/js/views/app.js
-msgid "Rearrange"
-msgstr ""
-
-#: ./src/pat/structure/js/views/app.js
-msgid "Rearrange folder contents"
-msgstr ""
-
-#: ./src/pat/structure/js/views/app.js
 msgid "Upload files"
 msgstr ""
 
@@ -323,14 +867,6 @@ msgstr ""
 
 #: ./src/pat/structure/js/views/columns.js
 msgid "Select columns to show, drag and drop to reorder"
-msgstr ""
-
-#: ./src/pat/structure/js/views/columns.js
-msgid "Save"
-msgstr ""
-
-#: ./src/pat/structure/js/views/generic-popover.js
-msgid "Apply"
 msgstr ""
 
 #: ./src/pat/structure/js/views/generic-popover.js
@@ -382,23 +918,11 @@ msgid "Notice: Drag and drop reordering is disabled when viewing the contents so
 msgstr ""
 
 #: ./src/pat/structure/js/views/textfilter.js
-msgid "Clear"
-msgstr ""
-
-#: ./src/pat/structure/js/views/textfilter.js
 msgid "This listing has filters applied. Not all items are shown."
 msgstr ""
 
 #: ./src/pat/structure/js/views/textfilter.js
 msgid "Drag and drop reordering is disabled while filters are applied."
-msgstr ""
-
-#: ./src/pat/structure/js/views/textfilter.js
-msgid "Filter"
-msgstr ""
-
-#: ./src/pat/structure/templates/actionmenu.xml
-msgid "Actions"
 msgstr ""
 
 #: ./src/pat/structure/templates/paging.xml
@@ -419,10 +943,6 @@ msgstr ""
 
 #: ./src/pat/structure/templates/table.xml
 msgid "Root"
-msgstr ""
-
-#: ./src/pat/structure/templates/tablerow.xml
-msgid "Excluded from navigation"
 msgstr ""
 
 #: ./src/pat/structure/templates/tablerow.xml
@@ -451,10 +971,6 @@ msgstr ""
 
 #: ./src/pat/tinymce/tinymce.js
 msgid "Insert"
-msgstr ""
-
-#: ./src/pat/tinymce/tinymce.js
-msgid "Cancel"
 msgstr ""
 
 #: ./src/pat/tinymce/tinymce.js
