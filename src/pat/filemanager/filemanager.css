@@ -1269,6 +1269,21 @@ body:has(.pat-filemanager) #portal-header {
     margin-left: 0.2rem;
 }
 
+/* Inline status badge in the title cell (future publishing date, expired,
+   working copy). Text labels mirror pat-structure; styling stays pure CSS. */
+.pat-filemanager-app .filemanager-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
+    color: #fff;
+    background: var(--bs-secondary, #6c757d);
+}
+
 /* Grid card badge for boolean indicators */
 .pat-filemanager-app .filemanager-card-badge {
     display: inline-flex;
@@ -1279,6 +1294,23 @@ body:has(.pat-filemanager) #portal-header {
     padding: 0.1rem 0.35rem;
     border-radius: var(--bs-border-radius-sm, 0.25rem);
     background: var(--bs-secondary-bg-subtle, #e9ecef);
+}
+
+/* Status colour modifiers, shared by the table title badge and the grid card
+   badge. Placed after both base rules so the colour wins on source order. */
+.pat-filemanager-app .filemanager-badge-ineffective {
+    color: #000;
+    background: var(--bs-warning, #ffc107);
+}
+
+.pat-filemanager-app .filemanager-badge-expired {
+    color: #fff;
+    background: var(--bs-danger, #dc3545);
+}
+
+.pat-filemanager-app .filemanager-badge-working-copy {
+    color: #000;
+    background: var(--bs-info, #0dcaf0);
 }
 
 .pat-filemanager-app .filemanager-message {

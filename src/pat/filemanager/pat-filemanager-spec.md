@@ -49,7 +49,9 @@ src/pat/filemanager/
       Breadcrumbs.svelte
       ContentTable.svelte     # table shell, header, select-all, the row <tr>s
                               #   (checkbox, columns, row menu), DnD + animate:flip
-      ColumnCell.svelte       # renders a value by column type (date/state/tags/image)
+      ColumnCell.svelte       # renders a value by column type (date/state/tags/image);
+                              #   title cell shows status badges (nav-excluded,
+                              #   before-publishing-date, expired, working-copy)
       RowActionMenu.svelte    # open/edit/cut/copy/paste/move-top/bottom/default-page
       Pagination.svelte       # batch size + page nav
       ColumnsConfig.svelte    # toggle + drag-reorder columns popover
@@ -763,7 +765,8 @@ the *interaction logic*, not the rendered element.
     the `ColumnCell` title-click logic).
   - A **selection checkbox overlay** (photo-manager style, top-left), plus
     `is-selected` / `is-cut` / `dragging` / `drop-target` classes.
-  - `review_state` badge + title caption.
+  - `review_state` badge + title caption, plus the shared status badges
+    (nav-excluded, before-publishing-date, expired, working-copy).
   - `draggable`, wired to the **same** `ListInteractions` row dispatchers; while
     `dragActive` they drive reorder/move-into-folder, otherwise external **file**
     drags upload into a subfolder card or fall through to `UploadZone` (the §17

@@ -75,6 +75,22 @@ required (it defaults to the current page URL with a trailing
 | Subject         | Tags    | tags  |    no    |
 | getObjSize      | Size    | text  |    no    |
 
+### Status indicators
+
+The title cell (and grid card) shows small inline badges after the title,
+derived from catalog metadata already returned by `@querystring-search` — no
+extra request:
+
+| Badge                  | Condition | Source field |
+| ---------------------- | --------- | ------------ |
+| Excluded from navigation | `exclude_from_nav` is set | `exclude_from_nav` |
+| Before publishing date | `EffectiveDate` is set and in the future (inactive portal content) | `EffectiveDate` |
+| Expired                | `ExpirationDate` is set and in the past | `ExpirationDate` |
+| Working copy           | item is a `plone.app.iterate` working copy | `is_working_copy` |
+
+The date checks live in `src/utils/format.ts` (`isIneffective` / `isExpired`)
+and the badges render unconditionally regardless of which columns are active.
+
 ## Accessibility & keyboard navigation
 
 The pattern doesn't impose a custom grid-traversal model. The table is plain

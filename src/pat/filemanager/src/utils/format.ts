@@ -3,10 +3,16 @@
 
 const MISSING = new Set(["1969/12/31 19:00:00 US/Eastern", "1969/12/31", "None", ""]);
 
-export function formatDate(value: unknown): string {
-    if (value == null || typeof value !== "string" || MISSING.has(value)) return "";
+/** Parse a catalog date string, treating the "no date" sentinels as null. */
+function parseDate(value: unknown): Date | null {
+    if (value == null || typeof value !== "string" || MISSING.has(value)) return null;
     const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "";
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export function formatDate(value: unknown): string {
+    const date = parseDate(value);
+    if (!date) return "";
     return new Intl.DateTimeFormat(undefined, {
         year: "numeric",
         month: "short",
@@ -14,6 +20,21 @@ export function formatDate(value: unknown): string {
         hour: "2-digit",
         minute: "2-digit",
     }).format(date);
+}
+
+/**
+ * True when the item's effective (publishing) date is set and still in the
+ * future — i.e. it is not yet publicly accessible ("inactive portal content").
+ */
+export function isIneffective(item: Record<string, any>, now: Date = new Date()): boolean {
+    const date = parseDate(item?.EffectiveDate);
+    return date != null && now < date;
+}
+
+/** True when the item's expiration date is set and has already passed. */
+export function isExpired(item: Record<string, any>, now: Date = new Date()): boolean {
+    const date = parseDate(item?.ExpirationDate);
+    return date != null && now > date;
 }
 
 export function formatSize(value: unknown): string {

@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { formatDate, formatSize, thumbnailUrl } from "../utils/format.ts";
+    import { formatDate, formatSize, thumbnailUrl, isExpired, isIneffective } from "../utils/format.ts";
     import Icon from "./Icon.svelte";
     import { _t } from "../utils/i18n.ts";
 
@@ -21,6 +21,8 @@
     const typeIcon = $derived(
         `contenttype/${(item.portal_type ?? "document").toLowerCase().replace(/\.| /g, "-")}`
     );
+    const ineffective = $derived(isIneffective(item));
+    const expired = $derived(isExpired(item));
 
     // Folderish titles drill into the folder in-app; everything else keeps the
     // plain link so the object opens normally.
@@ -39,6 +41,21 @@
         {#if item.exclude_from_nav}
             <span class="filemanager-nav-excluded" title={_t("Excluded from navigation")} aria-label={_t("Excluded from navigation")}>
                 <Icon name="eye-slash" />
+            </span>
+        {/if}
+        {#if ineffective}
+            <span class="filemanager-badge filemanager-badge-ineffective" title={_t("Publishing date is in the future")}>
+                {_t("Before publishing date")}
+            </span>
+        {/if}
+        {#if expired}
+            <span class="filemanager-badge filemanager-badge-expired" title={_t("Expiration date has passed")}>
+                {_t("Expired")}
+            </span>
+        {/if}
+        {#if item.is_working_copy}
+            <span class="filemanager-badge filemanager-badge-working-copy" title={_t("This is a working copy")}>
+                {_t("Working copy")}
             </span>
         {/if}
     </a>

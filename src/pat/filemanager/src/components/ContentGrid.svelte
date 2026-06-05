@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { thumbnailUrl } from "../utils/format.ts";
+    import { thumbnailUrl, isExpired, isIneffective } from "../utils/format.ts";
     import { sortableList } from "../utils/sortable.ts";
     import { _t } from "../utils/i18n.ts";
     import Icon from "./Icon.svelte";
@@ -169,6 +169,21 @@
                 {#if item.exclude_from_nav}
                     <span class="filemanager-card-badge" title={_t("Excluded from navigation")} aria-label={_t("Excluded from navigation")}>
                         <Icon name="eye-slash" />
+                    </span>
+                {/if}
+                {#if isIneffective(item)}
+                    <span class="filemanager-card-badge filemanager-badge-ineffective" title={_t("Publishing date is in the future")}>
+                        {_t("Before publishing date")}
+                    </span>
+                {/if}
+                {#if isExpired(item)}
+                    <span class="filemanager-card-badge filemanager-badge-expired" title={_t("Expiration date has passed")}>
+                        {_t("Expired")}
+                    </span>
+                {/if}
+                {#if item.is_working_copy}
+                    <span class="filemanager-card-badge filemanager-badge-working-copy" title={_t("This is a working copy")}>
+                        {_t("Working copy")}
                     </span>
                 {/if}
 

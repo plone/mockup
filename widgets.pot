@@ -157,6 +157,30 @@ msgstr ""
 msgid "Excluded from navigation"
 msgstr ""
 
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "Publishing date is in the future"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "Before publishing date"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "Expiration date has passed"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "Expired"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "This is a working copy"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/ColumnCell.svelte
+msgid "Working copy"
+msgstr ""
+
 #: ./src/pat/filemanager/src/components/ColumnsConfig.svelte
 msgid "Column settings"
 msgstr ""
@@ -995,14 +1019,6 @@ msgstr ""
 
 #: ./src/pat/structure/templates/table.xml
 msgid "Root"
-msgstr ""
-
-#: ./src/pat/structure/templates/tablerow.xml
-msgid "Expired"
-msgstr ""
-
-#: ./src/pat/structure/templates/tablerow.xml
-msgid "Before publishing date"
 msgstr ""
 
 #: ./src/pat/structure/templates/tablerow.xml
