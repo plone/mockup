@@ -532,6 +532,43 @@ required (it defaults to the current page URL with a trailing
 </tr>
 </tbody>
 </table>
+<h3>Status indicators</h3>
+<p>The title cell (and grid card) shows small inline badges after the title,
+derived from catalog metadata already returned by <code>@querystring-search</code> — no
+extra request:</p>
+<table>
+<thead>
+<tr>
+<th>Badge</th>
+<th>Condition</th>
+<th>Source field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excluded from navigation</td>
+<td><code>exclude_from_nav</code> is set</td>
+<td><code>exclude_from_nav</code></td>
+</tr>
+<tr>
+<td>Before publishing date</td>
+<td><code>EffectiveDate</code> is set and in the future (inactive portal content)</td>
+<td><code>EffectiveDate</code></td>
+</tr>
+<tr>
+<td>Expired</td>
+<td><code>ExpirationDate</code> is set and in the past</td>
+<td><code>ExpirationDate</code></td>
+</tr>
+<tr>
+<td>Working copy</td>
+<td>item is a <code>plone.app.iterate</code> working copy</td>
+<td><code>is_working_copy</code></td>
+</tr>
+</tbody>
+</table>
+<p>The date checks live in <code>src/utils/format.ts</code> (<code>isIneffective</code> / <code>isExpired</code>)
+and the badges render unconditionally regardless of which columns are active.</p>
 <h2>Accessibility &amp; keyboard navigation</h2>
 <p>The pattern doesn't impose a custom grid-traversal model. The table is plain
 semantic HTML (<code>&lt;table&gt;</code>/<code>&lt;thead&gt;</code>/<code>&lt;th&gt;</code>), so screen-reader semantics and the
