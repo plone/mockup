@@ -18,7 +18,9 @@ msgstr ""
 
 `;
 
-    const okayFiles = ["xml", "js", "htm", "html", "svelte"];
+    // ".svelte.ts" / ".ts" share the "ts" extension; covering it picks up
+    // store modules like ListInteractions.svelte.ts.
+    const okayFiles = ["xml", "js", "ts", "htm", "html", "svelte"];
     const found = [];
     const checkFile = function (filepath) {
         const split = filepath.split(".");
@@ -27,21 +29,30 @@ msgstr ""
         }
         console.log("reading file: " + filepath);
         const file = fs.readFileSync(filepath, { encoding: "utf-8" });
-        const re = /_t\((("[^"]+")|('[^']+'))(,\W{[^}]*})?\)/g;
-        let match = re.exec(file);
-        while (match) {
-            if (match) {
-                re.lastIndex = Math.max(match.index + 1, re.lastIndex + 1);
-                const val = match[1].replace(/['"]+/g, "");
-                if (found.indexOf(val) === -1) {
-                    output += `#: ${filepath}
-msgid "${val}"
+        // Match the translation call with optional whitespace/newlines before
+        // the first string argument (multiline calls), and allow escaped quotes
+        // inside the string so embedded quotes in a msgid survive extraction.
+        const re = /_t\(\s*("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/g;
+        let match;
+        while ((match = re.exec(file))) {
+            const raw = match[1];
+            const quote = raw[0];
+            // Strip only the surrounding quotes, then unescape any escaped
+            // surrounding-quote chars to recover the literal runtime msgid.
+            const val = raw
+                .slice(1, -1)
+                .replace(new RegExp("\\\\" + quote, "g"), quote);
+            if (found.indexOf(val) === -1) {
+                // gettext .po msgids must escape backslashes and double quotes.
+                const escaped = val
+                    .replace(/\\/g, "\\\\")
+                    .replace(/"/g, '\\"');
+                output += `#: ${filepath}
+msgid "${escaped}"
 msgstr ""
 
 `;
-                    found.push(val);
-                }
-                match = re.exec(file);
+                found.push(val);
             }
         }
     };

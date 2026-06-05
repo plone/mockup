@@ -282,7 +282,7 @@ msgid "Confirm folder upload"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
-msgid "Upload folder into ${target}?"
+msgid "Upload folder into \"${target}\"?"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/FolderDropPreview.svelte
@@ -739,6 +739,26 @@ msgstr ""
 
 #: ./src/pat/filemanager/src/components/modals/WorkflowForm.svelte
 msgid "Apply"
+msgstr ""
+
+#: ./src/pat/filemanager/src/stores/ListInteractions.svelte.ts
+msgid "Move ${count} item(s) into \"${folder}\"?"
+msgstr ""
+
+#: ./src/pat/filemanager/src/stores/ListInteractions.svelte.ts
+msgid "Move"
+msgstr ""
+
+#: ./src/pat/filemanager/src/stores/ListInteractions.svelte.ts
+msgid "Moving ${count} item(s) into \"${folder}\"…"
+msgstr ""
+
+#: ./src/pat/filemanager/src/stores/ListInteractions.svelte.ts
+msgid "Move ${count} item(s) to the parent folder?"
+msgstr ""
+
+#: ./src/pat/filemanager/src/stores/ListInteractions.svelte.ts
+msgid "Moving ${count} item(s) to the parent folder…"
 msgstr ""
 
 #: ./src/pat/formunloadalert/formunloadalert.js
