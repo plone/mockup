@@ -42,7 +42,7 @@
         "js-cookie": "^3.0.7",
         "select2": "github:ivaynberg/select2#95a977f674b6938af55ec5f28b7772df93786c5c",
         "sortablejs": "^1.15.7",
-        "tinymce": "8.5.0",
+        "tinymce": "8.5.1",
         "tinymce-i18n": "26.4.6",
         "underscore": "1.13.8"
     },

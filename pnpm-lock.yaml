@@ -110,8 +110,8 @@ importers:
         specifier: ^1.15.7
         version: 1.15.7
       tinymce:
-        specifier: 8.5.0
-        version: 8.5.0
+        specifier: 8.5.1
+        version: 8.5.1
       tinymce-i18n:
         specifier: 26.4.6
         version: 26.4.6
@@ -2775,6 +2775,7 @@ packages:
 
   dompurify@3.4.4:
     resolution: {integrity: sha512-r8K7KGKEcztXfA/nfabSYB2hg9tDphORJTdf8xprN/luSLGmNhOBN8dm1/SYjqLLet6YUFEXOcrdTuwryp/Bew==}
+    deprecated: Fixed a security issue introduced in 3.4.4
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -4619,8 +4620,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.2.6:
-    resolution: {integrity: sha512-XjBR15BhXuylgWGuslhDKqlSayuqvqBX91BP8pauG8kd1zY8kotkNWbXksTCNRarse4kuGbe2kIY05ARtwNIvw==}
+  react-is@19.2.7:
+    resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
 
   react@19.2.4:
     resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
@@ -5242,8 +5243,8 @@ packages:
   tinymce-i18n@26.4.6:
     resolution: {integrity: sha512-5lD8EEwe5nxEZISJLvRlaiZlt7sJA4rA0YhOLRdzXh5d1adHPXQe+CIkgKKGhYqVFeYCyshWGZLU0PoUF2sRKg==}
 
-  tinymce@8.5.0:
-    resolution: {integrity: sha512-DnKEfPNQnOJc8Ca1roZBs/GSbkAZyIIbC4p8eHZyZQi85OSAXtiVNYMaRxo4mzsGKpa0sA4/Us4KXQkX8q7w2A==}
+  tinymce@8.5.1:
+    resolution: {integrity: sha512-Wd4OrokDEwlXppSR+ijXngLa2+s3v8NZax9WCvAHeQhqvFsj9tGt19PmrnAdGLiQFkBBYzdOLW23tsBTPMiJYw==}
 
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
@@ -10774,7 +10775,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       ansi-styles: 5.2.0
       react-is-18: react-is@18.3.1
-      react-is-19: react-is@19.2.6
+      react-is-19: react-is@19.2.7
 
   prismjs@1.30.0: {}
 
@@ -10840,7 +10841,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.2.6: {}
+  react-is@19.2.7: {}
 
   react@19.2.4: {}
 
@@ -11496,7 +11497,7 @@ snapshots:
 
   tinymce-i18n@26.4.6: {}
 
-  tinymce@8.5.0: {}
+  tinymce@8.5.1: {}
 
   tippy.js@6.3.7:
     dependencies:
