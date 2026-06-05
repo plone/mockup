@@ -338,6 +338,29 @@ describe("Select2", function () {
         expect(native_change_events).toEqual(1);
     });
 
+    it("re-emits a native blur event when nothing is selected", async function () {
+        // Select2 v3 signals loss of focus via a jQuery `select2-blur` event,
+        // which native event listeners (e.g. in pat-validation) don't receive.
+        // When the widget is left empty, pat-select2 bridges this by
+        // re-dispatching a native `blur` event, so validation can kick in.
+        document.body.innerHTML = `
+          <input class="pat-select2"
+                 data-pat-select2="tags: Red,Yellow,Blue" />
+        `;
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const el = document.querySelector("input.pat-select2");
+
+        let native_blur_events = 0;
+        el.addEventListener("blur", () => native_blur_events++);
+
+        // A native listener does not receive jQuery-triggered events ...
+        $(el).trigger("select2-blur");
+        // ... but pat-select2 re-dispatches it as a native blur event.
+        expect(native_blur_events).toEqual(1);
+    });
+
     it("HTML multiple select widget converted to hidden inuput, before applying select2", async function () {
         document.body.innerHTML = `
           <div>

@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
+import events from "@patternslib/patternslib/src/core/events";
 import I18n from "../../core/i18n";
 import utils from "../../core/utils";
 
@@ -168,6 +169,12 @@ export default Base.extend({
             this.el.dispatchEvent(events.change_event());
             dispatching = false;
         });
+
+        // Select2 v3 signals loss of focus via a jQuery `select2-blur` event,
+        // which isn't caught by native JavaScript event listeners.
+        // Let's re-trigger as a native `blur` event so that native listeners can
+        // pick it up.
+        this.$el.on("select2-blur", () => this.el.dispatchEvent(events.blur_event()));
 
         this.$el.on("select2-selected", (e) => callback(this.options.onSelected, e));
         this.$el.on("select2-selecting", (e) => callback(this.options.onSelecting, e));
