@@ -9,6 +9,62 @@ import { mount } from "svelte";
 
 export const parser = new Parser("filemanager");
 
+// Critical, layout-affecting CSS injected synchronously on first init — kept in
+// sync with the matching rules in filemanager.css. The full stylesheet is loaded
+// as a lazy chunk (import("./filemanager.css")), which arrives a network
+// round-trip later; if these rules waited for it, the Plone header/nav would
+// paint and then vanish, flickering on every first load, and the listing area
+// would stay blank with no feedback until the Svelte bundle finished loading.
+// Applying them inline the moment the pattern is scanned fixes both without
+// un-lazying the rest of the styles.
+//
+// The spinner is shown via :not(:has(.pat-filemanager-app)): the Svelte app
+// mounts a .pat-filemanager-app root into the element, so the spinner shows from
+// the first paint and disappears automatically the instant the app renders.
+const CRITICAL_CSS = `
+body:has(.pat-filemanager) #content-header,
+body:has(.pat-filemanager) #mainnavigation-wrapper,
+body:has(.pat-filemanager) #above-content-wrapper {
+    display: none;
+}
+
+.pat-filemanager:not(:has(.pat-filemanager-app)) {
+    display: block;
+    min-height: 8rem;
+}
+
+.pat-filemanager:not(:has(.pat-filemanager-app))::after {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 5rem auto 3rem;
+    border: 3px solid var(--bs-border-color, #dee2e6);
+    border-top-color: var(--bs-primary, #0d6efd);
+    border-radius: 50%;
+    animation: pat-filemanager-spin 0.7s linear infinite;
+}
+
+@keyframes pat-filemanager-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+`;
+
+const CRITICAL_CSS_ID = "pat-filemanager-critical-css";
+
+export function injectCriticalCss() {
+    if (document.getElementById(CRITICAL_CSS_ID)) {
+        return;
+    }
+    const style = document.createElement("style");
+    style.id = CRITICAL_CSS_ID;
+    style.textContent = CRITICAL_CSS;
+    document.head.appendChild(style);
+}
+
 // No defaults here on purpose: the data attribute carries camelCase keys, and a
 // non-undefined parser default would overwrite the supplied value during the
 // parser's hyphenated->camelCase cleanup. Defaults live in App.svelte props.
@@ -31,6 +87,9 @@ class Pattern extends BasePattern {
     static parser = parser;
 
     async init() {
+        // Apply the chrome-hiding rule immediately so the Plone header does not
+        // flash before the lazy stylesheet chunk lands.
+        injectCriticalCss();
         import("./filemanager.css");
 
         // ensure an id on our element

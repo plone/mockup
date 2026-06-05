@@ -10,10 +10,45 @@
     /* Shared font size for toolbar, table headers and pagination — slightly
        smaller than the table body so chrome recedes and content stands out. */
     --filemanager-ui-size: 0.875rem;
+    --filemanager-app-margin: 2rem 0;
+    margin: var(--filemanager-app-margin, 2rem 0);
 }
 
-body:has(.pat-filemanager) #portal-header {
+/* Hide the surrounding Plone chrome while the filemanager owns the view, and
+   show a loading spinner until the Svelte app mounts its .pat-filemanager-app
+   root.
+   NOTE: these rules are duplicated as CRITICAL_CSS in filemanager.js, which
+   injects them synchronously on init so the header does not flicker and the
+   spinner appears before this lazy stylesheet loads. Keep the two copies in
+   sync. */
+body:has(.pat-filemanager) #content-header,
+body:has(.pat-filemanager) #mainnavigation-wrapper,
+body:has(.pat-filemanager) #above-content-wrapper {
     display: none;
+}
+
+.pat-filemanager:not(:has(.pat-filemanager-app)) {
+    display: block;
+    min-height: 8rem;
+}
+
+.pat-filemanager:not(:has(.pat-filemanager-app))::after {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 5rem auto 3rem;
+    border: 3px solid var(--bs-border-color, #dee2e6);
+    border-top-color: var(--bs-primary, #0d6efd);
+    border-radius: 50%;
+    animation: pat-filemanager-spin 0.7s linear infinite;
+}
+
+@keyframes pat-filemanager-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .pat-filemanager-app .filemanager-breadcrumbs ol {

@@ -1203,3 +1203,35 @@ preview). All stock restapi (content `POST {@type: Folder}` + the existing
 > nothing, Upload recreates the tree and uploads into the right subfolders;
 > plain file drop still skips the preview; a non-default `folder-type` is
 > honoured) is pending on the running dev server.
+
+## 27. Eager critical CSS — no header flicker + loading spinner (done)
+
+`filemanager.css` is loaded as a lazy webpack chunk (`import("./filemanager.css")`
+in `init()`), so it arrives a network round-trip after the pattern is scanned.
+The chrome-hiding rule (`body:has(.pat-filemanager)` → `display:none` on
+`#content-header`, `#mainnavigation-wrapper`, `#above-content-wrapper`) lived only
+in that chunk, so the Plone header/nav painted and then vanished — a flicker on
+every first load. The listing area also stayed blank with no feedback until the
+Svelte bundle finished loading.
+
+- **Fix.** `filemanager.js` holds the layout-critical rules as a `CRITICAL_CSS`
+  string and injects them synchronously via `injectCriticalCss()` as the first
+  line of `init()`, before the lazy `import("./filemanager.css")`. A `<style
+  id="pat-filemanager-critical-css">` guard makes it idempotent (one element per
+  document). The rest of the styles stay lazily loaded, keeping the code-split
+  convention used by the other patterns.
+- **Spinner.** A CSS-only spinner is rendered as a `::after` pseudo-element on
+  `.pat-filemanager:not(:has(.pat-filemanager-app))`. Because the Svelte app
+  mounts a `.pat-filemanager-app` root into the element, the spinner shows from
+  the first paint and disappears automatically the instant the app renders — no
+  JS toggling. Colours come from `--bs-primary` / `--bs-border-color` with
+  hardcoded fallbacks.
+- **Duplication.** The same rules remain in `filemanager.css` (with a NOTE
+  comment) so the stylesheet is still complete on its own; the two copies must be
+  kept in sync.
+- **Tests.** `filemanager.test.js` — `injectCriticalCss()` injects the
+  chrome-hiding rule and the spinner (`::after` + `@keyframes`) into `<head>`,
+  and repeated calls add only one `<style>`.
+- **Residual.** Eliminates the chunk-load delay entirely; any remaining flash is
+  only the post-initial-paint scan gap, which would need the rule in Plone's main
+  bundled CSS (outside mockup) to remove.

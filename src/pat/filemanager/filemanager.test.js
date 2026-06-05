@@ -1,4 +1,4 @@
-import Pattern, { parser } from "./filemanager";
+import Pattern, { parser, injectCriticalCss } from "./filemanager";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
@@ -26,6 +26,51 @@ describe("pat-filemanager registration", () => {
         expect(parsed.sortOn).toBe("effective");
         expect(parsed.sortOrder).toBe("descending");
         expect(parsed.activeColumns).toEqual(["Title", "review_state"]);
+    });
+
+    describe("critical CSS", () => {
+        afterEach(() => {
+            document.getElementById("pat-filemanager-critical-css")?.remove();
+        });
+
+        it("injects the chrome-hiding rule synchronously into the head", () => {
+            expect(
+                document.getElementById("pat-filemanager-critical-css")
+            ).toBeNull();
+
+            injectCriticalCss();
+
+            const style = document.getElementById("pat-filemanager-critical-css");
+            expect(style).not.toBeNull();
+            expect(style.parentNode).toBe(document.head);
+            expect(style.textContent).toContain("body:has(.pat-filemanager)");
+            expect(style.textContent).toContain("display: none;");
+        });
+
+        it("includes a loading spinner shown until the app mounts", () => {
+            injectCriticalCss();
+
+            const css = document.getElementById(
+                "pat-filemanager-critical-css"
+            ).textContent;
+            // Spinner is gated on the absence of the mounted app root, so it
+            // disappears the moment Svelte renders .pat-filemanager-app.
+            expect(css).toContain(
+                ".pat-filemanager:not(:has(.pat-filemanager-app))::after"
+            );
+            expect(css).toContain("@keyframes pat-filemanager-spin");
+            expect(css).toContain("animation: pat-filemanager-spin");
+        });
+
+        it("is idempotent — repeated calls add only one style element", () => {
+            injectCriticalCss();
+            injectCriticalCss();
+            injectCriticalCss();
+
+            expect(
+                document.querySelectorAll("#pat-filemanager-critical-css").length
+            ).toBe(1);
+        });
     });
 
     // Component mount requires Svelte 5 ESM compilation, which this CJS jest
