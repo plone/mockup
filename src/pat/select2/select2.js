@@ -149,6 +149,26 @@ export default Base.extend({
         }
 
         this.$el.select2(this.options);
+
+        // Select2 v3 signals changes via a jQuery `change` event, which isn't
+        // caught by native JavaScript event listeners.
+        // Let's re-trigger as native `input`- and `change`-events, so that
+        // those can pick it up. A native `<select>` fires both input and
+        // change when its value is committed, so we mirror both.
+        let dispatching = false;
+        this.$el.on("change", () => {
+            // The `dispatching` guard prevents infinite recursion: jQuery's
+            // `change` handler also catches the native `change` event we
+            // dispatch here.
+            if (dispatching) {
+                return;
+            }
+            dispatching = true;
+            this.el.dispatchEvent(events.input_event());
+            this.el.dispatchEvent(events.change_event());
+            dispatching = false;
+        });
+
         this.$el.on("select2-selected", (e) => callback(this.options.onSelected, e));
         this.$el.on("select2-selecting", (e) => callback(this.options.onSelecting, e));
         this.$el.on("select2-deselecting", (e) =>
