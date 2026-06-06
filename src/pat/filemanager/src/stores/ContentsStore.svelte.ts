@@ -216,6 +216,28 @@ export class ContentsStore {
         return this.load({ silent: true });
     }
 
+    /**
+     * Whether the listing is in its default manual order (sorted on
+     * getObjPositionInParent) — the only mode that permits drag-reorder /
+     * move-top-bottom. A column sort leaves this false.
+     */
+    get isManualOrder(): boolean {
+        return this.sortOn === "getObjPositionInParent";
+    }
+
+    /**
+     * Clear a column sort and return to the folder's manual order
+     * (getObjPositionInParent ascending), which re-enables drag-reorder. No-op
+     * if already in manual order.
+     */
+    resetSort(): Promise<void> {
+        if (this.isManualOrder) return Promise.resolve();
+        this.sortOn = "getObjPositionInParent";
+        this.sortOrder = "ascending";
+        this.bStart = 0;
+        return this.load({ silent: true });
+    }
+
     goToPage(page: number): Promise<void> {
         const target = Math.min(Math.max(1, page), this.pageCount);
         this.bStart = (target - 1) * this.bSize;

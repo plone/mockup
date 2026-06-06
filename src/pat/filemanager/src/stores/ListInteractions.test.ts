@@ -13,6 +13,9 @@ function makeContents(items: ReturnType<typeof item>[]) {
     return {
         items,
         sortOn: "getObjPositionInParent",
+        get isManualOrder() {
+            return this.sortOn === "getObjPositionInParent";
+        },
         parentUrl: "http://nohost/plone" as string | null,
         get currentIds() {
             return items.map((it) => it["@id"].split("/").pop());

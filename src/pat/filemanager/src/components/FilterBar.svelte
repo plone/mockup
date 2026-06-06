@@ -90,6 +90,18 @@
         {/if}
     </div>
 
+    {#if !contents.isManualOrder}
+        <button
+            type="button"
+            class="filemanager-sort-reset"
+            title={_t("Sorted by a column — drag-and-drop reordering is disabled. Reset to the manual order.")}
+            onclick={() => contents.resetSort()}
+        >
+            <Icon name="arrow-counterclockwise" />
+            {_t("Reset sorting")}
+        </button>
+    {/if}
+
     {#if contents.hasActiveFilters}
         <button type="button" class="filemanager-filter-clear" onclick={clearAll}>{_t("Clear")}</button>
     {/if}

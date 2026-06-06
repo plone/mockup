@@ -9,6 +9,9 @@ import RowActionMenu from "./RowActionMenu.svelte";
 function makeContents(overrides = {}) {
     return {
         sortOn: "getObjPositionInParent",
+        get isManualOrder() {
+            return this.sortOn === "getObjPositionInParent";
+        },
         items: [{}, {}, {}],
         currentIds: ["a", "b", "c"],
         config: {

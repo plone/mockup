@@ -95,7 +95,7 @@ export class ListInteractions {
 
     /** Reorder only makes sense while the listing is in manual-order mode. */
     get canReorder(): boolean {
-        return this.contents.sortOn === "getObjPositionInParent";
+        return this.contents.isManualOrder;
     }
 
     // Clicks on these controls (links, buttons, the checkbox, its label) keep

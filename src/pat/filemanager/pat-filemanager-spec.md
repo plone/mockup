@@ -121,6 +121,10 @@ Confirmed locally available restapi services:
 - [x] Batched listing on content
 - [x] Customizable batch size
 - [x] Drag / drop sorting (persistent, catalog-index based; flip-animated — §19)
+- [x] Reset column sort back to manual order (`ContentsStore.resetSort()` +
+  `isManualOrder`; a "Reset sorting" button in the FilterBar shown whenever a
+  column sort is active, re-enabling drag-reorder — mirrors pat-structure's
+  "Reset column sorting")
 - [x] Rearrange folder (full-sort by criterion via `OrderingMixin sort` PATCH — §24)
 - [x] Visible columns configuration (toggle + reorder + persist)
 - [x] Select items: current batch or all-in-query

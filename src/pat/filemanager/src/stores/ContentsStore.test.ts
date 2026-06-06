@@ -164,6 +164,29 @@ describe("ContentsStore", () => {
         expect(store.loading).toBe(false);
     });
 
+    it("resetSort returns to manual order and re-enables it", async () => {
+        mockedSearch.mockResolvedValue({ items: [], total: 0 });
+        const store = makeStore();
+        await store.sortBy("modified");
+        store.bStart = 30;
+        expect(store.isManualOrder).toBe(false);
+
+        await store.resetSort();
+        expect(store.sortOn).toBe("getObjPositionInParent");
+        expect(store.sortOrder).toBe("ascending");
+        expect(store.bStart).toBe(0);
+        expect(store.isManualOrder).toBe(true);
+    });
+
+    it("resetSort is a no-op when already in manual order", async () => {
+        mockedSearch.mockResolvedValue({ items: [], total: 0 });
+        const store = makeStore();
+        expect(store.isManualOrder).toBe(true);
+        mockedSearch.mockClear();
+        await store.resetSort();
+        expect(mockedSearch).not.toHaveBeenCalled();
+    });
+
     it("computes page count and clamps goToPage", async () => {
         mockedSearch.mockResolvedValue({ items: [], total: 0 });
         const store = makeStore();

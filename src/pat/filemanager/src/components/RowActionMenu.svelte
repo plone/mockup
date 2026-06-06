@@ -23,7 +23,7 @@
     const openUrl = $derived(contents.config.viewUrl(item));
     const id = $derived(objId(url));
     const title = $derived(item.Title || id);
-    const canReorder = $derived(contents.sortOn === "getObjPositionInParent");
+    const canReorder = $derived(contents.isManualOrder);
     const isFirst = $derived(index === 0);
     const isLast = $derived(index === contents.items.length - 1);
 

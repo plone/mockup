@@ -128,7 +128,8 @@ body:has(.pat-filemanager) #above-content-wrapper {
     border-right: 0;
 }
 
-.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear {
+.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear,
+.pat-filemanager-app .filemanager-filterbar .filemanager-sort-reset {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -142,7 +143,8 @@ body:has(.pat-filemanager) #above-content-wrapper {
     background: #fff;
     color: inherit;
 }
-.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear:hover:not(:disabled) {
+.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear:hover:not(:disabled),
+.pat-filemanager-app .filemanager-filterbar .filemanager-sort-reset:hover:not(:disabled) {
     background: #f1f3f5;
 }
 
