@@ -94,11 +94,11 @@
         <button
             type="button"
             class="filemanager-sort-reset"
-            title={_t("Sorted by a column — drag-and-drop reordering is disabled. Reset to the manual order.")}
+            title={_t("Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column.")}
             onclick={() => contents.resetSort()}
         >
             <Icon name="arrow-counterclockwise" />
-            {_t("Reset sorting")}
+            {_t("Reset column sorting")}
         </button>
     {/if}
 
