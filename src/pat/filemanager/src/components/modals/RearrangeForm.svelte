@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { _t } from "../../utils/i18n.ts";
+    import { _t, _tp } from "../../utils/i18n.ts";
 
     /** @type {import("../../stores/ContentsStore.svelte").ContentsStore} */
     const contents = getContext("contents");
@@ -10,10 +10,22 @@
     const status = getContext("status");
 
     // Sort fields available for a full-folder rearrange. These mirror the
-    // catalog indices plone.restapi's OrderingMixin accepts for `sort.on`.
+    // catalog indices pat-structure offers (plone.app.content `get_indexes`),
+    // which restapi's OrderingMixin resort accepts for `sort.on` (it runs the
+    // same `catalog(sort_on=…)` query). Labels are Plone field labels living in
+    // the "plone" i18n domain, so translate via _tp (like the server's own
+    // PloneMessageFactory) — _t (widgets) lacks several of them.
     const SORT_FIELDS = [
-        { value: "sortable_title", label: _t("Title") },
-        { value: "id", label: _t("ID") },
+        { value: "sortable_title", label: _tp("Title") },
+        { value: "id", label: _tp("ID") },
+        { value: "created", label: _tp("Created on") },
+        { value: "modified", label: _tp("Last modified") },
+        { value: "effective", label: _tp("Publication date") },
+        { value: "expires", label: _tp("Expiration date") },
+        { value: "review_state", label: _tp("Review state") },
+        { value: "Type", label: _tp("Type") },
+        { value: "Creator", label: _tp("Creator") },
+        { value: "Subject", label: _tp("Tags") },
     ];
 
     let sortOn = $state("sortable_title");

@@ -1061,12 +1061,19 @@ the legacy `/rearrange` custom Plone JSON view (§3).
   reloads so the rearranged items appear at the top of page 1. After rearranging,
   drag-drop reorder starts from the new order.
 - **`src/components/modals/RearrangeForm.svelte`** — a native-dialog form with
-  a "Sort by" `<select>` (**Title** = `sortable_title`, **ID** = `id`) and an
-  ascending/descending radio group. On submit calls `contents.rearrange`, shows
-  a success status and closes the modal. _(Earlier iteration also offered
-  Date created / modified / Publication date / Content type — trimmed to the
-  two manual-organization cases that match how editors actually rearrange
-  folders; the other indices remain available via column-sort in the table.)_
+  a "Sort by" `<select>` and an ascending/descending radio group. On submit
+  calls `contents.rearrange`, shows a success status and closes the modal. The
+  sort fields mirror pat-structure's set (plone.app.content `get_indexes`),
+  which restapi's `OrderingMixin.resortAllItemsInContext` accepts for `sort.on`
+  (it runs the same `catalog(sort_on=…)` query): **Title** (`sortable_title`),
+  **ID** (`id`), **Created on** (`created`), **Last modified** (`modified`),
+  **Publication date** (`effective`), **Expiration date** (`expires`),
+  **Review state** (`review_state`), **Type** (`Type`), **Creator** (`Creator`),
+  **Tags** (`Subject`). These labels are Plone field labels in the **plone**
+  i18n domain, so the form translates them via `_tp` (mirroring the server's own
+  `PloneMessageFactory`); `_t`/widgets lacks several of them. _(An earlier
+  iteration trimmed this to just Title/ID; restored to the fuller pat-structure
+  set on request.)_
 - **`BatchActionModal`** — wired in the `"rearrange"` case (title + `<RearrangeForm />`).
 - **`Toolbar`** — a **Rearrange** button (`plone-rearrange` icon, always enabled,
   not gated on selection) that calls `modal.toggle("rearrange")`.
