@@ -42,6 +42,7 @@
         sortOrder = "ascending",
         defaultView = "table",
         folderType = "Folder",
+        viewActionTypes = [],
         storageKey = "pat-filemanager",
     } = $props();
 
@@ -60,6 +61,7 @@
         sortOrder,
         defaultView,
         folderType,
+        viewActionTypes,
     });
     const contents = new ContentsStore(config, storageKey);
     const columns = new ColumnsStore(config, storageKey);

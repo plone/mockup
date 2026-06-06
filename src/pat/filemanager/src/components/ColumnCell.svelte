@@ -23,6 +23,9 @@
     );
     const ineffective = $derived(isIneffective(item));
     const expired = $derived(isExpired(item));
+    // File/Image (and any configured view-action type) open at /view, not the
+    // raw-content object URL. Folderish titles drill in-app (onTitleClick).
+    const openUrl = $derived(contents.config.viewUrl(item));
 
     // Folderish titles drill into the folder in-app; everything else keeps the
     // plain link so the object opens normally.
@@ -35,7 +38,7 @@
 </script>
 
 {#if column.type === "title"}
-    <a class="filemanager-title" href={item["@id"]} onclick={onTitleClick}>
+    <a class="filemanager-title" href={openUrl} onclick={onTitleClick}>
         <Icon name={typeIcon} />
         {value || item.id || item["@id"]}
         {#if item.exclude_from_nav}

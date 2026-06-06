@@ -11,6 +11,13 @@ function makeContents(overrides = {}) {
         sortOn: "getObjPositionInParent",
         items: [{}, {}, {}],
         currentIds: ["a", "b", "c"],
+        config: {
+            viewActionTypes: ["File", "Image"],
+            viewUrl: (item) =>
+                item.portal_type && ["File", "Image"].includes(item.portal_type)
+                    ? `${item["@id"]}/view`
+                    : item["@id"],
+        },
         moveTo: jest.fn().mockResolvedValue(undefined),
         makeDefaultPage: jest.fn().mockResolvedValue(undefined),
         ...overrides,

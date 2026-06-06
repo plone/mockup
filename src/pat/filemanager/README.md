@@ -57,6 +57,7 @@ required (it defaults to the current page URL with a trailing
 | sortOrder            | string  | "ascending"                        | Initial sort order: `"ascending"` or `"descending"`.                                          |
 | defaultView          | string  | "table"                            | Initial listing view: `"table"` or `"grid"`. Switchable at runtime; persisted per user in a cookie. |
 | folderType           | string  | "Folder"                           | Portal type created for folders recreated from an OS folder drop (see *Folder drop* below).   |
+| viewActionTypes      | array   | ["File", "Image"]                  | Portal types opened at `…/view` instead of the bare object URL (which would download/display the raw content). Mirrors the registry record `plone.types_use_view_action_in_listings`. |
 
 ### Column keys
 

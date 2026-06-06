@@ -704,4 +704,36 @@ describe("ConfigStore", () => {
             type: "text",
         });
     });
+
+    it("appends /view only for view-action types (default File/Image)", () => {
+        const config = new ConfigStore({ contextUrl: "http://nohost/plone" });
+        expect(config.viewActionTypes).toEqual(["File", "Image"]);
+        expect(
+            config.viewUrl({ "@id": "http://nohost/plone/f.pdf", portal_type: "File" })
+        ).toBe("http://nohost/plone/f.pdf/view");
+        expect(
+            config.viewUrl({ "@id": "http://nohost/plone/img", portal_type: "Image" })
+        ).toBe("http://nohost/plone/img/view");
+        expect(
+            config.viewUrl({ "@id": "http://nohost/plone/doc", portal_type: "Document" })
+        ).toBe("http://nohost/plone/doc");
+        // Missing portal_type → no /view (don't guess).
+        expect(config.viewUrl({ "@id": "http://nohost/plone/x" })).toBe(
+            "http://nohost/plone/x"
+        );
+    });
+
+    it("honours a custom viewActionTypes list", () => {
+        const config = new ConfigStore({
+            contextUrl: "http://nohost/plone",
+            viewActionTypes: ["Blob"],
+        });
+        expect(
+            config.viewUrl({ "@id": "http://nohost/plone/b", portal_type: "Blob" })
+        ).toBe("http://nohost/plone/b/view");
+        // File is no longer in the list when overridden.
+        expect(
+            config.viewUrl({ "@id": "http://nohost/plone/f", portal_type: "File" })
+        ).toBe("http://nohost/plone/f");
+    });
 });

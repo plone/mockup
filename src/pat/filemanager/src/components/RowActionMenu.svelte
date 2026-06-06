@@ -19,6 +19,8 @@
     let popover = $state();
 
     const url = $derived(item["@id"]);
+    // Open targets /view for File/Image; Edit stays on the bare object URL.
+    const openUrl = $derived(contents.config.viewUrl(item));
     const id = $derived(objId(url));
     const title = $derived(item.Title || id);
     const canReorder = $derived(contents.sortOn === "getObjPositionInParent");
@@ -140,7 +142,7 @@
             tabindex="-1"
             onkeydown={onMenuKeydown}
         >
-            <a role="menuitem" href={url} title={_t("Open")} onclick={close}>{_t("Open")}</a>
+            <a role="menuitem" href={openUrl} title={_t("Open")} onclick={close}>{_t("Open")}</a>
             <a role="menuitem" href="{url}/edit" title={_t("Edit")} onclick={close}>{_t("Edit")}</a>
             <button type="button" role="menuitem" title={_t("Cut")} onclick={cut}>{_t("Cut")}</button>
             <button type="button" role="menuitem" title={_t("Copy")} onclick={copy}>{_t("Copy")}</button>

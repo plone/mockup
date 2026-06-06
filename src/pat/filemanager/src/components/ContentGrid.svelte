@@ -159,7 +159,7 @@
 
                 <a
                     class="filemanager-card-title"
-                    href={item["@id"]}
+                    href={contents.config.viewUrl(item)}
                     tabindex="-1"
                     onclick={(e) => onTitleClick(e, item)}
                 >

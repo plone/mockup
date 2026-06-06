@@ -46,7 +46,19 @@ export interface ConfigOptions {
     defaultView?: string;
     /** Portal type created for folders recreated from an OS folder drop. */
     folderType?: string;
+    /**
+     * Portal types whose object URL serves the raw content (e.g. File, Image
+     * download/display) so opening them in a listing must append `/view` to
+     * reach the Plone view page. Mirrors the registry record
+     * `plone.types_use_view_action_in_listings` (default ['File', 'Image']),
+     * which is the canonical source but only readable with cmf.ManagePortal —
+     * so it is passed in / defaulted here, the way legacy pat-structure did.
+     */
+    viewActionTypes?: string[];
 }
+
+/** Plone default for plone.types_use_view_action_in_listings. */
+const DEFAULT_VIEW_ACTION_TYPES = ["File", "Image"];
 
 export class ConfigStore {
     contextUrl: string;
@@ -61,6 +73,7 @@ export class ConfigStore {
     sortOrder: "ascending" | "descending";
     defaultView: string;
     folderType: string;
+    viewActionTypes: string[];
 
     constructor(opts: ConfigOptions) {
         this.contextUrl = opts.contextUrl.replace(/\/+$/, "");
@@ -77,9 +90,26 @@ export class ConfigStore {
         this.sortOrder = opts.sortOrder || "ascending";
         this.defaultView = opts.defaultView || "table";
         this.folderType = opts.folderType || "Folder";
+        this.viewActionTypes = opts.viewActionTypes?.length
+            ? opts.viewActionTypes
+            : DEFAULT_VIEW_ACTION_TYPES;
     }
 
     column(key: string): ColumnDef {
         return COLUMN_DEFS[key] || { key, label: key, type: "text" };
+    }
+
+    /**
+     * The URL to open an item from the listing. Types in `viewActionTypes`
+     * (File/Image by default) serve their raw content at the object URL, so
+     * `/view` is appended to land on the Plone view page instead. Mirrors the
+     * `listing_view.pt` / contextnavigation `get_view_url` logic server-side.
+     */
+    viewUrl(item: { "@id": string; portal_type?: string }): string {
+        const url = item["@id"];
+        if (item.portal_type && this.viewActionTypes.includes(item.portal_type)) {
+            return `${url}/view`;
+        }
+        return url;
     }
 }

@@ -1235,3 +1235,37 @@ Svelte bundle finished loading.
 - **Residual.** Eliminates the chunk-load delay entirely; any remaining flash is
   only the post-initial-paint scan gap, which would need the rule in Plone's main
   bundled CSS (outside mockup) to remove.
+
+## 28. Open File/Image at `/view` (done)
+
+Clicking a File or Image in the listing must land on the Plone **view page**
+(`…/view`), not the bare object URL — which for these types serves the raw
+content (a File downloads, an Image displays the binary) instead of the editable
+view.
+
+- **Canonical source — and why we don't read it at runtime.** Plone keeps the
+  list of such types in the registry record
+  **`plone.types_use_view_action_in_listings`** (default `['File', 'Image']`).
+  Every server-side listing uses it: `listing_view.pt`
+  (`item_url + '/view' if item.portal_type in view_types`), `folder_listing.py`
+  (`use_view_action`), and the restapi **contextnavigation** service
+  (`get_view_url`, `services/contextnavigation/get.py:517`). But the restapi
+  **`@registry` service requires `cmf.ManagePortal`**
+  (`services/registry/configure.zcml`), so a normal editor can't read the record
+  via restapi. We therefore mirror **legacy pat-structure**, which hardcoded
+  `typeToViewAction: {File:"/view", Image:"/view", Blob:"/view"}` as an
+  overridable option (`structure.js:60`).
+- **`ConfigStore`** — new `viewActionTypes` option (default `["File", "Image"]`)
+  + `viewUrl(item)` helper returning `item["@id"]` with `/view` appended when
+  `item.portal_type` is in the list (no `portal_type` → no `/view`, don't guess).
+- **Call sites** routed through `config.viewUrl(item)`: `ColumnCell.svelte`
+  (table title link), `ContentGrid.svelte` (card title link),
+  `RowActionMenu.svelte` (the **Open** action — **Edit** stays on the bare object
+  URL), and `ListInteractions.activate()` (grid keyboard Enter / card open).
+  Folderish items are unaffected — they keep drilling in-app via `navigateTo`.
+- **Config plumbing.** `view-action-types` parser arg (`filemanager.js`,
+  no-default per the §11 gotcha), `App.svelte` prop (`[]` → ConfigStore default).
+- **Tests.** `ContentsStore.test.ts` (ConfigStore block) covers `viewUrl`:
+  File/Image → `/view`, other/missing type → bare url, and a custom
+  `viewActionTypes` override. `RowActionMenu.test.js` mock `contents` gained a
+  `config.viewUrl`. Full filemanager suite: **24 suites, 254 passing, 1 skipped**.

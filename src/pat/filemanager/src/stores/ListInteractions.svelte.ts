@@ -174,7 +174,7 @@ export class ListInteractions {
             this.contents.navigateTo(item["@id"]);
             return;
         }
-        window.location.assign(item["@id"]);
+        window.location.assign(this.contents.config.viewUrl(item));
     }
 
     /** Stop shift-click from highlighting cell text while range-selecting. */
