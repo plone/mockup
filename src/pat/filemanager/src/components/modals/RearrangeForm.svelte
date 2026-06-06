@@ -1,35 +1,60 @@
 <script>
-    import { getContext } from "svelte";
-    import { _t, _tp } from "../../utils/i18n.ts";
+    import { getContext, onMount } from "svelte";
+    import { _t } from "../../utils/i18n.ts";
+    import { fetchQuerystringConfig } from "../../api/querystring.js";
 
     /** @type {import("../../stores/ContentsStore.svelte").ContentsStore} */
     const contents = getContext("contents");
+    /** @type {import("../../stores/ConfigStore.svelte").ConfigStore} */
+    const config = getContext("config");
     /** @type {import("../../stores/ModalStore.svelte").ModalStore} */
     const modal = getContext("modal");
     /** @type {import("../../stores/StatusStore.svelte").StatusStore} */
     const status = getContext("status");
 
-    // Sort fields available for a full-folder rearrange. These mirror the
-    // catalog indices pat-structure offers (plone.app.content `get_indexes`),
-    // which restapi's OrderingMixin resort accepts for `sort.on` (it runs the
-    // same `catalog(sort_on=…)` query). Labels are Plone field labels living in
-    // the "plone" i18n domain, so translate via _tp (like the server's own
-    // PloneMessageFactory) — _t (widgets) lacks several of them.
-    const SORT_FIELDS = [
-        { value: "sortable_title", label: _tp("Title") },
-        { value: "id", label: _tp("ID") },
-        { value: "created", label: _tp("Created on") },
-        { value: "modified", label: _tp("Last modified") },
-        { value: "effective", label: _tp("Publication date") },
-        { value: "expires", label: _tp("Expiration date") },
-        { value: "review_state", label: _tp("Review state") },
-        { value: "Type", label: _tp("Type") },
-        { value: "Creator", label: _tp("Creator") },
-        { value: "Subject", label: _tp("Tags") },
+    // Which fields a folder can be rearranged by is driven by plone.app.querystring's
+    // canonical `sortable` flag, exposed by @querystring as `sortable_indexes`
+    // (registryreader.mapSortableIndexes). This is the principled source for
+    // "sensible sort indexes": non-sortable indexes such as Tags (Subject, a
+    // KeywordIndex) and Type (portal_type) are flagged sortable=False and so are
+    // excluded automatically — unlike pat-structure, which offers every catalog
+    // index minus a noise blocklist with no sortability check. restapi's
+    // OrderingMixin resort runs catalog(sort_on=key), which accepts exactly these
+    // indexes. Titles come server-translated, so no client-side i18n is needed —
+    // except two technical labels we relabel for clarity.
+    const LABEL_OVERRIDES = {
+        sortable_title: _t("Title"),
+        getId: _t("ID"),
+    };
+
+    // getObjPositionInParent is the current manual order — rearranging by it is a
+    // no-op, so drop it from the options.
+    const EXCLUDED = ["getObjPositionInParent"];
+
+    const FALLBACK = [
+        { value: "sortable_title", label: _t("Title") },
+        { value: "getId", label: _t("ID") },
     ];
 
+    let fields = $state(FALLBACK);
     let sortOn = $state("sortable_title");
     let sortOrder = $state("ascending");
+
+    onMount(async () => {
+        try {
+            const cfg = await fetchQuerystringConfig(config.contextUrl);
+            const sortable = cfg.sortable_indexes || {};
+            const opts = Object.entries(sortable)
+                .filter(([key]) => !EXCLUDED.includes(key))
+                .map(([value, meta]) => ({
+                    value,
+                    label: LABEL_OVERRIDES[value] || meta?.title || value,
+                }));
+            if (opts.length) fields = opts;
+        } catch {
+            // Keep the FALLBACK options if @querystring is unavailable.
+        }
+    });
 
     async function submit(event) {
         event.preventDefault();
@@ -54,7 +79,7 @@
     <label class="filemanager-field">
         <span>{_t("Sort by")}</span>
         <select bind:value={sortOn}>
-            {#each SORT_FIELDS as field (field.value)}
+            {#each fields as field (field.value)}
                 <option value={field.value}>{field.label}</option>
             {/each}
         </select>

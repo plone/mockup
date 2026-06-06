@@ -1063,17 +1063,23 @@ the legacy `/rearrange` custom Plone JSON view (§3).
 - **`src/components/modals/RearrangeForm.svelte`** — a native-dialog form with
   a "Sort by" `<select>` and an ascending/descending radio group. On submit
   calls `contents.rearrange`, shows a success status and closes the modal. The
-  sort fields mirror pat-structure's set (plone.app.content `get_indexes`),
-  which restapi's `OrderingMixin.resortAllItemsInContext` accepts for `sort.on`
-  (it runs the same `catalog(sort_on=…)` query): **Title** (`sortable_title`),
-  **ID** (`id`), **Created on** (`created`), **Last modified** (`modified`),
-  **Publication date** (`effective`), **Expiration date** (`expires`),
-  **Review state** (`review_state`), **Type** (`Type`), **Creator** (`Creator`),
-  **Tags** (`Subject`). These labels are Plone field labels in the **plone**
-  i18n domain, so the form translates them via `_tp` (mirroring the server's own
-  `PloneMessageFactory`); `_t`/widgets lacks several of them. _(An earlier
-  iteration trimmed this to just Title/ID; restored to the fuller pat-structure
-  set on request.)_
+  sort fields are built **dynamically from `@querystring`'s `sortable_indexes`**
+  (fetched on mount via `fetchQuerystringConfig`) — the canonical
+  `plone.app.querystring` `sortable` flag (`registryreader.mapSortableIndexes`).
+  This is the principled source for "which indexes are sensibly sortable":
+  non-sortable indexes such as **Tags** (`Subject`, a KeywordIndex) and **Type**
+  (`portal_type`) are flagged `sortable=False` and so are excluded
+  automatically. (pat-structure does **not** do this — its `get_indexes` offers
+  every catalog index minus a hardcoded noise blocklist, with no sortability
+  check, which is why it wrongly lists Tags.) restapi's
+  `OrderingMixin.resortAllItemsInContext` runs `catalog(sort_on=key)`, which
+  accepts exactly these sortable indexes. Index titles come **server-translated**
+  from `@querystring`, so no client-side i18n is needed (sidesteps the
+  widgets/plone domain split) — except `sortable_title` and `getId`, relabelled
+  to "Title"/"ID" for clarity. `getObjPositionInParent` (the current manual
+  order) is excluded as a no-op. A two-item fallback (Title/ID) is shown if
+  `@querystring` is unavailable. _(Earlier iterations: trimmed to Title/ID, then
+  a hardcoded fuller set; replaced by this dynamic, sortability-correct list.)_
 - **`BatchActionModal`** — wired in the `"rearrange"` case (title + `<RearrangeForm />`).
 - **`Toolbar`** — a **Rearrange** button (`plone-rearrange` icon, always enabled,
   not gated on selection) that calls `modal.toggle("rearrange")`.
