@@ -1090,20 +1090,27 @@ body:has(.pat-filemanager) #above-content-wrapper {
     background-position: 0 100%;
 }
 
+/* Use inset box-shadow (not border) so the 2px frame never adds to the cell
+   box — a real border would grow the row by a few px and shift the layout. */
 .pat-filemanager-app .filemanager-row.drop-target > td {
     background: #d1e7dd;
-    border-top: 2px solid #198754;
-    border-bottom: 2px solid #198754;
-    border-left: none;
-    border-right: none;
+    box-shadow:
+        inset 0 2px 0 0 #198754,
+        inset 0 -2px 0 0 #198754;
 }
 
 .pat-filemanager-app .filemanager-row.drop-target > td:first-child {
-    border-left: 2px solid #198754;
+    box-shadow:
+        inset 0 2px 0 0 #198754,
+        inset 0 -2px 0 0 #198754,
+        inset 2px 0 0 0 #198754;
 }
 
 .pat-filemanager-app .filemanager-row.drop-target > td:last-child {
-    border-right: 2px solid #198754;
+    box-shadow:
+        inset 0 2px 0 0 #198754,
+        inset 0 -2px 0 0 #198754,
+        inset -2px 0 0 0 #198754;
 }
 
 .pat-filemanager-app .filemanager-table.can-reorder .filemanager-row {
