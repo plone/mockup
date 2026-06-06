@@ -2,6 +2,7 @@
     import { getContext } from "svelte";
     import { fetchBreadcrumbs, buildBreadcrumbTrail } from "../api/breadcrumbs.js";
     import { _t } from "../utils/i18n.ts";
+    import Icon from "./Icon.svelte";
 
     /** @type {import("../stores/ConfigStore.svelte").ConfigStore} */
     const config = getContext("config");
@@ -53,7 +54,14 @@
 <nav class="filemanager-breadcrumbs" aria-label={_t("Breadcrumbs")}>
     <ol>
         <li>
-            <a href={home} onclick={(e) => navigate(e, home)}>{_t("Home")}</a>
+            <a
+                href={home}
+                onclick={(e) => navigate(e, home)}
+                title={_t("Home")}
+                aria-label={_t("Home")}
+            >
+                <Icon name="house" />
+            </a>
         </li>
         {#each items as crumb, i (crumb["@id"])}
             <li class:active={i === items.length - 1}>
