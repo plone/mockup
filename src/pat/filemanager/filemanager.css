@@ -305,7 +305,7 @@ body:has(.pat-filemanager) #above-content-wrapper {
 }
 
 .pat-filemanager-app .filemanager-view-button.active {
-    background: #0d6efd;
+    background: var(--bs-primary, #0d6efd);
     color: #fff;
 }
 
@@ -1199,7 +1199,7 @@ body:has(.pat-filemanager) #above-content-wrapper {
 }
 
 .pat-filemanager-app .filemanager-sort.active {
-    color: #0d6efd;
+    color: var(--bs-primary, #0d6efd);
 }
 
 /* Drag a column header onto another to reorder the columns. */
@@ -1438,7 +1438,7 @@ body:has(.pat-filemanager) #above-content-wrapper {
 }
 
 .pat-filemanager-app .filemanager-batchsize-button.active {
-    background: #0d6efd;
+    background: var(--bs-primary, #0d6efd);
     color: #fff;
 }
 
