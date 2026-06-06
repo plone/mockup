@@ -2,7 +2,7 @@
     import { getContext } from "svelte";
     import { formatDate, formatSize, thumbnailUrl, isExpired, isIneffective } from "../utils/format.ts";
     import Icon from "./Icon.svelte";
-    import { _t } from "../utils/i18n.ts";
+    import { _t, _tp } from "../utils/i18n.ts";
 
     /** @type {{ item: Record<string, any>, column: import("../stores/ConfigStore.svelte").ColumnDef }} */
     let { item, column } = $props();
@@ -72,7 +72,7 @@
     {formatDate(value)}
 {:else if column.type === "state"}
     {#if value}
-        <span class="filemanager-state state-{value}">{value}</span>
+        <span class="filemanager-state state-{value}">{_tp(value)}</span>
     {/if}
 {:else if column.type === "tags"}
     {#each tags as tag (tag)}
