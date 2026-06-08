@@ -1298,10 +1298,10 @@ body:has(.pat-filemanager) #above-content-wrapper {
 
 /* Review-state badge. Colours come from Plone's --plone-state-* root variables
    (defined by barceloneta, _variables.colors.plone.scss) so the badge tracks
-   the active theme; published has no --plone-state-* var (it is the normal
-   state) so it uses --bs-success. Text colour is chosen per state for contrast:
-   white on the dark hues, dark on the yellow ones. Each var carries a hardcoded
-   fallback for when the theme stylesheet is absent. */
+   the active theme; published uses --plone-state-published, falling back to the
+   theme primary colour (--bs-primary). Text colour is chosen per state for
+   contrast: white on the dark hues, dark on the yellow ones. Each var carries a
+   hardcoded fallback for when the theme stylesheet is absent. */
 .pat-filemanager-app .filemanager-state {
     display: inline-block;
     padding: 0.1rem 0.45rem;
@@ -1311,7 +1311,7 @@ body:has(.pat-filemanager) #above-content-wrapper {
 }
 
 .pat-filemanager-app .filemanager-state.state-published {
-    background: var(--bs-success, #198754);
+    background: var(--plone-state-published, var(--bs-primary, #0d6efd));
     color: #fff;
 }
 
