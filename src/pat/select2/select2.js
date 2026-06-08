@@ -217,7 +217,6 @@ export default Base.extend({
                     this.options.multiple === undefined ? true : this.options.multiple;
                 this.options.ajax = this.options.ajax || {};
                 this.options.ajax.url = this.options.vocabularyUrl;
-                // XXX removing the following function does'nt break tests. dead code?
                 this.options.initSelection = ($el, callback) => {
                     const data = [];
                     const value = $el.val();
