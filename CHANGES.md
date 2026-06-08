@@ -2,6 +2,56 @@
 
 
 
+## [5.6.5](https://github.com/plone/mockup/compare/5.6.4...5.6.5) (2026-06-08)
+
+### Features
+
+
+* **pat-select2:** Dispatch native blur event on select2 changes. ([3290a6f](https://github.com/plone/mockup/commit/3290a6f45a9404cae702d94a0d6213061b120a57))
+
+  When Select2 looses focus a jQuery blur event is thrown. This is not
+catched by native JavaScript event handler. This is now fixed - a
+Select2 blur event also throws a native blur event on the original input
+or select element.
+
+This aligns the behavior to pat-auto-suggest from @patternslib/patternslib.
+
+
+* **pat-select2:** Dispatch native input event on select2 changes. ([6d88723](https://github.com/plone/mockup/commit/6d887230e69bd5442481df43f94abb66178fd88b))
+
+  When a selection change was done in pat-select2, the Select2 library was
+only firing a jQuery change event which was never caught by native
+JavaScript event handlers. This is now fixed - on a Select2 change event
+a native JavaScript input event is fired. The input event is used as it
+is the better choice. The native change event has some limitations and
+is historically not fired on each value change.
+
+This aligns the behavior to pat-auto-suggest from @patternslib/patternslib.
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** fix implementation of maximumSelectionSize. ([80e8e2b](https://github.com/plone/mockup/commit/80e8e2b57ff5f59522fbd1a2635988ff23f3b8b4))
+
+
+* **pat toolbar:** Fix hidden dropdowns when toolbar position top. ([3f294e0](https://github.com/plone/mockup/commit/3f294e094475ef9cc86c8dcb7f0d8653a82d1207))
+
+
+* **pat-autodoc:** Fix missing selector for invalidation marker feedback . Extend selector list with `invalid-feedback` ([a5a397c](https://github.com/plone/mockup/commit/a5a397c709f68e48e6e18f03a228803d95704b03))
+
+
+### Maintenance
+
+
+* **bundle:** fix upgrade to pnpm 11 ([9209376](https://github.com/plone/mockup/commit/9209376d6d01496f6e2a6ecc02591af5088bf433))
+
+
+* **bundle:** update config for pnpm 11 ([c359d99](https://github.com/plone/mockup/commit/c359d99df35505957e20369c556eb2ff95489c12))
+
+
+* **bundle:** Upgrade dependencies: TinyMCE 8.6.0, @patternslib/patternslib 9.10.6 ([58e23cf](https://github.com/plone/mockup/commit/58e23cf5dae059f3ec6c44ba1c131c83215dcef8))
+
 ## [5.6.4](https://github.com/plone/mockup/compare/5.6.3...5.6.4) (2026-05-18)
 
 ### Maintenance
