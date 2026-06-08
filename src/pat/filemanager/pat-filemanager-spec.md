@@ -1295,3 +1295,50 @@ view.
   File/Image → `/view`, other/missing type → bare url, and a custom
   `viewActionTypes` override. `RowActionMenu.test.js` mock `contents` gained a
   `config.viewUrl`. Full filemanager suite: **24 suites, 254 passing, 1 skipped**.
+
+## 29. Context header sync on in-app navigation (done)
+
+The Plone content header above the listing — `#content > header` (CMFPlone
+`main_template.pt:84-104`): the `@@title` h1 (`.documentFirstHeading`), the
+below-content-title viewlet that renders the byline (`#section-byline`), and the
+`@@description` (`.documentDescription`) — is server-rendered for the **initial**
+context only. Browsing into another folder in-app left it stale. Legacy
+pat-structure patched title/description via a `context-info-loaded` event
+consumed by the separate `structure-updater` pattern; pat-filemanager updates the
+header itself (structure-updater is being retired).
+
+- **Approach — transplant, don't reconstruct.** Rather than re-fetch fields over
+  restapi and rebuild the byline (restapi exposes creator *ids*, not fullnames;
+  dates are localized/i18n server-side), the new context's HTML is fetched and
+  its whole `#content > header` node is swapped into the live page. The byline
+  (author, localized published/modified dates, expired flag, i18n) comes through
+  verbatim — it is the server's own markup. Title + description ride along.
+- **`src/utils/header.ts`** — `fetchContextHtml(url, signal)` (same-origin
+  `fetch`, `Accept: text/html`) and `swapContextHeader(html, selector, doc)`:
+  `DOMParser`-parses `html`, finds `selector` in both the parsed and live docs,
+  `replaceChildren(...importNode)` to swap the live header's contents, and copies
+  the parsed `<title>` into `doc.title`. Missing nodes → no-op `false` (never
+  throws). Pure/jsdom-testable.
+- **`src/components/HeaderSync.svelte`** — renders nothing; an `$effect` keyed on
+  `contents.contextUrl` that **skips the first run** (server already rendered the
+  initial header → no redundant fetch on load), then fetches + swaps. A run
+  counter + `AbortController` make rapid navigations **latest-wins** (stale
+  responses dropped, in-flight fetch aborted on re-run). Mounted in `App.svelte`.
+- **Configurable selector.** `headerSelector` option (parser arg
+  `header-selector`, `ConfigStore` default `"#content > header"`) for custom
+  themes.
+- **Trade-off.** One extra HTML GET per navigation (everything but the header
+  node is discarded) — acceptable next to the existing per-navigation restapi
+  search + breadcrumbs fetch. Patterns inside the transplanted header are not
+  re-initialised by Patternslib (the standard title/byline/description are
+  static); noted here in case a custom below-title viewlet ever needs a
+  `registry.scan` of the swapped node.
+- **Tests:** `src/utils/header.test.ts` (5 — transplant + `document.title`,
+  byline subtree intact, content-core untouched, no-op when the fetched HTML or
+  the live header lacks the selector). Full filemanager suite green; dev webpack
+  build compiles.
+
+> Manual UI verification (browse folders / breadcrumbs / Back-Forward → title,
+> byline author + last-modified date, description and tab title all track the
+> current folder; deep-URL reload keeps the server header; rapid clicks don't
+> strand a stale header) is pending on the running dev server.

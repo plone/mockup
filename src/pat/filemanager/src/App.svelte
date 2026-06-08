@@ -28,6 +28,7 @@
     import FolderDropPreview from "./components/FolderDropPreview.svelte";
     import ProgressDialog from "./components/ProgressDialog.svelte";
     import UploadDialog from "./components/UploadDialog.svelte";
+    import HeaderSync from "./components/HeaderSync.svelte";
 
     let {
         contextUrl,
@@ -43,6 +44,7 @@
         defaultView = "table",
         folderType = "Folder",
         viewActionTypes = [],
+        headerSelector = "#content > header",
         storageKey = "pat-filemanager",
     } = $props();
 
@@ -62,6 +64,7 @@
         defaultView,
         folderType,
         viewActionTypes,
+        headerSelector,
     });
     const contents = new ContentsStore(config, storageKey);
     const columns = new ColumnsStore(config, storageKey);
@@ -150,6 +153,7 @@
 </script>
 
 <div class="pat-filemanager-app" bind:this={appEl}>
+    <HeaderSync />
     <StatusMessages />
     <div class="filemanager-stickybar">
         <div class="filemanager-actionbar">

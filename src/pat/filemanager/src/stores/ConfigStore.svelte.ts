@@ -55,6 +55,8 @@ export interface ConfigOptions {
      * so it is passed in / defaulted here, the way legacy pat-structure did.
      */
     viewActionTypes?: string[];
+    /** CSS selector of the page header to sync on in-app navigation. */
+    headerSelector?: string;
 }
 
 /** Plone default for plone.types_use_view_action_in_listings. */
@@ -74,6 +76,7 @@ export class ConfigStore {
     defaultView: string;
     folderType: string;
     viewActionTypes: string[];
+    headerSelector: string;
 
     constructor(opts: ConfigOptions) {
         this.contextUrl = opts.contextUrl.replace(/\/+$/, "");
@@ -93,6 +96,7 @@ export class ConfigStore {
         this.viewActionTypes = opts.viewActionTypes?.length
             ? opts.viewActionTypes
             : DEFAULT_VIEW_ACTION_TYPES;
+        this.headerSelector = opts.headerSelector || "#content > header";
     }
 
     column(key: string): ColumnDef {
