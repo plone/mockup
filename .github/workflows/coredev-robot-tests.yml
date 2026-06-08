@@ -103,28 +103,14 @@ jobs:
           cache: pip
           cache-dependency-path: tests/requirements.txt
 
-      - name: Mark plone.staticresources as source checkout for mxdev
+      - name: Mark plone.staticresources as source checkout
         run: |
-          python3 -c "
-          import configparser
-          cfg = configparser.ConfigParser()
-          cfg.read('tests/mxcheckouts.ini')
-          if not cfg.has_section('plone.staticresources'):
-              cfg.add_section('plone.staticresources')
-          cfg.set('plone.staticresources', 'use', 'true')
-          with open('tests/mxcheckouts.ini', 'w') as f:
-              cfg.write(f)
-          "
+          echo "    plone.staticresources" >> tests/checkouts.cfg
 
       - name: Install (checks out plone.staticresources via mxdev)
         working-directory: tests
         run: make install
 
-      - name: Check Installation
-        run: |
-          tree -L 3 -I 'node_modules|.git'
-          cat tests/mxcheckouts.ini
-  
       # ── 2b. Build mockup bundle into tests/src/plone.staticresources ─────────
       - name: Build mockup for tests (webpack)
         run: pnpm build:webpack:tests
