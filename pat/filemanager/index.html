@@ -632,7 +632,11 @@ operation runs, and a backdrop click closes the dialog.</li>
 operation results are announced; each has a <em>Dismiss message</em> button.</li>
 <li>Breadcrumbs use <code>&lt;nav aria-label=&quot;Breadcrumbs&quot;&gt;</code> + <code>&lt;ol&gt;</code>.</li>
 <li>The upload zone is a <code>role=&quot;region&quot;</code> whose label announces the drop
-affordance; each in-progress upload exposes a labelled <code>&lt;progress&gt;</code>.</li>
+affordance; each in-progress upload exposes a labelled <code>&lt;progress&gt;</code>. While a
+file is dragged over the zone, a &quot;drop files here to upload to this folder&quot;
+strip appears below the listing as a <code>role=&quot;region&quot;</code> so the current folder is
+always a reachable drop target — even when every row is a folder that would
+otherwise claim the drop.</li>
 <li>Column-config, type-filter and advanced-filter popovers are <code>role=&quot;group&quot;</code>
 with labels; every query-builder control carries an <code>aria-label</code>.</li>
 <li>Decorative icons are <code>aria-hidden=&quot;true&quot;</code>; thumbnails carry <code>alt</code> text.</li>
