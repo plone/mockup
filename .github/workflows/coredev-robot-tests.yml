@@ -117,10 +117,15 @@ jobs:
               cfg.write(f)
           "
 
-      - name: make install (checks out plone.staticresources via mxdev)
+      - name: Install (checks out plone.staticresources via mxdev)
         working-directory: tests
         run: make install
 
+      - name: Check Installation
+        run: |
+          tree -L 3 -I 'node_modules|.git'
+          cat mxcheckouts.ini
+  
       # ── 2b. Build mockup bundle into tests/src/plone.staticresources ─────────
       - name: Build mockup for tests (webpack)
         run: pnpm build:webpack:tests
@@ -129,21 +134,6 @@ jobs:
       - name: install rfbrowser
         working-directory: tests
         run: .venv/bin/rfbrowser init chromium
-
-      # ── 5. Coredev robot tests ───────────────────────────────────────────────
-      - name: Mark plone.staticresources as source checkout for mxdev (again - this somehow gets lost?)
-        working-directory: tests
-        run: |
-          python3 -c "
-          import configparser
-          cfg = configparser.ConfigParser()
-          cfg.read('mxcheckouts.ini')
-          if not cfg.has_section('plone.staticresources'):
-              cfg.add_section('plone.staticresources')
-          cfg.set('plone.staticresources', 'use', 'true')
-          with open('mxcheckouts.ini', 'w') as f:
-              cfg.write(f)
-          "
 
       - name: Run Coredev robot tests
         working-directory: tests
