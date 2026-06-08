@@ -1,8 +1,8 @@
 import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
-import utils from "../../core/utils";
 import { mount } from "svelte";
+import utils from "../../core/utils";
 
 // pat-filemanager — Svelte 5 rewrite of pat-structure folder contents, talking
 // only to plone.restapi. P1: read-only batched listing with server-side sort.
