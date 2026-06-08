@@ -23,7 +23,7 @@ importers:
         version: 9.10.6
       '@plone/registry':
         specifier: ^2.7.2
-        version: 2.7.2(react@19.2.7)
+        version: 2.7.2(react@19.2.4)
       backbone:
         specifier: 1.6.1
         version: 1.6.1
@@ -124,6 +124,9 @@ importers:
       '@11ty/eleventy-plugin-syntaxhighlight':
         specifier: ^5.0.2
         version: 5.0.2
+      '@babel/preset-typescript':
+        specifier: ^7.29.7
+        version: 7.29.7(@babel/core@7.29.7)
       '@patternslib/dev':
         specifier: ^4.0.0
         version: 4.0.0(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(jiti@2.7.0)(postcss@8.5.15)(tslib@2.8.1)(typescript@6.0.3)
@@ -147,19 +150,25 @@ importers:
         version: 16.1.3
       svelte:
         specifier: ^5.56.3
-        version: 5.56.3
+        version: 5.56.3(@typescript-eslint/types@8.57.2)
       svelte-jester:
         specifier: ^5.0.0
-        version: 5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3)
+        version: 5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3(@typescript-eslint/types@8.57.2))
       svelte-loader:
         specifier: ^3.2.4
-        version: 3.2.4(svelte@5.56.3)
+        version: 3.2.4(svelte@5.56.3(@typescript-eslint/types@8.57.2))
+      svelte-preprocess:
+        specifier: ^6.0.5
+        version: 6.0.5(@babel/core@7.29.7)(postcss@8.5.15)(sass@1.100.0)(svelte@5.56.3(@typescript-eslint/types@8.57.2))(typescript@6.0.3)
       svelte-scrollto:
         specifier: ^0.2.0
         version: 0.2.0
       svg-inline-loader:
         specifier: ^0.8.2
         version: 0.8.2
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
 packages:
 
@@ -750,6 +759,12 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
+  '@babel/plugin-transform-typescript@7.29.7':
+    resolution: {integrity: sha512-jK52h8LaLc7JarhQV2ofeFMts4H7vnOXnqZNA6fYglBTZewRBE51KWt3BUltW1P+KoPsYkHoJeXePuz4zo2LMw==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+
   '@babel/plugin-transform-unicode-escapes@7.29.7':
     resolution: {integrity: sha512-jCfXxSjf94lf4E0hKE0AByxF6F3/pVFqRdUUNkDJhsY0m1ZKjnN6ZYyMeHNpzflxb/0q5b7t3p+BE+SLF1WOtA==}
     engines: {node: '>=6.9.0'}
@@ -784,6 +799,12 @@ packages:
     resolution: {integrity: sha512-HrcgcIESLm9aIR842yhJ5RWan/gebQUJ6E/E5+rf0y9o6oj7w0Br+sWuL6kEQ/o/AdfvR1Je9jG18/gnpwjEyA==}
     peerDependencies:
       '@babel/core': ^7.0.0-0 || ^8.0.0-0 <8.0.0
+
+  '@babel/preset-typescript@7.29.7':
+    resolution: {integrity: sha512-/Foi8vKY2EVbed/1eZx0gJEEwHAIxogrySI7rULcRIvhZzbvoE/b5qG5Ghc0WKAFKOHA9SD1x7RsFlOYdutIiQ==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
 
   '@babel/template@7.29.7':
     resolution: {integrity: sha512-puq+Gf35oI24FeN11LkoUQFqv9uwNeWpxXZi/Ji3rRIoKAzKnxRaZ+Gkj0vKS9ZCiTESfng1N9LyOyXvo+m+Gg==}
@@ -1883,6 +1904,10 @@ packages:
 
   '@types/yargs@17.0.35':
     resolution: {integrity: sha512-qUHkeCyQFxMXg79wQfTtfndEC+N9ZZg76HJftDJp+qH2tV7Gj4OJi7l+PiWwJ+pWtW8GwSmqsDj/oymhrTWXjg==}
+
+  '@typescript-eslint/types@8.57.2':
+    resolution: {integrity: sha512-/iZM6FnM4tnx9csuTxspMW4BOSegshwX5oBDznJ7S4WggL7Vczz5d2W11ecc4vRrQMQHXRSxzrCsyG5EsPPTbA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@ungap/structured-clone@1.3.1':
     resolution: {integrity: sha512-mUFwbeTqrVgDQxFveS+df2yfap6iuP20NAKAsBt5jDEoOTDew+zwLAOilHCeQJOVSvmgCX4ogqIrA0mnyr08yQ==}
@@ -4712,8 +4737,8 @@ packages:
   react-is@19.2.7:
     resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
 
-  react@19.2.7:
-    resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
+  react@19.2.4:
+    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
     engines: {node: '>=0.10.0'}
 
   read-package-json-fast@4.0.0:
@@ -5210,6 +5235,43 @@ packages:
     resolution: {integrity: sha512-e0HdDnkYH/MDx4/IfTSka5AOFg9yYJcPuoZJB5x0l60fkHjVjNvrrxr+rJegDG9J7ZymmdHt00/hdLw+QF299w==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0-next.0 || ^5.0.0-next.1
+
+  svelte-preprocess@6.0.5:
+    resolution: {integrity: sha512-sgwew5yV/2eMeQobIWgAxCNarKwiTUDIc3siAUbq3sp0G6ONtzk0W+wJihMdqjbYb3iGU3ubpGv0usnnuXT3qg==}
+    engines: {node: '>= 18.0.0'}
+    peerDependencies:
+      '@babel/core': ^7.10.2
+      coffeescript: ^2.5.1
+      less: ^3.11.3 || ^4.0.0
+      postcss: ^7 || ^8
+      postcss-load-config: '>=3'
+      pug: ^3.0.0
+      sass: ^1.26.8
+      stylus: '>=0.55'
+      sugarss: ^2.0.0 || ^3.0.0 || ^4.0.0
+      svelte: ^4.0.0 || ^5.0.0-next.100 || ^5.0.0
+      typescript: ^5.0.0 || ^6.0.0
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      coffeescript:
+        optional: true
+      less:
+        optional: true
+      postcss:
+        optional: true
+      postcss-load-config:
+        optional: true
+      pug:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      typescript:
+        optional: true
 
   svelte-scrollto@0.2.0:
     resolution: {integrity: sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==}
@@ -6489,6 +6551,17 @@ snapshots:
       '@babel/core': 7.29.7
       '@babel/helper-plugin-utils': 7.29.7
 
+  '@babel/plugin-transform-typescript@7.29.7(@babel/core@7.29.7)':
+    dependencies:
+      '@babel/core': 7.29.7
+      '@babel/helper-annotate-as-pure': 7.29.7
+      '@babel/helper-create-class-features-plugin': 7.29.7(@babel/core@7.29.7)
+      '@babel/helper-plugin-utils': 7.29.7
+      '@babel/helper-skip-transparent-expression-wrappers': 7.29.7
+      '@babel/plugin-syntax-typescript': 7.29.7(@babel/core@7.29.7)
+    transitivePeerDependencies:
+      - supports-color
+
   '@babel/plugin-transform-unicode-escapes@7.29.7(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
@@ -6595,6 +6668,17 @@ snapshots:
       '@babel/helper-plugin-utils': 7.29.7
       '@babel/types': 7.29.7
       esutils: 2.0.3
+
+  '@babel/preset-typescript@7.29.7(@babel/core@7.29.7)':
+    dependencies:
+      '@babel/core': 7.29.7
+      '@babel/helper-plugin-utils': 7.29.7
+      '@babel/helper-validator-option': 7.29.7
+      '@babel/plugin-syntax-jsx': 7.29.7(@babel/core@7.29.7)
+      '@babel/plugin-transform-modules-commonjs': 7.29.7(@babel/core@7.29.7)
+      '@babel/plugin-transform-typescript': 7.29.7(@babel/core@7.29.7)
+    transitivePeerDependencies:
+      - supports-color
 
   '@babel/template@7.29.7':
     dependencies:
@@ -7744,14 +7828,14 @@ snapshots:
 
   '@pkgr/core@0.3.6': {}
 
-  '@plone/registry@2.7.2(react@19.2.7)':
+  '@plone/registry@2.7.2(react@19.2.4)':
     dependencies:
       auto-config-loader: 1.7.8
       crypto-random-string: 3.2.0
       debug: 4.3.2
       dependency-graph: 0.10.0
       glob: 10.5.0
-      react: 19.2.7
+      react: 19.2.4
       tmp: 0.2.5
     transitivePeerDependencies:
       - supports-color
@@ -7983,7 +8067,7 @@ snapshots:
 
   '@types/resolve@1.17.1':
     dependencies:
-      '@types/node': 25.9.2
+      '@types/node': 12.20.55
 
   '@types/retry@0.12.2': {}
 
@@ -8033,6 +8117,9 @@ snapshots:
   '@types/yargs@17.0.35':
     dependencies:
       '@types/yargs-parser': 21.0.3
+
+  '@typescript-eslint/types@8.57.2':
+    optional: true
 
   '@ungap/structured-clone@1.3.1': {}
 
@@ -9180,9 +9267,11 @@ snapshots:
     dependencies:
       estraverse: 5.3.0
 
-  esrap@2.2.11:
+  esrap@2.2.11(@typescript-eslint/types@8.57.2):
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+    optionalDependencies:
+      '@typescript-eslint/types': 8.57.2
 
   esrecurse@4.3.0:
     dependencies:
@@ -10976,7 +11065,7 @@ snapshots:
 
   react-is@19.2.7: {}
 
-  react@19.2.7: {}
+  react@19.2.4: {}
 
   read-package-json-fast@4.0.0:
     dependencies:
@@ -11516,21 +11605,30 @@ snapshots:
 
   svelte-dev-helper@1.1.9: {}
 
-  svelte-hmr@0.14.12(svelte@5.56.3):
+  svelte-hmr@0.14.12(svelte@5.56.3(@typescript-eslint/types@8.57.2)):
     dependencies:
-      svelte: 5.56.3
+      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
 
-  svelte-jester@5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3):
+  svelte-jester@5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3(@typescript-eslint/types@8.57.2)):
     dependencies:
       jest: 30.4.2(@types/node@25.9.2)
-      svelte: 5.56.3
+      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
 
-  svelte-loader@3.2.4(svelte@5.56.3):
+  svelte-loader@3.2.4(svelte@5.56.3(@typescript-eslint/types@8.57.2)):
     dependencies:
       loader-utils: 2.0.4
-      svelte: 5.56.3
+      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
       svelte-dev-helper: 1.1.9
-      svelte-hmr: 0.14.12(svelte@5.56.3)
+      svelte-hmr: 0.14.12(svelte@5.56.3(@typescript-eslint/types@8.57.2))
+
+  svelte-preprocess@6.0.5(@babel/core@7.29.7)(postcss@8.5.15)(sass@1.100.0)(svelte@5.56.3(@typescript-eslint/types@8.57.2))(typescript@6.0.3):
+    dependencies:
+      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
+    optionalDependencies:
+      '@babel/core': 7.29.7
+      postcss: 8.5.15
+      sass: 1.100.0
+      typescript: 6.0.3
 
   svelte-scrollto@0.2.0:
     dependencies:
@@ -11538,7 +11636,7 @@ snapshots:
 
   svelte@3.59.2: {}
 
-  svelte@5.56.3:
+  svelte@5.56.3(@typescript-eslint/types@8.57.2):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -11551,7 +11649,7 @@ snapshots:
       clsx: 2.1.1
       devalue: 5.8.1
       esm-env: 1.2.2
-      esrap: 2.2.11
+      esrap: 2.2.11(@typescript-eslint/types@8.57.2)
       is-reference: 3.0.3
       locate-character: 3.0.0
       magic-string: 0.30.21

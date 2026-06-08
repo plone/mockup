@@ -1,0 +1,1927 @@
+.pat-filemanager-app {
+    --filemanager-border: var(--bs-border-color, #dee2e6);
+    --filemanager-muted: var(--bs-secondary-color, #6c757d);
+    /* Blue marks the sortablejs drop placeholder while reordering (the gap where
+       the dragged item will land); green (drop-target) marks a move-into-folder
+       target. */
+    --filemanager-drop: var(--bs-primary, #0d6efd);
+    /* Fixed height shared by every toolbar element so they all align. */
+    --filemanager-action-h: 2rem;
+    /* Shared font size for toolbar, table headers and pagination — slightly
+       smaller than the table body so chrome recedes and content stands out. */
+    --filemanager-ui-size: 0.875rem;
+    --filemanager-app-margin: 2rem 0;
+    margin: var(--filemanager-app-margin, 2rem 0);
+}
+
+/* Hide the surrounding Plone chrome while the filemanager owns the view, and
+   show a loading spinner until the Svelte app mounts its .pat-filemanager-app
+   root.
+   NOTE: these rules are duplicated as CRITICAL_CSS in filemanager.js, which
+   injects them synchronously on init so the header does not flicker and the
+   spinner appears before this lazy stylesheet loads. Keep the two copies in
+   sync. */
+body:has(.pat-filemanager) #content-header,
+body:has(.pat-filemanager) #mainnavigation-wrapper,
+body:has(.pat-filemanager) #above-content-wrapper {
+    display: none;
+}
+
+.pat-filemanager:not(:has(.pat-filemanager-app)) {
+    display: block;
+    min-height: 8rem;
+}
+
+.pat-filemanager:not(:has(.pat-filemanager-app))::after {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 5rem auto 3rem;
+    border: 3px solid var(--bs-border-color, #dee2e6);
+    border-top-color: var(--bs-primary, #0d6efd);
+    border-radius: 50%;
+    animation: pat-filemanager-spin 0.7s linear infinite;
+}
+
+@keyframes pat-filemanager-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.pat-filemanager-app .filemanager-breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+}
+
+.pat-filemanager-app .filemanager-breadcrumbs li:not(:last-child)::after {
+    content: "/";
+    margin-left: 0.25rem;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-breadcrumbs li.active a {
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.pat-filemanager-app .filemanager-stickybar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: #fff;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Actions on the left, search + advanced filter pushed to the right, all on
+   one row with the batch-action buttons. */
+.pat-filemanager-app .filemanager-actionbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    flex-wrap: wrap;
+    font-size: var(--filemanager-ui-size);
+}
+
+.pat-filemanager-app .filemanager-actionbar .filemanager-actions {
+    margin-bottom: 0;
+}
+
+.pat-filemanager-app .filemanager-filterbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+/* Search + Filter joined as one input group (like pat-structure). */
+.pat-filemanager-app .filemanager-search-group {
+    display: inline-flex;
+    align-items: stretch;
+}
+
+.pat-filemanager-app .filemanager-search {
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.5rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    min-width: 12rem;
+}
+
+/* When followed by the Filter button, drop the search's right edge so the two
+   read as a single control. */
+.pat-filemanager-app .filemanager-search-group:has(.filemanager-queryfilter) .filemanager-search {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+}
+
+.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear,
+.pat-filemanager-app .filemanager-filterbar .filemanager-sort-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font: inherit;
+    cursor: pointer;
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    color: inherit;
+}
+.pat-filemanager-app .filemanager-filterbar .filemanager-filter-clear:hover:not(:disabled),
+.pat-filemanager-app .filemanager-filterbar .filemanager-sort-reset:hover:not(:disabled) {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font: inherit;
+    cursor: pointer;
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: #fff;
+    color: inherit;
+    white-space: nowrap;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-toggle:hover {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-toggle.has-filter {
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-queryfilter,
+.pat-filemanager-app .filemanager-columns-config {
+    position: relative;
+}
+
+.pat-filemanager-app .filemanager-queryfilter-popover,
+.pat-filemanager-app .filemanager-columns-popover {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    min-width: 12rem;
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* The advanced filter now lives at the right edge, so open its popover
+   right-aligned to keep it on-screen. */
+.pat-filemanager-app .filemanager-queryfilter-popover {
+    min-width: 24rem;
+    left: auto;
+    right: 0;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-empty {
+    margin: 0 0 0.5rem;
+    color: var(--filemanager-muted);
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-row select,
+.pat-filemanager-app .filemanager-querybuilder-row input {
+    padding: 0.2rem 0.35rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 3px;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-value {
+    flex: 1 1 8rem;
+    min-width: 6rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-multi {
+    min-height: 4.5rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-range,
+.pat-filemanager-app .filemanager-querybuilder-relativedate {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 1 1 auto;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-remove {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--filemanager-muted);
+    padding: 0 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-querybuilder-add {
+    margin-top: 0.25rem;
+    border: 1px solid var(--filemanager-border);
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0.25rem 0.6rem;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-columns-config {
+    margin-left: auto;
+}
+
+.pat-filemanager-app .filemanager-columns-toggle {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.1rem 0.35rem;
+}
+
+/* In the actions column header the popover must open toward the table, not
+   off the right edge — and shed the inherited <th> bold / right alignment. */
+.pat-filemanager-app .filemanager-actions-col .filemanager-columns-popover {
+    left: auto;
+    right: 0;
+    font-weight: normal;
+    text-align: left;
+}
+
+.pat-filemanager-app .filemanager-viewswitcher {
+    display: inline-flex;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pat-filemanager-app .filemanager-view-button {
+    display: inline-flex;
+    align-items: center;
+    border: 0;
+    background: #fff;
+    cursor: pointer;
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.55rem;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-view-button + .filemanager-view-button {
+    border-left: 1px solid var(--filemanager-border);
+}
+
+.pat-filemanager-app .filemanager-view-button.active {
+    background: var(--bs-primary, #0d6efd);
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-columns-heading {
+    margin: 0.25rem 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-columns-list {
+    margin: 0 0 0.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.pat-filemanager-app .filemanager-columns-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-columns-item.dragging {
+    opacity: 0.5;
+}
+
+.pat-filemanager-app .filemanager-columns-reorder button {
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
+    cursor: pointer;
+    padding: var(--bs-btn-sm-padding-y, 0.25rem) var(--bs-btn-sm-padding-x, 0.5rem);
+    font-size: 0.875rem;
+    border-radius: var(--bs-border-radius-sm, 0.25rem);
+    border: 1px solid var(--bs-secondary-border-subtle, var(--filemanager-border));
+    background: transparent;
+    color: var(--bs-secondary, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-columns-reorder button:hover:not(:disabled) {
+    background: var(--bs-secondary, #6c757d);
+    border-color: var(--bs-secondary, #6c757d);
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-columns-reorder button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-columns-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-columns-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-top: 1px solid var(--filemanager-border);
+    padding-top: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-columns-actions button {
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
+    cursor: pointer;
+    padding: var(--bs-btn-sm-padding-y, 0.25rem) var(--bs-btn-sm-padding-x, 0.5rem);
+    font-size: 0.875rem;
+    border-radius: var(--bs-border-radius-sm, 0.25rem);
+    border: 1px solid var(--bs-border-color, var(--filemanager-border));
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+}
+
+.pat-filemanager-app .filemanager-columns-actions button:hover {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+    border-color: var(--bs-secondary, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Shared small-button look for every toolbar action (matches the segmented
+   ViewSwitcher / pat-structure button bar). */
+.pat-filemanager-app .filemanager-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font: inherit;
+    cursor: pointer;
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    color: inherit;
+}
+
+/* Plone icons resolved via the @@iconresolver, sized like pat-structure's
+   btn-sm icons and tinted with the button's colour (so Delete's icon is red). */
+.pat-filemanager-app .filemanager-icon {
+    display: inline-flex;
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+}
+
+.pat-filemanager-app .filemanager-icon svg {
+    width: 1rem;
+    height: 1rem;
+    display: block;
+}
+
+/* Tint the icon (and any inner paths that ship a hardcoded fill) with the
+   button's colour — CSS fill beats the SVG's presentation attribute, so the
+   Delete action's red reaches its icon. */
+.pat-filemanager-app .filemanager-icon svg,
+.pat-filemanager-app .filemanager-icon svg * {
+    fill: currentColor;
+}
+
+/* The main actions are icon-only (label is the tooltip), so use tighter
+   horizontal padding than the text buttons. */
+.pat-filemanager-app .filemanager-action-group button {
+    padding: 0 0.55rem;
+}
+
+.pat-filemanager-app .filemanager-actions button:hover:not(:disabled) {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-actions button:disabled {
+    color: var(--filemanager-muted);
+    cursor: default;
+    opacity: 0.65;
+}
+
+/* The main actions render as one connected button group, like pat-structure's
+   mainbuttons: square inner corners, shared (collapsed) borders. */
+.pat-filemanager-app .filemanager-action-group {
+    display: inline-flex;
+}
+
+.pat-filemanager-app .filemanager-action-group button {
+    border-radius: 0;
+    border-left-width: 0;
+}
+
+.pat-filemanager-app .filemanager-action-group button:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left-width: 1px;
+}
+
+.pat-filemanager-app .filemanager-action-group button:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* Scoped under .filemanager-actions so it wins over the generic
+   `.filemanager-actions button` rule (more specific than a lone class): a red
+   background with a white icon (the icon inherits #fff via fill: currentColor). */
+.pat-filemanager-app .filemanager-actions .filemanager-action-delete {
+    border-color: #b02a37;
+    background: #b02a37;
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-actions .filemanager-action-delete:hover:not(:disabled) {
+    background: #9a2530;
+}
+
+/* Keep the icon white when disabled too (the shared :disabled rule otherwise
+   tints it muted grey); it just fades via the inherited opacity. */
+.pat-filemanager-app .filemanager-actions .filemanager-action-delete:disabled {
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-actions button[aria-pressed="true"] {
+    background: #e7f1ff;
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-action-selectall,
+.pat-filemanager-app .filemanager-allselected {
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-allselected {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-uploadzone {
+    position: relative;
+}
+
+.pat-filemanager-app .filemanager-uploadzone.drag-active {
+    outline: 2px dashed #0d6efd;
+    outline-offset: -2px;
+}
+
+.pat-filemanager-app .filemanager-upload-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 110, 253, 0.08);
+    font-weight: 600;
+    color: #0d6efd;
+    pointer-events: none;
+}
+
+/* Upload progress/result dialog. The list lives in a scrollable modal body so a
+   long batch stays contained instead of pushing the listing down. */
+.filemanager-upload-dialog {
+    width: min(560px, calc(100vw - 2rem));
+}
+
+/* Drop target for the current folder, shown below the listing only while an
+   external file drag is over the zone. It guarantees a reachable "upload here"
+   spot even when every row is a folder (and each row would otherwise claim the
+   drop into itself). Sits above the overlay so its highlight reads clearly. */
+.pat-filemanager-app .filemanager-upload-here {
+    position: relative;
+    z-index: 21;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px dashed #0d6efd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #0d6efd;
+    background: rgba(13, 110, 253, 0.12);
+}
+
+.pat-filemanager-app .filemanager-upload {
+    gap: 0.4rem;
+}
+
+.pat-filemanager-app .filemanager-upload-summary {
+    color: #198754;
+}
+
+.pat-filemanager-app .filemanager-upload-summary.is-active {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-upload-summary.is-error {
+    color: #b02a37;
+}
+
+/* Indeterminate loading state shown while the file list is still being read —
+   a long dropped-folder walk can take a moment before the first entry appears. */
+.pat-filemanager-app .filemanager-upload-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+.pat-filemanager-app .filemanager-upload-loading progress {
+    width: 60%;
+    height: 0.9rem;
+}
+
+.pat-filemanager-app .filemanager-upload-loading-text {
+    color: var(--filemanager-muted);
+    font-size: 0.9rem;
+}
+
+.pat-filemanager-app .filemanager-upload-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-upload-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-upload-name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pat-filemanager-app .filemanager-upload-size {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-upload-item.is-error .filemanager-upload-error {
+    color: #b02a37;
+}
+
+.pat-filemanager-app .filemanager-upload-item.is-done .filemanager-upload-done {
+    color: #198754;
+}
+
+.pat-filemanager-app .filemanager-progress {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: #f8f9fa;
+}
+
+.pat-filemanager-app .filemanager-progress-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.pat-filemanager-app .filemanager-progress-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-progress-label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-progress-count {
+    color: var(--filemanager-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Self-closing dialog shown while a copy/paste runs. A compact, near-square
+   card centred over a darker backdrop. */
+.filemanager-progress-dialog {
+    width: 16rem;
+    min-width: 16rem;
+    min-height: 12rem;
+}
+
+/* Only lay out the box while open; closed dialogs keep the UA display:none —
+   otherwise the empty dialog renders as a bordered box over the listing. */
+.pat-filemanager-app .filemanager-progress-dialog[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filemanager-progress-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.filemanager-progress-dialog .filemanager-progress-list {
+    width: 100%;
+}
+
+.filemanager-progress-dialog .filemanager-progress-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.filemanager-progress-dialog .filemanager-progress-label {
+    color: var(--filemanager-muted);
+}
+
+.filemanager-progress-dialog progress {
+    width: 100%;
+    height: 0.9rem;
+}
+
+/* Busy folder (drag-into-folder target while the @move runs). A dark green
+   overlay covers the whole item (row or card) so it's obvious which folder is
+   receiving the items and that work is in progress. */
+.pat-filemanager-app .filemanager-row.is-busy,
+.pat-filemanager-app .filemanager-card.is-busy {
+    pointer-events: none;
+}
+
+.pat-filemanager-app .filemanager-row.is-busy {
+    position: relative;
+}
+
+/* Overlay spans the whole row: the cell stays static so `inset: 0` resolves to
+   the position:relative row. */
+.pat-filemanager-app .filemanager-row-progress {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    background: rgba(15, 81, 50, 0.88);
+    border-radius: 4px;
+}
+
+.pat-filemanager-app .filemanager-row-progress-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pat-filemanager-app .filemanager-row-progress progress {
+    flex: 1 1 auto;
+    max-width: 16rem;
+    height: 0.9rem;
+    accent-color: #75b798;
+}
+
+/* A full-card overlay with the label and a chunky bar. */
+.pat-filemanager-app .filemanager-card-progress {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(15, 81, 50, 0.88);
+    border: 2px solid #0f5132;
+    border-radius: 6px;
+}
+
+.pat-filemanager-app .filemanager-card-progress-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-card-progress progress {
+    width: 90%;
+    height: 0.9rem;
+    accent-color: #75b798;
+}
+
+/* Border + padding match the toolbar action buttons so the select-all control
+   reads as one of the actions rather than a bare checkbox + label. */
+.pat-filemanager-app .filemanager-grid-selectall {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--filemanager-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    height: var(--filemanager-action-h);
+    box-sizing: border-box;
+    padding: 0 0.7rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+}
+
+.pat-filemanager-app .filemanager-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Five image-size stages driven by the grid size slider. Only the card's
+   minimum width changes; the cards keep their 4:3 preview and flow to fill. */
+.pat-filemanager-app .filemanager-grid.grid-size-xs {
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+}
+
+.pat-filemanager-app .filemanager-grid.grid-size-s {
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.pat-filemanager-app .filemanager-grid.grid-size-m {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+}
+
+.pat-filemanager-app .filemanager-grid.grid-size-l {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+
+/* Largest stage: fixed 2-column layout. */
+.pat-filemanager-app .filemanager-grid.grid-size-xl {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* Image-size slider, shown left of search/filter while the grid view is
+   active. Sits inline with the search row and stays compact. */
+.pat-filemanager-app .filemanager-grid-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-grid-size input[type="range"] {
+    width: 6rem;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-grid-size-icon {
+    line-height: 1;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-grid-size-small .filemanager-icon {
+    width: 0.85rem;
+    height: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-grid-size-small .filemanager-icon svg {
+    width: 0.85rem;
+    height: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-grid-size-large .filemanager-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.pat-filemanager-app .filemanager-grid-size-large .filemanager-icon svg {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.pat-filemanager-app .filemanager-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-card.is-selected {
+    background: #e7f1ff;
+    border-color: #9ec5fe;
+}
+
+.pat-filemanager-app .filemanager-card:hover:not(.is-selected) {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-card.is-cut {
+    opacity: 0.5;
+}
+
+/* The chosen card (the one being dragged) fades while sortablejs animates a
+   clone to the cursor. */
+.pat-filemanager-app .filemanager-card.dragging {
+    opacity: 0.4;
+}
+
+.pat-filemanager-app .filemanager-grid.can-reorder .filemanager-card {
+    cursor: grab;
+}
+
+/* sortablejs's drop placeholder: an accent-tinted outline marking the slot the
+   dragged card will land in. */
+.pat-filemanager-app .filemanager-card.filemanager-drag-ghost {
+    opacity: 1;
+    background: rgba(13, 110, 253, 0.08);
+    box-shadow: inset 0 0 0 2px var(--filemanager-drop);
+}
+
+/* Reorder drop line at a *solid* folder card's leading (before) / trailing
+   (after) edge. The grid flows horizontally, so the line sits on the left or
+   right edge — matching the axis the before/into/after zones are split on. */
+.pat-filemanager-app .filemanager-card.reorder-before {
+    box-shadow: inset 3px 0 0 0 var(--filemanager-drop);
+}
+
+.pat-filemanager-app .filemanager-card.reorder-after {
+    box-shadow: inset -3px 0 0 0 var(--filemanager-drop);
+}
+
+.pat-filemanager-app .filemanager-card.drop-target {
+    background: #d1e7dd;
+    box-shadow: inset 0 0 0 2px #198754;
+}
+
+.pat-filemanager-app .filemanager-card:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+/* A check-circle / check-circle-fill icon stands in for the select checkbox.
+   The native input stays for accessibility and keyboard toggling but is hidden
+   behind the icon; a little inset keeps the icon clear of the card border. */
+.pat-filemanager-app .filemanager-card-select {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    z-index: 1;
+    margin: 0;
+    line-height: 0;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-card-select input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-card-select .filemanager-icon {
+    color: var(--filemanager-muted);
+    background: #fff;
+    border-radius: 50%;
+}
+
+.pat-filemanager-app .filemanager-card-select.is-checked .filemanager-icon {
+    color: #198754;
+}
+
+.pat-filemanager-app .filemanager-card-select input:focus-visible + .filemanager-icon {
+    outline: 2px solid #0d6efd;
+    outline-offset: 1px;
+    border-radius: 50%;
+}
+
+.pat-filemanager-app .filemanager-card-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    background: #f1f3f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pat-filemanager-app .filemanager-card-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pat-filemanager-app .filemanager-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pat-filemanager-app .filemanager-card-icon .filemanager-icon,
+.pat-filemanager-app .filemanager-card-icon .filemanager-icon svg {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* "Up to parent" placeholder card: a dashed, muted tile that browses up on
+   click and accepts drops (move/upload) into the parent container. It is not
+   draggable or selectable — just navigate + drop. */
+.pat-filemanager-app .filemanager-card-up {
+    border-style: dashed;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-card-up-link {
+    width: 100%;
+    text-decoration: none;
+    color: var(--filemanager-muted);
+    cursor: pointer;
+}
+
+/* "Up to parent" row in the table view — same intent, adapted for a <tr>. */
+.pat-filemanager-app .filemanager-row-up td {
+    border-bottom-style: dashed;
+}
+
+.pat-filemanager-app .filemanager-row-up-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+    color: var(--filemanager-muted);
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-row-up-link:hover {
+    color: var(--bs-body-color, #212529);
+    text-decoration: underline;
+}
+
+.pat-filemanager-app .filemanager-card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pat-filemanager-app .filemanager-card-title:hover {
+    text-decoration: underline;
+}
+
+.pat-filemanager-app .filemanager-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pat-filemanager-app .filemanager-title:hover {
+    text-decoration: underline;
+}
+
+.pat-filemanager-app .filemanager-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pat-filemanager-app .filemanager-row.is-selected {
+    background: #e7f1ff;
+}
+
+.pat-filemanager-app .filemanager-row:hover:not(.is-selected) > td {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-row.is-cut {
+    opacity: 0.5;
+}
+
+.pat-filemanager-app .filemanager-row.dragging {
+    opacity: 0.4;
+}
+
+/* sortablejs's drop placeholder for the table: an accent line across the row
+   marking the slot the dragged row will land in. */
+.pat-filemanager-app .filemanager-row.filemanager-drag-ghost > td {
+    background-image: linear-gradient(var(--filemanager-drop), var(--filemanager-drop));
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+    background-position: 0 0;
+}
+
+/* Reorder drop line at a *solid* folder's leading (before) / trailing (after)
+   edge — the folder itself never moves, so this accent line is the only cue
+   that a drop here re-sorts rather than moves into the folder. */
+.pat-filemanager-app .filemanager-row.reorder-before > td,
+.pat-filemanager-app .filemanager-row.reorder-after > td {
+    background-image: linear-gradient(var(--filemanager-drop), var(--filemanager-drop));
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+}
+
+.pat-filemanager-app .filemanager-row.reorder-before > td {
+    background-position: 0 0;
+}
+
+.pat-filemanager-app .filemanager-row.reorder-after > td {
+    background-position: 0 100%;
+}
+
+/* Use inset box-shadow (not border) so the 2px frame never adds to the cell
+   box — a real border would grow the row by a few px and shift the layout. */
+.pat-filemanager-app .filemanager-row.drop-target > td {
+    background: #d1e7dd;
+    box-shadow:
+        inset 0 2px 0 0 #198754,
+        inset 0 -2px 0 0 #198754;
+}
+
+.pat-filemanager-app .filemanager-row.drop-target > td:first-child {
+    box-shadow:
+        inset 0 2px 0 0 #198754,
+        inset 0 -2px 0 0 #198754,
+        inset 2px 0 0 0 #198754;
+}
+
+.pat-filemanager-app .filemanager-row.drop-target > td:last-child {
+    box-shadow:
+        inset 0 2px 0 0 #198754,
+        inset 0 -2px 0 0 #198754,
+        inset -2px 0 0 0 #198754;
+}
+
+.pat-filemanager-app .filemanager-table.can-reorder .filemanager-row {
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-actions-col {
+    width: 2rem;
+    text-align: right;
+}
+
+.pat-filemanager-app .filemanager-rowmenu {
+    position: relative;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-toggle {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.1rem 0.35rem;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover {
+    position: absolute;
+    z-index: 10;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    padding: 0.25rem;
+    background: #fff;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover > * {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: none;
+    padding: 0.3rem 0.5rem;
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover > *:hover {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-rowmenu-popover > *:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-table th,
+.pat-filemanager-app .filemanager-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--filemanager-border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.pat-filemanager-app .filemanager-table th {
+    font-size: var(--filemanager-ui-size);
+}
+
+.pat-filemanager-app .filemanager-table .filemanager-select {
+    width: 1.5rem;
+}
+
+.pat-filemanager-app .filemanager-sort {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pat-filemanager-app .filemanager-sort.active {
+    color: var(--bs-primary, #0d6efd);
+}
+
+/* Drag a column header onto another to reorder the columns. */
+.pat-filemanager-app .filemanager-header[draggable="true"] {
+    cursor: grab;
+}
+
+.pat-filemanager-app .filemanager-header.col-dragging {
+    opacity: 0.4;
+}
+
+/* Accent bar on the header the dragged column will drop onto. */
+.pat-filemanager-app .filemanager-header.col-drop-target {
+    box-shadow: inset 3px 0 0 var(--filemanager-drop);
+}
+
+.pat-filemanager-app .filemanager-thumb {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.pat-filemanager-app .filemanager-thumb-placeholder {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #f1f3f5;
+    border-radius: 2px;
+}
+
+/* Loading skeletons: muted blocks that occupy the same space the loaded rows
+   and cards will, so swapping in the real content doesn't shift the layout. A
+   slow opacity pulse hints that work is in progress; disabled for users who
+   prefer reduced motion. Pure CSS, no JS. */
+.pat-filemanager-app .filemanager-skeleton {
+    background: #e9ecef;
+    border-radius: 4px;
+    animation: filemanager-skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes filemanager-skeleton-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pat-filemanager-app .filemanager-skeleton {
+        animation: none;
+    }
+}
+
+/* Grid skeleton cards reuse the real card/preview boxes, so the grid reserves
+   the exact 4:3 tiles — just greyed out and non-interactive. */
+.pat-filemanager-app .filemanager-card-skeleton {
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-card-skeleton .filemanager-card-title {
+    height: 0.9rem;
+    width: 70%;
+}
+
+/* Table skeleton bar fills the cell at text height (capped so it reads as a
+   placeholder rather than stretching across wide columns). */
+.pat-filemanager-app .filemanager-skeleton-bar {
+    display: block;
+    height: 0.9rem;
+    width: 100%;
+    max-width: 12rem;
+}
+
+/* Review-state badge. Colours come from Plone's --plone-state-* root variables
+   (defined by barceloneta, _variables.colors.plone.scss) so the badge tracks
+   the active theme; published uses --plone-state-published, falling back to the
+   theme primary colour (--bs-primary). Text colour is chosen per state for
+   contrast: white on the dark hues, dark on the yellow ones. Each var carries a
+   hardcoded fallback for when the theme stylesheet is absent. */
+.pat-filemanager-app .filemanager-state {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    background: #e9ecef;
+}
+
+.pat-filemanager-app .filemanager-state.state-published {
+    background: var(--plone-state-published, var(--bs-primary, #0d6efd));
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-state.state-private {
+    background: var(--plone-state-private, #c4183c);
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-state.state-internally_published {
+    background: var(--plone-state-internally-published, #883dfa);
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-state.state-pending {
+    background: var(--plone-state-pending, #ccd111);
+    color: #212529;
+}
+
+.pat-filemanager-app .filemanager-state.state-draft,
+.pat-filemanager-app .filemanager-state.state-internal {
+    background: var(--plone-state-draft, #fab82a);
+    color: #212529;
+}
+
+.pat-filemanager-app .filemanager-tag {
+    display: inline-block;
+    margin-right: 0.25rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    background: #e7f1ff;
+}
+
+/* Inline indicator in the title cell for exclude_from_nav */
+.pat-filemanager-app .filemanager-nav-excluded {
+    display: inline-flex;
+    align-items: center;
+    color: var(--bs-secondary-color, #6c757d);
+    opacity: 0.7;
+    margin-left: 0.2rem;
+}
+
+/* Inline status badge in the title cell (future publishing date, expired,
+   working copy). Text labels mirror pat-structure; styling stays pure CSS. */
+.pat-filemanager-app .filemanager-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
+    color: #fff;
+    background: var(--bs-secondary, #6c757d);
+}
+
+/* Grid card badge for boolean indicators */
+.pat-filemanager-app .filemanager-card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: var(--filemanager-ui-size, 0.875rem);
+    color: var(--bs-secondary-color, #6c757d);
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--bs-border-radius-sm, 0.25rem);
+    background: var(--bs-secondary-bg-subtle, #e9ecef);
+}
+
+/* Status colour modifiers, shared by the table title badge and the grid card
+   badge. Placed after both base rules so the colour wins on source order. */
+.pat-filemanager-app .filemanager-badge-ineffective {
+    color: #000;
+    background: var(--bs-warning, #ffc107);
+}
+
+.pat-filemanager-app .filemanager-badge-expired {
+    color: #fff;
+    background: var(--bs-danger, #dc3545);
+}
+
+.pat-filemanager-app .filemanager-badge-working-copy {
+    color: #000;
+    background: var(--bs-info, #0dcaf0);
+}
+
+.pat-filemanager-app .filemanager-message {
+    padding: 1rem;
+    text-align: center;
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-message.filemanager-error {
+    color: #b02a37;
+}
+
+.pat-filemanager-app .filemanager-pagination {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+    font-size: var(--filemanager-ui-size);
+}
+
+.pat-filemanager-app .filemanager-range {
+    color: var(--filemanager-muted);
+}
+
+.pat-filemanager-app .filemanager-pager {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Icon-only prev/next buttons, matching the small-button look of the toolbar. */
+.pat-filemanager-app .filemanager-pager-button {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 6px;
+    background: #fff;
+    color: inherit;
+}
+
+.pat-filemanager-app .filemanager-pager-button:hover:not(:disabled) {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-pager-button:disabled {
+    color: var(--filemanager-muted);
+    cursor: default;
+    opacity: 0.65;
+}
+
+.pat-filemanager-app .filemanager-pager-button .filemanager-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Batch-size choices render as a segmented button group like the ViewSwitcher
+   and pat-structure's paging "Show:" buttons, with the active size highlighted. */
+.pat-filemanager-app .filemanager-batchsize {
+    margin-left: auto;
+    display: inline-flex;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button {
+    border: 0;
+    background: #fff;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    font: inherit;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button + .filemanager-batchsize-button {
+    border-left: 1px solid var(--filemanager-border);
+}
+
+.pat-filemanager-app .filemanager-batchsize-button:hover:not(:disabled):not(.active) {
+    background: #f1f3f5;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button.active {
+    background: var(--bs-primary, #0d6efd);
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-batchsize-button:disabled {
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-status-message {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--filemanager-border);
+    border-radius: 4px;
+    background: #e9ecef;
+}
+
+.pat-filemanager-app .filemanager-status-message.is-success {
+    background: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.pat-filemanager-app .filemanager-status-message.is-warning {
+    background: #fff3cd;
+    border-color: #ffecb5;
+}
+
+.pat-filemanager-app .filemanager-status-message.is-error {
+    background: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.pat-filemanager-app .filemanager-status-dismiss {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-modal {
+    width: min(640px, calc(100vw - 2rem));
+    max-height: calc(100vh - 4rem);
+    padding: 0;
+    border: 1px solid var(--bs-modal-border-color, var(--filemanager-border));
+    border-radius: var(--bs-modal-border-radius, var(--bs-border-radius-lg, 0.5rem));
+    background: var(--bs-modal-bg, #fff);
+    overflow: hidden;
+}
+
+/* Only lay out the box while open; closed dialogs keep the UA display:none. */
+.pat-filemanager-app .filemanager-modal[open] {
+    display: flex;
+    flex-direction: column;
+    animation: filemanager-modal-in 150ms ease-out;
+}
+
+.pat-filemanager-app .filemanager-modal::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+@keyframes filemanager-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.pat-filemanager-app .filemanager-modal-header {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--bs-modal-header-padding, 1rem);
+    border-bottom: var(--bs-modal-header-border-width, 1px) solid
+        var(--bs-modal-header-border-color, var(--filemanager-border));
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-modal-header h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: var(--bs-modal-title-line-height, 1.5);
+}
+
+.pat-filemanager-app .filemanager-modal-close {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 0 0.25rem;
+    opacity: 0.5;
+}
+
+.pat-filemanager-app .filemanager-modal-close:hover:not(:disabled) {
+    opacity: 0.75;
+}
+
+.pat-filemanager-app .filemanager-modal-form {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 0;
+    padding: var(--bs-modal-padding, 1rem);
+    overflow-y: auto;
+}
+
+.pat-filemanager-app .filemanager-modal-intro {
+    margin: 0;
+    color: var(--filemanager-muted);
+    font-size: 0.85rem;
+}
+
+.pat-filemanager-app .filemanager-modal-loading,
+.pat-filemanager-app .filemanager-modal-error {
+    margin: 0;
+}
+
+.pat-filemanager-app .filemanager-modal-error {
+    color: var(--bs-danger, #dc3545);
+}
+
+.pat-filemanager-app .filemanager-field,
+.pat-filemanager-app label.filemanager-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-field > span,
+.pat-filemanager-app .filemanager-field > legend {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-field input[type="text"],
+.pat-filemanager-app .filemanager-field input[type="datetime-local"],
+.pat-filemanager-app .filemanager-field select,
+.pat-filemanager-app .filemanager-field textarea {
+    padding: var(--bs-form-control-padding-y, 0.375rem) var(--bs-form-control-padding-x, 0.75rem);
+    border: var(--bs-border-width, 1px) solid var(--bs-border-color, var(--filemanager-border));
+    border-radius: var(--bs-border-radius-sm, 0.25rem);
+    font: inherit;
+    background-color: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, inherit);
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+.pat-filemanager-app .filemanager-field input:focus,
+.pat-filemanager-app .filemanager-field select:focus,
+.pat-filemanager-app .filemanager-field textarea:focus {
+    border-color: var(--bs-primary, #86b7fe);
+    outline: 0;
+    box-shadow: 0 0 0 var(--bs-focus-ring-width, 0.25rem) var(--bs-focus-ring-color, rgba(13, 110, 253, 0.25));
+}
+
+.pat-filemanager-app label.filemanager-field-check,
+.pat-filemanager-app label.filemanager-field-radio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pat-filemanager-app .filemanager-rename-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 24rem;
+    overflow-y: auto;
+}
+
+.pat-filemanager-app .filemanager-rename-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-rename-row .filemanager-field {
+    flex: 1 1 0;
+}
+
+.pat-filemanager-app .filemanager-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    border-top: var(--bs-modal-footer-border-width, 1px) solid
+        var(--bs-modal-footer-border-color, var(--filemanager-border));
+    padding-top: var(--bs-modal-padding, 0.75rem);
+}
+
+.pat-filemanager-app .filemanager-modal-actions button {
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
+    cursor: pointer;
+    padding: var(--bs-btn-padding-y, 0.375rem) var(--bs-btn-padding-x, 0.75rem);
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+    border: 1px solid var(--bs-secondary-border-subtle, #ced4da);
+    background: var(--bs-secondary-bg-subtle, #e9ecef);
+    color: var(--bs-body-color, #212529);
+    white-space: nowrap;
+}
+
+.pat-filemanager-app .filemanager-modal-actions button:hover:not(:disabled) {
+    background: var(--bs-secondary-bg, #adb5bd);
+    border-color: var(--bs-secondary, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-modal-actions button:disabled {
+    opacity: var(--bs-btn-disabled-opacity, 0.65);
+    cursor: default;
+}
+
+.pat-filemanager-app .filemanager-modal-actions .filemanager-modal-submit {
+    border-color: var(--bs-primary, #0d6efd);
+    background: var(--bs-primary, #0d6efd);
+    color: var(--bs-white, #fff);
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-modal-actions .filemanager-modal-submit:hover:not(:disabled) {
+    background: var(--bs-btn-hover-bg, #0b5ed7);
+    border-color: var(--bs-btn-hover-border-color, #0a58ca);
+    color: #fff;
+}
+
+.pat-filemanager-app .filemanager-modal-actions .filemanager-modal-submit.filemanager-action-delete {
+    border-color: var(--bs-danger, #dc3545);
+    background: var(--bs-danger, #dc3545);
+    color: #fff;
+}
+
+.pat-filemanager-app
+    .filemanager-modal-actions
+    .filemanager-modal-submit.filemanager-action-delete:hover:not(:disabled) {
+    background: #b02a37;
+    border-color: #a52834;
+    color: #fff;
+}
+
+/* Link integrity breach list */
+.pat-filemanager-app .filemanager-integrity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.pat-filemanager-app .filemanager-integrity-item {
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: var(--bs-border-radius, 0.375rem);
+    padding: 0.5rem 0.75rem;
+}
+
+.pat-filemanager-app .filemanager-integrity-target {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-integrity-count {
+    display: block;
+    font-size: var(--filemanager-ui-size, 0.875rem);
+    color: var(--bs-secondary-color, #6c757d);
+    margin-bottom: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-integrity-label {
+    font-size: var(--filemanager-ui-size, 0.875rem);
+    color: var(--bs-secondary-color, #6c757d);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.pat-filemanager-app .filemanager-integrity-sources {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+/* Confirmation dialog: a compact variant of the modal with its own padding
+   (the base modal sets padding:0 for full-bleed forms). */
+.pat-filemanager-app .filemanager-confirm {
+    width: min(420px, calc(100vw - 2rem));
+    padding: 1.25rem;
+    color: #212529;
+}
+
+.pat-filemanager-app .filemanager-confirm-message {
+    margin: 0 0 1rem;
+}
+
+.pat-filemanager-app .filemanager-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-confirm-actions button {
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
+    cursor: pointer;
+    padding: var(--bs-btn-padding-y, 0.375rem) var(--bs-btn-padding-x, 0.75rem);
+    border: 1px solid var(--bs-border-color, var(--filemanager-border));
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+}
+
+.pat-filemanager-app .filemanager-confirm-actions button:hover {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-confirm-actions .filemanager-confirm-ok {
+    font-weight: 600;
+    border-color: var(--bs-primary, #0d6efd);
+    background: var(--bs-primary, #0d6efd);
+    color: var(--bs-white, #fff);
+}
+
+.pat-filemanager-app .filemanager-confirm-actions .filemanager-confirm-ok:hover {
+    background: var(--bs-btn-hover-bg, #0b5ed7);
+    border-color: var(--bs-btn-hover-border-color, #0a58ca);
+}
+
+.pat-filemanager-app .filemanager-confirm-actions .filemanager-confirm-ok.filemanager-action-delete {
+    border-color: var(--bs-danger, #dc3545);
+    background: var(--bs-danger, #dc3545);
+    color: var(--bs-white, #fff);
+}
+
+/* ── Folder-drop preview/approval dialog ─────────────────────────────────── */
+
+.pat-filemanager-app .filemanager-folderdrop {
+    width: min(520px, calc(100vw - 2rem));
+    padding: 1.25rem;
+    color: #212529;
+}
+
+.pat-filemanager-app .filemanager-folderdrop-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.pat-filemanager-app .filemanager-folderdrop-summary {
+    margin: 0 0 0.75rem;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-tree {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0.5rem;
+    max-height: 40vh;
+    overflow: auto;
+    border: 1px solid var(--bs-border-color, var(--filemanager-border));
+    border-radius: var(--bs-border-radius, 0.375rem);
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+    padding-inline-start: calc(var(--depth, 0) * 1.25rem);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-name::before {
+    content: "📁 ";
+}
+
+.pat-filemanager-app .filemanager-folderdrop-row.is-root .filemanager-folderdrop-name {
+    font-style: italic;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-row.is-root .filemanager-folderdrop-name::before {
+    content: "";
+}
+
+.pat-filemanager-app .filemanager-folderdrop-count {
+    font-size: 0.85em;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions button {
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
+    cursor: pointer;
+    padding: var(--bs-btn-padding-y, 0.375rem) var(--bs-btn-padding-x, 0.75rem);
+    border: 1px solid var(--bs-border-color, var(--filemanager-border));
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions button:hover {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions .filemanager-folderdrop-ok {
+    font-weight: 600;
+    border-color: var(--bs-primary, #0d6efd);
+    background: var(--bs-primary, #0d6efd);
+    color: var(--bs-white, #fff);
+}
+
+.pat-filemanager-app .filemanager-folderdrop-actions .filemanager-folderdrop-ok:hover {
+    background: var(--bs-btn-hover-bg, #0b5ed7);
+    border-color: var(--bs-btn-hover-border-color, #0a58ca);
+}

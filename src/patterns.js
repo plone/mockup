@@ -23,6 +23,7 @@ import "./pat/contentloader/contentloader";
 import "./pat/contentbrowser/contentbrowser";
 import "./pat/cookietrigger/cookietrigger";
 import "./pat/datatables/datatables";
+import "./pat/filemanager/filemanager";
 import "./pat/formautofocus/formautofocus";
 import "./pat/formunloadalert/formunloadalert";
 import "./pat/livesearch/livesearch";

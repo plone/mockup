@@ -8,8 +8,16 @@ config.transformIgnorePatterns = [
     "/node_modules/.pnpm/(?!@patternslib)(?!@plone)(?!preact)(?!screenfull)(?!sinon)(?!bootstrap)(?!datatable)(?!svelte)(?!esm-env)",
 ];
 
-// add svelte-jester
-config.transform["^.+\\.svelte$"] = "svelte-jester";
+// Transforms. Order matters: Jest uses the first matching pattern, so the
+// runes-in-module rule (.svelte.ts / .svelte.js) must precede the generic
+// babel rule (which would otherwise also match `.svelte.ts`).
+config.transform = {
+    "^.+\\.svelte\\.(js|ts)$": path.resolve(__dirname, "./tools/jest-svelte-module.cjs"),
+    // svelte-jester refuses to run in Jest's CJS mode, so use a custom client
+    // compile + ESM->CJS transformer (see the tool for the rationale).
+    "^.+\\.svelte$": path.resolve(__dirname, "./tools/jest-svelte-component.cjs"),
+    ...config.transform,
+};
 
 // console.log(JSON.stringify(config, null, 4));
 module.exports = config;

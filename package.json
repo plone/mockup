@@ -52,6 +52,7 @@
         "@11ty/eleventy": "^3.1.6",
         "@11ty/eleventy-navigation": "^1.0.5",
         "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+        "@babel/preset-typescript": "^7.29.7",
         "@patternslib/dev": "^4.0.0",
         "@testing-library/jest-dom": "^6.9.1",
         "@types/sinon": "^10.0.20",
@@ -62,8 +63,10 @@
         "svelte": "^5.56.3",
         "svelte-jester": "^5.0.0",
         "svelte-loader": "^3.2.4",
+        "svelte-preprocess": "^6.0.5",
         "svelte-scrollto": "^0.2.0",
-        "svg-inline-loader": "^0.8.2"
+        "svg-inline-loader": "^0.8.2",
+        "typescript": "^6.0.3"
     },
     "resolutions": {
         "@patternslib/patternslib": "9.10.6",

@@ -1,4 +1,5 @@
 !devsrc/.gitkeep
+.claude/
 .env
 .vscode
 /docs/external/pat-*
@@ -15,3 +16,4 @@ docs/mockup/patterns
 node_modules/
 stats.json
 /_site/*
+/stamp-yarn
