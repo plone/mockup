@@ -24,7 +24,8 @@ export const parser = new Parser("filemanager");
 const CRITICAL_CSS = `
 body:has(.pat-filemanager) #content-header,
 body:has(.pat-filemanager) #mainnavigation-wrapper,
-body:has(.pat-filemanager) #above-content-wrapper {
+body:has(.pat-filemanager) #above-content-wrapper,
+body:has(.pat-filemanager) footer {
     display: none;
 }
 
