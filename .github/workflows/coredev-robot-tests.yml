@@ -124,7 +124,7 @@ jobs:
       - name: Check Installation
         run: |
           tree -L 3 -I 'node_modules|.git'
-          cat mxcheckouts.ini
+          cat tests/mxcheckouts.ini
   
       # ── 2b. Build mockup bundle into tests/src/plone.staticresources ─────────
       - name: Build mockup for tests (webpack)
