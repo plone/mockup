@@ -2,6 +2,23 @@
 
 
 
+## [5.7.0-alpha.0](https://github.com/plone/mockup/compare/5.6.6...5.7.0-alpha.0) (2026-06-08)
+
+### Features
+
+
+* **pat-filemanager:** add Svelte 5 folder-contents pattern ([1e3a5d0](https://github.com/plone/mockup/commit/1e3a5d0085085506cc4bded6996ed3ab54fb5c5e))
+
+  A plone.restapi-only rewrite of pat-structure's folder contents, built on
+Svelte 5 runes. Table and photo-grid views; selection, clipboard
+(cut/copy/paste), delete with link-integrity check, drag-and-drop
+reordering and drag-into-folder; multi-upload via @tus-upload — including
+dropping a whole folder to recreate its tree behind a preview/approval
+step; in-app folder browsing with breadcrumbs and live header sync; column
+configuration, free-text and advanced querystring filtering; batch actions
+(workflow, tags, properties, rename); cookie persistence, i18n and
+accessibility. No Backbone, underscore, DataTables or custom Plone views.
+
 ## [5.6.6](https://github.com/plone/mockup/compare/5.6.5...5.6.6) (2026-06-08)
 
 ### Bug Fixes
