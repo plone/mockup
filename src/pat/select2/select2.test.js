@@ -100,6 +100,29 @@ describe("Select2", function () {
         expect(select2.options.ajax.url).toEqual("select2-users-vocabulary");
     });
 
+    it("renders the preset value of a single-select input widget", async function () {
+        document.body.innerHTML = `
+            <input class="pat-select2"
+                   value="Europe/Vienna"
+                   data-pat-select2='{
+                       "multiple": false,
+                       "allowNewItems": "false",
+                       "vocabularyUrl": "select2-timezone-vocabulary"
+                   }'
+                   />
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const el = document.querySelector("input.pat-select2");
+        expect($(el).select2("data")).toEqual({
+            id: "Europe/Vienna",
+            text: "Europe/Vienna",
+        });
+        expect($(el).parent().find(".select2-chosen").text()).toEqual("Europe/Vienna");
+    });
+
     it("displays the vocabulary when clicking an empty checkbox", async function () {
         document.body.innerHTML = `
           <input type="hidden"
