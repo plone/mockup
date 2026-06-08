@@ -103,21 +103,11 @@ jobs:
           cache: pip
           cache-dependency-path: tests/requirements.txt
 
-      - name: Mark plone.staticresources as source checkout for mxdev
-        working-directory: tests
+      - name: Mark plone.staticresources as source checkout
         run: |
-          python3 -c "
-          import configparser
-          cfg = configparser.ConfigParser()
-          cfg.read('mxcheckouts.ini')
-          if not cfg.has_section('plone.staticresources'):
-              cfg.add_section('plone.staticresources')
-          cfg.set('plone.staticresources', 'use', 'true')
-          with open('mxcheckouts.ini', 'w') as f:
-              cfg.write(f)
-          "
+          echo "    plone.staticresources" >> tests/checkouts.cfg
 
-      - name: make install (checks out plone.staticresources via mxdev)
+      - name: Install (checks out plone.staticresources via mxdev)
         working-directory: tests
         run: make install
 
@@ -129,21 +119,6 @@ jobs:
       - name: install rfbrowser
         working-directory: tests
         run: .venv/bin/rfbrowser init chromium
-
-      # ── 5. Coredev robot tests ───────────────────────────────────────────────
-      - name: Mark plone.staticresources as source checkout for mxdev (again - this somehow gets lost?)
-        working-directory: tests
-        run: |
-          python3 -c "
-          import configparser
-          cfg = configparser.ConfigParser()
-          cfg.read('mxcheckouts.ini')
-          if not cfg.has_section('plone.staticresources'):
-              cfg.add_section('plone.staticresources')
-          cfg.set('plone.staticresources', 'use', 'true')
-          with open('mxcheckouts.ini', 'w') as f:
-              cfg.write(f)
-          "
 
       - name: Run Coredev robot tests
         working-directory: tests

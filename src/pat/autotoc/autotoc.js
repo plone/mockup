@@ -177,7 +177,7 @@ export default Base.extend({
 
     validation_marker: function () {
         for (const tab of this.tabs) {
-            if (tab.section.querySelectorAll(":invalid").length > 0) {
+            if (tab.section.querySelectorAll(":invalid, .invalid-feedback").length > 0) {
                 tab.nav.classList.add("invalid");
             } else {
                 tab.nav.classList.remove("invalid");

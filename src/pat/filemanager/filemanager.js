@@ -82,6 +82,7 @@ parser.addArgument("sort-order");
 parser.addArgument("default-view");
 parser.addArgument("folder-type");
 parser.addArgument("view-action-types");
+parser.addArgument("header-selector");
 
 class Pattern extends BasePattern {
     static name = "filemanager";

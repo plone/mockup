@@ -58,6 +58,7 @@ required (it defaults to the current page URL with a trailing
 | defaultView          | string  | "table"                            | Initial listing view: `"table"` or `"grid"`. Switchable at runtime; persisted per user in a cookie. |
 | folderType           | string  | "Folder"                           | Portal type created for folders recreated from an OS folder drop (see *Folder drop* below).   |
 | viewActionTypes      | array   | ["File", "Image"]                  | Portal types opened at `…/view` instead of the bare object URL (which would download/display the raw content). Mirrors the registry record `plone.types_use_view_action_in_listings`. |
+| headerSelector       | string  | "#content > header"                | CSS selector of the page header (title / byline / description) kept in sync with the current folder while browsing (see *Context header sync* below). |
 
 ### Column keys
 
@@ -153,7 +154,11 @@ popover.
   operation results are announced; each has a *Dismiss message* button.
 - Breadcrumbs use `<nav aria-label="Breadcrumbs">` + `<ol>`.
 - The upload zone is a `role="region"` whose label announces the drop
-  affordance; each in-progress upload exposes a labelled `<progress>`.
+  affordance; each in-progress upload exposes a labelled `<progress>`. While a
+  file is dragged over the zone, a "drop files here to upload to this folder"
+  strip appears below the listing as a `role="region"` so the current folder is
+  always a reachable drop target — even when every row is a folder that would
+  otherwise claim the drop.
 - Column-config, type-filter and advanced-filter popovers are `role="group"`
   with labels; every query-builder control carries an `aria-label`.
 - Decorative icons are `aria-hidden="true"`; thumbnails carry `alt` text.
@@ -221,6 +226,20 @@ unaffected — they upload immediately with no preview. The recreated containers
 use the `folderType` option (default `"Folder"`). Folders are read via the
 browser's `DataTransferItem.webkitGetAsEntry()` entries API; browsers without it
 fall back to flat-file uploads.
+
+### Context header sync
+
+The page header above the listing — the title (`.documentFirstHeading`), the
+byline (`#section-byline`) and the description (`.documentDescription`), all
+rendered by Plone inside `#content > header` — is kept in sync with the folder
+you browse into. On each in-app navigation the filemanager fetches the target
+context's HTML and **transplants its `#content > header`** into the live page
+(and updates the browser tab title). Because it reuses the server's own markup,
+the byline (author, localized published/modified dates, expired flag, i18n)
+comes through verbatim — no client-side reconstruction. The header node is
+selected with the configurable `headerSelector` option (default
+`"#content > header"`). This replaces the old `pat-structure` +
+`structure-updater` event dance; the filemanager updates the header on its own.
 
 All user-facing strings are routed through the patternslib i18n bridge
 (`src/utils/i18n.ts`, `widgets` domain).

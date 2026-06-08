@@ -1,5 +1,15 @@
-ignoredBuiltDependencies:
-  - yarn
+allowBuilds:
+  '@parcel/watcher': true
+  '@patternslib/dev': true
+  svelte-preprocess: true
+  unrs-resolver: true
+  yarn: false
 
-onlyBuiltDependencies:
-  - '@patternslib/dev'
+minimumReleaseAgeExclude:
+  - svelte@5.56.3
+
+overrides:
+  "slick-carousel": "-"
+  "slides": "-"
+
+shamefullyHoist: true

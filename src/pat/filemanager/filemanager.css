@@ -458,7 +458,6 @@ body:has(.pat-filemanager) #above-content-wrapper {
     opacity: 0.65;
 }
 
-
 /* The main actions render as one connected button group, like pat-structure's
    mainbuttons: square inner corners, shared (collapsed) borders. */
 .pat-filemanager-app .filemanager-action-group {
@@ -540,6 +539,24 @@ body:has(.pat-filemanager) #above-content-wrapper {
    long batch stays contained instead of pushing the listing down. */
 .filemanager-upload-dialog {
     width: min(560px, calc(100vw - 2rem));
+}
+
+/* Drop target for the current folder, shown below the listing only while an
+   external file drag is over the zone. It guarantees a reachable "upload here"
+   spot even when every row is a folder (and each row would otherwise claim the
+   drop into itself). Sits above the overlay so its highlight reads clearly. */
+.pat-filemanager-app .filemanager-upload-here {
+    position: relative;
+    z-index: 21;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px dashed #0d6efd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #0d6efd;
+    background: rgba(13, 110, 253, 0.12);
 }
 
 .pat-filemanager-app .filemanager-upload {
@@ -1281,10 +1298,10 @@ body:has(.pat-filemanager) #above-content-wrapper {
 
 /* Review-state badge. Colours come from Plone's --plone-state-* root variables
    (defined by barceloneta, _variables.colors.plone.scss) so the badge tracks
-   the active theme; published has no --plone-state-* var (it is the normal
-   state) so it uses --bs-success. Text colour is chosen per state for contrast:
-   white on the dark hues, dark on the yellow ones. Each var carries a hardcoded
-   fallback for when the theme stylesheet is absent. */
+   the active theme; published uses --plone-state-published, falling back to the
+   theme primary colour (--bs-primary). Text colour is chosen per state for
+   contrast: white on the dark hues, dark on the yellow ones. Each var carries a
+   hardcoded fallback for when the theme stylesheet is absent. */
 .pat-filemanager-app .filemanager-state {
     display: inline-block;
     padding: 0.1rem 0.45rem;
@@ -1294,7 +1311,7 @@ body:has(.pat-filemanager) #above-content-wrapper {
 }
 
 .pat-filemanager-app .filemanager-state.state-published {
-    background: var(--bs-success, #198754);
+    background: var(--plone-state-published, var(--bs-primary, #0d6efd));
     color: #fff;
 }
 
@@ -1552,7 +1569,8 @@ body:has(.pat-filemanager) #above-content-wrapper {
     align-items: center;
     justify-content: space-between;
     padding: var(--bs-modal-header-padding, 1rem);
-    border-bottom: var(--bs-modal-header-border-width, 1px) solid var(--bs-modal-header-border-color, var(--filemanager-border));
+    border-bottom: var(--bs-modal-header-border-width, 1px) solid
+        var(--bs-modal-header-border-color, var(--filemanager-border));
     background: var(--bs-tertiary-bg, #f8f9fa);
 }
 
@@ -1625,7 +1643,9 @@ body:has(.pat-filemanager) #above-content-wrapper {
     font: inherit;
     background-color: var(--bs-body-bg, #fff);
     color: var(--bs-body-color, inherit);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
 }
 
 .pat-filemanager-app .filemanager-field input:focus,
@@ -1665,7 +1685,8 @@ body:has(.pat-filemanager) #above-content-wrapper {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
-    border-top: var(--bs-modal-footer-border-width, 1px) solid var(--bs-modal-footer-border-color, var(--filemanager-border));
+    border-top: var(--bs-modal-footer-border-width, 1px) solid
+        var(--bs-modal-footer-border-color, var(--filemanager-border));
     padding-top: var(--bs-modal-padding, 0.75rem);
 }
 
@@ -1711,7 +1732,9 @@ body:has(.pat-filemanager) #above-content-wrapper {
     color: #fff;
 }
 
-.pat-filemanager-app .filemanager-modal-actions .filemanager-modal-submit.filemanager-action-delete:hover:not(:disabled) {
+.pat-filemanager-app
+    .filemanager-modal-actions
+    .filemanager-modal-submit.filemanager-action-delete:hover:not(:disabled) {
     background: #b02a37;
     border-color: #a52834;
     color: #fff;
