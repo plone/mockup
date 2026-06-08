@@ -462,6 +462,12 @@ required (it defaults to the current page URL with a trailing
 <td style="text-align:center">[&quot;File&quot;, &quot;Image&quot;]</td>
 <td style="text-align:center">Portal types opened at <code>…/view</code> instead of the bare object URL (which would download/display the raw content). Mirrors the registry record <code>plone.types_use_view_action_in_listings</code>.</td>
 </tr>
+<tr>
+<td style="text-align:center">headerSelector</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">&quot;#content &gt; header&quot;</td>
+<td style="text-align:center">CSS selector of the page header (title / byline / description) kept in sync with the current folder while browsing (see <em>Context header sync</em> below).</td>
+</tr>
 </tbody>
 </table>
 <h3>Column keys</h3>
@@ -697,6 +703,18 @@ unaffected — they upload immediately with no preview. The recreated containers
 use the <code>folderType</code> option (default <code>&quot;Folder&quot;</code>). Folders are read via the
 browser's <code>DataTransferItem.webkitGetAsEntry()</code> entries API; browsers without it
 fall back to flat-file uploads.</p>
+<h3>Context header sync</h3>
+<p>The page header above the listing — the title (<code>.documentFirstHeading</code>), the
+byline (<code>#section-byline</code>) and the description (<code>.documentDescription</code>), all
+rendered by Plone inside <code>#content &gt; header</code> — is kept in sync with the folder
+you browse into. On each in-app navigation the filemanager fetches the target
+context's HTML and <strong>transplants its <code>#content &gt; header</code></strong> into the live page
+(and updates the browser tab title). Because it reuses the server's own markup,
+the byline (author, localized published/modified dates, expired flag, i18n)
+comes through verbatim — no client-side reconstruction. The header node is
+selected with the configurable <code>headerSelector</code> option (default
+<code>&quot;#content &gt; header&quot;</code>). This replaces the old <code>pat-structure</code> +
+<code>structure-updater</code> event dance; the filemanager updates the header on its own.</p>
 <p>All user-facing strings are routed through the patternslib i18n bridge
 (<code>src/utils/i18n.ts</code>, <code>widgets</code> domain).</p>
 <h2>Default</h2>
