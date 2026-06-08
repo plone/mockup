@@ -290,6 +290,14 @@ msgid "Advanced filter"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
+msgid "Reset column sorting"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/FilterBar.svelte
 msgid "Clear"
 msgstr ""
 
@@ -543,6 +551,10 @@ msgstr ""
 
 #: ./src/pat/filemanager/src/components/UploadZone.svelte
 msgid "Folder contents — drop files to upload"
+msgstr ""
+
+#: ./src/pat/filemanager/src/components/UploadZone.svelte
+msgid "Drop files here to upload to this folder"
 msgstr ""
 
 #: ./src/pat/filemanager/src/components/UploadZone.svelte
@@ -983,14 +995,6 @@ msgstr ""
 
 #: ./src/pat/structure/js/views/selectionwell.js
 msgid "Cancel selection"
-msgstr ""
-
-#: ./src/pat/structure/js/views/table.js
-msgid "Reset column sorting"
-msgstr ""
-
-#: ./src/pat/structure/js/views/table.js
-msgid "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
 msgstr ""
 
 #: ./src/pat/structure/js/views/textfilter.js
