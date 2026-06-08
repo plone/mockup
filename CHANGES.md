@@ -2,6 +2,13 @@
 
 
 
+## [5.6.6](https://github.com/plone/mockup/compare/5.6.5...5.6.6) (2026-06-08)
+
+### Bug Fixes
+
+
+* **pat querystring:** fix issue with the new select2 native events where `e.val` is undefined ([cb83396](https://github.com/plone/mockup/commit/cb833967047a1467360072f657eb9900aa7422ac))
+
 ## [5.6.5](https://github.com/plone/mockup/compare/5.6.4...5.6.5) (2026-06-08)
 
 ### Features
