@@ -123,6 +123,27 @@ describe("Select2", function () {
         expect($(el).parent().find(".select2-chosen").text()).toEqual("Europe/Vienna");
     });
 
+    it("renders the preset value of a single-select select widget", async function () {
+        document.body.innerHTML = `
+            <select class="pat-select2">
+                <option value="Europe/Paris">Europe/Paris</option>
+                <option value="Europe/Vienna" selected>Europe/Vienna</option>
+            </select>
+        `;
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const el = document.querySelector("select.pat-select2");
+        // For a native <select>, select2 v3 attaches extra metadata to the
+        // data object (element, disabled, locked, ...), so match a subset.
+        expect($(el).select2("data")).toMatchObject({
+            id: "Europe/Vienna",
+            text: "Europe/Vienna",
+        });
+        expect($(el).parent().find(".select2-chosen").text()).toEqual("Europe/Vienna");
+    });
+
     it("displays the vocabulary when clicking an empty checkbox", async function () {
         document.body.innerHTML = `
           <input type="hidden"
