@@ -104,16 +104,15 @@ jobs:
           cache-dependency-path: tests/requirements.txt
 
       - name: Mark plone.staticresources as source checkout for mxdev
-        working-directory: tests
         run: |
           python3 -c "
           import configparser
           cfg = configparser.ConfigParser()
-          cfg.read('mxcheckouts.ini')
+          cfg.read('tests/mxcheckouts.ini')
           if not cfg.has_section('plone.staticresources'):
               cfg.add_section('plone.staticresources')
           cfg.set('plone.staticresources', 'use', 'true')
-          with open('mxcheckouts.ini', 'w') as f:
+          with open('tests/mxcheckouts.ini', 'w') as f:
               cfg.write(f)
           "
 
