@@ -5,12 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@patternslib/patternslib': 9.10.4
-  backbone: 1.6.1
-  jquery: 3.7.1
-  sass: ~1.77.8
-  underscore: 1.13.8
-  slick-carousel: git+https://github.com/kenwheeler/slick.git#d0716f19aa730006ee80ab026625fb1107816a97
+  slick-carousel: '-'
+  slides: '-'
 
 importers:
 
@@ -27,7 +23,7 @@ importers:
         version: 9.10.6
       '@plone/registry':
         specifier: ^2.7.2
-        version: 2.7.2(react@19.2.4)
+        version: 2.7.2(react@19.2.7)
       backbone:
         specifier: 1.6.1
         version: 1.6.1
@@ -105,7 +101,7 @@ importers:
         version: 3.0.8
       select2:
         specifier: github:ivaynberg/select2#95a977f674b6938af55ec5f28b7772df93786c5c
-        version: Select2@git+https://git@github.com:ivaynberg/select2.git#95a977f674b6938af55ec5f28b7772df93786c5c
+        version: Select2@https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c
       sortablejs:
         specifier: ^1.15.7
         version: 1.15.7
@@ -130,40 +126,64 @@ importers:
         version: 5.0.2
       '@patternslib/dev':
         specifier: ^4.0.0
-        version: 4.0.0(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(jiti@2.7.0)(postcss@8.5.15)(tslib@2.8.1)(typescript@5.9.3)
+        version: 4.0.0(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(jiti@2.7.0)(postcss@8.5.15)(tslib@2.8.1)(typescript@6.0.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
       '@types/sinon':
         specifier: ^10.0.20
         version: 10.0.20
+      babel-loader:
+        specifier: ^10.1.1
+        version: 10.1.1(@babel/core@7.29.7)(webpack@5.107.2)
+      conventional-changelog-conventionalcommits:
+        specifier: ^9.0.0
+        version: 9.3.1
+      css-loader:
+        specifier: ^7.1.4
+        version: 7.1.4(webpack@5.107.2)
       css.escape:
         specifier: ^1.5.1
         version: 1.5.1
+      eslint:
+        specifier: ^10.0.0
+        version: 10.4.1(jiti@2.7.0)
+      jest:
+        specifier: ^30.0.0
+        version: 30.4.2(@types/node@25.9.2)
       npm-run-all2:
         specifier: ^8.0.4
         version: 8.0.4
       rimraf:
         specifier: ^6.1.3
         version: 6.1.3
+      sass-loader:
+        specifier: ^16.0.0
+        version: 16.0.8(sass@1.100.0)(webpack@5.107.2)
       sinon:
         specifier: ^16.1.3
         version: 16.1.3
+      style-loader:
+        specifier: ^4.0.0
+        version: 4.0.0(webpack@5.107.2)
       svelte:
         specifier: ^5.56.3
-        version: 5.56.3(@typescript-eslint/types@8.57.2)
+        version: 5.56.3
       svelte-jester:
         specifier: ^5.0.0
-        version: 5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3(@typescript-eslint/types@8.57.2))
+        version: 5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3)
       svelte-loader:
         specifier: ^3.2.4
-        version: 3.2.4(svelte@5.56.3(@typescript-eslint/types@8.57.2))
+        version: 3.2.4(svelte@5.56.3)
       svelte-scrollto:
         specifier: ^0.2.0
         version: 0.2.0
       svg-inline-loader:
         specifier: ^0.8.2
         version: 0.8.2
+      webpack:
+        specifier: ^5.107.2
+        version: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
 
 packages:
 
@@ -1489,6 +1509,94 @@ packages:
     resolution: {integrity: sha512-iUPq9gmYZQb5ATscYX6y2dzggeHFkw2YY7xycl0plc5dXyqmvIIJWJtNu5ALk+IUOL7H4BrODOQduMqVzBXMSg==}
     engines: {node: '>=10.0.0'}
 
+  '@parcel/watcher-android-arm64@2.5.6':
+    resolution: {integrity: sha512-YQxSS34tPF/6ZG7r/Ih9xy+kP/WwediEUsqmtf0cuCV5TPPKw/PQHRhueUo6JdeFJaqV3pyjm0GdYjZotbRt/A==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm64]
+    os: [android]
+
+  '@parcel/watcher-darwin-arm64@2.5.6':
+    resolution: {integrity: sha512-Z2ZdrnwyXvvvdtRHLmM4knydIdU9adO3D4n/0cVipF3rRiwP+3/sfzpAwA/qKFL6i1ModaabkU7IbpeMBgiVEA==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@parcel/watcher-darwin-x64@2.5.6':
+    resolution: {integrity: sha512-HgvOf3W9dhithcwOWX9uDZyn1lW9R+7tPZ4sug+NGrGIo4Rk1hAXLEbcH1TQSqxts0NYXXlOWqVpvS1SFS4fRg==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@parcel/watcher-freebsd-x64@2.5.6':
+    resolution: {integrity: sha512-vJVi8yd/qzJxEKHkeemh7w3YAn6RJCtYlE4HPMoVnCpIXEzSrxErBW5SJBgKLbXU3WdIpkjBTeUNtyBVn8TRng==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@parcel/watcher-linux-arm-glibc@2.5.6':
+    resolution: {integrity: sha512-9JiYfB6h6BgV50CCfasfLf/uvOcJskMSwcdH1PHH9rvS1IrNy8zad6IUVPVUfmXr+u+Km9IxcfMLzgdOudz9EQ==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm]
+    os: [linux]
+    libc: [glibc]
+
+  '@parcel/watcher-linux-arm-musl@2.5.6':
+    resolution: {integrity: sha512-Ve3gUCG57nuUUSyjBq/MAM0CzArtuIOxsBdQ+ftz6ho8n7s1i9E1Nmk/xmP323r2YL0SONs1EuwqBp2u1k5fxg==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm]
+    os: [linux]
+    libc: [musl]
+
+  '@parcel/watcher-linux-arm64-glibc@2.5.6':
+    resolution: {integrity: sha512-f2g/DT3NhGPdBmMWYoxixqYr3v/UXcmLOYy16Bx0TM20Tchduwr4EaCbmxh1321TABqPGDpS8D/ggOTaljijOA==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@parcel/watcher-linux-arm64-musl@2.5.6':
+    resolution: {integrity: sha512-qb6naMDGlbCwdhLj6hgoVKJl2odL34z2sqkC7Z6kzir8b5W65WYDpLB6R06KabvZdgoHI/zxke4b3zR0wAbDTA==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@parcel/watcher-linux-x64-glibc@2.5.6':
+    resolution: {integrity: sha512-kbT5wvNQlx7NaGjzPFu8nVIW1rWqV780O7ZtkjuWaPUgpv2NMFpjYERVi0UYj1msZNyCzGlaCWEtzc+exjMGbQ==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@parcel/watcher-linux-x64-musl@2.5.6':
+    resolution: {integrity: sha512-1JRFeC+h7RdXwldHzTsmdtYR/Ku8SylLgTU/reMuqdVD7CtLwf0VR1FqeprZ0eHQkO0vqsbvFLXUmYm/uNKJBg==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@parcel/watcher-win32-arm64@2.5.6':
+    resolution: {integrity: sha512-3ukyebjc6eGlw9yRt678DxVF7rjXatWiHvTXqphZLvo7aC5NdEgFufVwjFfY51ijYEWpXbqF5jtrK275z52D4Q==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@parcel/watcher-win32-ia32@2.5.6':
+    resolution: {integrity: sha512-k35yLp1ZMwwee3Ez/pxBi5cf4AoBKYXj00CZ80jUz5h8prpiaQsiRPKQMxoLstNuqe2vR4RNPEAEcjEFzhEz/g==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@parcel/watcher-win32-x64@2.5.6':
+    resolution: {integrity: sha512-hbQlYcCq5dlAX9Qx+kFb0FHue6vbjlf0FrNzSKdYK2APUf7tGfGxQCk2ihEREmbR6ZMc0MVAD5RIX/41gpUzTw==}
+    engines: {node: '>= 10.0.0'}
+    cpu: [x64]
+    os: [win32]
+
+  '@parcel/watcher@2.5.6':
+    resolution: {integrity: sha512-tmmZ3lQxAe/k/+rNnXQRawJ4NjxO2hqiOLTHvWchtGZULp4RyFeh6aU4XdOYBFe2KE1oShQTv4AblOs2iOrNnQ==}
+    engines: {node: '>= 10.0.0'}
+
   '@patternslib/dev@4.0.0':
     resolution: {integrity: sha512-WERspi16UWUfZZoeFgWGEPJ3rportsaLp6dy5UjPop4N6K4/T2OJeAjblhJ18L/BeXx1rRLXHh91dQd07GEsYw==}
     engines: {node: '>=22'}
@@ -1800,10 +1908,6 @@ packages:
   '@types/yargs@17.0.35':
     resolution: {integrity: sha512-qUHkeCyQFxMXg79wQfTtfndEC+N9ZZg76HJftDJp+qH2tV7Gj4OJi7l+PiWwJ+pWtW8GwSmqsDj/oymhrTWXjg==}
 
-  '@typescript-eslint/types@8.57.2':
-    resolution: {integrity: sha512-/iZM6FnM4tnx9csuTxspMW4BOSegshwX5oBDznJ7S4WggL7Vczz5d2W11ecc4vRrQMQHXRSxzrCsyG5EsPPTbA==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
   '@ungap/structured-clone@1.3.1':
     resolution: {integrity: sha512-mUFwbeTqrVgDQxFveS+df2yfap6iuP20NAKAsBt5jDEoOTDew+zwLAOilHCeQJOVSvmgCX4ogqIrA0mnyr08yQ==}
 
@@ -1978,8 +2082,8 @@ packages:
   '@xtuc/long@4.2.2':
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
 
-  Select2@git+https://git@github.com:ivaynberg/select2.git#95a977f674b6938af55ec5f28b7772df93786c5c:
-    resolution: {commit: 95a977f674b6938af55ec5f28b7772df93786c5c, repo: git@github.com:ivaynberg/select2.git, type: git}
+  Select2@https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c}
     version: 3.5.4
 
   a-sync-waterfall@1.0.1:
@@ -2560,8 +2664,8 @@ packages:
       cosmiconfig: '>=9'
       typescript: '>=5'
 
-  cosmiconfig@9.0.2:
-    resolution: {integrity: sha512-gtTZxTDau1wL7Y7zifc2dd8jHSK/k6BTx/2Xp/BpdlAdnlYWFVt7qhJqgwi7637yRwRQ3qL4ZidbB4I8tA5VOg==}
+  cosmiconfig@9.0.1:
+    resolution: {integrity: sha512-hr4ihw+DBqcvrsEDioRO31Z17x71pUYoNe/4h6Z0wB72p7MU7/9gH8Q3s12NFhHPfYBBOV3qyfUxmr/Yn3shnQ==}
     engines: {node: '>=14'}
     peerDependencies:
       typescript: '>=4.9.5'
@@ -2751,6 +2855,10 @@ packages:
   destroy@1.2.0:
     resolution: {integrity: sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
+
+  detect-libc@2.1.2:
+    resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
+    engines: {node: '>=8'}
 
   detect-newline@3.1.0:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
@@ -3413,8 +3521,8 @@ packages:
   imagesloaded@4.1.4:
     resolution: {integrity: sha512-ltiBVcYpc/TYTF5nolkMNsnREHW+ICvfQ3Yla2Sgr71YFwQ86bDwV9hgpFhFtrGPuwEx5+LqOHIrdXBdoWwwsA==}
 
-  immutable@4.3.8:
-    resolution: {integrity: sha512-d/Ld9aLbKpNwyl0KiM2CT1WYvkitQ1TSvmRtkcV8FKStiDoA7Slzgjmb/1G2yhKM1p0XeNOieaTbFZmU1d3Xuw==}
+  immutable@5.1.6:
+    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -3803,7 +3911,7 @@ packages:
   jqtree@1.8.11:
     resolution: {integrity: sha512-PZlNPr0m/4+19r6feLAWQ82rpgrRnh0HOxDtZg2vglolx0TGVRPoIEuFojlNjXB24K/brf0plf6W0Yzof9nLGg==}
     peerDependencies:
-      jquery: 3.7.1
+      jquery: '>= 3'
 
   jquery-form@4.3.0:
     resolution: {integrity: sha512-q3uaVCEWdLOYUCI6dpNdwf/7cJFOsUgdpq6r0taxtGQ5NJSkOzofyWm4jpOuJ5YxdmL1FI5QR+q+HB63HHLGnQ==}
@@ -4208,6 +4316,9 @@ packages:
 
   nise@5.1.9:
     resolution: {integrity: sha512-qOnoujW4SV6e40dYxJOb3uvuoPHtmLzIk4TFo+j0jPJoC+5Z9xja5qH5JZobEPsa8+YYphMrOSwnrshEhG2qww==}
+
+  node-addon-api@7.1.1:
+    resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
   node-fetch-native@1.6.7:
     resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
@@ -4625,8 +4736,8 @@ packages:
   react-is@19.2.7:
     resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
 
-  react@19.2.4:
-    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
+  react@19.2.7:
+    resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
     engines: {node: '>=0.10.0'}
 
   read-package-json-fast@4.0.0:
@@ -4780,7 +4891,7 @@ packages:
     peerDependencies:
       '@rspack/core': 0.x || ^1.0.0 || ^2.0.0-0
       node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
-      sass: ~1.77.8
+      sass: ^1.3.0
       sass-embedded: '*'
       webpack: ^5.0.0
     peerDependenciesMeta:
@@ -4795,9 +4906,9 @@ packages:
       webpack:
         optional: true
 
-  sass@1.77.8:
-    resolution: {integrity: sha512-4UHg6prsrycW20fqLGPShtEvo/WyHRVRHwOP4DzkUrObWoWI05QBSfzU71TVB7PFaL104TwNaHpjlWXAZbQiNQ==}
-    engines: {node: '>=14.0.0'}
+  sass@1.100.0:
+    resolution: {integrity: sha512-B5j0rYMlinhhOo9tjQebMVVn0TfyXAF+wB3b2ggZUuJ/is/Y+7+JGjirAMxHZ9Z3hIP98NPfamlAkBHa1lAaXQ==}
+    engines: {node: '>=20.19.0'}
     hasBin: true
 
   saxes@6.0.0:
@@ -4936,16 +5047,6 @@ packages:
   slash@5.1.0:
     resolution: {integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==}
     engines: {node: '>=14.16'}
-
-  slick-carousel@https://codeload.github.com/kenwheeler/slick/tar.gz/d0716f19aa730006ee80ab026625fb1107816a97:
-    resolution: {tarball: https://codeload.github.com/kenwheeler/slick/tar.gz/d0716f19aa730006ee80ab026625fb1107816a97}
-    version: 1.8.1
-    peerDependencies:
-      jquery: 3.7.1
-
-  slides@git+https://git@github.com:Patternslib/slides.git#9319c68a208f92b7f21f4239916ca05429b9e139:
-    resolution: {commit: 9319c68a208f92b7f21f4239916ca05429b9e139, repo: git@github.com:Patternslib/slides.git, type: git}
-    version: 0.1.1
 
   slugify@1.6.9:
     resolution: {integrity: sha512-vZ7rfeehZui7wQs438JXBckYLkIIdfHOXsaVEUMyS5fHo1483l1bMdo0EDSWYclY0yZKFOipDy4KHuKs6ssvdg==}
@@ -5347,8 +5448,8 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -6544,11 +6645,11 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@commitlint/cli@20.5.3(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(typescript@5.9.3)':
+  '@commitlint/cli@20.5.3(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(typescript@6.0.3)':
     dependencies:
       '@commitlint/format': 20.5.0
       '@commitlint/lint': 20.5.3
-      '@commitlint/load': 20.5.3(@types/node@25.9.2)(typescript@5.9.3)
+      '@commitlint/load': 20.5.3(@types/node@25.9.2)(typescript@6.0.3)
       '@commitlint/read': 20.5.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
       '@commitlint/types': 20.5.0
       tinyexec: 1.2.4
@@ -6593,14 +6694,14 @@ snapshots:
       '@commitlint/rules': 20.5.3
       '@commitlint/types': 20.5.0
 
-  '@commitlint/load@20.5.3(@types/node@25.9.2)(typescript@5.9.3)':
+  '@commitlint/load@20.5.3(@types/node@25.9.2)(typescript@6.0.3)':
     dependencies:
       '@commitlint/config-validator': 20.5.0
       '@commitlint/execute-rule': 20.0.0
       '@commitlint/resolve-extends': 20.5.3
       '@commitlint/types': 20.5.0
-      cosmiconfig: 9.0.2(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.3.0(@types/node@25.9.2)(cosmiconfig@9.0.2(typescript@5.9.3))(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@6.0.3)
+      cosmiconfig-typescript-loader: 6.3.0(@types/node@25.9.2)(cosmiconfig@9.0.1(typescript@6.0.3))(typescript@6.0.3)
       es-toolkit: 1.47.0
       is-plain-obj: 4.1.0
       picocolors: 1.1.1
@@ -7405,17 +7506,78 @@ snapshots:
       colorette: 2.0.20
       ora: 5.4.1
 
-  '@patternslib/dev@4.0.0(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(jiti@2.7.0)(postcss@8.5.15)(tslib@2.8.1)(typescript@5.9.3)':
+  '@parcel/watcher-android-arm64@2.5.6':
+    optional: true
+
+  '@parcel/watcher-darwin-arm64@2.5.6':
+    optional: true
+
+  '@parcel/watcher-darwin-x64@2.5.6':
+    optional: true
+
+  '@parcel/watcher-freebsd-x64@2.5.6':
+    optional: true
+
+  '@parcel/watcher-linux-arm-glibc@2.5.6':
+    optional: true
+
+  '@parcel/watcher-linux-arm-musl@2.5.6':
+    optional: true
+
+  '@parcel/watcher-linux-arm64-glibc@2.5.6':
+    optional: true
+
+  '@parcel/watcher-linux-arm64-musl@2.5.6':
+    optional: true
+
+  '@parcel/watcher-linux-x64-glibc@2.5.6':
+    optional: true
+
+  '@parcel/watcher-linux-x64-musl@2.5.6':
+    optional: true
+
+  '@parcel/watcher-win32-arm64@2.5.6':
+    optional: true
+
+  '@parcel/watcher-win32-ia32@2.5.6':
+    optional: true
+
+  '@parcel/watcher-win32-x64@2.5.6':
+    optional: true
+
+  '@parcel/watcher@2.5.6':
+    dependencies:
+      detect-libc: 2.1.2
+      is-glob: 4.0.3
+      node-addon-api: 7.1.1
+      picomatch: 4.0.4
+    optionalDependencies:
+      '@parcel/watcher-android-arm64': 2.5.6
+      '@parcel/watcher-darwin-arm64': 2.5.6
+      '@parcel/watcher-darwin-x64': 2.5.6
+      '@parcel/watcher-freebsd-x64': 2.5.6
+      '@parcel/watcher-linux-arm-glibc': 2.5.6
+      '@parcel/watcher-linux-arm-musl': 2.5.6
+      '@parcel/watcher-linux-arm64-glibc': 2.5.6
+      '@parcel/watcher-linux-arm64-musl': 2.5.6
+      '@parcel/watcher-linux-x64-glibc': 2.5.6
+      '@parcel/watcher-linux-x64-musl': 2.5.6
+      '@parcel/watcher-win32-arm64': 2.5.6
+      '@parcel/watcher-win32-ia32': 2.5.6
+      '@parcel/watcher-win32-x64': 2.5.6
+    optional: true
+
+  '@patternslib/dev@4.0.0(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(jiti@2.7.0)(postcss@8.5.15)(tslib@2.8.1)(typescript@6.0.3)':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/preset-env': 7.29.7(@babel/core@7.29.7)
-      '@commitlint/cli': 20.5.3(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(typescript@5.9.3)
+      '@commitlint/cli': 20.5.3(@types/node@25.9.2)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(typescript@6.0.3)
       '@commitlint/config-conventional': 20.5.3
       '@eslint/js': 10.0.1(eslint@10.4.1(jiti@2.7.0))
       '@release-it/conventional-changelog': 10.0.6(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(release-it@20.2.0(@types/node@25.9.2))
-      babel-loader: 10.1.1(@babel/core@7.29.7)(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))))
+      babel-loader: 10.1.1(@babel/core@7.29.7)(webpack@5.107.2)
       caniuse-lite: 1.0.30001790
-      css-loader: 7.1.4(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))))
+      css-loader: 7.1.4(webpack@5.107.2)
       eslint: 10.4.1(jiti@2.7.0)
       eslint-config-prettier: 10.1.8(eslint@10.4.1(jiti@2.7.0))
       globals: 17.6.0
@@ -7426,15 +7588,15 @@ snapshots:
       prettier: 3.8.3
       regenerator-runtime: 0.14.1
       release-it: 20.2.0(@types/node@25.9.2)
-      sass: 1.77.8
-      sass-loader: 16.0.8(sass@1.77.8)(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))))
-      style-loader: 4.0.0(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))))
-      terser-webpack-plugin: 5.6.1(postcss@8.5.15)(webpack@5.107.2(postcss@8.5.15))
+      sass: 1.100.0
+      sass-loader: 16.0.8(sass@1.100.0)(webpack@5.107.2)
+      style-loader: 4.0.0(webpack@5.107.2)
+      terser-webpack-plugin: 5.6.1(postcss@8.5.15)(webpack@5.107.2)
       timezone-mock: 1.4.2
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
       webpack-bundle-analyzer: 5.3.0
-      webpack-cli: 7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))
-      webpack-dev-server: 5.2.4(tslib@2.8.1)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))
+      webpack-cli: 7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4)(webpack@5.107.2)
+      webpack-dev-server: 5.2.4(tslib@2.8.1)(webpack-cli@7.0.3)(webpack@5.107.2)
       whybundled: 2.0.0
       yarn: 1.22.22
     transitivePeerDependencies:
@@ -7502,8 +7664,6 @@ snapshots:
       select2: 3.5.1
       showdown: 2.1.0
       showdown-prettify: 1.3.0
-      slick-carousel: https://codeload.github.com/kenwheeler/slick/tar.gz/d0716f19aa730006ee80ab026625fb1107816a97(jquery@3.7.1)
-      slides: git+https://git@github.com:Patternslib/slides.git#9319c68a208f92b7f21f4239916ca05429b9e139
       spectrum-colorpicker: 1.8.1
       tippy.js: 6.3.7
 
@@ -7608,14 +7768,14 @@ snapshots:
 
   '@pkgr/core@0.3.6': {}
 
-  '@plone/registry@2.7.2(react@19.2.4)':
+  '@plone/registry@2.7.2(react@19.2.7)':
     dependencies:
       auto-config-loader: 1.7.8
       crypto-random-string: 3.2.0
       debug: 4.3.2
       dependency-graph: 0.10.0
       glob: 10.5.0
-      react: 19.2.4
+      react: 19.2.7
       tmp: 0.2.5
     transitivePeerDependencies:
       - supports-color
@@ -7847,7 +8007,7 @@ snapshots:
 
   '@types/resolve@1.17.1':
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 25.9.2
 
   '@types/retry@0.12.2': {}
 
@@ -7897,9 +8057,6 @@ snapshots:
   '@types/yargs@17.0.35':
     dependencies:
       '@types/yargs-parser': 21.0.3
-
-  '@typescript-eslint/types@8.57.2':
-    optional: true
 
   '@ungap/structured-clone@1.3.1': {}
 
@@ -8053,7 +8210,7 @@ snapshots:
 
   '@xtuc/long@4.2.2': {}
 
-  Select2@git+https://git@github.com:ivaynberg/select2.git#95a977f674b6938af55ec5f28b7772df93786c5c: {}
+  Select2@https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c: {}
 
   a-sync-waterfall@1.0.1: {}
 
@@ -8197,12 +8354,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-loader@10.1.1(@babel/core@7.29.7)(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))):
+  babel-loader@10.1.1(@babel/core@7.29.7)(webpack@5.107.2):
     dependencies:
       '@babel/core': 7.29.7
       find-up: 5.0.0
     optionalDependencies:
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
 
   babel-plugin-istanbul@7.0.1:
     dependencies:
@@ -8632,21 +8789,21 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@6.3.0(@types/node@25.9.2)(cosmiconfig@9.0.2(typescript@5.9.3))(typescript@5.9.3):
+  cosmiconfig-typescript-loader@6.3.0(@types/node@25.9.2)(cosmiconfig@9.0.1(typescript@6.0.3))(typescript@6.0.3):
     dependencies:
       '@types/node': 25.9.2
-      cosmiconfig: 9.0.2(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@6.0.3)
       jiti: 2.6.1
-      typescript: 5.9.3
+      typescript: 6.0.3
 
-  cosmiconfig@9.0.2(typescript@5.9.3):
+  cosmiconfig@9.0.1(typescript@6.0.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
       js-yaml: 4.2.0
       parse-json: 5.2.0
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.3
 
   cross-spawn@7.0.6:
     dependencies:
@@ -8664,7 +8821,7 @@ snapshots:
     transitivePeerDependencies:
       - jquery
 
-  css-loader@7.1.4(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))):
+  css-loader@7.1.4(webpack@5.107.2):
     dependencies:
       icss-utils: 5.1.0(postcss@8.5.15)
       postcss: 8.5.15
@@ -8675,7 +8832,7 @@ snapshots:
       postcss-value-parser: 4.2.0
       semver: 7.8.2
     optionalDependencies:
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
 
   css.escape@1.5.1: {}
 
@@ -8825,6 +8982,9 @@ snapshots:
   destr@2.0.5: {}
 
   destroy@1.2.0: {}
+
+  detect-libc@2.1.2:
+    optional: true
 
   detect-newline@3.1.0: {}
 
@@ -9044,11 +9204,9 @@ snapshots:
     dependencies:
       estraverse: 5.3.0
 
-  esrap@2.2.11(@typescript-eslint/types@8.57.2):
+  esrap@2.2.11:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
-    optionalDependencies:
-      '@typescript-eslint/types': 8.57.2
 
   esrecurse@4.3.0:
     dependencies:
@@ -9528,7 +9686,7 @@ snapshots:
     dependencies:
       ev-emitter: 1.1.1
 
-  immutable@4.3.8: {}
+  immutable@5.1.6: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -10414,6 +10572,9 @@ snapshots:
       just-extend: 6.2.0
       path-to-regexp: 6.3.0
 
+  node-addon-api@7.1.1:
+    optional: true
+
   node-fetch-native@1.6.7: {}
 
   node-int64@0.4.0: {}
@@ -10839,7 +11000,7 @@ snapshots:
 
   react-is@19.2.7: {}
 
-  react@19.2.4: {}
+  react@19.2.7: {}
 
   read-package-json-fast@4.0.0:
     dependencies:
@@ -11009,18 +11170,20 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sass-loader@16.0.8(sass@1.77.8)(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))):
+  sass-loader@16.0.8(sass@1.100.0)(webpack@5.107.2):
     dependencies:
       neo-async: 2.6.2
     optionalDependencies:
-      sass: 1.77.8
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      sass: 1.100.0
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
 
-  sass@1.77.8:
+  sass@1.100.0:
     dependencies:
-      chokidar: 3.6.0
-      immutable: 4.3.8
+      chokidar: 5.0.0
+      immutable: 5.1.6
       source-map-js: 1.2.1
+    optionalDependencies:
+      '@parcel/watcher': 2.5.6
 
   saxes@6.0.0:
     dependencies:
@@ -11195,12 +11358,6 @@ snapshots:
 
   slash@5.1.0: {}
 
-  slick-carousel@https://codeload.github.com/kenwheeler/slick/tar.gz/d0716f19aa730006ee80ab026625fb1107816a97(jquery@3.7.1):
-    dependencies:
-      jquery: 3.7.1
-
-  slides@git+https://git@github.com:Patternslib/slides.git#9319c68a208f92b7f21f4239916ca05429b9e139: {}
-
   slugify@1.6.9: {}
 
   smart-buffer@4.2.0: {}
@@ -11357,9 +11514,9 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  style-loader@4.0.0(webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))):
+  style-loader@4.0.0(webpack@5.107.2):
     dependencies:
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
 
   sucrase@3.35.1:
     dependencies:
@@ -11383,21 +11540,21 @@ snapshots:
 
   svelte-dev-helper@1.1.9: {}
 
-  svelte-hmr@0.14.12(svelte@5.56.3(@typescript-eslint/types@8.57.2)):
+  svelte-hmr@0.14.12(svelte@5.56.3):
     dependencies:
-      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
+      svelte: 5.56.3
 
-  svelte-jester@5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3(@typescript-eslint/types@8.57.2)):
+  svelte-jester@5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3):
     dependencies:
       jest: 30.4.2(@types/node@25.9.2)
-      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
+      svelte: 5.56.3
 
-  svelte-loader@3.2.4(svelte@5.56.3(@typescript-eslint/types@8.57.2)):
+  svelte-loader@3.2.4(svelte@5.56.3):
     dependencies:
       loader-utils: 2.0.4
-      svelte: 5.56.3(@typescript-eslint/types@8.57.2)
+      svelte: 5.56.3
       svelte-dev-helper: 1.1.9
-      svelte-hmr: 0.14.12(svelte@5.56.3(@typescript-eslint/types@8.57.2))
+      svelte-hmr: 0.14.12(svelte@5.56.3)
 
   svelte-scrollto@0.2.0:
     dependencies:
@@ -11405,7 +11562,7 @@ snapshots:
 
   svelte@3.59.2: {}
 
-  svelte@5.56.3(@typescript-eslint/types@8.57.2):
+  svelte@5.56.3:
     dependencies:
       '@jridgewell/remapping': 2.3.5
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -11418,7 +11575,7 @@ snapshots:
       clsx: 2.1.1
       devalue: 5.8.1
       esm-env: 1.2.2
-      esrap: 2.2.11(@typescript-eslint/types@8.57.2)
+      esrap: 2.2.11
       is-reference: 3.0.3
       locate-character: 3.0.0
       magic-string: 0.30.21
@@ -11440,13 +11597,13 @@ snapshots:
 
   tapable@2.3.3: {}
 
-  terser-webpack-plugin@5.6.1(postcss@8.5.15)(webpack@5.107.2(postcss@8.5.15)):
+  terser-webpack-plugin@5.6.1(postcss@8.5.15)(webpack@5.107.2):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
       terser: 5.48.0
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
     optionalDependencies:
       postcss: 8.5.15
 
@@ -11568,7 +11725,7 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typescript@5.9.3: {}
+  typescript@6.0.3: {}
 
   uc.micro@2.1.0: {}
 
@@ -11697,7 +11854,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)):
+  webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4)(webpack@5.107.2):
     dependencies:
       '@discoveryjs/json-ext': 1.1.0
       commander: 14.0.3
@@ -11706,13 +11863,13 @@ snapshots:
       import-local: 3.2.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
       webpack-merge: 6.0.1
     optionalDependencies:
       webpack-bundle-analyzer: 5.3.0
-      webpack-dev-server: 5.2.4(tslib@2.8.1)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))
+      webpack-dev-server: 5.2.4(tslib@2.8.1)(webpack-cli@7.0.3)(webpack@5.107.2)
 
-  webpack-dev-middleware@7.4.5(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)):
+  webpack-dev-middleware@7.4.5(tslib@2.8.1)(webpack@5.107.2):
     dependencies:
       colorette: 2.0.20
       memfs: 4.57.6(tslib@2.8.1)
@@ -11721,11 +11878,11 @@ snapshots:
       range-parser: 1.2.1
       schema-utils: 4.3.3
     optionalDependencies:
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
     transitivePeerDependencies:
       - tslib
 
-  webpack-dev-server@5.2.4(tslib@2.8.1)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)):
+  webpack-dev-server@5.2.4(tslib@2.8.1)(webpack-cli@7.0.3)(webpack@5.107.2):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
@@ -11753,11 +11910,11 @@ snapshots:
       serve-index: 1.9.2
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15))
+      webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.107.2)
       ws: 8.21.0
     optionalDependencies:
-      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15)))
-      webpack-cli: 7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))
+      webpack: 5.107.2(postcss@8.5.15)(webpack-cli@7.0.3)
+      webpack-cli: 7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4)(webpack@5.107.2)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -11773,7 +11930,7 @@ snapshots:
 
   webpack-sources@3.5.0: {}
 
-  webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))):
+  webpack@5.107.2(postcss@8.5.15)(webpack-cli@7.0.3):
     dependencies:
       '@types/estree': 1.0.9
       '@types/json-schema': 7.0.15
@@ -11795,11 +11952,11 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.3
       tapable: 2.3.3
-      terser-webpack-plugin: 5.6.1(postcss@8.5.15)(webpack@5.107.2(postcss@8.5.15))
+      terser-webpack-plugin: 5.6.1(postcss@8.5.15)(webpack@5.107.2)
       watchpack: 2.5.1
       webpack-sources: 3.5.0
     optionalDependencies:
-      webpack-cli: 7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4(tslib@2.8.1)(webpack@5.107.2(postcss@8.5.15)))(webpack@5.107.2(postcss@8.5.15))
+      webpack-cli: 7.0.3(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4)(webpack@5.107.2)
     transitivePeerDependencies:
       - '@minify-html/node'
       - '@swc/core'

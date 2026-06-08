@@ -9,7 +9,7 @@
         "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
         "select2": "Use the commit hash for checkout since pnpm has problems with the annotated commit #3.5.4"
     },
-    "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+    "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916",
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "3.0.2",
         "@patternslib/pat-code-editor": "4.0.1",
@@ -41,6 +41,8 @@
         "jquery.browser": "0.1.0",
         "js-cookie": "^3.0.8",
         "select2": "github:ivaynberg/select2#95a977f674b6938af55ec5f28b7772df93786c5c",
+        "slick-carousel": "git+https://github.com/kenwheeler/slick.git#d0716f19aa730006ee80ab026625fb1107816a97",
+        "slides": "git+https://github.com/Patternslib/slides.git",
         "sortablejs": "^1.15.7",
         "tinymce": "8.6.0",
         "tinymce-i18n": "26.5.18",
@@ -53,18 +55,26 @@
         "@patternslib/dev": "^4.0.0",
         "@testing-library/jest-dom": "^6.9.1",
         "@types/sinon": "^10.0.20",
+        "babel-loader": "^10.1.1",
+        "conventional-changelog-conventionalcommits": "^9.0.0",
         "css.escape": "^1.5.1",
+        "css-loader": "^7.1.4",
+        "eslint": "^10.0.0",
+        "jest": "^30.0.0",
         "npm-run-all2": "^8.0.4",
         "rimraf": "^6.1.3",
+        "sass-loader": "^16.0.0",
         "sinon": "^16.1.3",
+        "style-loader": "^4.0.0",
         "svelte": "^5.56.3",
         "svelte-jester": "^5.0.0",
         "svelte-loader": "^3.2.4",
         "svelte-scrollto": "^0.2.0",
-        "svg-inline-loader": "^0.8.2"
+        "svg-inline-loader": "^0.8.2",
+        "webpack": "^5.107.2"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.10.4",
+        "@patternslib/patternslib": "9.10.6",
         "backbone": "1.6.1",
         "jquery": "3.7.1",
         "sass": "~1.77.8",
@@ -121,10 +131,5 @@
     ],
     "publishConfig": {
         "access": "public"
-    },
-    "pnpm": {
-        "overrides": {
-            "slick-carousel": "git+https://github.com/kenwheeler/slick.git#d0716f19aa730006ee80ab026625fb1107816a97"
-        }
     }
 }
