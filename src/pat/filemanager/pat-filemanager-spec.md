@@ -597,6 +597,13 @@ custom views.
   folder only when no subfolder claimed it. Files dropped anywhere else fall
   through to `UploadZone` as before. The zone hides its "Drop files to upload"
   overlay while `fileDropIndex >= 0` so the subfolder highlight reads cleanly.
+- **"Drop here" strip (current-folder target).** When every row is a folder,
+  the rows fill the zone and each claims the drop into *itself*, leaving no easy
+  spot to upload into the current folder. `UploadZone` therefore renders a strip
+  below the listing (`.filemanager-upload-here`) **only while an external file
+  drag is over the zone** (`{#if dragActive}`): hovering it clears `fileDropIndex`
+  and the drop bubbles to the zone's `onDrop` (current folder). It's highlighted
+  above the overlay, giving a guaranteed reachable current-folder target.
 - Tests: `src/api/upload.test.js` (6 — tus open/patch/return, create-failure,
   missing-Location, POST File/Image fallback, tus→POST fallback;
   jsdom needs a `TextEncoder` polyfill from `util`), `src/stores/UploadStore.test.ts`

@@ -153,7 +153,11 @@ popover.
   operation results are announced; each has a *Dismiss message* button.
 - Breadcrumbs use `<nav aria-label="Breadcrumbs">` + `<ol>`.
 - The upload zone is a `role="region"` whose label announces the drop
-  affordance; each in-progress upload exposes a labelled `<progress>`.
+  affordance; each in-progress upload exposes a labelled `<progress>`. While a
+  file is dragged over the zone, a "drop files here to upload to this folder"
+  strip appears below the listing as a `role="region"` so the current folder is
+  always a reachable drop target — even when every row is a folder that would
+  otherwise claim the drop.
 - Column-config, type-filter and advanced-filter popovers are `role="group"`
   with labels; every query-builder control carries an `aria-label`.
 - Decorative icons are `aria-hidden="true"`; thumbnails carry `alt` text.

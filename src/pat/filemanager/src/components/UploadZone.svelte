@@ -49,6 +49,18 @@
         // the current folder; a folder drop is previewed/approved then recreated.
         await interactions.handleExternalDrop(event.dataTransfer);
     }
+
+    // The always-present "drop here" strip below the listing. When every row is
+    // a folder, the rows fill the zone and each claims the drop into itself, so
+    // there's no easy spot left to target the *current* folder; this strip is
+    // that guaranteed spot. Hovering it clears any folder-row highlight so the
+    // drop falls through to the zone's onDrop (current folder).
+    function onHereOver(event) {
+        if (!hasFiles(event)) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "copy";
+        interactions.fileDropIndex = -1;
+    }
 </script>
 
 <div
@@ -62,6 +74,18 @@
     ondrop={onDrop}
 >
     {@render children?.()}
+
+    {#if dragActive}
+        <div
+            class="filemanager-upload-here"
+            role="region"
+            aria-label={_t("Drop files here to upload to this folder")}
+            ondragenter={onHereOver}
+            ondragover={onHereOver}
+        >
+            {_t("Drop files here to upload to this folder")}
+        </div>
+    {/if}
 
     {#if dragActive && interactions.fileDropIndex < 0}
         <div class="filemanager-upload-overlay">{_t("Drop files to upload")}</div>
