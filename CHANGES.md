@@ -2,6 +2,14 @@
 
 
 
+## [5.4.10](https://github.com/plone/mockup/compare/5.4.9...5.4.10) (2026-06-09)
+
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** Backport add button usability fix. ([040aaa6](https://github.com/plone/mockup/commit/040aaa61201bf90650b204d61a9df451690b3845))
+
 ## [5.4.9](https://github.com/plone/mockup/compare/5.4.8...5.4.9) (2026-05-21)
 
 
