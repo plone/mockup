@@ -217,15 +217,22 @@ export default Base.extend({
                     this.options.multiple === undefined ? true : this.options.multiple;
                 this.options.ajax = this.options.ajax || {};
                 this.options.ajax.url = this.options.vocabularyUrl;
-                // XXX removing the following function does'nt break tests. dead code?
                 this.options.initSelection = ($el, callback) => {
                     const data = [];
                     const value = $el.val();
                     for (const val of value.split(this.options.separator)) {
+                        if (val === "") {
+                            // Skip empty values, e.g. from an empty input.
+                            continue;
+                        }
                         const _val = utils.removeHTML(val);
                         data.push({ id: _val, text: _val });
                     }
-                    callback(data);
+                    // Select2 v3 expects a single object for single-select
+                    // widgets and an array for multi-select widgets. Passing an
+                    // array to a single select leaves `data.text` undefined and
+                    // the pre-set value is not rendered.
+                    callback(this.options.multiple ? data : data[0] || null);
                 };
             }
 
