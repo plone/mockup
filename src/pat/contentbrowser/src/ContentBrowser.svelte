@@ -536,7 +536,7 @@
                                 in:fly|local={{ duration: 500 }}
                             >
                                 <div class="levelToolbar">
-                                    {#if i == 0 && $config.mode == "browse"}
+                                    {#if i == 0 && levels.length > 1 && $config.mode == "browse"}
                                         <button
                                             type="button"
                                             class="btn btn-link btn-xs ps-0"
@@ -552,7 +552,7 @@
                                     {#if i == levels.length - 1}
                                         {#if level.selectable && !level.showFilter && !previewItem.UID}
                                             <button
-                                                class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                                class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                                 title={_t("select ${level_path}", {
                                                     level_path:
                                                         level.Title || itemId(level),
@@ -562,7 +562,7 @@
                                                     addItem(level)}
                                                 ><svg
                                                     use:resolveIcon={{
-                                                        iconName: "plus",
+                                                        iconName: "check",
                                                     }}
                                                 />
                                                 <span class="select-button-ellipsis"
@@ -734,14 +734,14 @@
                                 <div class="selectLevel me-3">
                                     {#if isSelectable(previewItem)}
                                         <button
-                                            class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                            class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                             title={_t("select ${preview_path}", {
                                                 preview_path: previewItem.Title,
                                             })}
                                             on:click|preventDefault={() =>
                                                 addItem(previewItem)}
                                             ><svg
-                                                use:resolveIcon={{ iconName: "plus" }}
+                                                use:resolveIcon={{ iconName: "check" }}
                                             />
                                             <span class="select-button-ellipsis"
                                                 >{previewItem.Title}</span
@@ -809,10 +809,10 @@
                         <div class="preview" in:fly|local={{ duration: 500 }}>
                             <div class="levelToolbar">
                                 <button
-                                    class="btn btn-xs btn-outline-primary d-flex align-items-center"
+                                    class="btn btn-xs btn-primary d-flex align-items-center ps-1"
                                     title={_t("add selected items")}
                                     on:click|preventDefault={addSelectedItems}
-                                    ><svg use:resolveIcon={{ iconName: "plus" }} />
+                                    ><svg use:resolveIcon={{ iconName: "check" }} />
                                     <span class="select-button-ellipsis"
                                         >{_t("add selected items")}</span
                                     >
@@ -1006,7 +1006,7 @@
 
     .select-button-ellipsis {
         white-space: nowrap;
-        max-width: 150px;
+        max-width: 220px;
         text-overflow: ellipsis;
         overflow: hidden;
     }
