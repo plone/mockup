@@ -365,6 +365,13 @@ rune-based store classes (<code>.svelte.ts</code>) provided to components via
 <code>PATCH</code>/<code>DELETE</code> — so the pattern only needs a context URL and (ideally) the
 portal URL to work. There are <strong>no</strong> custom Plone JSON views and <strong>no</strong>
 add-content menu (adding content is out of scope).</p>
+<p>The standard restapi calls (breadcrumbs, copy/move, delete, reorder, folder
+create) go through the official <strong><code>@plone/client</code></strong> (aurora); the calls the
+current alpha client can't yet express — the sorted/batched listing, workflow
+transitions, rearrange / set-default-page, link integrity, and tus upload —
+stay on the pattern's own minimal <code>fetch</code> layer. See
+<code>docs/upstream-plone-client.md</code> for the upstream fixes that would let the rest
+migrate.</p>
 <p>Sorting a column re-queries the server, so it orders the <strong>whole</strong> result set
 before batching — not just the visible page (the core fix over the legacy
 DataTables sort). Date columns sort on the catalog date index, so they sort as
