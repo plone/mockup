@@ -14,6 +14,7 @@
     import { UploadStore } from "./stores/UploadStore.svelte.ts";
     import { ViewStore } from "./stores/ViewStore.svelte.ts";
     import { ListInteractions } from "./stores/ListInteractions.svelte.ts";
+    import { initPloneClient } from "./api/ploneClient.js";
     import Breadcrumbs from "./components/Breadcrumbs.svelte";
     import Toolbar from "./components/Toolbar.svelte";
     import FilterBar from "./components/FilterBar.svelte";
@@ -66,6 +67,13 @@
         viewActionTypes,
         headerSelector,
     });
+
+    // Shared @plone/client for the standard restapi calls (paste/move/copy,
+    // delete, reorder, breadcrumbs, folder create). Scoped to the portal root so
+    // the api/ layer can hand it portal-relative paths. Must run before any
+    // store issues a request.
+    initPloneClient(config.portalUrl);
+
     const contents = new ContentsStore(config, storageKey);
     const columns = new ColumnsStore(config, storageKey);
     const selection = new SelectionStore(contents);

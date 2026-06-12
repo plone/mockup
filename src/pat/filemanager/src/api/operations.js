@@ -1,8 +1,12 @@
 import { request } from "./client.js";
+import { api, toPath } from "./ploneClient.js";
 
-// Write operations against plone.restapi. All endpoints are stock restapi
-// services (copymove, content delete, ordering/default_page deserializers) —
-// no pat-structure custom JSON views. See spec §3 / §9 for the mapping.
+// Write operations against plone.restapi. Stock restapi services — no
+// pat-structure custom JSON views. The standard copymove / content-delete /
+// ordering calls go through @plone/client; the ones the alpha client can't
+// express yet (default_page, sort/rearrange, arbitrary-field PATCH for
+// tags/properties/rename, link integrity) stay on the native-fetch `request()`.
+// See spec §"hybrid @plone/client" and docs/upstream-plone-client.md.
 
 /** Last path segment of a content url/path (the object id within its parent). */
 export function objId(urlOrPath) {
@@ -23,16 +27,13 @@ export function objId(urlOrPath) {
  * @returns {Promise<Array<{source:string,target:string}>>}
  */
 export function pasteItems({ targetUrl, sources, op }) {
-    const endpoint = op === "cut" ? "@move" : "@copy";
-    return request(`${targetUrl}/${endpoint}`, {
-        method: "POST",
-        body: { source: sources },
-    });
+    const args = { path: toPath(targetUrl), data: { source: sources } };
+    return op === "cut" ? api().moveContent(args) : api().copyContent(args);
 }
 
 /** DELETE a single content item by its url. */
 export function deleteItem(itemUrl) {
-    return request(itemUrl, { method: "DELETE" });
+    return api().deleteContent({ path: toPath(itemUrl) });
 }
 
 /**
@@ -78,7 +79,7 @@ export function checkLinkIntegrity(contextUrl, uids) {
 export function moveItem({ containerUrl, id, delta, subsetIds }) {
     const ordering = { obj_id: id, delta };
     if (subsetIds) ordering.subset_ids = subsetIds;
-    return request(containerUrl, { method: "PATCH", body: { ordering } });
+    return api().updateContent({ path: toPath(containerUrl), data: { ordering } });
 }
 
 /** Set the container's default page to one of its children (by id). */

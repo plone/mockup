@@ -1342,3 +1342,72 @@ header itself (structure-updater is being retired).
 > byline author + last-modified date, description and tab title all track the
 > current folder; deep-URL reload keeps the server header; rapid clicks don't
 > strand a stale header) is pending on the running dev server.
+
+## 30. Hybrid `@plone/client` adoption (done)
+
+Volto's next major ("aurora") ships `@plone/client` **without** the old
+React/react-query dependency (`2.0.0-alpha.4`: deps axios, zod, query-string,
+debug; the `react` peer is vestigial — nothing imports it), so it is usable in
+this Svelte/Patternslib bundle. The standard restapi calls now go through the
+official client; the calls it can't yet express stay on the native-fetch
+`request()` layer. The filemanager already funnels every call through
+`src/api/*.js`, so this was a contained refactor of that layer — stores and
+components are untouched.
+
+- **`src/api/ploneClient.js`** — one shared client:
+  `initPloneClient(apiPath)` → `PloneClient.initialize({ apiPath, apiSuffix: ""
+  })` (apiPath = portal root; `apiSuffix: ""` hits restapi directly via content
+  negotiation, **no `/++api++`**, matching the prior behaviour). `client()`
+  accessor; `toPath(url)` → portal-relative path (services build their own
+  `@id`/`@move`/`@breadcrumbs` subpaths off it); `unwrap(promise)` returns the
+  axios `.data` on success and **translates the client's `{status, data,
+  location}` rejection into a `RestapiError`** (reused from `client.js`) so
+  callers keep seeing `.message`/`.status`/`.body`. **`api()`** wraps the client
+  in a Proxy that routes every service method through `unwrap` and applies it on
+  the underlying instance (the services read `this.config`), so call sites are
+  simply `api().deleteContent({path})` — no per-call adapter. `App.svelte` calls
+  `initPloneClient(config.portalUrl)` before any store runs.
+
+- **Migrated (verified-clean shapes):** `fetchBreadcrumbs` → `getBreadcrumbs`;
+  `pasteItems` → `moveContent`/`copyContent` (`{path, data:{source}}`);
+  `deleteItem` → `deleteContent`; `moveItem` → `updateContent` with `{ordering}`
+  (incl. `subset_ids`, which the schema supports); `createFolder` →
+  `createContent` (`{@type, title}`) — all via `api()`.
+
+- **Kept custom (the alpha client can't express these yet):** the listing
+  (`contents.js` — `querystringSearch` drops `sort_on`/`b_size`/`b_start`/
+  `metadata_fields` and is root-scoped); workflow transitions (`createWorkflow`
+  hardcodes `/@workflow/publish`); `rearrangeFolder` (`sort`) and
+  `setDefaultPage` (`default_page`) — stripped by the update allowlist;
+  `patchItem`/`patchItems` (tags/properties/rename — arbitrary fields risk being
+  stripped); `checkLinkIntegrity` (root + single-`uids`); and tus upload
+  (`uploadFileTus`/`uploadFilePost` — no service). These keep `request()`; the
+  two transports coexist by design.
+
+- **Upstream path.** The four wrapper gaps are small and the endpoints/schemas
+  already mostly support them — ready-to-submit diffs + PR descriptions live in
+  `docs/upstream-plone-client.md`. Once released, the matching `api/*` internals
+  migrate (leaving only tus custom).
+
+- **Bundle.** Because the pattern is dynamically imported, webpack puts
+  `@plone/client` + axios + zod into the **lazily-loaded filemanager chunk**;
+  the core `bundle.min.js` is essentially unchanged (~+2 KiB).
+
+- **Auth.** axios same-origin requests carry the Plone session cookie (no
+  `withCredentials` needed same-origin); restapi services are CSRF-exempt, so
+  `@move`/`@copy`/`DELETE`/`PATCH`/`POST` work without `_authenticator`. This is
+  the key thing to confirm in the live smoke test.
+
+- **Tests.** `src/api/ploneClient.test.js` (init/`toPath`/`unwrap` + error
+  mapping); `operations`/`breadcrumbs`/`upload` tests updated to mock
+  `./ploneClient.js` and assert the client is called with the right
+  `{path, data}`. A jest manual mock at `src/__mocks__/@plone/client.js`
+  auto-stubs the package (its CJS build pulls in ESM-only `query-string` that
+  jest can't load); the real client runs in the webpack build + manual smoke.
+  Full filemanager suite green; dev build compiles.
+
+> Manual UI verification (paste cut/copy, drag-into-folder, move-to-parent,
+> delete, drag-reorder with subset, drop-a-folder → folder create — all via the
+> client, against live Plone with session-cookie auth; plus the still-custom
+> listing/workflow/rearrange/set-default-page/tus paths) is pending on the dev
+> server.
