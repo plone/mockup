@@ -33,38 +33,47 @@ describe("1 - AutoTOC", function () {
         document.body.innerHTML = "";
     });
     it("by default creates TOC from h1/h2/h3", async function () {
-        expect(document.querySelectorAll("nav").length).toEqual(0);
+        expect(document.querySelectorAll(".nav").length).toEqual(0);
 
         registry.scan(document.body);
         await utils.timeout(1);
 
-        expect(document.querySelectorAll("nav").length).toEqual(1);
-        expect(document.querySelectorAll("nav > a").length).toEqual(9);
-        expect(document.querySelectorAll("nav > a.autotoc-level-1").length).toEqual(4);
-        expect(document.querySelectorAll("nav > a.autotoc-level-2").length).toEqual(4);
-        expect(document.querySelectorAll("nav > a.autotoc-level-3").length).toEqual(1);
-        expect(document.querySelectorAll("nav > a.autotoc-level-4").length).toEqual(0);
+        expect(document.querySelectorAll(".nav").length).toEqual(1);
+        expect(document.querySelectorAll(".nav > li > a").length).toEqual(9);
+        expect(
+            document.querySelectorAll(".nav > li > a.autotoc-level-1").length
+        ).toEqual(4);
+        expect(
+            document.querySelectorAll(".nav > li > a.autotoc-level-2").length
+        ).toEqual(4);
+        expect(
+            document.querySelectorAll(".nav > li > a.autotoc-level-3").length
+        ).toEqual(1);
+        expect(
+            document.querySelectorAll(".nav > li > a.autotoc-level-4").length
+        ).toEqual(0);
     });
     it("sets href and id", async () => {
         registry.scan(document.body);
         await utils.timeout(1);
 
-        expect(document.querySelectorAll("nav > a")[0].getAttribute("id")).toEqual(
+        const firstTab = document.querySelectorAll(".nav > li > a")[0]
+        expect(firstTab.getAttribute("id")).toEqual(
             "autotoc-item-autotoc-0"
         );
-        expect(document.querySelectorAll("nav > a")[0].getAttribute("href")).toEqual(
-            "#autotoc-item-autotoc-0"
-        );
+        expect(
+            firstTab.getAttribute("data-bs-target")
+        ).toEqual("#autotoc-item-autotoc-0-pane");
     });
     it("can have custom levels", async function () {
         this.$el.attr("data-pat-autotoc", "levels: h1");
-        expect($("> nav", this.$el).length).toEqual(0);
+        expect($("> .nav", this.$el).length).toEqual(0);
         registry.scan(this.$el);
         await utils.timeout(1);
 
         expect($("> nav", this.$el).length).toEqual(1);
-        expect($("> nav > a.autotoc-level-1", this.$el).length).toEqual(4);
-        expect($("> nav > a.autotoc-level-2", this.$el).length).toEqual(0);
+        expect($("> nav > ul > li > a.autotoc-level-1", this.$el).length).toEqual(4);
+        expect($("> nav > ul > li > a.autotoc-level-2", this.$el).length).toEqual(0);
     });
     it("can be appended anywhere", async function () {
         this.$el.attr("data-pat-autotoc", "levels: h1;appendTo:.placeholder");
@@ -78,21 +87,22 @@ describe("1 - AutoTOC", function () {
         expect($("div.placeholder", this.$el).children().eq(0).attr("id")).toEqual(
             "first-elem"
         );
-        expect($("div.placeholder", this.$el).children().eq(1).attr("class")).toEqual(
-            "autotoc-nav"
-        );
+        expect(
+            $("div.placeholder", this.$el).children().eq(1).find("ul").attr("class")
+        ).toContain("autotoc-nav nav flex-column");
+
     });
     it("can be prepended anywhere", async function () {
         this.$el.attr("data-pat-autotoc", "levels: h1;prependTo:.placeholder");
-        expect($("> nav", this.$el).length).toEqual(0);
-        expect($("div.placeholder > nav", this.$el).length).toEqual(0);
+        expect($("> .nav", this.$el).length).toEqual(0);
+        expect($("div.placeholder > .nav", this.$el).length).toEqual(0);
         registry.scan(this.$el);
         await utils.timeout(1);
 
-        expect($("> nav", this.$el).length).toEqual(0);
+        expect($("> .nav", this.$el).length).toEqual(0);
         expect($("div.placeholder > nav", this.$el).length).toEqual(1);
-        expect($("div.placeholder", this.$el).children().eq(0).attr("class")).toEqual(
-            "autotoc-nav"
+        expect($("div.placeholder", this.$el).children().eq(0).find("ul").attr("class")).toContain(
+            "autotoc-nav nav flex-column"
         );
         expect($("div.placeholder", this.$el).children().eq(1).attr("id")).toEqual(
             "first-elem"
@@ -102,7 +112,7 @@ describe("1 - AutoTOC", function () {
         registry.scan(this.$el);
         await utils.timeout(1);
 
-        expect($("> nav > a.active", this.$el).text()).toEqual("Title 1");
+        expect($("> nav > ul > li > a.active", this.$el).text()).toEqual("Title 1");
     });
     it("the first element with `classActiveName` will be the active", async function () {
         $("h1:eq(1)", this.$el).addClass("active");
@@ -111,7 +121,7 @@ describe("1 - AutoTOC", function () {
         registry.scan(this.$el);
         await utils.timeout(1);
 
-        expect($("> nav > a.active", this.$el).text()).toEqual("Title 2");
+        expect($("> nav > ul > li > a.active", this.$el).text()).toEqual("Title 2");
     });
     it("custom className", async function () {
         this.$el.attr("data-pat-autotoc", "className:SOMETHING");
