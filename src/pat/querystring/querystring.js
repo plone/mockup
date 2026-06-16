@@ -111,9 +111,15 @@ Criteria.prototype = {
             width: self.options.indexWidth,
             placeholder: _t("Select criteria"),
         });
-        self.$index.on("change", function (e) {
+        self.$index.on("change", function () {
+            // Read the value from the element rather than from the event's
+            // `val` property. Select2 v3 fires a jQuery `change` event carrying
+            // a `val` property, but pat-select2 also re-dispatches a native
+            // `change` event (for native listeners), which jQuery's `change`
+            // handler catches as well. On that second invocation `e.val` would
+            // be undefined. Reading `self.$index.val()` is correct in both cases.
             self.removeValue();
-            self.createOperator(e.val);
+            self.createOperator(self.$index.val());
             self.createClear();
             self.trigger("index-changed");
         });
