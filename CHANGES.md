@@ -2,6 +2,19 @@
 
 
 
+## [5.6.7](https://github.com/plone/mockup/compare/5.6.6...5.6.7) (2026-06-16)
+
+### Bug Fixes
+
+
+* **modal:** title extraction method (jquery removed .context) ([f36a28e](https://github.com/plone/mockup/commit/f36a28e58d2596b847facc1db5d8e62e2855184e))
+
+
+### Maintenance
+
+
+* **bundle:** update release-it config for maintenance branch ([8b30efd](https://github.com/plone/mockup/commit/8b30efd832bfc8608501dc09f18e57858f5468a5))
+
 ## [5.6.6](https://github.com/plone/mockup/compare/5.6.5...5.6.6) (2026-06-08)
 
 ### Bug Fixes
