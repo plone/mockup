@@ -16,12 +16,12 @@ describe("formatDate", () => {
         expect(formatDate(PAST)).not.toBe("");
     });
 
-    it("respects the document language (de)", () => {
+    it("respects the document language (es)", () => {
         const originalLang = document.documentElement.lang;
-        document.documentElement.lang = "de";
+        document.documentElement.lang = "es";
         const formatted = formatDate(PAST);
-        // "Jan." is the short month in German for January (January 1st, 2020)
-        expect(formatted).toContain("Jan.");
+        // "ene" is the short month in Spanish for January (January 1st, 2020)
+        expect(formatted).toContain("ene");
         document.documentElement.lang = originalLang;
     });
 
