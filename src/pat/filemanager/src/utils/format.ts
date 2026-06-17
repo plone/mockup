@@ -19,13 +19,19 @@ export function getLang(): string {
 export function formatDate(value: unknown): string {
     const date = parseDate(value);
     if (!date) return "";
-    return new Intl.DateTimeFormat(getLang(), {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    }).format(date);
+    const lang = getLang();
+    try {
+        return new Intl.DateTimeFormat(lang, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }).format(date);
+    } catch (e) {
+        console.error(`Error formatting date for locale "${lang}":`, e);
+        return date.toLocaleString(); // Fallback
+    }
 }
 
 /**
