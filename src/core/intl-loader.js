@@ -24,18 +24,25 @@ export async function ensureIntlSupport(lang) {
 
     console.info(`Locale "${normalizedLang}" not supported. Loading polyfill...`);
 
-    // Load polyfill core if needed
-    if (typeof Intl === "undefined" || !Intl.DateTimeFormat) {
-        await import("@formatjs/intl-datetimeformat/polyfill.js");
+    // Load polyfill core if native support is missing for this locale.
+    try {
+        // Use polyfill-force to ensure we get a version that supports adding locale data,
+        // as native versions might not have the hooks for the locale-data files.
+        await import("@formatjs/intl-datetimeformat/polyfill-force.js");
+    } catch (e) {
+        console.error("Failed to load Intl polyfill core", e);
     }
 
     // Load specific locale data via Webpack dynamic chunk.
-    // Note: We use the base language (e.g., 'eu' from 'eu_ES') as most
-    // polyfills are grouped by base language.
-    // We use a relative path to node_modules to bypass problematic package exports
-    // that confuse Webpack 5 when using dynamic imports with template strings.
     try {
-        await import(`../../node_modules/@formatjs/intl-datetimeformat/locale-data/${baseLang}.js`);
+        // Use the package name with explicit .js extension.
+        // We have an alias in webpack.config.js to help resolve this path correctly
+        // without triggering package export warnings in Webpack 5.
+        await import(`@formatjs/intl-datetimeformat/locale-data/${baseLang}.js`);
+
+        if (Intl.DateTimeFormat.supportedLocalesOf(normalizedLang).length > 0) {
+            console.info(`Locale "${normalizedLang}" is now supported.`);
+        }
     } catch (e) {
         console.warn(`Could not load Intl data for ${baseLang}`, e);
     }
