@@ -11,7 +11,7 @@ function parseDate(value: unknown): Date | null {
 }
 
 /** Detect the current UI language from the <html> tag, normalized for Intl. */
-function getLang(): string {
+export function getLang(): string {
     if (typeof document === "undefined") return "en";
     return (document.documentElement.lang || "en").replace("_", "-");
 }

@@ -1,9 +1,10 @@
 <script>
     import utils from "@patternslib/patternslib/src/core/utils";
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import * as animateScroll from "svelte-scrollto";
     import { fly } from "svelte/transition";
     import _t from "../../../core/i18n-wrapper";
+    import { ensureIntlSupport } from "../../../core/intl-loader";
     import Upload from "../../upload/upload";
     import contentStore from "./ContentStore";
     import {
@@ -471,6 +472,11 @@
             },
         };
     }
+
+    onMount(async () => {
+        const lang = document.documentElement.lang || "en";
+        await ensureIntlSupport(lang);
+    });
 
     $effect(() => {
         if ($showContentBrowser) {

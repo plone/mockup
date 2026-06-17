@@ -1,4 +1,5 @@
 import Base from "@patternslib/patternslib/src/core/base";
+import { ensureIntlSupport } from "../../core/intl-loader";
 
 export default Base.extend({
     name: "structure",
@@ -150,6 +151,8 @@ export default Base.extend({
         this.options.pattern = this;
         this.options.language =
             document.querySelector("html").getAttribute("lang") || "en";
+
+        await ensureIntlSupport(this.options.language);
 
         // the ``attributes`` options key is not compatible with backbone,
         // but queryHelper that will be constructed by the default

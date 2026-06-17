@@ -1,6 +1,8 @@
 <script>
     import { onMount, setContext } from "svelte";
     import logger from "@patternslib/patternslib/src/core/logging";
+    import { ensureIntlSupport } from "../../../core/intl-loader";
+    import { getLang } from "./utils/format.ts";
     import { ConfigStore } from "./stores/ConfigStore.svelte.ts";
     import { ContentsStore } from "./stores/ContentsStore.svelte.ts";
     import { ColumnsStore } from "./stores/ColumnsStore.svelte.ts";
@@ -118,7 +120,8 @@
 
     let isRestoringHistory = false;
 
-    onMount(() => {
+    onMount(async () => {
+        await ensureIntlSupport(getLang());
         contents.load();
 
         function onPopState(event) {

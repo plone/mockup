@@ -15,6 +15,9 @@ importers:
       '@11ty/eleventy-upgrade-help':
         specifier: 3.0.2
         version: 3.0.2(posthtml@0.16.7)
+      '@formatjs/intl-datetimeformat':
+        specifier: ^7.4.9
+        version: 7.4.9
       '@patternslib/pat-code-editor':
         specifier: 4.0.1
         version: 4.0.1
@@ -989,6 +992,18 @@ packages:
   '@eslint/plugin-kit@0.7.2':
     resolution: {integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@formatjs/bigdecimal@0.2.6':
+    resolution: {integrity: sha512-aPzKsGQOkQRHUEbyO/ZtYfr4EqaBQnSs6U4tzTla1xBnIdEHgY2GqEqso28UMwWRkzKqqTj5+/6BmuOsRkfn2A==}
+
+  '@formatjs/fast-memoize@3.1.6':
+    resolution: {integrity: sha512-H5aexk1Le7T9TPmscacZ+1pR6CTa2n1wq+HDVGXhH8TzUlQQpeXzZs91dRtmFHrbeNbjPFPfQujUqm7MHgVoXQ==}
+
+  '@formatjs/intl-datetimeformat@7.4.9':
+    resolution: {integrity: sha512-dpGGhYrAq+3X0ME9V161qCgQcaY1IGhKUR6y58mep53qd3sg86ai+WkjlLbP0Hr2TFpPU9Z+i4oCxh1RUvW6mA==}
+
+  '@formatjs/intl-localematcher@0.8.10':
+    resolution: {integrity: sha512-P/IC3qws3jH+1fEs+o0RIFgXKRaQlFehjS5W0FPAqdo6hgzawLl+eD0q0JjheQ3XtoOe5n8WSYfX06KQZI/QJA==}
 
   '@fullcalendar/adaptive@5.11.5':
     resolution: {integrity: sha512-yGXS7u1EOKyNdNuwepDEgh2e52jaxYu9D8A4ptdKEPtBMqdStShMp/4NNN8QEJJr50a5qdJTZRA8q1HAdq2USQ==}
@@ -6899,6 +6914,19 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@formatjs/bigdecimal@0.2.6': {}
+
+  '@formatjs/fast-memoize@3.1.6': {}
+
+  '@formatjs/intl-datetimeformat@7.4.9':
+    dependencies:
+      '@formatjs/bigdecimal': 0.2.6
+      '@formatjs/intl-localematcher': 0.8.10
+
+  '@formatjs/intl-localematcher@0.8.10':
+    dependencies:
+      '@formatjs/fast-memoize': 3.1.6
 
   '@fullcalendar/adaptive@5.11.5':
     dependencies:
