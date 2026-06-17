@@ -18,7 +18,7 @@ export async function ensureIntlSupport(lang) {
         ) {
             return;
         }
-    } catch (e) {
+    } catch {
         // Fall through to loading polyfill if supportedLocalesOf fails
     }
 
