@@ -15,6 +15,24 @@ describe("formatDate", () => {
     it("formats a real date string", () => {
         expect(formatDate(PAST)).not.toBe("");
     });
+
+    it("respects the document language (es)", () => {
+        const originalLang = document.documentElement.lang;
+        document.documentElement.lang = "es";
+        const formatted = formatDate(PAST);
+        // "ene" is the short month in Spanish for January (January 1st, 2020)
+        expect(formatted).toContain("ene");
+        document.documentElement.lang = originalLang;
+    });
+
+    it("respects the document language (en)", () => {
+        const originalLang = document.documentElement.lang;
+        document.documentElement.lang = "en";
+        const formatted = formatDate(PAST);
+        // "Jan" is the short month in English for January
+        expect(formatted).toContain("Jan");
+        document.documentElement.lang = originalLang;
+    });
 });
 
 describe("formatSize", () => {

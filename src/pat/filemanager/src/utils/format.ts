@@ -10,10 +10,16 @@ function parseDate(value: unknown): Date | null {
     return Number.isNaN(date.getTime()) ? null : date;
 }
 
+/** Detect the current UI language from the <html> tag, normalized for Intl. */
+function getLang(): string {
+    if (typeof document === "undefined") return "en";
+    return (document.documentElement.lang || "en").replace("_", "-");
+}
+
 export function formatDate(value: unknown): string {
     const date = parseDate(value);
     if (!date) return "";
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(getLang(), {
         year: "numeric",
         month: "short",
         day: "numeric",
