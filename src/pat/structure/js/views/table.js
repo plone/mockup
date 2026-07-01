@@ -1,7 +1,6 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
-import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 import BaseView from "../../../../core/ui/views/base";
 import TableRowView from "./tablerow";
@@ -125,10 +124,8 @@ export default BaseView.extend({
         if (this.collection.length) {
             const container = $("tbody", this.$el);
 
-            const collection_length = this.collection.length;
-            let collection_cnt = 0;
-
-            this.collection.each(async (result) => {
+            // Create one row view per result, keeping the collection order.
+            const rowViews = this.collection.map((result) => {
                 this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
                     if (
@@ -139,41 +136,22 @@ export default BaseView.extend({
                     }
                 });
 
-                const view = new TableRowView({
+                return new TableRowView({
                     model: result,
                     app: this.app,
                     table: this,
                 });
-                await view.render();
-                container.append(view.el);
-
-                // Throw the ``table_row_rendering_finished`` event after all table rows have finished rendering.
-                collection_cnt++;
-                if (collection_cnt === collection_length) {
-                    this.el.dispatchEvent(new Event("table_row_rendering_finished"));
-                }
             });
 
-            // NOTE: this is based on the concept of awaiting an event.
-            // See this Stackoverflow answer here:
+            // Render all rows in parallel (row rendering is async because of
+            // icon resolution), but wait for all of them to finish before
+            // appending. Appending in ``rowViews`` order guarantees the DOM
+            // order matches the collection order – otherwise rows would be
+            // appended in the arbitrary order their async render resolves,
+            // which corrupts the sorting.
+            await Promise.all(rowViews.map((view) => view.render()));
+            rowViews.forEach((view) => container.append(view.el));
 
-            // https://stackoverflow.com/a/44746691/1337474
-            // When the last table row has finished rendering, throw an event.
-            // For this "table_row_rendering_finished" event we're a-waiting for.
-            // And after that we can scan the table.
-            const table_row_rendering_finished = () =>
-                new Promise((resolve) =>
-                    events.add_event_listener(
-                        this.el,
-                        "table_row_rendering_finished",
-                        "table_row_rendering_finished__listener",
-                        resolve,
-                        { once: true }
-                    )
-                );
-
-            await table_row_rendering_finished();
-            events.remove_event_listener = (this.el, "table_row_rendering_finished__listener"); // prettier-ignore
             registry.scan(this.$el);
 
             // Set the context (again) after rerendering. If render was called after a collection sync – which is the
