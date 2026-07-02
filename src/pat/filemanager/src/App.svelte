@@ -122,6 +122,24 @@
 
     onMount(async () => {
         await ensureIntlSupport(getLang());
+    });
+    
+    onMount(() => {
+        contents.load();
+
+        function onPopState(event) {
+            const ctx = event.state?.contextUrl;
+            if (ctx && ctx !== contents.contextUrl) {
+                isRestoringHistory = true;
+                contents.navigateTo(ctx).finally(() => {
+                    isRestoringHistory = false;
+                });
+            }
+        }
+        window.addEventListener("popstate", onPopState);
+        return () => window.removeEventListener("popstate", onPopState);
+    });
+        await ensureIntlSupport(getLang());
         contents.load();
 
         function onPopState(event) {
