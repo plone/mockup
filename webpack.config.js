@@ -166,6 +166,13 @@ module.exports = () => {
         extensions: [".js", ".ts", ".json", ".wasm", ".svelte"],
         mainFields: ["browser", "module", "main"],
         conditionNames: ["svelte", "browser", "require"],
+        alias: {
+            ...config.resolve.alias,
+            "@formatjs/intl-datetimeformat/locale-data": path.resolve(
+                __dirname,
+                "node_modules/@formatjs/intl-datetimeformat/locale-data"
+            ),
+        },
     };
 
     // NOTE: above doesn't work.

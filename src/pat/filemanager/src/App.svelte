@@ -1,6 +1,8 @@
 <script>
     import { onMount, setContext } from "svelte";
     import logger from "@patternslib/patternslib/src/core/logging";
+    import { ensureIntlSupport } from "../../../core/intl-loader";
+    import { getLang } from "./utils/format.ts";
     import { ConfigStore } from "./stores/ConfigStore.svelte.ts";
     import { ContentsStore } from "./stores/ContentsStore.svelte.ts";
     import { ColumnsStore } from "./stores/ColumnsStore.svelte.ts";
@@ -117,6 +119,14 @@
     history.replaceState({ contextUrl: contents.contextUrl }, "");
 
     let isRestoringHistory = false;
+
+    // Lazily load Intl polyfills for the site language. Kept in its own
+    // async onMount so the listener-owning onMount below can stay synchronous
+    // and return its cleanup function (an async onMount returns a Promise,
+    // which Svelte ignores, leaking the listener).
+    onMount(async () => {
+        await ensureIntlSupport(getLang());
+    });
 
     onMount(() => {
         contents.load();

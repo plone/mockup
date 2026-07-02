@@ -12,6 +12,7 @@
     "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916",
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "3.0.2",
+        "@formatjs/intl-datetimeformat": "^7.4.9",
         "@patternslib/pat-code-editor": "4.0.1",
         "@patternslib/patternslib": "9.10.6",
         "@plone/registry": "^2.7.2",
