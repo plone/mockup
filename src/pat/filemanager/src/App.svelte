@@ -120,44 +120,15 @@
 
     let isRestoringHistory = false;
 
+    // Lazily load Intl polyfills for the site language. Kept in its own
+    // async onMount so the listener-owning onMount below can stay synchronous
+    // and return its cleanup function (an async onMount returns a Promise,
+    // which Svelte ignores, leaking the listener).
     onMount(async () => {
         await ensureIntlSupport(getLang());
     });
-    
-    onMount(() => {
-        contents.load();
 
-        function onPopState(event) {
-            const ctx = event.state?.contextUrl;
-            if (ctx && ctx !== contents.contextUrl) {
-                isRestoringHistory = true;
-                contents.navigateTo(ctx).finally(() => {
-                    isRestoringHistory = false;
-                });
-            }
-        }
-        window.addEventListener("popstate", onPopState);
-        return () => window.removeEventListener("popstate", onPopState);
-    });
-        await ensureIntlSupport(getLang());
-    });
-    
     onMount(() => {
-        contents.load();
-
-        function onPopState(event) {
-            const ctx = event.state?.contextUrl;
-            if (ctx && ctx !== contents.contextUrl) {
-                isRestoringHistory = true;
-                contents.navigateTo(ctx).finally(() => {
-                    isRestoringHistory = false;
-                });
-            }
-        }
-        window.addEventListener("popstate", onPopState);
-        return () => window.removeEventListener("popstate", onPopState);
-    });
-        await ensureIntlSupport(getLang());
         contents.load();
 
         function onPopState(event) {
