@@ -4,7 +4,6 @@ import Base from "@patternslib/patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
 import registry from "@patternslib/patternslib/src/core/registry";
-import Select2 from "../select2/select2";
 
 const KEY = {
     LEFT: 37,
@@ -501,6 +500,9 @@ export default Base.extend({
     },
 
     async init() {
+        // select2 methods are borrowed onto this instance; load them lazily so
+        // the select2 body stays out of the eager patterns chunk.
+        this._select2 = (await import("../select2/select2--implementation")).default;
         (await import("bootstrap")).Dropdown;
         import("./relateditems.scss");
 
@@ -525,8 +527,8 @@ export default Base.extend({
         this.$el.wrap('<div class="pat-relateditems-container" />');
         this.$container = this.$el.parents(".pat-relateditems-container");
 
-        Select2.prototype.initializeValues.call(this);
-        Select2.prototype.initializeTags.call(this);
+        this._select2.initializeValues.call(this);
+        this._select2.initializeTags.call(this);
 
         this.options.formatSelection = (item) => {
             item = $.extend(
@@ -674,8 +676,8 @@ export default Base.extend({
 
         this.options.id = (item) => item.UID;
 
-        await Select2.prototype.initializeSelect2.call(this);
-        await Select2.prototype.initializeOrdering.call(this);
+        await this._select2.initializeSelect2.call(this);
+        await this._select2.initializeOrdering.call(this);
 
         this.$toolbar = $('<div class="toolbar d-flex" />');
         this.$container.prepend(this.$toolbar);
@@ -697,7 +699,7 @@ export default Base.extend({
         });
 
         $(document).on("keyup", this.$el, (event) => {
-            const isOpen = Select2.prototype.opened.call(this);
+            const isOpen = this._select2.opened.call(this);
             if (!isOpen) {
                 return;
             }
