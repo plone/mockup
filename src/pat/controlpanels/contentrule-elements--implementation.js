@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Modal from "../modal/modal";
+import Modal from "../modal/modal--implementation";
 
 export default class Contentrules {
     constructor(el) {

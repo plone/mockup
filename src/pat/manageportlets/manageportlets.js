@@ -1,5 +1,4 @@
 import $ from "jquery";
-import Modal from "../modal/modal";
 import Base from "@patternslib/patternslib/src/core/base";
 import logger from "@patternslib/patternslib/src/core/logging";
 import utils from "../../core/utils";
@@ -109,8 +108,11 @@ export default Base.extend({
             $message.fadeTo(500, 0.6);
         }, 3000);
     },
-    showEditPortlet: function (url) {
+    showEditPortlet: async function (url) {
         log.info("show edit portlet in modal");
+        // manageportlets is registered eagerly, so it loads the modal
+        // implementation on demand to keep it out of the eager bundle.
+        const Modal = (await import("../modal/modal--implementation")).default;
         var that = this;
         var $a = $("<a/>");
         $("body").append($a);
