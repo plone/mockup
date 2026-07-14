@@ -2,6 +2,35 @@
 
 
 
+## [5.6.8](https://github.com/plone/mockup/compare/5.6.7...5.6.8) (2026-07-14)
+
+### Bug Fixes
+
+
+* **pat-structure:** keep table rows in collection order ([c59a3fd](https://github.com/plone/mockup/commit/c59a3fd2532e37659a1eec94e2917206b7f2a91c))
+
+  The table row rendering iterated the collection with an async callback
+(`collection.each(async ...)`) that appended each row only after awaiting
+`view.render()`. Row rendering is async (it awaits icon resolution), so
+rows were appended in the arbitrary order their render promises resolved
+rather than in collection order, corrupting the sort order of the folder
+contents.
+
+This stayed hidden until 5.6.0: DataTables was initialized with
+`order: [0, "asc"]`, which re-sorted the rows by the hidden `_sort`
+column (the server order index) on every draw and thus masked the race.
+Commit 57cd7dd ("Fix ordering logic.") changed this to `order: []`,
+removing the safety net and exposing the underlying bug.
+
+Fix the root cause: build the row views in collection order, render them
+all in parallel via `Promise.all`, then append them in order. This
+guarantees the DOM order matches the collection order regardless of the
+DataTables ordering settings. The now-obsolete
+`table_row_rendering_finished` event dance and its `events` import are
+removed.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [5.6.7](https://github.com/plone/mockup/compare/5.6.6...5.6.7) (2026-06-16)
 
 ### Bug Fixes
