@@ -401,7 +401,7 @@ export default Base.extend({
     },
 
     async initUploadView(disabled) {
-        let Upload = await import("../upload/upload");
+        let Upload = await import("../upload/upload--implementation");
         Upload = Upload.default;
 
         const upload_button = this.$toolbar[0].querySelector(".upload button");
