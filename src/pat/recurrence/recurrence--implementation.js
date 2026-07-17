@@ -3,7 +3,7 @@ import _ from "underscore";
 import DisplayTemplate from "./templates/display.xml";
 import FormTemplate from "./templates/form.xml";
 import OccurrenceTemplate from "./templates/occurrence.xml";
-import Modal from "../modal/modal";
+import Modal from "../modal/modal--implementation";
 import utils from "../../core/utils";
 
 // Formatting function (mostly) from jQueryTools dateinput
