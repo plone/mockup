@@ -1,12 +1,16 @@
 import Base from "@patternslib/patternslib/src/core/base";
 import events from "@patternslib/patternslib/src/core/events";
-import registry from "@patternslib/patternslib/src/core/registry";
+import mockupParser from "@patternslib/patternslib/src/core/mockup-parser";
 import $ from "jquery";
 import _ from "underscore";
 
 import tinymce from "tinymce/tinymce";
 import "../../autotoc/autotoc";
-import "../../modal/modal";
+// The full modal implementation, not the thin registration module: the modal
+// instance is used synchronously (show() right after construction), so its
+// methods must live on the prototype. This module is only reached via the
+// lazily-loaded tinymce implementation, so it stays out of the eager bundle.
+import Modal from "../../modal/modal--implementation";
 import ImageTemplate from "../templates/image.xml";
 import LinkTemplate from "../templates/link.xml";
 
@@ -408,21 +412,29 @@ export default Base.extend({
         this.dom = this.tiny.dom;
         this.linkType = this.options.initialLinkType;
         this.linkTypes = {};
-        this.modal = registry.patterns["plone-modal"].init(this.$el, {
-            html: this.generateModalHtml(),
-            content: null,
-            buttons: ".plone-btn",
-            reloadWindowOnClose: false,
-            templateOptions: {
-                classDialog: "modal-dialog modal-lg",
+        // Construct the implementation class directly — its static init()
+        // (like registry.patterns["plone-modal"].init) would instantiate the
+        // registered thin pattern, whose methods only appear after an async
+        // graft, while show() is called synchronously right after this.
+        // mockupParser reproduces the option parsing of the registry path.
+        this.modal = new Modal(
+            this.$el,
+            mockupParser.getOptions(this.$el, "plone-modal", {
+                html: this.generateModalHtml(),
+                content: null,
+                buttons: ".plone-btn",
                 reloadWindowOnClose: false,
-            },
-            actionOptions: { reloadWindowOnClose: false },
-            backdropOptions: {
-                zIndex: "1340",
-                closeOnClick: false,
-            },
-        });
+                templateOptions: {
+                    classDialog: "modal-dialog modal-lg",
+                    reloadWindowOnClose: false,
+                },
+                actionOptions: { reloadWindowOnClose: false },
+                backdropOptions: {
+                    zIndex: "1340",
+                    closeOnClick: false,
+                },
+            })
+        );
         this.modal.on("shown", (e) => {
             this.modalShown.apply(this, [e]);
         });
