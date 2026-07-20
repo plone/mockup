@@ -1,6 +1,7 @@
 import { TextEncoder } from "util";
 import { uploadFileTus, uploadFilePost, uploadFile, createFolder } from "./upload.js";
 import { request } from "./client.js";
+import { api } from "./ploneClient.js";
 
 // jsdom does not expose TextEncoder (browsers and Node do); polyfill it so the
 // tus Upload-Metadata base64 encoding runs.
@@ -10,7 +11,19 @@ if (typeof global.TextEncoder === "undefined") {
 
 jest.mock("./client.js", () => ({ request: jest.fn() }));
 
+// createFolder now goes through @plone/client createContent (via the api()
+// proxy, which resolves to the body); tus + base64 POST fallback stay on the
+// native-fetch request()/fetch.
+jest.mock("./ploneClient.js", () => {
+    const stub = { createContent: jest.fn() };
+    return {
+        api: () => stub,
+        toPath: (url) => new URL(url).pathname.replace(/\/+$/, ""),
+    };
+});
+
 const mockedRequest = request;
+const c = api();
 
 /** Minimal Response stand-in with header lookup. */
 function fakeResponse({ ok = true, status = 200, headers = {} } = {}) {
@@ -126,24 +139,21 @@ describe("uploadFile", () => {
 });
 
 describe("createFolder", () => {
-    it("POSTs a Folder with the given title into the parent", async () => {
-        mockedRequest.mockResolvedValueOnce({ "@id": "http://nohost/plone/folder/sub" });
-        const result = await createFolder("http://nohost/plone/folder", {
-            title: "Sub",
+    beforeEach(() => c.createContent.mockReset());
+
+    it("creates a Folder with the given title in the portal-relative parent", async () => {
+        c.createContent.mockResolvedValueOnce({ "@id": "http://nohost/plone/folder/sub" });
+        const result = await createFolder("http://nohost/plone/folder", { title: "Sub" });
+        expect(c.createContent).toHaveBeenCalledWith({
+            path: "/plone/folder",
+            data: { "@type": "Folder", title: "Sub" },
         });
-        expect(mockedRequest.mock.calls[0][0]).toBe("http://nohost/plone/folder");
-        const init = mockedRequest.mock.calls[0][1];
-        expect(init.method).toBe("POST");
-        expect(init.body).toEqual({ "@type": "Folder", title: "Sub" });
         expect(result["@id"]).toBe("http://nohost/plone/folder/sub");
     });
 
     it("honours a custom folder type", async () => {
-        mockedRequest.mockResolvedValueOnce({ "@id": "x" });
-        await createFolder("http://nohost/plone/folder", {
-            title: "Sub",
-            type: "myfolder",
-        });
-        expect(mockedRequest.mock.calls[0][1].body["@type"]).toBe("myfolder");
+        c.createContent.mockResolvedValueOnce({ "@id": "x" });
+        await createFolder("http://nohost/plone/folder", { title: "Sub", type: "myfolder" });
+        expect(c.createContent.mock.calls[0][0].data["@type"]).toBe("myfolder");
     });
 });

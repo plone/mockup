@@ -1,13 +1,14 @@
-import { request } from "./client.js";
+import { api, toPath } from "./ploneClient.js";
 
 /**
- * Fetch the breadcrumb trail for a context via plone.restapi @breadcrumbs.
+ * Fetch the breadcrumb trail for a context via plone.restapi @breadcrumbs
+ * (through @plone/client `getBreadcrumbs`).
  *
  * @param {string} contextUrl - absolute url of the folder
  * @returns {Promise<{items: Array<{"@id": string, title: string}>, root: string|null}>}
  */
 export async function fetchBreadcrumbs(contextUrl) {
-    const data = await request(`${contextUrl}/@breadcrumbs`);
+    const data = await api().getBreadcrumbs({ path: toPath(contextUrl) });
     return {
         items: data?.items || [],
         root: data?.root || null,

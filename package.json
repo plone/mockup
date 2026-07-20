@@ -55,6 +55,7 @@
         "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
         "@babel/preset-typescript": "^7.29.7",
         "@patternslib/dev": "^4.0.0",
+        "@plone/client": "2.0.0-alpha.4",
         "@testing-library/jest-dom": "^6.9.1",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",

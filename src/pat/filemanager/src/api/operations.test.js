@@ -10,14 +10,36 @@ import {
     rearrangeFolder,
 } from "./operations.js";
 import { request } from "./client.js";
+import { api } from "./ploneClient.js";
 
 jest.mock("./client.js", () => ({ request: jest.fn() }));
 
+// pasteItems/deleteItem/moveItem now go through @plone/client via the api()
+// proxy (resolves to the body, throws RestapiError); the rest stay on the
+// native-fetch request(). Mock the proxy with stubbed services.
+jest.mock("./ploneClient.js", () => {
+    const stub = {
+        moveContent: jest.fn(),
+        copyContent: jest.fn(),
+        deleteContent: jest.fn(),
+        updateContent: jest.fn(),
+    };
+    return {
+        api: () => stub,
+        toPath: (url) => new URL(url).pathname.replace(/\/+$/, ""),
+    };
+});
+
 const mockedRequest = request;
+const c = api();
 
 beforeEach(() => {
     mockedRequest.mockReset();
     mockedRequest.mockResolvedValue(null);
+    for (const fn of [c.moveContent, c.copyContent, c.deleteContent, c.updateContent]) {
+        fn.mockReset();
+        fn.mockResolvedValue({});
+    }
 });
 
 describe("objId", () => {
@@ -30,55 +52,53 @@ describe("objId", () => {
 });
 
 describe("pasteItems", () => {
-    it("POSTs to @move for a cut", async () => {
+    it("moveContent for a cut, with portal-relative target path", async () => {
         await pasteItems({
             targetUrl: "http://nohost/plone/target",
             sources: ["http://nohost/plone/a", "http://nohost/plone/b"],
             op: "cut",
         });
-        expect(mockedRequest).toHaveBeenCalledWith("http://nohost/plone/target/@move", {
-            method: "POST",
-            body: { source: ["http://nohost/plone/a", "http://nohost/plone/b"] },
+        expect(c.moveContent).toHaveBeenCalledWith({
+            path: "/plone/target",
+            data: { source: ["http://nohost/plone/a", "http://nohost/plone/b"] },
         });
+        expect(c.copyContent).not.toHaveBeenCalled();
     });
 
-    it("POSTs to @copy for a copy", async () => {
+    it("copyContent for a copy", async () => {
         await pasteItems({
             targetUrl: "http://nohost/plone/target",
             sources: ["http://nohost/plone/a"],
             op: "copy",
         });
-        expect(mockedRequest).toHaveBeenCalledWith("http://nohost/plone/target/@copy", {
-            method: "POST",
-            body: { source: ["http://nohost/plone/a"] },
+        expect(c.copyContent).toHaveBeenCalledWith({
+            path: "/plone/target",
+            data: { source: ["http://nohost/plone/a"] },
         });
+        expect(c.moveContent).not.toHaveBeenCalled();
     });
 });
 
 describe("deleteItem / deleteItems", () => {
-    it("DELETEs a single item url", async () => {
+    it("deleteContent for a single item url", async () => {
         await deleteItem("http://nohost/plone/a");
-        expect(mockedRequest).toHaveBeenCalledWith("http://nohost/plone/a", { method: "DELETE" });
+        expect(c.deleteContent).toHaveBeenCalledWith({ path: "/plone/a" });
     });
 
-    it("DELETEs each item in order", async () => {
+    it("deletes each item in order", async () => {
         await deleteItems(["http://nohost/plone/a", "http://nohost/plone/b"]);
-        expect(mockedRequest).toHaveBeenCalledTimes(2);
-        expect(mockedRequest).toHaveBeenNthCalledWith(1, "http://nohost/plone/a", {
-            method: "DELETE",
-        });
-        expect(mockedRequest).toHaveBeenNthCalledWith(2, "http://nohost/plone/b", {
-            method: "DELETE",
-        });
+        expect(c.deleteContent).toHaveBeenCalledTimes(2);
+        expect(c.deleteContent).toHaveBeenNthCalledWith(1, { path: "/plone/a" });
+        expect(c.deleteContent).toHaveBeenNthCalledWith(2, { path: "/plone/b" });
     });
 });
 
 describe("moveItem", () => {
-    it("PATCHes the container with an ordering payload", async () => {
+    it("updateContent with an ordering payload", async () => {
         await moveItem({ containerUrl: "http://nohost/plone/folder", id: "doc-1", delta: "top" });
-        expect(mockedRequest).toHaveBeenCalledWith("http://nohost/plone/folder", {
-            method: "PATCH",
-            body: { ordering: { obj_id: "doc-1", delta: "top" } },
+        expect(c.updateContent).toHaveBeenCalledWith({
+            path: "/plone/folder",
+            data: { ordering: { obj_id: "doc-1", delta: "top" } },
         });
     });
 
@@ -89,8 +109,8 @@ describe("moveItem", () => {
             delta: 2,
             subsetIds: ["doc-1", "doc-2", "doc-3"],
         });
-        const body = mockedRequest.mock.calls[0][1].body;
-        expect(body.ordering).toEqual({
+        const data = c.updateContent.mock.calls[0][0].data;
+        expect(data.ordering).toEqual({
             obj_id: "doc-1",
             delta: 2,
             subset_ids: ["doc-1", "doc-2", "doc-3"],
