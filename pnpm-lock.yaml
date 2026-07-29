@@ -154,9 +154,6 @@ importers:
       svelte-loader:
         specifier: ^3.2.4
         version: 3.2.4(svelte@5.56.3)
-      svelte-scrollto:
-        specifier: ^0.2.0
-        version: 0.2.0
       svg-inline-loader:
         specifier: ^0.8.2
         version: 0.8.2
@@ -5211,13 +5208,6 @@ packages:
     resolution: {integrity: sha512-e0HdDnkYH/MDx4/IfTSka5AOFg9yYJcPuoZJB5x0l60fkHjVjNvrrxr+rJegDG9J7ZymmdHt00/hdLw+QF299w==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0-next.0 || ^5.0.0-next.1
-
-  svelte-scrollto@0.2.0:
-    resolution: {integrity: sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==}
-
-  svelte@3.59.2:
-    resolution: {integrity: sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==}
-    engines: {node: '>= 8'}
 
   svelte@5.56.3:
     resolution: {integrity: sha512-w7JvrM5IFl5cmfbY0TLik9o7mjRUJmRMhOR51tBPu708Gr/MjbGs7VnJnr/B0CaXeI4vtnOh7RKxDr0cwhMdDA==}
@@ -11532,12 +11522,6 @@ snapshots:
       svelte: 5.56.3
       svelte-dev-helper: 1.1.9
       svelte-hmr: 0.14.12(svelte@5.56.3)
-
-  svelte-scrollto@0.2.0:
-    dependencies:
-      svelte: 3.59.2
-
-  svelte@3.59.2: {}
 
   svelte@5.56.3:
     dependencies:
