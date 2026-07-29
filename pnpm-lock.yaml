@@ -163,9 +163,6 @@ importers:
       svelte-preprocess:
         specifier: ^6.0.5
         version: 6.0.5(@babel/core@7.29.7)(postcss@8.5.15)(sass@1.101.0)(svelte@5.56.3(@typescript-eslint/types@8.57.2))(typescript@6.0.3)
-      svelte-scrollto:
-        specifier: ^0.2.0
-        version: 0.2.0
       svg-inline-loader:
         specifier: ^0.8.2
         version: 0.8.2
@@ -5288,13 +5285,6 @@ packages:
         optional: true
       typescript:
         optional: true
-
-  svelte-scrollto@0.2.0:
-    resolution: {integrity: sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==}
-
-  svelte@3.59.2:
-    resolution: {integrity: sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==}
-    engines: {node: '>= 8'}
 
   svelte@5.56.3:
     resolution: {integrity: sha512-w7JvrM5IFl5cmfbY0TLik9o7mjRUJmRMhOR51tBPu708Gr/MjbGs7VnJnr/B0CaXeI4vtnOh7RKxDr0cwhMdDA==}
@@ -11658,12 +11648,6 @@ snapshots:
       postcss: 8.5.15
       sass: 1.101.0
       typescript: 6.0.3
-
-  svelte-scrollto@0.2.0:
-    dependencies:
-      svelte: 3.59.2
-
-  svelte@3.59.2: {}
 
   svelte@5.56.3(@typescript-eslint/types@8.57.2):
     dependencies:
