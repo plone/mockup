@@ -1,7 +1,6 @@
 <script>
     import utils from "@patternslib/patternslib/src/core/utils";
     import { getContext } from "svelte";
-    import * as animateScroll from "svelte-scrollto";
     import { fly } from "svelte/transition";
     import _t from "../../../core/i18n-wrapper";
     import Upload from "../../upload/upload";
@@ -17,12 +16,6 @@
     } from "./utils";
     import Favorites from "./Favorites.svelte";
     import RecentlyUsed from "./RecentlyUsed.svelte";
-
-    animateScroll.setGlobalOptions({
-        scrollX: true,
-        container: ".levelColumns",
-        duration: 500,
-    });
 
     // get context stores
     const currentPath = getContext("currentPath");
@@ -389,9 +382,9 @@
     function scrollToRight() {
         const scrollContainer = document.querySelector(".levelColumns");
         if (scrollContainer) {
-            animateScroll.scrollTo({
-                // element: ".levelColumn:last-child",
-                x: scrollContainer.scrollWidth + 100,
+            scrollContainer.scrollTo({
+                left: scrollContainer.scrollWidth + 100,
+                behavior: "smooth",
             });
         }
     }

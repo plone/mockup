@@ -36,7 +36,7 @@ Show a widget to select items in an offcanvas miller-column browser.
 | recentlyUsed               | boolean | false                                   | Show the recently used items dropdown.                                                                                                           |
 | recentlyUsedKey            | integer |                                         | Storage key for saving the recently used items. This is generated with fieldname and username in the patternoptions.                             |
 | recentlyUsedMaxItems       | integer | 20                                      | Maximum items to keep in recently used list. 0: no restriction.                                                                                  |
-| customComponentKeys        | dict    | {}                                      | Register custom components. Currently only "SelectedItem" implemented                                                                            |
+| componentRegistryKeys      | dict    | {}                                      | Use custom components registered in the `@plone/registry` component registry. Currently only "selectedItem" is implemented.                      |
 | searchIndex                | string  | "SearchableText"                        | Catalog search index for filtering and search mode. (Note: only ZCTextIndex allowed)                                                             |
 
 
@@ -93,24 +93,25 @@ Show a widget to select items in an offcanvas miller-column browser.
 
 ## Register custom component
 
-Use the `customComponentKeys.selectedItem` configuration value as follows to override the `SelectedItems` compontent (only supported component currently).
+Use the `componentRegistryKeys.selectedItem` configuration value as follows to override the `SelectedItem` component (only supported component currently).
 
 ```html
 <input
     type="text"
     class="pat-contentbrowser"
     data-pat-contentbrowser='{
-        "customComponentKeys": {
-            "SelectedItem": "pat-contentbrowser.myfield.MySelectedItemComponent",
-        },
+        "componentRegistryKeys": {
+            "selectedItem": "pat-contentbrowser.myfield.MySelectedItemComponent"
+        }
     }'
 />
 ```
 
 Copy the existing component `src/SelectedItem.svelte` to your addon, customize it and register it in your JS bundle as follows:
 
-Note: the `name` of the registered component must match the `customComponentKeys.selectedItem` config value defined above.
+Note: the `name` of the registered component must match the `componentRegistryKeys.selectedItem` config value defined above.
 It can be any unique identifier.
+If no custom component is registered for the configured key, the pattern falls back to the default component registered as `pat-contentbrowser.SelectedItem`.
 
 ```javascript
 ...
@@ -133,4 +134,27 @@ register_selecteditem_component();
 ```
 
 Note: this needs the `svelte-loader` plugin in your webpack.config.js ... see mockups `webpack.config.js` for more info.
+
+Your add-on bundle also has to share the Svelte runtime via module federation, so that your component runs on the same runtime instance as the Plone bundle.
+Add the same `svelte` and `svelte/` shared entries as in mockups `webpack.config.js` to your module federation config:
+
+```javascript
+mf_config({
+    name: package_json.name,
+    remote_entry: config.entry["mybundle.min"],
+    dependencies: {
+        ...package_json.dependencies,
+    },
+    shared: {
+        svelte: {
+            singleton: true,
+            requiredVersion: package_json.dependencies["svelte"],
+        },
+        "svelte/": {
+            singleton: true,
+            requiredVersion: package_json.dependencies["svelte"],
+        },
+    },
+});
+```
 
