@@ -209,6 +209,25 @@ module.exports = () => {
                     requiredVersion: package_json.dependencies["jquery"],
                     eager: true,
                 },
+                // Share the Svelte runtime with remote (add-on) bundles.
+                // Svelte keeps its reactivity state (effect tree, etc.) in
+                // module-level variables, so host and remotes must use the
+                // very same runtime instance — otherwise a Svelte component
+                // registered by an add-on (e.g. via @plone/registry for
+                // pat-contentbrowser's ``componentRegistryKeys``) cannot be
+                // mounted by this bundle.
+                svelte: {
+                    singleton: true,
+                    requiredVersion: package_json.dependencies["svelte"],
+                },
+                // Prefix share ("svelte/"): compiled Svelte components do not
+                // import "svelte" itself but subpaths like
+                // "svelte/internal/client", which an exact-match share entry
+                // does not cover.
+                "svelte/": {
+                    singleton: true,
+                    requiredVersion: package_json.dependencies["svelte"],
+                },
             },
         })
     );
