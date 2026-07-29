@@ -105,6 +105,9 @@ importers:
       sortablejs:
         specifier: ^1.15.7
         version: 1.15.7
+      svelte:
+        specifier: ^5.56.3
+        version: 5.56.3
       tinymce:
         specifier: 8.6.0
         version: 8.6.0
@@ -145,9 +148,6 @@ importers:
       sinon:
         specifier: ^16.1.3
         version: 16.1.3
-      svelte:
-        specifier: ^5.56.3
-        version: 5.56.3
       svelte-jester:
         specifier: ^5.0.0
         version: 5.0.0(jest@30.4.2(@types/node@25.9.2))(svelte@5.56.3)
@@ -2059,7 +2059,7 @@ packages:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
 
   Select2@https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c}
+    resolution: {gitHosted: true, integrity: sha512-42On0yUzjhE/vNTVRT/+3wUwIpKyUGEW31PA1gFRv0j+OjgXJgo4aJVWCfjEpMa+O34PYKCfEdUN0OWaAEQ/6Q==, tarball: https://codeload.github.com/ivaynberg/select2/tar.gz/95a977f674b6938af55ec5f28b7772df93786c5c}
     version: 3.5.4
 
   a-sync-waterfall@1.0.1:

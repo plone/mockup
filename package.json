@@ -7,7 +7,8 @@
     "dependenciesComments": {
         "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
         "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
-        "select2": "Use the commit hash for checkout since pnpm has problems with the annotated commit #3.5.4"
+        "select2": "Use the commit hash for checkout since pnpm has problems with the annotated commit #3.5.4",
+        "svelte": "Runtime dependency: needs to be in dependencies so that it is part of the module federation shared dependencies and add-on bundles use the same Svelte runtime instance as this bundle."
     },
     "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916",
     "dependencies": {
@@ -44,6 +45,7 @@
         "slick-carousel": "git+https://github.com/kenwheeler/slick.git#d0716f19aa730006ee80ab026625fb1107816a97",
         "slides": "git+https://github.com/Patternslib/slides.git",
         "sortablejs": "^1.15.7",
+        "svelte": "^5.56.3",
         "tinymce": "8.6.0",
         "tinymce-i18n": "26.5.18",
         "underscore": "1.13.8"
@@ -59,7 +61,6 @@
         "npm-run-all2": "^8.0.4",
         "rimraf": "^6.1.3",
         "sinon": "^16.1.3",
-        "svelte": "^5.56.3",
         "svelte-jester": "^5.0.0",
         "svelte-loader": "^3.2.4",
         "svelte-scrollto": "^0.2.0",
