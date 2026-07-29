@@ -500,10 +500,10 @@
 <td style="text-align:center">Maximum items to keep in recently used list. 0: no restriction.</td>
 </tr>
 <tr>
-<td style="text-align:center">customComponentKeys</td>
+<td style="text-align:center">componentRegistryKeys</td>
 <td style="text-align:center">dict</td>
 <td style="text-align:center">{}</td>
-<td style="text-align:center">Register custom components. Currently only &quot;SelectedItem&quot; implemented</td>
+<td style="text-align:center">Use custom components registered in the <code>@plone/registry</code> component registry. Currently only &quot;selectedItem&quot; is implemented.</td>
 </tr>
 <tr>
 <td style="text-align:center">searchIndex</td>
@@ -545,19 +545,20 @@
     <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"selectableTypes": ["Image", "File"], "vocabularyUrl": "contentbrowser-test.json", "upload": true}<span class="token punctuation">'</span></span>
 <span class="token punctuation">/></span></span></code></pre>
 <h2>Register custom component</h2>
-<p>Use the <code>customComponentKeys.selectedItem</code> configuration value as follows to override the <code>SelectedItems</code> compontent (only supported component currently).</p>
+<p>Use the <code>componentRegistryKeys.selectedItem</code> configuration value as follows to override the <code>SelectedItem</code> component (only supported component currently).</p>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
     <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pat-contentbrowser<span class="token punctuation">"</span></span>
     <span class="token attr-name">data-pat-contentbrowser</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{
-        "customComponentKeys": {
-            "SelectedItem": "pat-contentbrowser.myfield.MySelectedItemComponent",
-        },
+        "componentRegistryKeys": {
+            "selectedItem": "pat-contentbrowser.myfield.MySelectedItemComponent"
+        }
     }<span class="token punctuation">'</span></span>
 <span class="token punctuation">/></span></span></code></pre>
 <p>Copy the existing component <code>src/SelectedItem.svelte</code> to your addon, customize it and register it in your JS bundle as follows:</p>
-<p>Note: the <code>name</code> of the registered component must match the <code>customComponentKeys.selectedItem</code> config value defined above.
-It can be any unique identifier.</p>
+<p>Note: the <code>name</code> of the registered component must match the <code>componentRegistryKeys.selectedItem</code> config value defined above.
+It can be any unique identifier.
+If no custom component is registered for the configured key, the pattern falls back to the default component registered as <code>pat-contentbrowser.SelectedItem</code>.</p>
 <pre class="language-javascript"><code class="language-javascript"><span class="token operator">...</span>
 <span class="token keyword">import</span> plone_registry <span class="token keyword">from</span> <span class="token string">"@plone/registry"</span><span class="token punctuation">;</span>
 <span class="token operator">...</span>
@@ -576,6 +577,25 @@ It can be any unique identifier.</p>
 <span class="token operator">...</span>
 </code></pre>
 <p>Note: this needs the <code>svelte-loader</code> plugin in your webpack.config.js ... see mockups <code>webpack.config.js</code> for more info.</p>
+<p>Your add-on bundle also has to share the Svelte runtime via module federation, so that your component runs on the same runtime instance as the Plone bundle.
+Add the same <code>svelte</code> and <code>svelte/</code> shared entries as in mockups <code>webpack.config.js</code> to your module federation config:</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">mf_config</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> package_json<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+    <span class="token literal-property property">remote_entry</span><span class="token operator">:</span> config<span class="token punctuation">.</span>entry<span class="token punctuation">[</span><span class="token string">"mybundle.min"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">dependencies</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token operator">...</span>package_json<span class="token punctuation">.</span>dependencies<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">shared</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token literal-property property">svelte</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token literal-property property">singleton</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">requiredVersion</span><span class="token operator">:</span> package_json<span class="token punctuation">.</span>dependencies<span class="token punctuation">[</span><span class="token string">"svelte"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string-property property">"svelte/"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token literal-property property">singleton</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token literal-property property">requiredVersion</span><span class="token operator">:</span> package_json<span class="token punctuation">.</span>dependencies<span class="token punctuation">[</span><span class="token string">"svelte"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 
       </main>
     </div>
