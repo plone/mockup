@@ -1,25 +1,29 @@
 import { fetchBreadcrumbs, buildBreadcrumbTrail } from "./breadcrumbs.js";
-import { request } from "./client.js";
+import { api } from "./ploneClient.js";
 
-jest.mock("./client.js", () => ({ request: jest.fn() }));
+jest.mock("./ploneClient.js", () => {
+    const stub = { getBreadcrumbs: jest.fn() };
+    return {
+        api: () => stub,
+        toPath: (url) => new URL(url).pathname.replace(/\/+$/, ""),
+    };
+});
 
-const mockedRequest = request;
+const c = api();
 
 beforeEach(() => {
-    mockedRequest.mockReset();
+    c.getBreadcrumbs.mockReset();
 });
 
 describe("fetchBreadcrumbs", () => {
-    it("GETs the @breadcrumbs endpoint and returns items + root", async () => {
-        mockedRequest.mockResolvedValue({
+    it("calls getBreadcrumbs with the portal-relative path and returns items + root", async () => {
+        c.getBreadcrumbs.mockResolvedValue({
             "@id": "http://nohost/plone/folder/@breadcrumbs",
             root: "http://nohost/plone",
             items: [{ "@id": "http://nohost/plone/folder", title: "Folder" }],
         });
         const data = await fetchBreadcrumbs("http://nohost/plone/folder");
-        expect(mockedRequest).toHaveBeenCalledWith(
-            "http://nohost/plone/folder/@breadcrumbs"
-        );
+        expect(c.getBreadcrumbs).toHaveBeenCalledWith({ path: "/plone/folder" });
         expect(data).toEqual({
             items: [{ "@id": "http://nohost/plone/folder", title: "Folder" }],
             root: "http://nohost/plone",
@@ -27,7 +31,7 @@ describe("fetchBreadcrumbs", () => {
     });
 
     it("defaults items to [] and root to null when missing", async () => {
-        mockedRequest.mockResolvedValue({});
+        c.getBreadcrumbs.mockResolvedValue({});
         const data = await fetchBreadcrumbs("http://nohost/plone");
         expect(data).toEqual({ items: [], root: null });
     });

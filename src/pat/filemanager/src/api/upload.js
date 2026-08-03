@@ -1,5 +1,6 @@
 import logger from "@patternslib/patternslib/src/core/logging";
 import { request } from "./client.js";
+import { api, toPath } from "./ploneClient.js";
 
 const log = logger.getLogger("pat-filemanager");
 
@@ -155,11 +156,8 @@ export async function uploadFilePost(folderUrl, file) {
  * @returns {Promise<{"@id":string}>}
  */
 export function createFolder(parentUrl, { title, type = "Folder" } = {}) {
-    log.debug(`POST ${parentUrl} (create ${type} "${title}")`);
-    return request(parentUrl, {
-        method: "POST",
-        body: { "@type": type, title },
-    });
+    log.debug(`create ${type} "${title}" in ${parentUrl}`);
+    return api().createContent({ path: toPath(parentUrl), data: { "@type": type, title } });
 }
 
 /**
