@@ -27,6 +27,13 @@
     // raw-content object URL. Folderish titles drill in-app (onTitleClick).
     const openUrl = $derived(contents.config.viewUrl(item));
 
+    function displayValue(value) {
+        if (value == null) return "";
+        if (column.valueI18n === "plone") return _tp(String(value));
+        if (column.valueI18n === "patternslib") return _t(String(value));
+        return value;
+    }
+
     // Folderish titles drill into the folder in-app; everything else keeps the
     // plain link so the object opens normally.
     function onTitleClick(event) {
@@ -72,7 +79,7 @@
     {formatDate(value)}
 {:else if column.type === "state"}
     {#if value}
-        <span class="filemanager-state state-{value}">{_tp(value)}</span>
+        <span class="filemanager-state state-{value}">{displayValue(value)}</span>
     {/if}
 {:else if column.type === "tags"}
     {#each tags as tag (tag)}
@@ -81,5 +88,5 @@
 {:else if column.key === "getObjSize"}
     {formatSize(value)}
 {:else}
-    {value ?? ""}
+    {displayValue(value)}
 {/if}

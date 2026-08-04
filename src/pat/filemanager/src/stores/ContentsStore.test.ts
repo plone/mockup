@@ -721,6 +721,9 @@ describe("ConfigStore", () => {
     it("resolves a column definition by key", () => {
         const config = new ConfigStore({ contextUrl: "http://nohost/plone" });
         expect(config.column("ModificationDate").type).toBe("date");
+        expect(config.column("portal_type").valueI18n).toBe("plone");
+        expect(config.column("review_state").valueI18n).toBe("plone");
+        expect(config.column("Title").valueI18n).toBeUndefined();
         expect(config.column("unknown")).toEqual({
             key: "unknown",
             label: "unknown",

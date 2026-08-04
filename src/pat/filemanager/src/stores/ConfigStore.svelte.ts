@@ -13,14 +13,28 @@ export interface ColumnDef {
     field?: string;
     /** catalog index to sort on; omit for non-sortable columns */
     sortIndex?: string;
+    /** translation domain for catalog values; omit for user-authored/raw values */
+    valueI18n?: "patternslib" | "plone";
     type: ColumnType;
 }
 
 export const COLUMN_DEFS: Record<string, ColumnDef> = {
     image: { key: "image", label: "Preview", field: "image_scales", type: "image" },
     Title: { key: "Title", label: "Title", sortIndex: "sortable_title", type: "title" },
-    portal_type: { key: "portal_type", label: "Type", sortIndex: "portal_type", type: "text" },
-    review_state: { key: "review_state", label: "State", sortIndex: "review_state", type: "state" },
+    portal_type: {
+        key: "portal_type",
+        label: "Type",
+        sortIndex: "portal_type",
+        valueI18n: "plone",
+        type: "text",
+    },
+    review_state: {
+        key: "review_state",
+        label: "State",
+        sortIndex: "review_state",
+        valueI18n: "plone",
+        type: "state",
+    },
     ModificationDate: { key: "ModificationDate", label: "Modified", sortIndex: "modified", type: "date" },
     CreationDate: { key: "CreationDate", label: "Created", sortIndex: "created", type: "date" },
     EffectiveDate: { key: "EffectiveDate", label: "Published", sortIndex: "effective", type: "date" },
