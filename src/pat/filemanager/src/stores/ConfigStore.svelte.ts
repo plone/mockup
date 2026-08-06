@@ -14,7 +14,7 @@ export interface ColumnDef {
     /** catalog index to sort on; omit for non-sortable columns */
     sortIndex?: string;
     /** translation domain for catalog values; omit for user-authored/raw values */
-    valueI18n?: "patternslib" | "plone";
+    translationDomain?: "widgets" | "plone";
     type: ColumnType;
 }
 
@@ -25,14 +25,14 @@ export const COLUMN_DEFS: Record<string, ColumnDef> = {
         key: "portal_type",
         label: "Type",
         sortIndex: "portal_type",
-        valueI18n: "plone",
+        translationDomain: "plone",
         type: "text",
     },
     review_state: {
         key: "review_state",
         label: "State",
         sortIndex: "review_state",
-        valueI18n: "plone",
+        translationDomain: "plone",
         type: "state",
     },
     ModificationDate: { key: "ModificationDate", label: "Modified", sortIndex: "modified", type: "date" },

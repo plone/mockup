@@ -29,8 +29,8 @@
 
     function displayValue(value) {
         if (value == null) return "";
-        if (column.valueI18n === "plone") return _tp(String(value));
-        if (column.valueI18n === "patternslib") return _t(String(value));
+        if (column.translationDomain === "plone") return _tp(String(value));
+        if (column.translationDomain === "widgets") return _t(String(value));
         return value;
     }
 
