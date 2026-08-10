@@ -4,6 +4,7 @@
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
     import events from "@patternslib/patternslib/src/core/events";
+    import registry from "@patternslib/patternslib/src/core/registry";
     import plone_registry from "@plone/registry";
 
     let ref = $state();
@@ -109,6 +110,7 @@
             target: node,
             props: props,
         });
+        registry.scan(node);
     }
 
     $effect(() => {
