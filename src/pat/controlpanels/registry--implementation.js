@@ -1,6 +1,6 @@
 import $ from "jquery";
 import utils from "../../core/utils";
-import Modal from "../modal/modal";
+import Modal from "../modal/modal--implementation";
 
 export default class ConfigRegistry {
     constructor(el) {

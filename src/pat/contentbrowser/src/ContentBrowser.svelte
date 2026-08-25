@@ -3,7 +3,7 @@
     import { getContext } from "svelte";
     import { fly } from "svelte/transition";
     import _t from "../../../core/i18n-wrapper";
-    import Upload from "../../upload/upload";
+    import Upload from "../../upload/upload--implementation";
     import contentStore from "./ContentStore";
     import {
         clickOutside,
