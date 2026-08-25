@@ -22,6 +22,7 @@ jobs:
       run: |
         make docs
     - name: Deploy docs
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
         publish_dir: ./_site
