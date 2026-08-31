@@ -8,7 +8,7 @@ export default class SchemaEditor {
     init() {
         if ($("#form fieldset", this.el).length >= 2) {
             // If multiple fieldsets, release after autotoc has been initialized
-            if ($("#form .autotoc-nav > a", this.el).length) {
+            if ($("#form .autotoc-nav a", this.el).length) {
                 // pat-autotoc already initialized, script probably run after
                 // mockup initialization.
                 this.init_schemaeditor();
@@ -107,7 +107,7 @@ export default class SchemaEditor {
         var self = this;
         // ///////////////
         // ADD FIELD INIT
-        $("#form .autotoc-nav > a", this.el).each(function () {
+        $("#form .autotoc-nav a", this.el).each(function () {
             $(this).on("click", function (e) {
                 e.preventDefault();
                 var fieldset_id = $(this).attr("data-fieldset_drag_id");
@@ -115,7 +115,7 @@ export default class SchemaEditor {
             });
         });
 
-        var fieldset_id = $("#form .autotoc-nav > a.active", this.el).attr(
+        var fieldset_id = $("#form .autotoc-nav a.active", this.el).attr(
             "data-fieldset_drag_id"
         );
         this.init_add_field(fieldset_id);
@@ -247,8 +247,7 @@ $.fn.plone_schemaeditor_html5_sortable = function (
         }
         $(this).attr("data-fieldset_drag_id", i);
     });
-    $("#form .autotoc-nav > a").each(function (i) {
-        // Plone 5 / mockup
+    $("#form .autotoc-nav a").each(function (i) {
         var $fieldset = $("#form fieldset#fieldset-" + i, self.el);
         if ($fieldset.data("can-add-fields") === true) {
             $(this).attr("droppable", "true");
