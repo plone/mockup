@@ -418,18 +418,26 @@ const resolveIcon = async function (name) {
             }
         }
         if (!icon) {
-            // fallback
-            name = icon_lookup_name;
+            // Fallback: fetch the icon resource directly. Deliberately not a
+            // bundled import — a templated import("bootstrap-icons/icons/...")
+            // creates a webpack context over all 2000+ icons (~125KB of eager
+            // filename/chunk-hash maps plus one dist chunk per icon).
             try {
                 import("../styles/icons.scss");
-                const iconmap = await import("../iconmap.json");
-                const parts = iconmap[name]?.split?.("/");
-                if (parts[0].includes("bootstrap-icons")) {
-                    icon = await import(`bootstrap-icons/icons/${parts[1]}`);
-                    icon = icon?.default;
+                const iconmap_module = await import("../iconmap.json");
+                const iconmap = iconmap_module.default ?? iconmap_module;
+                const icon_path = iconmap[icon_lookup_name];
+                if (icon_path?.includes("bootstrap-icons")) {
+                    const resp = await fetch(`${base_url || ""}/${icon_path}`);
+                    if (resp.ok) {
+                        icon = await resp.text();
+                    } else {
+                        logger.warn(
+                            `Loading icon "${icon_lookup_name}" failed from fallback: HTTP ${resp.status}`
+                        );
+                    }
                 }
             } catch (e) {
-                // import error
                 logger.warn(`Loading icon "${icon_lookup_name}" failed from fallback.`);
                 console.warn(e);
             }
