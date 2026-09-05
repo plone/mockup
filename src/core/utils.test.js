@@ -115,6 +115,14 @@ describe("utils", function () {
                 '{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}],"sort_on":"is_folderish","sort_order":"reverse"}'
             );
         });
+        it("getCriterias keeps non-ASCII term raw (encode-exactly-once)", function () {
+            var qh = new utils.QueryHelper({
+                vocabularyUrl: "http://foobar.com/",
+            });
+            var criterias = qh.getCriterias("täst");
+            expect(criterias[0].v).toEqual("täst*");
+            expect(criterias[0].v).not.toContain("%");
+        });
         it("getQueryData use attributes correctly", function () {
             var qh = new utils.QueryHelper({
                 vocabularyUrl: "http://foobar.com/",
@@ -167,6 +175,15 @@ describe("utils", function () {
             );
         });
 
+        it("getCriterias keeps non-ASCII terms raw (encode-exactly-once)", function () {
+            var qh = new utils.QueryHelper({
+                vocabularyUrl: "http://foobar.com/",
+            });
+            var criterias = qh.getCriterias("täst");
+            var crit = criterias[criterias.length - 1];
+            expect(crit.v).toEqual("täst*");
+            expect(crit.v).not.toContain("%");
+        });
         it("browsing adds path criteria", function () {
             var qh = new utils.QueryHelper({
                 vocabularyUrl: "http://foobar.com/?foo=bar",
