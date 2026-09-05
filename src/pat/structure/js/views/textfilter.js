@@ -68,7 +68,7 @@ export default BaseView.extend({
 
     setTerm: function (term, set_input) {
         const term_el = this.$el[0].querySelector(".search-query");
-        this.term = encodeURIComponent(term);
+        this.term = term;
         if (set_input) {
             term_el.value = term;
         }
