@@ -30,8 +30,6 @@
   used by compiled Svelte 5 components — an exact-match entry does not
   cover those.
 
-Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
-
 ### Maintenance
 
 - **pat contentbrowser:** fix custom component documentation ([3f73bcb](https://github.com/plone/mockup/commit/3f73bcb404aed39c83ed2584422d43ce48fde2fe))
@@ -45,8 +43,6 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
     config example for add-on bundles which register a custom Svelte
     component.
 
-Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
-
 - **pat contentbrowser:** replace svelte-scrollto with native smooth scrolling ([4f60a42](https://github.com/plone/mockup/commit/4f60a421c331acfff4970e7c426a9783844f19a1))
 
     svelte-scrollto is unmaintained (last release 2019) and built for
@@ -58,8 +54,6 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 The single usage — smoothly scrolling the miller columns to the right
 — is covered by the native Element.scrollTo() with behavior "smooth",
 which is supported by all targeted browsers.
-
-Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 
 ## [5.6.8](https://github.com/plone/mockup/compare/5.6.7...5.6.8) (2026-07-14)
 
@@ -86,8 +80,6 @@ guarantees the DOM order matches the collection order regardless of the
 DataTables ordering settings. The now-obsolete
 `table_row_rendering_finished` event dance and its `events` import are
 removed.
-
-Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
 
 ## [5.6.7](https://github.com/plone/mockup/compare/5.6.6...5.6.7) (2026-06-16)
 
