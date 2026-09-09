@@ -183,8 +183,8 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3
       dropzone:
-        specifier: 6.0.0-beta.2
-        version: 6.0.0-beta.2
+        specifier: 6.2.0
+        version: 6.2.0
       jqtree:
         specifier: ^1.9.1
         version: 1.9.1(jquery@3.7.1)
@@ -1857,9 +1857,6 @@ packages:
     peerDependencies:
       acorn: ^8.9.0
 
-  '@swc/helpers@0.2.14':
-    resolution: {integrity: sha512-wpCQMhf5p5GhNg2MmGKXzUNwxe7zRiCsmqYsamez2beP7mKPCSiu+BjZcdN95yYSzO857kr0VfQewmGpS77nqA==}
-
   '@testing-library/dom@10.4.1':
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
     engines: {node: '>=18'}
@@ -3159,8 +3156,9 @@ packages:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
 
-  dropzone@6.0.0-beta.2:
-    resolution: {integrity: sha512-k44yLuFFhRk53M8zP71FaaNzJYIzr99SKmpbO/oZKNslDjNXQsBTdfLs+iONd0U0L94zzlFzRnFdqbLcs7h9fQ==}
+  dropzone@6.2.0:
+    resolution: {integrity: sha512-oL6hkyz707aiPTcaFW6iGVbYAzJsMG819lvTQ2MYw/dzF6KnYUKj+cOt0QLkRl5NmEIZwExUwN+H3KzogctpTA==}
+    engines: {node: '>=20.19.0'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -4229,9 +4227,6 @@ packages:
   junk@3.1.0:
     resolution: {integrity: sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==}
     engines: {node: '>=8'}
-
-  just-extend@5.1.1:
-    resolution: {integrity: sha512-b+z6yF1d4EOyDgylzQo5IminlUmzSeqR1hs/bzjBNjuGras4FXq/6TrzjxfN0j+TmI0ltJzTNlqXUMCniciwKQ==}
 
   just-extend@6.2.0:
     resolution: {integrity: sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==}
@@ -8202,8 +8197,6 @@ snapshots:
     dependencies:
       acorn: 8.18.0
 
-  '@swc/helpers@0.2.14': {}
-
   '@testing-library/dom@10.4.1':
     dependencies:
       '@babel/code-frame': 7.29.7
@@ -9456,10 +9449,7 @@ snapshots:
 
   dotenv@17.4.2: {}
 
-  dropzone@6.0.0-beta.2:
-    dependencies:
-      '@swc/helpers': 0.2.14
-      just-extend: 5.1.1
+  dropzone@6.2.0: {}
 
   dunder-proto@1.0.1:
     dependencies:
@@ -10716,8 +10706,6 @@ snapshots:
       semver: 7.8.5
 
   junk@3.1.0: {}
-
-  just-extend@5.1.1: {}
 
   just-extend@6.2.0: {}
 
