@@ -1,5 +1,35 @@
 # Changelog
 
+
+
+## [5.6.10](https://github.com/plone/mockup/compare/5.6.9...5.6.10) (2026-09-09)
+
+### Bug Fixes
+
+
+* **pat structure:** text filtering with umlauts. ([59349a8](https://github.com/plone/mockup/commit/59349a8568789bd2244fa37732dcb4f6b8a50d06))
+
+
+* **pat-select2:** Show predefined value for single-select widgets. ([84512a1](https://github.com/plone/mockup/commit/84512a1b9edd91f691187239004ae4b20c9cf8ca))
+
+  Single-select widgets did not show their predefined value.
+This is now fixed.
+
+
+### Maintenance
+
+
+* **bundle:** prepare 5.6.10 ([6eecf4c](https://github.com/plone/mockup/commit/6eecf4c31e596b12db734c26ce3f0fa53d1e33d1))
+
+
+* **pat-select2:** Add test for predefined value for a select widget. ([a681796](https://github.com/plone/mockup/commit/a6817965f986c2ff3b09db5b24937a7a30cfd70e))
+
+
+* **tests:** increase testTimeout ([fcccae0](https://github.com/plone/mockup/commit/fcccae0d7f04c0997fddcee00353ccf4c588759e))
+
+
+* Upgrade dropzone to 6.2.0. ([7afca10](https://github.com/plone/mockup/commit/7afca1096978cbc68eee879efdc8c7719128ec76))
+
 ## [5.6.9](https://github.com/plone/mockup/compare/5.6.8...5.6.9) (2026-08-25)
 
 ### Features
