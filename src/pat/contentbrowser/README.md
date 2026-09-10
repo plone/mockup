@@ -113,6 +113,9 @@ Note: the `name` of the registered component must match the `componentRegistryKe
 It can be any unique identifier.
 If no custom component is registered for the configured key, the pattern falls back to the default component registered as `pat-contentbrowser.SelectedItem`.
 
+To replace the component site-wide without any pattern configuration, register your component under the default key `pat-contentbrowser.SelectedItem` instead.
+The pattern only registers its own default component if nothing is registered under that key yet, so an add-on registration is kept no matter whether the add-on bundle initializes before or after the pattern.
+
 ```javascript
 ...
 import plone_registry from "@plone/registry";
