@@ -56,25 +56,16 @@ class Pattern extends BasePattern {
     static trigger = ".pat-contentbrowser";
     static parser = parser;
 
-    static async register_default_components() {
-        // Register the default components in @plone/registry — but only if
-        // nothing is registered under that key yet. This lets add-ons
-        // replace a component site-wide by registering their own under the
-        // default key, regardless of whether their bundle initializes before
-        // or after this pattern (registerComponent overwrites silently).
-        if (!plone_registry.getComponent("pat-contentbrowser.SelectedItem").component) {
-            const SelectedItem = (await import("./src/SelectedItem.svelte")).default;
-            plone_registry.registerComponent({
-                name: "pat-contentbrowser.SelectedItem",
-                component: SelectedItem,
-            });
-        }
-    }
-
     async init() {
         this.el.style.display = "none";
 
-        await Pattern.register_default_components();
+        // register default components in @plone/registry
+        const SelectedItem = (await import("./src/SelectedItem.svelte")).default;
+
+        plone_registry.registerComponent({
+            name: "pat-contentbrowser.SelectedItem",
+            component: SelectedItem,
+        });
 
         // ensure an id on our element (TinyMCE doesn't have one)
         let nodeId = this.el.getAttribute("id");
