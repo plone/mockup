@@ -559,6 +559,8 @@
 <p>Note: the <code>name</code> of the registered component must match the <code>componentRegistryKeys.selectedItem</code> config value defined above.
 It can be any unique identifier.
 If no custom component is registered for the configured key, the pattern falls back to the default component registered as <code>pat-contentbrowser.SelectedItem</code>.</p>
+<p>To replace the component site-wide without any pattern configuration, register your component under the default key <code>pat-contentbrowser.SelectedItem</code> instead.
+The pattern only registers its own default component if nothing is registered under that key yet, so an add-on registration is kept no matter whether the add-on bundle initializes before or after the pattern.</p>
 <pre class="language-javascript"><code class="language-javascript"><span class="token operator">...</span>
 <span class="token keyword">import</span> plone_registry <span class="token keyword">from</span> <span class="token string">"@plone/registry"</span><span class="token punctuation">;</span>
 <span class="token operator">...</span>
