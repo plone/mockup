@@ -2,6 +2,48 @@
 
 
 
+## [5.6.11](https://github.com/plone/mockup/compare/5.6.10...5.6.11) (2026-09-11)
+
+### Bug Fixes
+
+
+* **pat contentbrowser:** keep add-on components registered under the default key ([fdc8b52](https://github.com/plone/mockup/commit/fdc8b523cf84ccf31105c304602f705f08d87359))
+
+  The pattern registered its default SelectedItem component in init(),
+on every widget initialization, and @plone/registry overwrites
+silently. An add-on that registered its own component under the
+default key "pat-contentbrowser.SelectedItem" was therefore reset by
+the next content browser that initialized, so replacing the component
+site-wide only worked via a custom key plus the componentRegistryKeys
+pattern option.
+
+The default component is now only registered if nothing is registered
+under that key yet. An add-on registration wins no matter whether the
+add-on bundle initializes before or after the pattern.
+
+
+* **pat contentbrowser:** keep add-on components registered under the default key ([83e564e](https://github.com/plone/mockup/commit/83e564e759392e2ab3630745e8134739682a8b89))
+
+  The pattern registered its default SelectedItem component in init(),
+on every widget initialization, and @plone/registry overwrites
+silently. An add-on that registered its own component under the
+default key "pat-contentbrowser.SelectedItem" was therefore reset by
+the next content browser that initialized, so replacing the component
+site-wide only worked via a custom key plus the componentRegistryKeys
+pattern option.
+
+The default component is now only registered if nothing is registered
+under that key yet. An add-on registration wins no matter whether the
+add-on bundle initializes before or after the pattern.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+
+### Maintenance
+
+
+* **Build:** In the bundle-pre target use pnpm recursive unlink, as the other form is deprecated. Also run make install afterwards instead of only pnpm install. ([470f736](https://github.com/plone/mockup/commit/470f736b107af5bd0b062bffb8007572eaf2ba02))
+
 ## [5.6.10](https://github.com/plone/mockup/compare/5.6.9...5.6.10) (2026-09-09)
 
 ### Bug Fixes
