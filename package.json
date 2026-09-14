@@ -69,13 +69,6 @@
         "svg-inline-loader": "^0.8.2",
         "typescript": "^6.0.3"
     },
-    "resolutions": {
-        "@patternslib/patternslib": "9.10.6",
-        "backbone": "1.6.1",
-        "jquery": "3.7.1",
-        "sass": "~1.77.8",
-        "underscore": "1.13.8"
-    },
     "scripts": {
         "clean": "rimraf docs/_site",
         "build:webpack": "NODE_ENV=production webpack --config webpack.config.js",
