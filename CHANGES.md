@@ -2,6 +2,332 @@
 
 
 
+## [5.7.0-alpha.1](https://github.com/plone/mockup/compare/5.7.0-alpha.0...5.7.0-alpha.1) (2026-09-14)
+
+### Features
+
+
+* **core:** getCriterias preserves non-ASCII terms raw (encode-exactly-once) ([d8f9bf4](https://github.com/plone/mockup/commit/d8f9bf44a7361cc5f03b0f2e41c6d6acbb3cadfb))
+
+
+* **pat-contentbrowser:** Initialize patterns on selected items. ([99c9e70](https://github.com/plone/mockup/commit/99c9e70779f788e38ebdea07e26475c8da7706b2))
+
+  Do a registry scan on the selected items template, so that
+customizations can use Patterns in their SelectedItems.svelte templates.
+
+
+### Bug Fixes
+
+
+* **bundle:** share the Svelte runtime with module federation remotes ([6c27e8f](https://github.com/plone/mockup/commit/6c27e8f3e0bfb619345611d482c463dc9cd4fe92))
+
+  Svelte keeps its reactivity state (effect tree etc.) in module-level
+variables, so the host bundle and remote (add-on) bundles must use the
+very same runtime instance. Without sharing, a Svelte component
+registered by an add-on bundle (e.g. via @plone/registry for
+pat-contentbrowser's componentRegistryKeys) is compiled against the
+add-on's own runtime copy and crashes in the host's mount() with
+"TypeError: Cannot read properties of null (reading 'nodes')".
+
+- Move svelte from devDependencies to dependencies — it is a runtime
+  dependency and this way it becomes part of the generated module
+  federation shared dependencies (also for add-ons which spread
+  Mockup's dependencies into their shared config).
+- Add an explicit "svelte" shared entry (singleton) and a "svelte/"
+  prefix share which covers deep imports like "svelte/internal/client"
+  used by compiled Svelte 5 components — an exact-match entry does not
+  cover those.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+
+* **ci:** deploy docs only on push to master ([831cb82](https://github.com/plone/mockup/commit/831cb820524c993096fce363ee978919e53ffdb9))
+
+  The deploy step also ran on pull_request events and published the
+PR build to gh_docs_deploy. Since the branch got protected, the push
+is rejected and every PR fails the docs job. Skip the deploy for PR
+builds; they only need to verify that the docs build.
+
+
+* **core:** remove unused variable in intl-loader catch block ([9c5107d](https://github.com/plone/mockup/commit/9c5107d2f654917ae6b8da7c99afaf4420d04b09))
+
+
+* **core:** Resolve Webpack build errors by using relative paths for Intl locale data ([fbbdbf1](https://github.com/plone/mockup/commit/fbbdbf1e927048395145bfc5982c7287421302ca))
+
+
+* **core:** Use Webpack alias for Intl locale data to avoid build warnings ([5a09b8c](https://github.com/plone/mockup/commit/5a09b8cf637974b2ce04e53667e45f27cbee9355))
+
+
+* **modal:** title extraction method (jquery removed .context) ([733db87](https://github.com/plone/mockup/commit/733db8789d7c4d3d4d80ab803218d28a59cd0f69))
+
+
+* **pat contentbrowser:** keep add-on components registered under the default key ([3f6c734](https://github.com/plone/mockup/commit/3f6c734e17d26ed783a55fea243c0df333cb1b8f))
+
+  The pattern registered its default SelectedItem component in init(),
+on every widget initialization, and @plone/registry overwrites
+silently. An add-on that registered its own component under the
+default key "pat-contentbrowser.SelectedItem" was therefore reset by
+the next content browser that initialized, so replacing the component
+site-wide only worked via a custom key plus the componentRegistryKeys
+pattern option.
+
+The default component is now only registered if nothing is registered
+under that key yet. An add-on registration wins no matter whether the
+add-on bundle initializes before or after the pattern.
+
+
+* **pat-filemanager:** Add `displayValue` i18n support for column definitions and ensure proper translations ([5c2cde0](https://github.com/plone/mockup/commit/5c2cde03d01b25007affe2fb6c1c19036c81d167))
+
+
+* **pat-filemanager:** Add error handling and fallback to formatDate ([78e511d](https://github.com/plone/mockup/commit/78e511d38faa1cf9ad347ac3f23c05114f276a19))
+
+
+* **pat-filemanager:** suggestion merge issue ([d16233f](https://github.com/plone/mockup/commit/d16233faa742e21e6b615e76d48648105dad75ca))
+
+
+* **pat-filemanager:** Use site language in formatDate ([bc08a48](https://github.com/plone/mockup/commit/bc08a4884e11c1c38c520b7174ae49012da86d1b))
+
+
+* **pat-select2:** Show predefined value for single-select widgets. ([063bc09](https://github.com/plone/mockup/commit/063bc094285aad0385c74d01d1323a0da10c92b5))
+
+  Single-select widgets did not show their predefined value.
+This is now fixed.
+
+
+* **pat-structure:** keep table rows in collection order ([966a79a](https://github.com/plone/mockup/commit/966a79ad5052f1a83c22bdd77a664c412ca363b1))
+
+  The table row rendering iterated the collection with an async callback
+(`collection.each(async ...)`) that appended each row only after awaiting
+`view.render()`. Row rendering is async (it awaits icon resolution), so
+rows were appended in the arbitrary order their render promises resolved
+rather than in collection order, corrupting the sort order of the folder
+contents.
+
+This stayed hidden until 5.6.0: DataTables was initialized with
+`order: [0, "asc"]`, which re-sorted the rows by the hidden `_sort`
+column (the server order index) on every draw and thus masked the race.
+Commit 57cd7dd ("Fix ordering logic.") changed this to `order: []`,
+removing the safety net and exposing the underlying bug.
+
+Fix the root cause: build the row views in collection order, render them
+all in parallel via `Promise.all`, then append them in order. This
+guarantees the DOM order matches the collection order regardless of the
+DataTables ordering settings. The now-obsolete
+`table_row_rendering_finished` event dance and its `events` import are
+removed.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+
+* **pat-tinymce:** construct the modal implementation for the link modal ([e72149a](https://github.com/plone/mockup/commit/e72149a9348aa6d62726e2083eee39b0385e4f78))
+
+  The pat-plone-modal lazification left links.js creating its modal via
+registry.patterns["plone-modal"].init(...). That static initializer
+constructs the *registered* pattern — now the thin registration module,
+whose methods (show/hide/...) only appear after an async graft — while
+LinkModal calls this.modal.show() synchronously right after construction.
+First click on Insert Link/Image threw and the modal stayed broken, which
+also failed every robot test funneling through it (tinymce, contentbrowser,
+linkintegrity).
+
+Construct modal--implementation directly instead; mockupParser reproduces
+the option parsing of the registry path. links.js is only reached via the
+lazily-loaded tinymce implementation, so the modal body stays out of the
+eager bundle. Add a regression test asserting the implementation exposes
+its methods synchronously.
+
+
+### Technical Changes
+
+
+* **bundle:** export the patterns import as default for module federation ([b277a2d](https://github.com/plone/mockup/commit/b277a2d1c67d21025ec5fed62b0404f2f35a305a))
+
+  @patternslib/dev 4.1 waits for the default export of a remote's main
+module if it is a promise, so that window.__patternslib_mf_initialized
+only resolves after the remote's patterns and components are
+registered. Export the dynamic import of ./patterns accordingly, like
+Patternslib 9.11 does in its own entry point.
+
+
+* **core:** Integrate lazy Intl polyfills into multiple patterns ([f6521ba](https://github.com/plone/mockup/commit/f6521baf04acf14f33b84e7d63a0e8e873d332ab))
+
+
+* **pat-modal:** lazify pattern, split registration from implementation ([74a7eb1](https://github.com/plone/mockup/commit/74a7eb18de4871a7e468070b54a7b63731afd333))
+
+  Split the ~1000-line pat-modal implementation out of the every-page
+eager patterns chunk. modal.js becomes a thin registration module that
+loads modal--implementation.js on first .pat-plone-modal match; the
+implementation grafts onto the instance from the prototype, since
+imperative callers still do `new Modal()`.
+
+jquery-form ($.fn.ajaxSubmit) moves from a top-level import to a lazy
+`await import("jquery-form")` at its single call site in
+handleFormAction, so it no longer loads on every page.
+
+Imperative importers are repointed at modal--implementation:
+controlpanels (registry / dexterity-types-listing / contentrule-elements)
+and recurrence load it as part of their own lazy implementation chunks;
+manageportlets is registered eagerly, so it loads the impl on demand
+inside showEditPortlet. Side-effect registration imports (patterns.js,
+tinymce links, structure actionmenu) keep pointing at the thin module.
+
+Depends on the pat-recurrence lazification: recurrence is eagerly
+registered, so its Modal import must live in recurrence--implementation
+(a lazy chunk) for the modal body to actually leave the eager bundle.
+Merge after the pat-recurrence PR.
+
+
+* **pat-querystring:** lazify pattern, split registration from implementation ([8f166a1](https://github.com/plone/mockup/commit/8f166a1b2a74126dab0243ec2444a749e9c1f554))
+
+  pat-querystring contributed ~33KB src to the eager patterns chunk on every
+page, though the widget only appears on Collection edit forms and the
+querystring criteria UI. It also statically imported the contentbrowser
+pattern, dragging an eager edge into pat-contentbrowser.
+
+Split it into a thin registration module and querystring--implementation.js
+(holding the widget and the contentbrowser import). The implementation is
+grafted onto the single pattern instance in init(), so external consumers
+that reach into instance state (pat-structure's textfilter reads
+this.queryString.$sortOn/$sortOrder) keep working. Public options and
+emitted markup are unchanged.
+
+The implementation and its contentbrowser edge now load only on pages with a
+.pat-querystring element.
+
+
+* **pat-recurrence:** lazify pattern, split registration from implementation ([901d89c](https://github.com/plone/mockup/commit/901d89ce07114110c04bd7d718d3775a731ddb40))
+
+  pat-recurrence was the single largest pattern in the eager patterns chunk
+(~52KB src, incl. three statically-imported XML templates and the Modal
+dependency), loaded on every page though the widget only appears on Event
+add/edit forms.
+
+Split it into a thin registration module (trigger, parser, and an init()
+that dynamically imports the implementation on first match) plus
+recurrence--implementation.js holding the widget, the XML templates and the
+Modal import. Follows the existing tinymce--implementation lazy-pattern
+convention. Public options and markup contract are unchanged.
+
+The implementation now loads only on pages with a .pat-recurrence element,
+in its own chunk.
+
+
+* **pat-select2:** lazify pattern, split registration from implementation ([b465752](https://github.com/plone/mockup/commit/b4657524afa147bf1303e521e851b62e956c5ba7))
+
+  pat-select2 contributed ~13KB src to the eager patterns chunk on every page,
+plus a lazy select2_locale_* context map baked into the eager chunk, though
+select2 widgets only appear on forms. (The select2 library itself was already
+an async chunk; only the wrapper and the locale map were eager.)
+
+Split it into a thin registration module and select2--implementation.js
+holding the wrapper, the select2 library import and the select2_locale_*
+context. The implementation is grafted onto the single pattern instance in
+init(). Public options and emitted markup are unchanged.
+
+pat-relateditems borrows select2's methods (Select2.prototype.* applied to
+its own instance). To keep that working without pulling select2 back into the
+eager chunk, relateditems now imports select2--implementation lazily in its
+init() and calls the borrowed methods through it. This is the coordinated
+change flagged between the select2 and relateditems lazification tickets.
+
+The select2 wrapper and locale map now load only on pages with a .pat-select2
+or .pat-relateditems element.
+
+
+* **pat-upload:** lazify pattern, split registration from implementation ([4bf04d0](https://github.com/plone/mockup/commit/4bf04d09cef166ddc8d2d947d31427c86c1a0f66))
+
+  pat-upload contributed ~17KB src to the eager patterns chunk on every page,
+though the upload UI only appears in folder contents and upload dialogs.
+
+Split it into a thin registration module and upload--implementation.js
+holding the jquery/underscore/i18n wiring and the lazily-loaded Dropzone
+integration. The thin module keeps registering the .pat-upload trigger and
+grafts the implementation prototype on first match. Public options and
+emitted markup are unchanged.
+
+pat-structure, pat-relateditems and the contentbrowser app construct upload
+imperatively (new Upload(...)) and use the instance right away. The
+implementation therefore stays a constructable Base.extend pattern and those
+callers import it directly, so new Upload() yields a fully formed instance
+synchronously. Registry.register is first-wins, so the eagerly imported thin
+module remains the registered .pat-upload pattern; the implementation is
+only reached via lazy chunks (the structure app view, the contentbrowser
+component and the relateditems dynamic import).
+
+Add a regression test asserting the implementation is constructable and
+exposes its methods synchronously.
+
+The implementation now loads only where a .pat-upload element exists.
+
+
+* **tests:** increase jest.testTimeout ([c06df06](https://github.com/plone/mockup/commit/c06df063001f2ac38dd874617e433d903acd620e))
+
+
+### Maintenance
+
+
+* allow selecting the buildout.coredev branch for robot tests ([e3755ac](https://github.com/plone/mockup/commit/e3755ac92284b24beffac788289a515727bbcadf))
+
+  /run-coredev-robottests keeps testing against the default branch;
+/run-coredev-6.1-robottests (or 6.2, 6.3, ...) checks out that
+buildout.coredev branch instead. Unknown branches get an error
+comment. Also run update-check with always() so the check run no
+longer stays in_progress when the tests fail.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+
+* **bundle:** install @patternslib/patternslib=9.11.0-alpha.0 and @patternslib/dev=4.1.0-alpha.0 ([93ecc7d](https://github.com/plone/mockup/commit/93ecc7d75af475ee9671e950cdcaf22ca3599700))
+
+
+* **bundle:** remove the unused resolutions block ([9986682](https://github.com/plone/mockup/commit/9986682e3ca26e804e9776bc378dc71deee8d5fc))
+
+  The yarn-style resolutions field is not honored by pnpm >= 10, which
+reads overrides from pnpm-workspace.yaml instead. The block was left
+over from the pnpm 11 migration and no longer had any effect: the
+installed versions (patternslib 9.11.0-alpha.0, sass 1.101.0) already
+differ from the pinned ones, and every listed package resolves to a
+single version anyway. The sass pin dates from the Bootstrap 5.3.3
+era (declarations after nested rules), fixed in Bootstrap 5.3.4.
+
+
+* **core:** Add functional tests for lazy Intl polyfill loading ([c377809](https://github.com/plone/mockup/commit/c3778098fd71db9f4870044b2a85534e80f59c67))
+
+
+* **pat contentbrowser:** fix custom component documentation ([bfb9d26](https://github.com/plone/mockup/commit/bfb9d269e652bac26a70d156e502b1dc64e09d96))
+
+  The option to use custom components from the @plone/registry component
+registry is named componentRegistryKeys with sub-key "selectedItem" —
+the README documented the outdated name customComponentKeys with
+sub-key "SelectedItem". Also fix the trailing commas in the JSON
+example (the pattern's JSON option parser would reject them), document
+the default component fallback and add a module federation shared
+config example for add-on bundles which register a custom Svelte
+component.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+
+* **pat contentbrowser:** replace svelte-scrollto with native smooth scrolling ([e484d32](https://github.com/plone/mockup/commit/e484d3267a3e5de1976ec39d07d19cd68b85a48b))
+
+  svelte-scrollto is unmaintained (last release 2019) and built for
+Svelte 3 — under pnpm it pulls in its own nested svelte@3 copy. With
+the Svelte runtime now shared via module federation ("svelte/" prefix
+share), those Svelte 3 modules (svelte/easing, svelte/internal) were
+provided unversioned into the share scope and caused build warnings.
+
+The single usage — smoothly scrolling the miller columns to the right
+— is covered by the native Element.scrollTo() with behavior "smooth",
+which is supported by all targeted browsers.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+
+* **pat-filemanager:** Use distinct locales (en/es) for formatDate tests ([a84f920](https://github.com/plone/mockup/commit/a84f920b3cd136e23eccb3a2cf85ec9421309515))
+
+
+* **pat-select2:** Add test for predefined value for a select widget. ([a4b35d6](https://github.com/plone/mockup/commit/a4b35d6511eb8c99f99d4a1ab6c5c47f4779a08f))
+
 ## [5.7.0-alpha.0](https://github.com/plone/mockup/compare/5.6.6...5.7.0-alpha.0) (2026-06-08)
 
 ### Features
