@@ -19,7 +19,10 @@
 import "@patternslib/dev/webpack/module_federation";
 
 // And now load this bundle's actual entry point.
-import("./patterns");
+// The import needs to be kept dynamic (async boundary for shared modules) and
+// is exported as default, so that the Patternslib Module Federation helper
+// can wait for it before resolving ``window.__patternslib_mf_initialized``.
+export default import("./patterns");
 
 // Register Bootstrap and jQuery gloablly
 async function register_global_libraries() {

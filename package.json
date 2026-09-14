@@ -10,12 +10,12 @@
         "select2": "Use the commit hash for checkout since pnpm has problems with the annotated commit #3.5.4",
         "svelte": "Runtime dependency: needs to be in dependencies so that it is part of the module federation shared dependencies and add-on bundles use the same Svelte runtime instance as this bundle."
     },
-    "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916",
+    "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c",
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "3.0.2",
         "@formatjs/intl-datetimeformat": "^7.4.9",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.10.6",
+        "@patternslib/patternslib": "9.11.0-alpha.0",
         "@plone/registry": "^2.7.2",
         "backbone": "1.6.1",
         "backbone.paginator": "2.0.8",
@@ -56,7 +56,7 @@
         "@11ty/eleventy-navigation": "^1.0.5",
         "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
         "@babel/preset-typescript": "^7.29.7",
-        "@patternslib/dev": "^4.0.0",
+        "@patternslib/dev": "^4.1.0-alpha.0",
         "@testing-library/jest-dom": "^6.9.1",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",
@@ -68,13 +68,6 @@
         "svelte-preprocess": "^6.0.5",
         "svg-inline-loader": "^0.8.2",
         "typescript": "^6.0.3"
-    },
-    "resolutions": {
-        "@patternslib/patternslib": "9.10.6",
-        "backbone": "1.6.1",
-        "jquery": "3.7.1",
-        "sass": "~1.77.8",
-        "underscore": "1.13.8"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
