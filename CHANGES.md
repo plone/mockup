@@ -2,6 +2,13 @@
 
 
 
+## [5.6.12](https://github.com/plone/mockup/compare/5.6.11...5.6.12) (2026-09-16)
+
+### Maintenance
+
+
+* Update to @patternslib/patternslib 9.11.0 and @patternslib/dev 4.1.0. ([7cc594d](https://github.com/plone/mockup/commit/7cc594de5780a7687b2fabe383c49e39cfe4983c))
+
 ## [5.6.11](https://github.com/plone/mockup/compare/5.6.10...5.6.11) (2026-09-11)
 
 ### Bug Fixes
