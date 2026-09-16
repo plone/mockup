@@ -2,6 +2,13 @@
 
 
 
+## [5.7.0-alpha.2](https://github.com/plone/mockup/compare/5.7.0-alpha.1...5.7.0-alpha.2) (2026-09-16)
+
+### Maintenance
+
+
+* Update to @patternslib/patternslib 9.11.0 and @patternslib/dev 4.1.0. ([9069518](https://github.com/plone/mockup/commit/90695186043f9753e5758c3047305e867b22ced7))
+
 ## [5.7.0-alpha.1](https://github.com/plone/mockup/compare/5.7.0-alpha.0...5.7.0-alpha.1) (2026-09-14)
 
 ### Features
