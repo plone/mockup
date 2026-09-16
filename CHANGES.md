@@ -2,6 +2,16 @@
 
 
 
+## [5.6.13](https://github.com/plone/mockup/compare/5.6.12...5.6.13) (2026-09-16)
+
+### Bug Fixes
+
+
+* default-export the bundle in the entry point. ([4585d39](https://github.com/plone/mockup/commit/4585d3900f94f08d8e64dbb45cd08272e0822269))
+
+  This is necessary, so that the module federation initialization code can
+await bundle initialization.
+
 ## [5.6.12](https://github.com/plone/mockup/compare/5.6.11...5.6.12) (2026-09-16)
 
 ### Maintenance
