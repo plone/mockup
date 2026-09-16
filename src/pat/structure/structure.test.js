@@ -568,6 +568,88 @@ describe("Structure", function () {
         ]);
     });
 
+    ["removed_column", "Description"].forEach((column) => {
+        it(`handles saved column ${column} without creating a phantom table column`, async function () {
+            Cookies.set(
+                "_fc_activeColumns",
+                JSON.stringify({
+                    value: ["ModificationDate", "EffectiveDate", "review_state", column],
+                })
+            );
+            if (column === "Description") {
+                const options = JSON.parse(this.$el.attr("data-pat-structure"));
+                options.availableColumns = { Description: "Description" };
+                this.$el.attr("data-pat-structure", JSON.stringify(options));
+            }
+            const alert = jest.spyOn(window, "alert").mockImplementation(() => {});
+            try {
+                registry.scan(this.el);
+                await utils.timeout(300);
+
+                const checkTable = () => {
+                    const table = this.$el.find("table").DataTable();
+                    expect(table.columns().count()).toBe(6);
+                    expect(table.settings()[0].aoColumns[0].bSortable).toBe(false);
+                    expect(table.settings()[0].aoColumns[5].bSortable).toBe(false);
+                    expect(this.$el.find("tbody tr").first().children().length).toBe(6);
+                    expect(alert).not.toHaveBeenCalled();
+                    if (column === "Description") {
+                        expect(
+                            this.$el.find("td.title .Description").length
+                        ).toBeGreaterThan(0);
+                    }
+                };
+                checkTable();
+
+                this.$el.find("tbody tr").first().find("a.manage").trigger("click");
+                await utils.timeout(300);
+                checkTable();
+            } finally {
+                this.$el.find(".fc-breadcrumbs a").first().trigger("click");
+                await utils.timeout(300);
+                alert.mockRestore();
+            }
+        });
+    });
+
+    it("inherits body modal options for action menus after rendering and navigation", async function () {
+        document.body.setAttribute(
+            "data-pat-plone-modal",
+            '{"modalSizeClass":"modal-xl"}'
+        );
+        const options = JSON.parse(this.$el.attr("data-pat-structure"));
+        options.menuOptions = {
+            editItem: {
+                title: "Edit",
+                url: "#edit",
+                category: "button",
+                css: "pat-plone-modal",
+            },
+        };
+        this.$el.attr("data-pat-structure", JSON.stringify(options));
+        try {
+            registry.scan(this.el);
+            await utils.timeout(300);
+            const checkModalOptions = () => {
+                const links = this.$el.find(".actionmenu .pat-plone-modal");
+                expect(links.length).toBeGreaterThan(0);
+                links.each((index, link) => {
+                    expect(
+                        $(link).data("pattern-plone-modal").options.modalSizeClass
+                    ).toBe("modal-xl");
+                });
+            };
+            checkModalOptions();
+            this.$el.find("tbody tr").first().find("a.manage").trigger("click");
+            await utils.timeout(300);
+            checkModalOptions();
+        } finally {
+            this.$el.find(".fc-breadcrumbs a").first().trigger("click");
+            await utils.timeout(300);
+            document.body.removeAttribute("data-pat-plone-modal");
+        }
+    });
+
     it("test main buttons count", async function () {
         registry.scan(this.$el);
         await utils.timeout(100);
