@@ -74,7 +74,7 @@ export default BaseView.extend({
      */
     render: async function (triggerCollection) {
         // By default do not start sorted by any column
-        // Ignore first column and the last one (activeColumns.length + 1)
+        // Ignore the first and last columns for sorting.
         // Do not show paginator, search or information, we only want column sorting
         const datatables_options = {
             // Don't apply initial ordering.
@@ -88,7 +88,9 @@ export default BaseView.extend({
                     // The first (selection checkboxes) and last (actions)
                     // columns should not be sortable.
                     orderable: false,
-                    targets: [0, this.app.activeColumns.length + 2],
+                    // Count from the end: activeColumns can include Description
+                    // or unavailable saved columns that do not render a cell.
+                    targets: [0, -1],
                 },
                 {
                     // Keep the selection checkbox column as narrow as possible.
