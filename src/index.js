@@ -19,7 +19,7 @@
 import "@patternslib/dev/webpack/module_federation";
 
 // And now load this bundle's actual entry point.
-import("./patterns");
+export default import("./patterns");
 
 // Register Bootstrap and jQuery gloablly
 async function register_global_libraries() {
