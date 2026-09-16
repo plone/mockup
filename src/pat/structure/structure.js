@@ -124,6 +124,8 @@ export default Base.extend({
             },
         ],
 
+        actionmenu: null,
+
         datatables_options: {},
 
         upload: {

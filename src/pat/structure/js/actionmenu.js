@@ -84,7 +84,19 @@ const ActionMenu = function (menu) {
     const app = menu.app;
     const canMove = !!app.options.moveUrl;
 
-    const result = JSON.parse(JSON.stringify(menuOptions));
+    let result;
+    if (app.options.actionmenu) {
+        const actionmenu = app.options.actionmenu.replaceAll("{itemUrl}", model.getURL);
+        try {
+            result = JSON.parse(actionmenu);
+        } catch {
+            // Ignore
+        }
+    }
+    if (!result) {
+        result = JSON.parse(JSON.stringify(menuOptions));
+    }
+
     if (!(app.pasteAllowed() && model.is_folderish)) {
         delete result.pasteItem;
     }
