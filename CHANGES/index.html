@@ -343,6 +343,63 @@
 
       <main id="content">
         <h1>Changelog</h1>
+<h2><a href="https://github.com/plone/mockup/compare/5.7.0-alpha.2...5.7.0-alpha.3">5.7.0-alpha.3</a> (2026-09-17)</h2>
+<h3>Bug Fixes</h3>
+<ul>
+<li>
+<p><strong>pat-structure:</strong> Prevent datatables alerts in specific column layouts. (<a href="https://github.com/plone/mockup/commit/bbfff284cbbca0f9e1bea3e84e2c66f1f31daeda">bbfff28</a>)</p>
+<p>Co-authored-by: Codex <a href="mailto:noreply@openai.com">noreply@openai.com</a></p>
+</li>
+<li>
+<p><strong>pat-structure:</strong> Scan rows when attached. (<a href="https://github.com/plone/mockup/commit/c11fb384d013700698b7490223ae274cd4384727">c11fb38</a>)</p>
+<p>Do a Patternslib registry scan on rows when they are attached to the
+document and not when they are created. This allows the Patternslib
+parser to pick up parent Pattern configurations. A common way is to
+define global Pattern options on the document body.</p>
+<p>Co-authored-by: Codex <a href="mailto:noreply@openai.com">noreply@openai.com</a></p>
+</li>
+</ul>
+<h3>Technical Changes</h3>
+<ul>
+<li>
+<p><strong>core:</strong> restrict the formatjs locale-data context to base languages (<a href="https://github.com/plone/mockup/commit/3b8878b442269854154d3434678c44cce28249b8">3b8878b</a>)</p>
+<p>core/intl-loader.js dynamically imports <code>locale-data/${baseLang}.js</code> from
+the ~766-file @formatjs/intl-datetimeformat/locale-data directory. Webpack
+turns that into a context and emits one lazy chunk per file (~110 MB of
+chunks plus ~220 MB of source maps), and the production build runs out
+of the default Node heap. baseLang never carries a region or script
+suffix, so the ~450 variant files were never requestable.
+See plone/mockup#1640.</p>
+<p>Constrain the context with webpackInclude to base-language files
+(de.js, pt.js, ...). Regional variants still resolve through the polyfill's
+own fallback (pt-BR -&gt; pt, de-AT -&gt; de), as they did before. The include is
+matched against the absolute file path, so it must not be anchored at &quot;./&quot;.</p>
+<p>Move the polyfill-force import and the locale-data context into a separate
+lazy intl-polyfill.js, loaded only after feature detection fails, so the
+context map is not part of the pat-structure chunk.</p>
+<p>Measured on a production build, 3587 -&gt; 3145 chunk files, 767 -&gt; 324
+locale chunks, dist 380 MB -&gt; 170 MB, bundle.min.js -13 KB (webpack's
+runtime chunk-hash map shrinks with the chunk count).</p>
+<p>closes <a href="https://github.com/plone/mockup/issues/1640">plone/mockup#1640</a></p>
+</li>
+</ul>
+<h3>Maintenance</h3>
+<ul>
+<li>
+<p><strong>bundle:</strong> update @patternslib/dev to 4.2.0 and Babel to 8 (<a href="https://github.com/plone/mockup/commit/acdfe34e4e11d36ca357ee5dfabd7b9398c34930">acdfe34</a>)</p>
+<p>@patternslib/dev 4.2.0 ships the production source map setup this
+package needed (nosources-source-map, css/sass source maps off) and
+upgrades to Babel 8 targeting ES6+ browsers.</p>
+<p>Babel 8 removes the allowDeclareFields and allExtensions options of
+@babel/preset-typescript (both are now the default behaviour), so drop
+them from the babel config, the svelte runes-in-module webpack rule and
+the jest transformer. @babel/core is declared as a devDependency, as the
+babel config and the jest transformer require it directly, and pinned
+to 8 via a pnpm override: babel-jest otherwise resolves its @babel/core
+peer to a second 7.x instance, under which the Babel 8 presets do not
+strip TypeScript and the .ts test suites fail to parse.</p>
+</li>
+</ul>
 <h2><a href="https://github.com/plone/mockup/compare/5.7.0-alpha.1...5.7.0-alpha.2">5.7.0-alpha.2</a> (2026-09-16)</h2>
 <h3>Maintenance</h3>
 <ul>
@@ -785,7 +842,7 @@ is historically not fired on each value change.</p>
 </li>
 <li>
 <p><strong>pat-navigationmarker:</strong> Add support for navigate event. (<a href="https://github.com/plone/mockup/commit/418b0c5b3755eec9e08132b13b65b19b52c2ee36">418b0c5</a>)</p>
-<p>Re-mark the navigation items when a location URL change has been happened resp. a  event was triggered.</p>
+<p>Re-mark the navigation items when a location URL change has been happened resp. a event was triggered.</p>
 </li>
 <li>
 <p><strong>pat-navigationmarker:</strong> Also mark the anchor itself as current. (<a href="https://github.com/plone/mockup/commit/8c1e1cba3ed6e231f1ad05f23a1da15cea6f163f">8c1e1cb</a>)</p>
@@ -1411,7 +1468,7 @@ closes <a href="https://github.com/plone/mockup/issues/1412">plone/mockup#1412</
 <p><strong>pat querystring:</strong> use contentbrowser for internal path selection. (<a href="https://github.com/plone/mockup/commit/8ba6adc10a9438225d30f86f831846d5414438e6">8ba6adc</a>)</p>
 </li>
 <li>
-<p><strong>pat structure:</strong> Refactor  -&gt; do not import bootstrap resources but use css variables (<a href="https://github.com/plone/mockup/commit/4d89dcad929332c4477d34759cc62a85389a3bab">4d89dca</a>)</p>
+<p><strong>pat structure:</strong> Refactor -&gt; do not import bootstrap resources but use css variables (<a href="https://github.com/plone/mockup/commit/4d89dcad929332c4477d34759cc62a85389a3bab">4d89dca</a>)</p>
 </li>
 </ul>
 <h3>Maintenance</h3>
@@ -1635,7 +1692,7 @@ If you have custom TinyMCE plugins, please check with https://www.tiny.cloud/doc
 <h3>Maintenance</h3>
 <ul>
 <li>
-<p>Add sinon to  in jest config. (<a href="https://github.com/plone/mockup/commit/7aa8a9e56fc7e9eb75b157594d255c97d0ac5b44">7aa8a9e</a>)</p>
+<p>Add sinon to in jest config. (<a href="https://github.com/plone/mockup/commit/7aa8a9e56fc7e9eb75b157594d255c97d0ac5b44">7aa8a9e</a>)</p>
 </li>
 <li>
 <p><strong>Dependencies:</strong> Upgrade dependencies. (<a href="https://github.com/plone/mockup/commit/b41d4caf4aa83083119b6eca83896d7ee62e0365">b41d4ca</a>)</p>
