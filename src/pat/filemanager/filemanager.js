@@ -1,7 +1,6 @@
 import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
-import { mount } from "svelte";
 import utils from "../../core/utils";
 
 // pat-filemanager — Svelte 5 rewrite of pat-structure folder contents, talking
@@ -122,7 +121,13 @@ class Pattern extends BasePattern {
         const portalUrl =
             this.options.portalUrl || this.options.urlStructure?.base || "";
 
-        const App = (await import("./src/App.svelte")).default;
+        // svelte is imported here, not at module level — a static import would
+        // pull the whole svelte runtime into the eager patterns chunk on every
+        // page.
+        const [{ mount }, { default: App }] = await Promise.all([
+            import("svelte"),
+            import("./src/App.svelte"),
+        ]);
 
         this.component = mount(App, {
             target: this.el,
