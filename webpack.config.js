@@ -136,12 +136,7 @@ module.exports = () => {
                 options: {
                     babelrc: false,
                     configFile: false,
-                    presets: [
-                        [
-                            "@babel/preset-typescript",
-                            { allExtensions: true, allowDeclareFields: true },
-                        ],
-                    ],
+                    presets: ["@babel/preset-typescript"],
                 },
             },
         ],
