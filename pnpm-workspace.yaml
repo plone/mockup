@@ -7,6 +7,8 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - svelte@5.56.3
+  - '@patternslib/dev@4.1.0'
+  - '@patternslib/patternslib@9.11.0'
 
 overrides:
   "slick-carousel": "-"
