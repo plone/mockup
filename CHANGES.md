@@ -1,53 +1,86 @@
 # Changelog
 
+## [5.6.14](https://github.com/plone/mockup/compare/5.6.13...5.6.14) (2026-09-17)
 
+### Bug Fixes
+
+- **pat-structure:** Prevent datatables alerts in specific column layouts. ([4c6f583](https://github.com/plone/mockup/commit/4c6f583de4bbee2495eea3bde3a92c2829e45b52))
+
+    Co-authored-by: Codex <noreply@openai.com>
+
+- **pat-structure:** Scan rows when attached. ([3e6dc6f](https://github.com/plone/mockup/commit/3e6dc6f201d8e76d99649ca70a18ce078fd3b3b1))
+
+    Do a Patternslib registry scan on rows when they are attached to the
+    document and not when they are created. This allows the Patternslib
+    parser to pick up parent Pattern configurations. A common way is to
+    define global Pattern options on the document body.
+
+    Co-authored-by: Codex <noreply@openai.com>
+
+### Technical Changes
+
+- **tests:** Poll for results instead of fixed waits in relateditems tests. ([c96ea20](https://github.com/plone/mockup/commit/c96ea206dce2a228235c6fb53bfdabbc00becb1e))
+
+    The sinon fake server answers via timers, so a fixed 50ms wait before
+    asserting the result count is fragile when the whole suite runs in
+    parallel workers. Poll for the expected count instead; the assertions
+    stay unchanged.
+
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+
+### Maintenance
+
+- Update to @patternslib/dev 4.2.0. ([c92a867](https://github.com/plone/mockup/commit/c92a86702805f51132f2e1022b43de6b2947b0bc))
+
+    Production builds now use nosources-source-map and no CSS source maps,
+    which shrinks the generated JS by about 14% and the source maps by
+    about 74%. Development builds use eval-cheap-module-source-map.
+    Babel 8 produces identical output for this code base.
+
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 
 ## [5.6.13](https://github.com/plone/mockup/compare/5.6.12...5.6.13) (2026-09-16)
 
 ### Bug Fixes
 
+- default-export the bundle in the entry point. ([4585d39](https://github.com/plone/mockup/commit/4585d3900f94f08d8e64dbb45cd08272e0822269))
 
-* default-export the bundle in the entry point. ([4585d39](https://github.com/plone/mockup/commit/4585d3900f94f08d8e64dbb45cd08272e0822269))
-
-  This is necessary, so that the module federation initialization code can
-await bundle initialization.
+    This is necessary, so that the module federation initialization code can
+    await bundle initialization.
 
 ## [5.6.12](https://github.com/plone/mockup/compare/5.6.11...5.6.12) (2026-09-16)
 
 ### Maintenance
 
-
-* Update to @patternslib/patternslib 9.11.0 and @patternslib/dev 4.1.0. ([7cc594d](https://github.com/plone/mockup/commit/7cc594de5780a7687b2fabe383c49e39cfe4983c))
+- Update to @patternslib/patternslib 9.11.0 and @patternslib/dev 4.1.0. ([7cc594d](https://github.com/plone/mockup/commit/7cc594de5780a7687b2fabe383c49e39cfe4983c))
 
 ## [5.6.11](https://github.com/plone/mockup/compare/5.6.10...5.6.11) (2026-09-11)
 
 ### Bug Fixes
 
+- **pat contentbrowser:** keep add-on components registered under the default key ([fdc8b52](https://github.com/plone/mockup/commit/fdc8b523cf84ccf31105c304602f705f08d87359))
 
-* **pat contentbrowser:** keep add-on components registered under the default key ([fdc8b52](https://github.com/plone/mockup/commit/fdc8b523cf84ccf31105c304602f705f08d87359))
-
-  The pattern registered its default SelectedItem component in init(),
-on every widget initialization, and @plone/registry overwrites
-silently. An add-on that registered its own component under the
-default key "pat-contentbrowser.SelectedItem" was therefore reset by
-the next content browser that initialized, so replacing the component
-site-wide only worked via a custom key plus the componentRegistryKeys
-pattern option.
+    The pattern registered its default SelectedItem component in init(),
+    on every widget initialization, and @plone/registry overwrites
+    silently. An add-on that registered its own component under the
+    default key "pat-contentbrowser.SelectedItem" was therefore reset by
+    the next content browser that initialized, so replacing the component
+    site-wide only worked via a custom key plus the componentRegistryKeys
+    pattern option.
 
 The default component is now only registered if nothing is registered
 under that key yet. An add-on registration wins no matter whether the
 add-on bundle initializes before or after the pattern.
 
+- **pat contentbrowser:** keep add-on components registered under the default key ([83e564e](https://github.com/plone/mockup/commit/83e564e759392e2ab3630745e8134739682a8b89))
 
-* **pat contentbrowser:** keep add-on components registered under the default key ([83e564e](https://github.com/plone/mockup/commit/83e564e759392e2ab3630745e8134739682a8b89))
-
-  The pattern registered its default SelectedItem component in init(),
-on every widget initialization, and @plone/registry overwrites
-silently. An add-on that registered its own component under the
-default key "pat-contentbrowser.SelectedItem" was therefore reset by
-the next content browser that initialized, so replacing the component
-site-wide only worked via a custom key plus the componentRegistryKeys
-pattern option.
+    The pattern registered its default SelectedItem component in init(),
+    on every widget initialization, and @plone/registry overwrites
+    silently. An add-on that registered its own component under the
+    default key "pat-contentbrowser.SelectedItem" was therefore reset by
+    the next content browser that initialized, so replacing the component
+    site-wide only worked via a custom key plus the componentRegistryKeys
+    pattern option.
 
 The default component is now only registered if nothing is registered
 under that key yet. An add-on registration wins no matter whether the
@@ -55,39 +88,30 @@ add-on bundle initializes before or after the pattern.
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 
-
 ### Maintenance
 
-
-* **Build:** In the bundle-pre target use pnpm recursive unlink, as the other form is deprecated. Also run make install afterwards instead of only pnpm install. ([470f736](https://github.com/plone/mockup/commit/470f736b107af5bd0b062bffb8007572eaf2ba02))
+- **Build:** In the bundle-pre target use pnpm recursive unlink, as the other form is deprecated. Also run make install afterwards instead of only pnpm install. ([470f736](https://github.com/plone/mockup/commit/470f736b107af5bd0b062bffb8007572eaf2ba02))
 
 ## [5.6.10](https://github.com/plone/mockup/compare/5.6.9...5.6.10) (2026-09-09)
 
 ### Bug Fixes
 
+- **pat structure:** text filtering with umlauts. ([59349a8](https://github.com/plone/mockup/commit/59349a8568789bd2244fa37732dcb4f6b8a50d06))
 
-* **pat structure:** text filtering with umlauts. ([59349a8](https://github.com/plone/mockup/commit/59349a8568789bd2244fa37732dcb4f6b8a50d06))
+- **pat-select2:** Show predefined value for single-select widgets. ([84512a1](https://github.com/plone/mockup/commit/84512a1b9edd91f691187239004ae4b20c9cf8ca))
 
-
-* **pat-select2:** Show predefined value for single-select widgets. ([84512a1](https://github.com/plone/mockup/commit/84512a1b9edd91f691187239004ae4b20c9cf8ca))
-
-  Single-select widgets did not show their predefined value.
-This is now fixed.
-
+    Single-select widgets did not show their predefined value.
+    This is now fixed.
 
 ### Maintenance
 
+- **bundle:** prepare 5.6.10 ([6eecf4c](https://github.com/plone/mockup/commit/6eecf4c31e596b12db734c26ce3f0fa53d1e33d1))
 
-* **bundle:** prepare 5.6.10 ([6eecf4c](https://github.com/plone/mockup/commit/6eecf4c31e596b12db734c26ce3f0fa53d1e33d1))
+- **pat-select2:** Add test for predefined value for a select widget. ([a681796](https://github.com/plone/mockup/commit/a6817965f986c2ff3b09db5b24937a7a30cfd70e))
 
+- **tests:** increase testTimeout ([fcccae0](https://github.com/plone/mockup/commit/fcccae0d7f04c0997fddcee00353ccf4c588759e))
 
-* **pat-select2:** Add test for predefined value for a select widget. ([a681796](https://github.com/plone/mockup/commit/a6817965f986c2ff3b09db5b24937a7a30cfd70e))
-
-
-* **tests:** increase testTimeout ([fcccae0](https://github.com/plone/mockup/commit/fcccae0d7f04c0997fddcee00353ccf4c588759e))
-
-
-* Upgrade dropzone to 6.2.0. ([7afca10](https://github.com/plone/mockup/commit/7afca1096978cbc68eee879efdc8c7719128ec76))
+- Upgrade dropzone to 6.2.0. ([7afca10](https://github.com/plone/mockup/commit/7afca1096978cbc68eee879efdc8c7719128ec76))
 
 ## [5.6.9](https://github.com/plone/mockup/compare/5.6.8...5.6.9) (2026-08-25)
 
