@@ -6,6 +6,17 @@ import utils from "@patternslib/patternslib/src/core/utils";
 
 const SELECT2_TIMEOUT = 50;
 
+// Poll until ``selector`` matches ``count`` elements. The fake server answers
+// asynchronously via timers, so a fixed wait is fragile under load (e.g. when
+// running the whole test suite in parallel workers). The assertion after the
+// wait still checks the exact count.
+async function waitForCount(selector, count, max_wait = 2000) {
+    const start = Date.now();
+    while ($(selector).length !== count && Date.now() - start < max_wait) {
+        await utils.timeout(SELECT2_TIMEOUT);
+    }
+}
+
 describe("Related Items", function () {
     var root = [
         {
@@ -302,7 +313,7 @@ describe("Related Items", function () {
                 JSON.stringify({
                     total: results.length,
                     results: results.slice(page * pageSize, page * pageSize + pageSize),
-                })
+                }),
             );
         });
     });
@@ -347,11 +358,14 @@ describe("Related Items", function () {
 
         // open up result list by clicking into search field
         document.querySelector(".select2-search-field input.select2-input").click();
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            5,
+        );
 
         // Only Images and Folders should be shown.
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(5);
 
         // Select first folder
@@ -360,23 +374,31 @@ describe("Related Items", function () {
 
         // Still, this folder should be shown in the result list - only not selectable.
         $(".select2-search-field input.select2-input").trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            5,
+        );
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(5);
 
         // Browse into second folder which contains images
         $('.pat-relateditems-result-browse[data-path="/folder2"]').trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            2,
+        );
 
         // 1 "One level up" and 2 images
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(2);
         expect($(".pat-relateditems-result")[0].textContent).toContain("One level up");
 
         // Select first image
-        $('a.pat-relateditems-result-select[data-path="/folder2/image17"]').trigger("click");
+        $('a.pat-relateditems-result-select[data-path="/folder2/image17"]').trigger(
+            "click",
+        );
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID17");
 
         // Browse one level up
@@ -385,13 +407,16 @@ describe("Related Items", function () {
 
         await utils.timeout(SELECT2_TIMEOUT);
         $(
-            ".pat-relateditems-result.one-level-up a.pat-relateditems-result-browse"
+            ".pat-relateditems-result.one-level-up a.pat-relateditems-result-browse",
         )[0].click();
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            5,
+        );
 
         // Again, 5 items on root.
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(5);
 
         // Input a search term and enter search mode
@@ -399,25 +424,33 @@ describe("Related Items", function () {
         $input.trigger("click").val("folder2");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            2,
+        );
 
         // Searching for folder 2 brings up 2 items: folder2 itself and the not-yet-selected image.
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(2);
 
         // We can even browse into folders in search mode
         $('.pat-relateditems-result-browse[data-path="/folder2"]').trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            1,
+        );
 
         // Being in folder 2, we see again one item...
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(1);
         expect($(".pat-relateditems-result")[0].textContent).toContain("One level up");
 
         // Selecting the image will add it to the selected items.
-        $('a.pat-relateditems-result-select[data-path="/folder2/image18"]').trigger("click");
+        $('a.pat-relateditems-result-select[data-path="/folder2/image18"]').trigger(
+            "click",
+        );
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID17,UID18");
     });
 
@@ -431,12 +464,15 @@ describe("Related Items", function () {
 
         // open up result list by clicking on "browse"
         $(".mode.browse", $container).trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            5,
+        );
 
         // result list must have expected length
         // Only Images and Folders.
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(5);
 
         // PT 2
@@ -449,11 +485,16 @@ describe("Related Items", function () {
 
         // click again on browse, should open up result list again, this time without 'UID1'
         $(".mode.browse", $container).trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            2,
+        );
 
         // result list must have expected length
         expect(
-            $(".pat-relateditems-result-select.selectable .pat-relateditems-result-info")
+            $(
+                ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            ),
         ).toHaveLength(2);
 
         // add another one
@@ -469,9 +510,14 @@ describe("Related Items", function () {
         $input.trigger("click").val("Ima");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            2,
+        );
         expect(
-            $(".pat-relateditems-result-select.selectable .pat-relateditems-result-info")
+            $(
+                ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            ),
         ).toHaveLength(2);
 
         // add first from result
@@ -489,11 +535,14 @@ describe("Related Items", function () {
 
         // open up result list by clicking on "browse"
         $(".mode.search", $container).trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select .pat-relateditems-result-info",
+            11,
+        );
 
         // result list must have expected length
         expect(
-            $(".pat-relateditems-result-select .pat-relateditems-result-info")
+            $(".pat-relateditems-result-select .pat-relateditems-result-info"),
         ).toHaveLength(11);
 
         //  // PT 2
@@ -506,11 +555,16 @@ describe("Related Items", function () {
 
         //  // click again on browse, should open up result list again, this time without 'UID1'
         $(".mode.search", $container).trigger("click");
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            10,
+        );
 
         //  // result list must have expected length
         expect(
-            $(".pat-relateditems-result-select.selectable .pat-relateditems-result-info")
+            $(
+                ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            ),
         ).toHaveLength(10);
 
         //  // add another one
@@ -526,13 +580,20 @@ describe("Related Items", function () {
         $input.trigger("click").val("document15");
         var keyup = $.Event("keyup-change");
         $input.trigger(keyup);
-        await utils.timeout(SELECT2_TIMEOUT);
+        await waitForCount(
+            ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            1,
+        );
         expect(
-            $(".pat-relateditems-result-select.selectable .pat-relateditems-result-info")
+            $(
+                ".pat-relateditems-result-select.selectable .pat-relateditems-result-info",
+            ),
         ).toHaveLength(1);
 
         //  // add first from result
-        $('a.pat-relateditems-result-select[data-path="/folder2/document15"]').trigger("click");
+        $('a.pat-relateditems-result-select[data-path="/folder2/document15"]').trigger(
+            "click",
+        );
         expect($("input.pat-relateditems").val()).toEqual("UID2,UID15");
     });
 
@@ -558,7 +619,7 @@ describe("Related Items", function () {
         await utils.timeout(SELECT2_TIMEOUT);
 
         expect(
-            $(".path-wrapper .pat-relateditems-path-label", $container).text()
+            $(".path-wrapper .pat-relateditems-path-label", $container).text(),
         ).toEqual("Current path:");
         expect($($(".path-wrapper .crumb")[1], $container).text()).toEqual("folder1");
     });
@@ -604,10 +665,10 @@ describe("Related Items", function () {
 
         // last selected should be first in list.
         expect($($(".pat-relateditems-recentlyused-select")[0]).data("uid")).toEqual(
-            "UID7"
+            "UID7",
         );
         expect($($(".pat-relateditems-recentlyused-select")[1]).data("uid")).toEqual(
-            "UID6"
+            "UID6",
         );
 
         // Klicking on last used item should add it to the selection.
@@ -697,10 +758,10 @@ describe("Related Items", function () {
         // only two should be visible, last selected should be first in list.
         expect($(".pat-relateditems-recentlyused-select").length).toEqual(2);
         expect($($(".pat-relateditems-recentlyused-select")[0]).data("uid")).toEqual(
-            "UID9"
+            "UID9",
         );
         expect($($(".pat-relateditems-recentlyused-select")[1]).data("uid")).toEqual(
-            "UID8"
+            "UID8",
         );
 
         // done.
