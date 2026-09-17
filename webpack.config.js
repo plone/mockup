@@ -240,6 +240,33 @@ module.exports = () => {
         config.devServer.static.directory = path.resolve(__dirname, "./_site/");
     }
 
+    if (process.env.NODE_ENV === "production") {
+        // Source maps without the embedded sources: stack traces still map to
+        // the original file and line, but the maps are more than 10x smaller.
+        // The full sources of every lazy chunk would otherwise be shipped with
+        // plone.staticresources and every Plone deployment.
+        config.devtool = "nosources-source-map";
+
+        // css-loader and sass-loader derive their sourceMap option from
+        // devtool, and style-loader embeds the resulting CSS source maps into
+        // the JS chunks, where every browser downloads and parses them (the
+        // TinyMCE chunk alone grows by more than 1 MB with full maps).
+        // Nobody debugs the compiled CSS of a production site down to the
+        // SCSS line, so switch them off explicitly.
+        for (const rule of config.module.rules) {
+            if (!Array.isArray(rule.use)) {
+                continue;
+            }
+            rule.use = rule.use.map((loader) => {
+                const name = typeof loader === "string" ? loader : loader.loader;
+                if (name !== "css-loader" && name !== "sass-loader") {
+                    return loader;
+                }
+                return { loader: name, options: { ...loader.options, sourceMap: false } };
+            });
+        }
+    }
+
     if (process.env.DEPLOYMENT === "docs") {
         config.output.path = path.resolve(
             __dirname,
