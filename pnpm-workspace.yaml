@@ -5,7 +5,7 @@ allowBuilds:
   yarn: false
 
 minimumReleaseAgeExclude:
-  - '@patternslib/dev@4.1.0'
+  - '@patternslib/dev@4.1.0 || 4.2.0'
   - '@patternslib/patternslib@9.11.0'
 
 overrides:
