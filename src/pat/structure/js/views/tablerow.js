@@ -4,6 +4,7 @@ import _t from "../../../../core/i18n-wrapper";
 import { translate_plone as _tp } from "../../../../core/i18n-wrapper"; // eslint-disable-line
 import utils from "../../../../core/utils";
 import Backbone from "backbone";
+import registry from "@patternslib/patternslib/src/core/registry";
 
 import ActionMenuView from "./actionmenu";
 import TableRowTemplate from "../../templates/tablerow.xml";
@@ -92,6 +93,13 @@ export default Backbone.View.extend({
             model: this.model,
         });
         $(".actionmenu-container", this.$el).append(await menuview.render());
+
+        // Patterns inherit configuration from ancestors, so initialize only
+        // after attachment. TableView scans newly inserted rows; rows rendered
+        // again after context-info updates are already in the document.
+        if (this.el.isConnected) {
+            registry.scan(this.$el);
+        }
 
         return this;
     },
