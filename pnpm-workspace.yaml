@@ -7,10 +7,15 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - svelte@5.56.3
-  - '@patternslib/dev@4.1.0'
+  - '@patternslib/dev@4.1.0 || 4.2.0'
   - '@patternslib/patternslib@9.11.0'
 
 overrides:
+  # Force Babel 8 for the whole graph. babel-jest and babel-preset-jest
+  # otherwise resolve their @babel/core peer to a second 7.x instance, and
+  # the Babel 8 presets (@patternslib/dev >= 4.2.0) do not strip TypeScript
+  # under that core.
+  "@babel/core": "^8.0.5"
   "slick-carousel": "-"
   "slides": "-"
 
