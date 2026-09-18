@@ -13,8 +13,9 @@ config.transformIgnorePatterns = [
 // tight and fails sporadically. Give all tests a bit more room.
 config.testTimeout = 10000;
 
-// add svelte-jester
-config.transform["^.+\\.svelte$"] = "svelte-jester";
+// svelte-jester refuses to run in Jest's CJS mode, so use a custom client
+// compile + ESM->CJS transformer (see the tool for the rationale).
+config.transform["^.+\\.svelte$"] = path.resolve(__dirname, "./tools/jest-svelte-component.cjs");
 
 // console.log(JSON.stringify(config, null, 4));
 module.exports = config;
