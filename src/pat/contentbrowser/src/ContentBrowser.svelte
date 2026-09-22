@@ -1027,6 +1027,8 @@
         padding: 0.5rem;
         width: 100%;
         word-wrap: anywhere;
+        max-height: 88vh;
+        overflow-y: auto;
     }
     .preview .info .previewIcon {
         margin: 0 auto 1rem auto;
