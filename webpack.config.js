@@ -9,7 +9,7 @@ const webpack_config = require("@patternslib/dev/webpack/webpack.config").config
 module.exports = () => {
     let config = {
         entry: {
-            "bundle.min": path.resolve(__dirname, "src/index.js"),
+            "bundle.min": "./src/index",
         },
         optimization: {
             splitChunks: {
