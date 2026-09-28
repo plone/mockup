@@ -58,7 +58,6 @@
         "@babel/core": "^8.0.6",
         "@babel/preset-typescript": "^8.0.1",
         "@patternslib/dev": "^4.3.0",
-        "@testing-library/jest-dom": "^7.0.1",
         "@types/sinon": "^10.0.20",
         "css.escape": "^1.5.1",
         "npm-run-all2": "^9.0.3",
