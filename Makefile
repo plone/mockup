@@ -18,11 +18,10 @@
 -include .env
 export
 
-PNPM = pnpm
+PNPM ?= npx pnpm
 
 
 pnpm-lock.yaml install:
-	npm i -g corepack@latest && corepack enable
 	$(PNPM) install
 
 
