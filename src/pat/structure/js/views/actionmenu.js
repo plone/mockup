@@ -2,7 +2,6 @@ import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import utils from "../../../../core/utils";
-import registry from "@patternslib/patternslib/src/core/registry";
 import BaseView from "../../../../core/ui/views/base";
 import ActionMenuTemplate from "../../templates/actionmenu.xml";
 import "../../../modal/modal";
@@ -101,7 +100,6 @@ export default BaseView.extend({
             this.$el.addClass(this.options.className);
         }
 
-        registry.scan(this.$el);
         return this.el;
     },
 });

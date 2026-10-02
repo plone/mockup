@@ -136,12 +136,7 @@ module.exports = () => {
                 options: {
                     babelrc: false,
                     configFile: false,
-                    presets: [
-                        [
-                            "@babel/preset-typescript",
-                            { allExtensions: true, allowDeclareFields: true },
-                        ],
-                    ],
+                    presets: ["@babel/preset-typescript"],
                 },
             },
         ],
@@ -175,8 +170,8 @@ module.exports = () => {
         },
     };
 
-    // NOTE: above doesn't work.
-    // Currently, webpack needs the pnpm setting "shamefully-hoist=true" in
+    // pnpm loader resolution: the attempted resolveLoader configuration below
+    // did not resolve the issue. The workaround was "shamefully-hoist=true" in
     // `.npmrc` to create a flat node_modules directory.
     // See this comment for more information:
     // https://github.com/webpack/webpack/issues/5087#issuecomment-3193480986

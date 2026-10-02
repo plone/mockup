@@ -15,12 +15,7 @@ module.exports = {
             filename,
             babelrc: false,
             configFile: false,
-            presets: [
-                [
-                    "@babel/preset-typescript",
-                    { allExtensions: true, allowDeclareFields: true },
-                ],
-            ],
+            presets: ["@babel/preset-typescript"],
         }).code;
 
         const compiled = svelte.compileModule(stripped, {

@@ -9,7 +9,7 @@ module.exports = (api) => {
     const config = base(api);
     config.presets = [
         ...(config.presets || []),
-        ["@babel/preset-typescript", { allowDeclareFields: true }],
+        "@babel/preset-typescript",
     ];
     return config;
 };
