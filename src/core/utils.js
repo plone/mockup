@@ -1,4 +1,5 @@
 import $ from "jquery";
+import bootstrap_icons from "bootstrap-icons/package.json";
 import logging from "@patternslib/patternslib/src/core/logging";
 
 const logger = logging.getLogger("core utils");
@@ -369,6 +370,9 @@ var storage = {
 
 export const ICON_CACHE = new Map();
 
+// Source of the bootstrap-icons outside of Plone, see ``resolveIcon``.
+const BOOTSTRAP_ICONS_CDN = `https://cdn.jsdelivr.net/npm/bootstrap-icons@${bootstrap_icons.version}/icons`;
+
 /**
  * Return a <svg> element from a icon name.
  *
@@ -428,7 +432,15 @@ const resolveIcon = async function (name) {
                 const iconmap = iconmap_module.default ?? iconmap_module;
                 const icon_path = iconmap[icon_lookup_name];
                 if (icon_path?.includes("bootstrap-icons")) {
-                    const resp = await fetch(`${base_url || ""}/${icon_path}`);
+                    // A Plone site serves the icons itself. Only without
+                    // Plone, e.g. in the demo, load them from a CDN, pinned
+                    // to the bootstrap-icons version of the iconmap. Example:
+                    // "++plone++bootstrap-icons/house.svg" becomes
+                    // ".../npm/bootstrap-icons@1.13.1/icons/house.svg".
+                    const icon_url = base_url
+                        ? `${base_url}/${icon_path}`
+                        : `${BOOTSTRAP_ICONS_CDN}/${icon_path.split("/").pop()}`;
+                    const resp = await fetch(icon_url);
                     if (resp.ok) {
                         icon = await resp.text();
                     } else {

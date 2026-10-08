@@ -1,5 +1,6 @@
 import $ from "jquery";
-import utils from "./utils";
+import bootstrap_icons from "bootstrap-icons/package.json";
+import utils, { ICON_CACHE } from "./utils";
 
 describe("utils", function () {
     describe("setId", function () {
@@ -258,6 +259,51 @@ describe("utils", function () {
         it("removing", function () {
             var clean = utils.removeHTML("<p>Paragraph</p>");
             expect(clean).toEqual("Paragraph");
+        });
+    });
+
+    describe("resolveIcon", function () {
+        const house_svg = '<svg class="bi bi-house"></svg>';
+        const resolver_url = "http://nohost/plone/@@iconresolver/house";
+        const plone_url = "http://nohost/plone/++plone++bootstrap-icons/house.svg";
+        const cdn_url = `https://cdn.jsdelivr.net/npm/bootstrap-icons@${bootstrap_icons.version}/icons/house.svg`;
+
+        const found = { ok: true, status: 200, text: async () => house_svg };
+        const not_found = { ok: false, status: 404, text: async () => "" };
+
+        // Answer each URL with its entry in ``responses``, anything else
+        // with a 404.
+        const serve = (responses) => {
+            global.fetch = jest.fn(async (url) => responses[url] ?? not_found);
+        };
+        const fetched_urls = () => global.fetch.mock.calls.map((call) => call[0]);
+
+        beforeEach(function () {
+            ICON_CACHE.clear();
+        });
+
+        afterEach(function () {
+            delete global.fetch;
+            document.body.removeAttribute("data-portal-url");
+        });
+
+        it("falls back to the Plone bootstrap-icons resource", async function () {
+            document.body.setAttribute("data-portal-url", "http://nohost/plone");
+            serve({ [plone_url]: found });
+
+            const icon = await utils.resolveIcon("house");
+
+            expect(icon).toBe(house_svg);
+            expect(fetched_urls()).toEqual([resolver_url, plone_url]);
+        });
+
+        it("falls back to the pinned bootstrap-icons CDN without Plone", async function () {
+            serve({ [cdn_url]: found });
+
+            const icon = await utils.resolveIcon("house");
+
+            expect(icon).toBe(house_svg);
+            expect(fetched_urls()).toEqual([cdn_url]);
         });
     });
 });
