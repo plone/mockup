@@ -70,25 +70,41 @@
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
+    let sortable;
+
     function initializeSorting() {
-        if ($config.maximumSelectionSize !== 1 && $selectedItems.length > 1) {
-            Sortable.create(
-                selectedItemsNode.previousSibling.querySelector(
-                    ".content-browser-selected-items",
-                ),
-                {
-                    draggable: "> div",
-                    animation: 200,
-                    onUpdate: (e) => {
-                        let sortedUuids = [];
-                        e.target.querySelectorAll(".selected-item").forEach((el) => {
-                            sortedUuids.push(el.dataset["uuid"]);
-                        });
-                        setNodeValue(sortedUuids);
-                    },
-                },
-            );
+        if (sortable || $config.maximumSelectionSize === 1 || $selectedItems.length < 2) {
+            return;
         }
+        let nextSibling;
+        sortable = Sortable.create(
+            selectedItemsNode.previousSibling.querySelector(
+                ".content-browser-selected-items",
+            ),
+            {
+                draggable: "> div",
+                animation: 200,
+                onStart: (e) => {
+                    nextSibling = e.item.nextSibling;
+                },
+                onUpdate: (e) => {
+                    // Svelte owns the list: put the dragged node back and
+                    // reorder the store instead. A DOM order the store does
+                    // not know is lost on the next add or remove.
+                    e.from.insertBefore(e.item, nextSibling);
+                    selectedItems.update((items) => {
+                        const sorted = [...items];
+                        sorted.splice(
+                            e.newDraggableIndex,
+                            0,
+                            ...sorted.splice(e.oldDraggableIndex, 1),
+                        );
+                        return sorted;
+                    });
+                    selectedUids.update(() => $selectedItems.map((x) => x.UID));
+                },
+            },
+        );
     }
 
     function selectedUidsFromSelectedItems() {
