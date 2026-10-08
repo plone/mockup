@@ -1,5 +1,5 @@
 import $ from "jquery";
-import utils from "./utils";
+import utils, { ICON_CACHE } from "./utils";
 
 describe("utils", function () {
     describe("setId", function () {
@@ -258,6 +258,50 @@ describe("utils", function () {
         it("removing", function () {
             var clean = utils.removeHTML("<p>Paragraph</p>");
             expect(clean).toEqual("Paragraph");
+        });
+    });
+
+    describe("resolveIcon", function () {
+        const house_svg = '<svg class="bi bi-house"></svg>';
+        let public_path;
+
+        beforeEach(function () {
+            ICON_CACHE.clear();
+            public_path = global.__webpack_public_path__;
+            global.__webpack_public_path__ = "https://cdn.example.org/mockup/dist/";
+            // Only the bootstrap-icons resource exists, the iconresolver fails.
+            global.fetch = jest.fn(async (url) =>
+                url.endsWith("bootstrap-icons/house.svg")
+                    ? { ok: true, text: async () => house_svg }
+                    : { ok: false, status: 404, text: async () => "" }
+            );
+        });
+
+        afterEach(function () {
+            global.__webpack_public_path__ = public_path;
+            delete global.fetch;
+            document.body.removeAttribute("data-portal-url");
+        });
+
+        it("falls back to the Plone bootstrap-icons resource", async function () {
+            document.body.setAttribute("data-portal-url", "http://nohost/plone");
+
+            const icon = await utils.resolveIcon("house");
+
+            expect(icon).toBe(house_svg);
+            expect(global.fetch.mock.calls.map((call) => call[0])).toEqual([
+                "http://nohost/plone/@@iconresolver/house",
+                "http://nohost/plone/++plone++bootstrap-icons/house.svg",
+            ]);
+        });
+
+        it("falls back to the bootstrap-icons next to the bundle without Plone", async function () {
+            const icon = await utils.resolveIcon("house");
+
+            expect(icon).toBe(house_svg);
+            expect(global.fetch.mock.calls.map((call) => call[0])).toEqual([
+                "https://cdn.example.org/mockup/dist/bootstrap-icons/house.svg",
+            ]);
         });
     });
 });
