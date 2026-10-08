@@ -1,10 +1,24 @@
 import "./markspeciallinks";
+import fs from "fs";
+import path from "path";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
+const icons_dir = path.dirname(require.resolve("bootstrap-icons/icons/house.svg"));
+
 describe("MarkSpecialLinks", function () {
+    beforeEach(function () {
+        // Serve the bootstrap-icons fallback of resolveIcon.
+        global.fetch = jest.fn(async (url) => ({
+            ok: true,
+            text: async () =>
+                fs.readFileSync(path.join(icons_dir, path.basename(url)), "utf8"),
+        }));
+    });
+
     afterEach(function () {
         document.body.innerHTML = "";
+        delete global.fetch;
     });
 
     it("external links have target=_blank", async function () {

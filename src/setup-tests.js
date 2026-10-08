@@ -4,6 +4,9 @@
 import jquery from "jquery";
 global.$ = global.jQuery = jquery;
 
+// Provide webpack's public path, which is not set outside of a webpack build.
+global.__webpack_public_path__ = "/";
+
 jquery.expr.pseudos.visible = function () {
     // Fix jQuery ":visible" selector always returns false in JSDOM.
     // https://github.com/jsdom/jsdom/issues/1048#issuecomment-401599392

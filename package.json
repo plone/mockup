@@ -60,6 +60,7 @@
         "@patternslib/dev": "^4.2.0",
         "@testing-library/jest-dom": "^6.9.1",
         "@types/sinon": "^10.0.20",
+        "copy-webpack-plugin": "^14.0.0",
         "css.escape": "^1.5.1",
         "npm-run-all2": "^8.0.4",
         "rimraf": "^6.1.3",

@@ -1,3 +1,4 @@
+/* global __webpack_public_path__ */
 import $ from "jquery";
 import logging from "@patternslib/patternslib/src/core/logging";
 
@@ -428,7 +429,12 @@ const resolveIcon = async function (name) {
                 const iconmap = iconmap_module.default ?? iconmap_module;
                 const icon_path = iconmap[icon_lookup_name];
                 if (icon_path?.includes("bootstrap-icons")) {
-                    const resp = await fetch(`${base_url || ""}/${icon_path}`);
+                    // Without Plone, use the icons copied next to the bundle
+                    // (see webpack.config.js).
+                    const icon_url = base_url
+                        ? `${base_url}/${icon_path}`
+                        : `${__webpack_public_path__}bootstrap-icons/${icon_path.split("/").pop()}`;
+                    const resp = await fetch(icon_url);
                     if (resp.ok) {
                         icon = await resp.text();
                     } else {
