@@ -100,6 +100,11 @@
     }
 
     function setNodeValue(selectedUids) {
+        if (!selectedItemsNode) {
+            // The target input is gone (e.g. a JS framework host removed
+            // the widget after selection); there is nowhere to write to.
+            return;
+        }
         const node_val = selectedUids.join($config.separator);
         selectedItemsNode.value = node_val;
         selectedItemsNode.dispatchEvent(events.change_event());
