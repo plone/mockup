@@ -418,18 +418,41 @@ const resolveIcon = async function (name) {
             }
         }
         if (!icon) {
-            // fallback
-            name = icon_lookup_name;
+            // Fallback: fetch the icon resource from the jsdelivr CDN. If that
+            // fails, try to fetch it from the provided base_url (e.g. the
+            // Plone portal root).
             try {
                 import("../styles/icons.scss");
-                const iconmap = await import("../iconmap.json");
-                const parts = iconmap[name]?.split?.("/");
-                if (parts[0].includes("bootstrap-icons")) {
-                    icon = await import(`bootstrap-icons/icons/${parts[1]}`);
-                    icon = icon?.default;
+                const iconmap_module = await import("../iconmap.json");
+                const iconmap = iconmap_module.default ?? iconmap_module;
+                const icon_path = iconmap[icon_lookup_name];
+
+                let icon_name;
+                let icon_url;
+                const cdn_url = "https://cdn.jsdelivr.net/npm";
+
+                if (icon_path.includes("bootstrap-icons")) {
+                    icon_name = icon_path.split("bootstrap-icons/").pop();
+                    icon_url = `${cdn_url}/bootstrap-icons@latest/${icon_name}`;
+                } else if (icon_path.includes("country-flag-icons")) {
+                    icon_name = icon_path.split("country-flag-icons/").pop();
+                    icon_url = `${cdn_url}/country-flag-icons@latest/${icon_name}`;
+                } else if (icon_path.includes("language-flag-icons")) {
+                    icon_name = icon_path.split("language-flag-icons").pop();
+                    icon_url = `${cdn_url}/country-flag-icons@latest/${icon_name}`;
+                } else {
+                    // Final fallback - try to fetch from Plone
+                    icon_url = `${base_url}/${icon_path}`;
+                }
+                const resp = await fetch(icon_url);
+                if (resp.ok) {
+                    icon = await resp.text();
+                } else {
+                    logger.warn(
+                        `Loading icon "${icon_lookup_name}" failed from fallback: HTTP ${resp.status}`
+                    );
                 }
             } catch (e) {
-                // import error
                 logger.warn(`Loading icon "${icon_lookup_name}" failed from fallback.`);
                 console.warn(e);
             }
