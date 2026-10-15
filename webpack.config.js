@@ -1,5 +1,6 @@
 process.traceDeprecation = true;
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 const sveltePreprocess = require("svelte-preprocess");
 const package_json = require("./package.json");
 const patternslib_package_json = require("@patternslib/patternslib/package.json");
@@ -224,6 +225,23 @@ module.exports = () => {
                     requiredVersion: package_json.dependencies["svelte"],
                 },
             },
+        })
+    );
+
+    // Static bootstrap-icons for the resolveIcon fallback outside of Plone.
+    // Copied, not imported: an import would add a webpack context over all
+    // icons to the eager chunks.
+    config.plugins.push(
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.join(
+                        path.dirname(require.resolve("bootstrap-icons/package.json")),
+                        "icons"
+                    ),
+                    to: "bootstrap-icons",
+                },
+            ],
         })
     );
 
