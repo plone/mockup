@@ -9,14 +9,14 @@
         </div>
         <div class="dz-message"><p><%-_t("Drop files here...")%></p></div>
         <div class="row browse-select">
-            <div class="col-md-9">
+            <div class="col">
                 <input
                     id="fakeUploadFile"
                     placeholder="<%- _t("Choose File") %>"
                     disabled
                     />
             </div>
-            <div class="col-md-3">
+            <div class="col-auto">
                 <button
                     type="button"
                     class="btn btn-primary browse">
@@ -41,7 +41,7 @@
                 </div>
                 <% } %>
                 <div class="actions row">
-                    <div class="col-md-9">
+                    <div class="col">
                         <div class="progress active">
                             <div class="progress-bar progress-bar-success"
                                  role="progressbar"
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 align-right">
+                    <div class="col-auto align-right">
                         <button
                             type="button"
                             class="btn btn-primary upload-all">
