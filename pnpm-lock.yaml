@@ -271,8 +271,8 @@ importers:
         specifier: ^5.57.1
         version: 5.57.1
       tinymce:
-        specifier: 8.9.2
-        version: 8.9.2
+        specifier: 8.9.3
+        version: 8.9.3
       tinymce-i18n:
         specifier: 26.9.21
         version: 26.9.21
@@ -5531,8 +5531,8 @@ packages:
   tinymce-i18n@26.9.21:
     resolution: {integrity: sha512-umMiwx0KtwWfjqUiKiG5I+HGeJ9HA8+QjSi2j2jCnn2r1rlC2Sgoa4T2ZVHV/PdlJA3b15urDkaaQsBAMLTWZA==}
 
-  tinymce@8.9.2:
-    resolution: {integrity: sha512-Qh6ADSC0x1F/KsrupfResNJFAaINJQBtfVjx5zxxWJ0ZrGtaKldtAXDMI6uEA57s2n+0rEtXmtbitiU4zV7+0Q==}
+  tinymce@8.9.3:
+    resolution: {integrity: sha512-T6Z541dm8R34/rgotB40/j2lwrE3eKARbaoet37/I4d3jq+S7Ul3Q7bNZUQY2WtXOvD9P5aTVbgcYI1nKQoGqg==}
 
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
@@ -11705,7 +11705,7 @@ snapshots:
 
   tinymce-i18n@26.9.21: {}
 
-  tinymce@8.9.2: {}
+  tinymce@8.9.3: {}
 
   tippy.js@6.3.7:
     dependencies:
