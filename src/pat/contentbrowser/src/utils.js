@@ -234,3 +234,44 @@ export function formatDate(dateval) {
     const i18n = new I18n();
     return new Date(d).toLocaleString(i18n.currentLanguage.replace("_", "-"));
 }
+
+// Workflow review state styling.
+// The actual colors are provided by Plone via CSS variables named
+// --plone-state-<review_state>. Fall back to the standard Plone workflow state
+// colors when the pattern runs outside of Plone or the state is not themed.
+const DEFAULT_REVIEW_STATE_COLORS = {
+    private: "#dc3545",
+    pending: "#fd7e14",
+    visible: "#0d6efd",
+    internal: "#6f42c1",
+    internally_published: "#0d6efd",
+    archived: "#6c757d",
+    draft: "#6c757d",
+};
+
+export function sanitizeCssClass(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+}
+
+export function reviewStateClass(reviewState) {
+    const state = sanitizeCssClass(reviewState);
+    return state ? `state-${state}` : "";
+}
+
+export function portalTypeClass(portalType) {
+    const type = sanitizeCssClass(portalType);
+    return type ? `contenttype-${type}` : "";
+}
+
+export function reviewStateColor(reviewState) {
+    const state = sanitizeCssClass(reviewState);
+    // Published items keep the default text color.
+    if (!state || state === "published") return null;
+    const fallback = DEFAULT_REVIEW_STATE_COLORS[state] || "inherit";
+    return `var(--plone-state-${state}, ${fallback})`;
+}
