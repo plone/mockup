@@ -11,8 +11,11 @@
         formatDate,
         get_items_from_uids,
         iconTag,
+        portalTypeClass,
         request,
         resolveIcon,
+        reviewStateClass,
+        reviewStateColor,
         updateRecentlyUsed,
     } from "./utils";
     import Favorites from "./Favorites.svelte";
@@ -690,7 +693,7 @@
                                                 ) === -1)) &&
                                             !isBrowseable(item)
                                                 ? ' text-body-tertiary'
-                                                : ''}"
+                                                : ''} {reviewStateClass(item.review_state)} {portalTypeClass(item.portal_type)}"
                                             role="button"
                                             tabindex={n}
                                             data-uuid={item.UID}
@@ -725,6 +728,9 @@
                                                 {/if}
                                                 <span
                                                     class={!item.Title ? "id-only" : ""}
+                                                    style={reviewStateColor(item.review_state)
+                                                        ? `color: ${reviewStateColor(item.review_state)}`
+                                                        : null}
                                                     >{item.Title || itemId(item)}</span
                                                 >
                                                 {#if $config.mode == "search"}

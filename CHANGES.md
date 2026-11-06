@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- **pat-contentbrowser:** distinguish items by review state in the listing.
+  Items now render with a `state-<review_state>` CSS class and the title is
+  colored via the Plone CSS variable `--plone-state-<review_state>` for
+  non-published states only. Published items keep the default text color and no
+  status dot is rendered. See
+  [#1664](https://github.com/plone/mockup/issues/1664).
+
+
 ## [5.7.0-alpha.3](https://github.com/plone/mockup/compare/5.7.0-alpha.2...5.7.0-alpha.3) (2026-09-17)
 
 ### Bug Fixes
