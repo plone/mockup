@@ -19,6 +19,7 @@ import "@patternslib/patternslib/src/pat/depends/depends";
 // Import all used patterns for the bundle to be generated
 import "./pat/autotoc/autotoc";
 import "./pat/backdrop/backdrop";
+import "./pat/base-url/base-url";
 import "./pat/contentloader/contentloader";
 import "./pat/contentbrowser/contentbrowser";
 import "./pat/cookietrigger/cookietrigger";
