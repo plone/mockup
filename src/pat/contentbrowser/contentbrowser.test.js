@@ -39,6 +39,31 @@ describe("Content Browser", () => {
         expect(document.querySelectorAll(".content-browser-wrapper").length).toEqual(1);
     });
 
+    it("destroy removes the browser and unmounts the app", async function () {
+        const options = { vocabularyUrl: "http://localhost/plone/@@getVocabulary" };
+        document.body.innerHTML = `
+            <input type="text" value="" class="pat-contentbrowser"
+                   data-pat-contentbrowser='${JSON.stringify(options)}'>
+        `;
+        global.fetch = jest.fn(async () => ({
+            ok: true,
+            json: async () => ({ results: [], total: 0 }),
+        }));
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+        expect(document.querySelectorAll(".content-browser-wrapper").length).toEqual(1);
+        const pattern = document.querySelector(".pat-contentbrowser")["pattern-contentbrowser"];
+        expect(pattern.component_content_browser).toBeTruthy();
+
+        pattern.destroy();
+
+        expect(document.querySelectorAll(".content-browser-wrapper").length).toEqual(0);
+        expect(pattern.component_content_browser).toBeNull();
+
+        delete global.fetch;
+        delete plone_registry.components[DEFAULT_KEY];
+    });
 });
 
 describe("Content Browser default components", () => {
