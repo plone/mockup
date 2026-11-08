@@ -2,6 +2,35 @@
 
 
 
+## [5.1.18](https://github.com/plone/mockup/compare/5.1.17...5.1.18) (2026-11-08)
+
+
+### Technical Changes
+
+
+* **tests:** increase jest.testTimeout ([9fb8f32](https://github.com/plone/mockup/commit/9fb8f321e14823c788f572962e9eabb3407d2cd3))
+
+  (cherry picked from commit c06df063001f2ac38dd874617e433d903acd620e)
+
+
+
+### Maintenance
+
+
+* Upgrade dependencies with security fixes. ([dce356c](https://github.com/plone/mockup/commit/dce356cb0e19b042b177bd5ae81b2bc913da4c34))
+
+  - @patternslib/patternslib 9.10.2 -> 9.10.7: brings the pat-validation
+  message sanitizing fix and DOMPurify 3.4.17 (^3.4.8), which closes all
+  open DOMPurify advisories.
+- js-cookie 3.0.5 -> 3.0.8 (CVE-2026-46625).
+- underscore 1.13.7 -> 1.13.8 via the yarn resolution (CVE-2026-27601).
+- moment 2.30.1 -> 2.31.0 via lockfile refresh (CVE-2026-17495).
+- bootstrap 5.3.3 -> 5.3.8, in line with plonetheme.barceloneta 3.1.13.
+
+TinyMCE 5 and select2 3.5 are left as they are.
+
+Assisted by: Claude (claude-fable-5-1)
+
 ## [5.1.17](https://github.com/plone/mockup/compare/5.1.16...5.1.17) (2025-05-09)
 
 
