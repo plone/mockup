@@ -2,6 +2,24 @@
 
 
 
+## [5.4.11](https://github.com/plone/mockup/compare/5.4.10...5.4.11) (2026-11-08)
+
+
+### Maintenance
+
+
+* **bundle:** Upgrade dependencies. ([f188b8f](https://github.com/plone/mockup/commit/f188b8f59deb861c24c52550be52c873551b08f2))
+
+  Update @patternslib/patternslib to 9.10.7 and bootstrap-icons to 1.13.2,
+refresh the other pins within their ranges (js-cookie 3.0.8, sortablejs
+1.15.7, @plone/registry 2.7.3) and re-resolve yarn.lock. This pulls in
+DOMPurify 3.4.17 and moment 2.31.0. Keep @testing-library/jest-dom on
+6.9.x: 6.10.0 is a deprecated release with breaking changes.
+
+TinyMCE stays at 7.9.3.
+
+Assisted by: Claude (claude-fable-5-1)
+
 ## [5.4.10](https://github.com/plone/mockup/compare/5.4.9...5.4.10) (2026-06-09)
 
 
