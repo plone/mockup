@@ -101,6 +101,12 @@
 
     function setNodeValue(selectedUids) {
         const node_val = selectedUids.join($config.separator);
+        if (selectedItemsNode.value === node_val) {
+            // Nothing changed — the initial selection being written back
+            // on mount must not look like an edit (pat-formunloadalert
+            // would otherwise warn on every page leave).
+            return;
+        }
         selectedItemsNode.value = node_val;
         selectedItemsNode.dispatchEvent(events.change_event());
     }
