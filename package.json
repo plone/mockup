@@ -12,10 +12,10 @@
     "dependencies": {
         "@11ty/eleventy-upgrade-help": "2",
         "@patternslib/pat-code-editor": "4.0.1",
-        "@patternslib/patternslib": "9.10.2",
+        "@patternslib/patternslib": "9.10.7",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "5.3.3",
+        "bootstrap": "5.3.8",
         "bootstrap-icons": "1.11.3",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "1.12.1",
@@ -37,7 +37,7 @@
         "jquery": "3.7.1",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
-        "js-cookie": "3.0.5",
+        "js-cookie": "3.0.8",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "1.15.6",
         "tinymce": "5.10.9",
@@ -72,7 +72,7 @@
         "datatables.net-select-bs5": "<1.5",
         "jquery": "3.7.1",
         "nwsapi": "2.2.12",
-        "underscore": "1.13.7"
+        "underscore": "1.13.8"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
