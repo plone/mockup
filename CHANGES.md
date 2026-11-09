@@ -1,5 +1,47 @@
 # Changelog
 
+## [5.6.15](https://github.com/plone/mockup/compare/5.6.14...5.6.15) (2026-11-09)
+
+### Bug Fixes
+
+- **contentbrowser:** Fix preview column so when it is bigger than the viewport it would be scrollable. ([d314871](https://github.com/plone/mockup/commit/d31487187b96f76fd693aff127c213356198fb79))
+- **pat-contentbrowser:** don't fire change while rendering the initial selection ([33fd99c](https://github.com/plone/mockup/commit/33fd99ce54e848dfe704def4c1154d9d97c4394e))
+
+    The selected-items effect wrote the initial value back to the input on mount
+    and dispatched a change event for it, so pat-formunloadalert marked every
+    untouched form with a content browser field as edited and warned when
+    leaving the page.
+
+    Only write and dispatch when the value actually differs.
+
+    (cherry picked from commit 2ae9d77675dd595566ea14c021b83a56afd4d096)
+
+### Technical Changes
+
+- **tests:** compile Svelte components for Jest without svelte-jester ([5cb2081](https://github.com/plone/mockup/commit/5cb2081d416d055c243124388dcefa6a68f215b8))
+
+    svelte-jester refuses to run in Jest's CJS mode, so any test that mounts
+    a .svelte component fails on this branch. Use the custom transformer from
+    master instead: compile with the svelte compiler and convert the emitted
+    ESM to CommonJS for Jest's default runtime. Needed to backport the
+    pat-contentbrowser tests.
+
+### Maintenance
+
+- **deps:** Upgrade TinyMCE to 8.9.3, Patternslib to 9.11.1, Svelte to 5.57.3. ([016b6bf](https://github.com/plone/mockup/commit/016b6bf61c572303c30951fa9ea44535d3812fc7))
+
+    TinyMCE 8.9.3 fixes a stored XSS in the media plugin (GHSA-mf2p-h6hf-fcwm).
+    Patternslib 9.11.1 pulls in DOMPurify 3.4.17.
+    Also updates tinymce-i18n to 26.11.2 and bootstrap-icons to 1.13.2.
+
+    Assisted by: Claude (claude-fable-5-1)
+
+- Let pnpm trust [@patternslib](https://github.com/patternslib) packages. ([3d072ad](https://github.com/plone/mockup/commit/3d072ad591d5ed32878a0632b74207083ba7d85a))
+
+    @patternslib projects are close to the Plone community and can be
+    trusted. Often a fix in @patternslib/dev or @patternslib/patternslib is
+    done to fix a Problem in Mockup, so we need up-to-date releases.
+
 ## [5.6.14](https://github.com/plone/mockup/compare/5.6.13...5.6.14) (2026-09-17)
 
 ### Bug Fixes
