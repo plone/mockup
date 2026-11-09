@@ -77,7 +77,7 @@
 
         const patUpload = new Upload(uploadEl, {
             baseUrl: $config.rootUrl,
-            currentPath: $currentPath,
+            currentPath: pathBelowRoot($currentPath),
             relativePath: "@@fileUpload",
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
@@ -319,6 +319,18 @@
         }
         updateRecentlyUsed(item, $config);
         closeBrowser();
+    }
+
+    // rootUrl is the URL of rootPath: joining it with the physical path
+    // names the site twice, which only acquisition resolves
+    function pathBelowRoot(path) {
+        const root = $config.rootPath;
+        if (!root || root === "/") {
+            return path;
+        }
+        return path === root || path.startsWith(`${root}/`)
+            ? path.slice(root.length)
+            : path;
     }
 
     async function addSelectedItems() {
