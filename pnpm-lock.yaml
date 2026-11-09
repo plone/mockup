@@ -120,8 +120,8 @@ importers:
         specifier: 4.0.1
         version: 4.0.1
       '@patternslib/patternslib':
-        specifier: 9.11.0
-        version: 9.11.0
+        specifier: 9.11.1
+        version: 9.11.1
       '@plone/registry':
         specifier: ^2.7.3
         version: 2.7.3(react@19.3.0)(supports-color@8.1.1)
@@ -135,8 +135,8 @@ importers:
         specifier: 5.3.8
         version: 5.3.8(@popperjs/core@2.11.8)
       bootstrap-icons:
-        specifier: 1.13.1
-        version: 1.13.1
+        specifier: 1.13.2
+        version: 1.13.2
       cs-jqtree-contextmenu:
         specifier: 0.1.0
         version: 0.1.0(jquery@3.7.1)
@@ -207,14 +207,14 @@ importers:
         specifier: ^1.15.7
         version: 1.15.7
       svelte:
-        specifier: ^5.57.0
-        version: 5.57.0
+        specifier: ^5.57.3
+        version: 5.57.3
       tinymce:
-        specifier: 8.9.0
-        version: 8.9.0
+        specifier: 8.9.3
+        version: 8.9.3
       tinymce-i18n:
-        specifier: 26.9.7
-        version: 26.9.7
+        specifier: 26.11.2
+        version: 26.11.2
       underscore:
         specifier: 1.13.8
         version: 1.13.8
@@ -251,10 +251,10 @@ importers:
         version: 16.1.3
       svelte-jester:
         specifier: ^5.0.0
-        version: 5.0.0(jest@30.5.1(@types/node@22.20.2)(supports-color@8.1.1))(svelte@5.57.0)
+        version: 5.0.0(jest@30.5.1(@types/node@22.20.2)(supports-color@8.1.1))(svelte@5.57.3)
       svelte-loader:
         specifier: ^3.2.4
-        version: 3.2.4(svelte@5.57.0)
+        version: 3.2.4(svelte@5.57.3)
       svg-inline-loader:
         specifier: ^0.8.2
         version: 0.8.2
@@ -1762,8 +1762,8 @@ packages:
   '@patternslib/pat-code-editor@4.0.1':
     resolution: {integrity: sha512-fYReaMlVsUw9uSFOklGoEezVD+rkYd6uiGSLkFk4y2mkTTslKlYDhKBxUkbUEAmUtWFgzRVr3tG4P8AEpRiyQw==}
 
-  '@patternslib/patternslib@9.11.0':
-    resolution: {integrity: sha512-ef0tr67EgOUS0/f3izawkp7MUp7uvY/GFWzHYF2bG6VgTK21UeSMbMCAFGQBiBJOxmb3X/armgteRpq3bPsJFA==}
+  '@patternslib/patternslib@9.11.1':
+    resolution: {integrity: sha512-TtiHlBVNij8yP2fbHwqN1Cq/Zi7fmNWcjn7TJ3uWiZ0JdVAo0LA0ZzPR/jRPsrbzlpAhgvY/e2unxyfw+BpBTw==}
     engines: {node: '>=22'}
 
   '@peculiar/asn1-cms@2.9.4':
@@ -2647,8 +2647,8 @@ packages:
   bonjour-service@1.4.4:
     resolution: {integrity: sha512-jCZcVv7eoc4QesRscwEZtSROBen+6LpKAmBIsQYQrsAeVHLyMXWX/t6eIV5KiRZYNUBl8eVqImEEMQ8L5+c/Kw==}
 
-  bootstrap-icons@1.13.1:
-    resolution: {integrity: sha512-ijombt4v6bv5CLeXvRWKy7CuM3TRTuPEuGaGKvTV5cz65rQSY8RQ2JcHt6b90cBBAC7s8fsf2EkQDldzCoXUjw==}
+  bootstrap-icons@1.13.2:
+    resolution: {integrity: sha512-fAU1Ly3dH7hwRg+CB8EZ0Vl0fF80zgXHeUVJyfUOKzoURr+TbwISbCW5tKUoQLERaWYG2emTCybcPbD96hdD1A==}
 
   bootstrap@5.3.8:
     resolution: {integrity: sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg==}
@@ -3198,8 +3198,8 @@ packages:
     resolution: {integrity: sha512-GrwoxYN+uWlzO8uhUXRl0P+kHE4GtVPfYzVLcUxPL7KNdHKj66vvlhiweIHqYYXWlw+T8iLMp42Lm67ghw4WMQ==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.15:
-    resolution: {integrity: sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==}
+  dompurify@3.4.17:
+    resolution: {integrity: sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -5478,8 +5478,8 @@ packages:
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0-next.0 || ^5.0.0-next.1
 
-  svelte@5.57.0:
-    resolution: {integrity: sha512-NdbDn7fl4be1ViUG0oq/lvG6OZy3oENolV2ONjiqqsfVoeAfzaQAKUcEX3MrQod/Bebv1PgwET9rfXhgn9s4Kg==}
+  svelte@5.57.3:
+    resolution: {integrity: sha512-5mAftM3SoDV9X0zdF386F9p2pv8iKOwi/KfBS1XnBAkVCKFzVOLHUoa8iGWAt4buoicLmyWVRpuuD5wplXOQsg==}
     engines: {node: '>=18'}
 
   svg-inline-loader@0.8.2:
@@ -5575,11 +5575,11 @@ packages:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
 
-  tinymce-i18n@26.9.7:
-    resolution: {integrity: sha512-ZLmWShvol2xL9UfpI+rLuimU6CiDg7XryJU3m/PS6hc/Y7KJNghtrMnhX3b1F9dVD8ybD3iyIIFLvCJRmlE4fA==}
+  tinymce-i18n@26.11.2:
+    resolution: {integrity: sha512-2QCB4Z0dlFhyrQHlP5soLaeIHn8KL/C4GZ8FRYMf5ZZGZutsyveWrOZXEEo6daTmcdLI8AVww1SVU7hAeoWXxg==}
 
-  tinymce@8.9.0:
-    resolution: {integrity: sha512-zh9NKpdF89vnqOB3VEkTHiPtltrY6i3vTEVF5+l7vLxMX6lBju7d0UV9wWV7Vm1NyO1PccDCwa6qxAb2pWSvfg==}
+  tinymce@8.9.3:
+    resolution: {integrity: sha512-T6Z541dm8R34/rgotB40/j2lwrE3eKARbaoet37/I4d3jq+S7Ul3Q7bNZUQY2WtXOvD9P5aTVbgcYI1nKQoGqg==}
 
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
@@ -7899,7 +7899,7 @@ snapshots:
       codejar: 3.7.0
       highlight.js: 10.7.3
 
-  '@patternslib/patternslib@9.11.0':
+  '@patternslib/patternslib@9.11.1':
     dependencies:
       '@fullcalendar/adaptive': 5.11.5
       '@fullcalendar/core': 5.11.5
@@ -7909,7 +7909,7 @@ snapshots:
       '@fullcalendar/luxon2': 5.11.5(luxon@3.7.2)
       '@fullcalendar/timegrid': 5.11.5
       '@stomp/stompjs': 7.3.0
-      dompurify: 3.4.15
+      dompurify: 3.4.17
       highlight.js: 10.7.3
       imagesloaded: 4.1.4
       jquery: 3.7.1
@@ -8828,7 +8828,7 @@ snapshots:
       fast-deep-equal: 3.1.3
       multicast-dns: 7.2.5
 
-  bootstrap-icons@1.13.1: {}
+  bootstrap-icons@1.13.2: {}
 
   bootstrap@5.3.8(@popperjs/core@2.11.8):
     dependencies:
@@ -9359,7 +9359,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.15:
+  dompurify@3.4.17:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -11765,23 +11765,23 @@ snapshots:
 
   svelte-dev-helper@1.1.9: {}
 
-  svelte-hmr@0.14.12(svelte@5.57.0):
+  svelte-hmr@0.14.12(svelte@5.57.3):
     dependencies:
-      svelte: 5.57.0
+      svelte: 5.57.3
 
-  svelte-jester@5.0.0(jest@30.5.1(@types/node@22.20.2)(supports-color@8.1.1))(svelte@5.57.0):
+  svelte-jester@5.0.0(jest@30.5.1(@types/node@22.20.2)(supports-color@8.1.1))(svelte@5.57.3):
     dependencies:
       jest: 30.5.1(@types/node@22.20.2)(supports-color@8.1.1)
-      svelte: 5.57.0
+      svelte: 5.57.3
 
-  svelte-loader@3.2.4(svelte@5.57.0):
+  svelte-loader@3.2.4(svelte@5.57.3):
     dependencies:
       loader-utils: 2.0.4
-      svelte: 5.57.0
+      svelte: 5.57.3
       svelte-dev-helper: 1.1.9
-      svelte-hmr: 0.14.12(svelte@5.57.0)
+      svelte-hmr: 0.14.12(svelte@5.57.3)
 
-  svelte@5.57.0:
+  svelte@5.57.3:
     dependencies:
       '@jridgewell/remapping': 2.3.5
       '@jridgewell/sourcemap-codec': 1.6.0
@@ -11862,9 +11862,9 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.7)
       picomatch: 4.0.7
 
-  tinymce-i18n@26.9.7: {}
+  tinymce-i18n@26.11.2: {}
 
-  tinymce@8.9.0: {}
+  tinymce@8.9.3: {}
 
   tippy.js@6.3.7:
     dependencies:
