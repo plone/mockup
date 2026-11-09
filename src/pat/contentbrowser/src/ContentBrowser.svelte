@@ -86,8 +86,7 @@
             acceptedFiles: $config.uploadAcceptedMimetypes,
             success: (fileupload, obj) => {
                 if ($config.maximumSelectionSize == 1) {
-                    // remove currently selected item and save the uid of the uploaded item
-                    selectedItems.set([]);
+                    // the uploaded item replaces the selection in addSelectedItems
                     $previewUids = [obj.UID];
                 } else {
                     // in multiselect mode we add the uploaded item to the previous selection
@@ -324,6 +323,16 @@
 
     async function addSelectedItems() {
         const previewItems = await get_items_from_uids($previewUids, $config);
+        if ($config.maximumSelectionSize == 1) {
+            // Replace in one step: clearing first fires a change with no
+            // selection, which a host reads as the item being removed.
+            if (previewItems.length) {
+                selectedItems.set(previewItems.slice(0, 1));
+            }
+            selectedUids.update(() => $selectedItems.map((x) => x.UID));
+            closeBrowser();
+            return;
+        }
         selectedItems.update((n) => {
             for (const it of previewItems) {
                 if ($selectedUids.indexOf(it.UID) != -1) continue;
