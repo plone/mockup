@@ -106,4 +106,27 @@ describe("Content Browser upload", () => {
 
         expect(changes).toEqual(["new"]);
     });
+
+    it("uploads below the root URL, not to the site's path twice", async () => {
+        vocabulary = [];
+        const options = {
+            vocabularyUrl,
+            upload: true,
+            rootPath: "/plone",
+            rootUrl: "http://localhost/plone",
+            basePath: "/plone",
+        };
+        document.body.innerHTML = `
+            <input type="text" class="pat-contentbrowser"
+                   data-pat-contentbrowser='${JSON.stringify(options)}'>
+        `;
+        registry.scan(document.body);
+        (await waitFor(() =>
+            document.querySelector(".content-browser-selected-items-wrapper a.btn"),
+        )).click();
+        (await waitFor(() => document.querySelector("button.upload"))).click();
+        const uploadOptions = await waitFor(() => Upload.mock.calls[0]?.[1]);
+
+        expect(uploadOptions.url).toBe("http://localhost/plone/@@fileUpload");
+    });
 });
