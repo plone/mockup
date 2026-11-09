@@ -20,4 +20,19 @@ describe("upload implementation", function () {
         expect(typeof upload.setPath).toBe("function");
         expect(typeof upload.getUrl).toBe("function");
     });
+
+    it("moves the focus to Upload when the last file hides the Browse button", async function () {
+        const upload = new Upload($el, { url: "/upload", currentPath: "/a", maxFiles: 1 });
+        let browse;
+        for (let attempt = 0; attempt < 200 && !browse; attempt += 1) {
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            browse = upload.dropzone && $el[0].querySelector("button.browse");
+        }
+        browse.focus();
+
+        upload.dropzone.addFile(new File(["x"], "x.png", { type: "image/png" }));
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        expect(document.activeElement).toBe($el[0].querySelector("button.upload-all"));
+    });
 });
