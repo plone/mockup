@@ -125,6 +125,21 @@
             initializeSorting();
         }
     });
+
+    let opener = $state();
+    let wasOpen = false;
+
+    // a closed browser hands the focus back, unless it went elsewhere
+    $effect(() => {
+        const isOpen = $showContentBrowser;
+        if (wasOpen && !isOpen) {
+            const active = document.activeElement;
+            if (!active || active === document.body || active.closest(".content-browser")) {
+                opener?.focus();
+            }
+        }
+        wasOpen = isOpen;
+    });
 </script>
 
 <div
@@ -159,6 +174,7 @@
         aria-disabled={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize}
         title={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize ? _t("You can only select ${max} items", { max: $config.maximumSelectionSize }) : undefined}
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
+        bind:this={opener}
         onclick={(e) => { e.preventDefault(); if ($config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize) return; $showContentBrowser = true; }}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
     >
 </div>
