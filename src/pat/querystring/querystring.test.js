@@ -170,6 +170,29 @@ describe("Querystring", function () {
         delete global.fetch;
     });
 
+    it("removes a criterion with a button the keyboard reaches", async function () {
+        const criterias = await import("./test-querystringcriteria.json");
+        global.fetch = jest.fn().mockImplementation(mockFetch(criterias));
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        const remove = document.querySelector(".querystring-criteria-remove");
+        expect(remove.tagName).toEqual("BUTTON");
+        expect(remove.type).toEqual("button");
+        expect(remove.getAttribute("aria-label")).toEqual("Remove criterion");
+
+        remove.click();
+        await utils.timeout(1);
+
+        expect(
+            document.querySelectorAll(".querystring-criteria-wrapper").length
+        ).toEqual(2);
+
+        global.fetch.mockClear();
+        delete global.fetch;
+    });
+
     it("handles a native change event on the index select", async function () {
         // Regression test: pat-select2 re-dispatches a native `change` event in
         // addition to the Select2 v3 jQuery `change` event. jQuery's `change`

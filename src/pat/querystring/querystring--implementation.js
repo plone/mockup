@@ -72,7 +72,8 @@ Criteria.prototype = {
         self.patternRelateditemsOptions["maximumSelectionSize"] = 1;
 
         // Remove button
-        self.$remove = $("<div>" + self.options.remove + "</div>")
+        self.$remove = $('<button type="button">' + self.options.remove + "</button>")
+            .attr("aria-label", _t("Remove criterion"))
             .addClass(self.options.classRemoveName)
             .appendTo(self.$wrapper)
             .on("click", function (e) {
