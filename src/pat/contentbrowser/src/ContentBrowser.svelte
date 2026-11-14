@@ -1,6 +1,6 @@
 <script>
     import utils from "@patternslib/patternslib/src/core/utils";
-    import { getContext, onMount } from "svelte";
+    import { getContext, onMount, tick } from "svelte";
     import { fly } from "svelte/transition";
     import _t from "../../../core/i18n-wrapper";
     import { ensureIntlSupport } from "../../../core/intl-loader";
@@ -380,7 +380,9 @@
         );
     }
 
-    function scrollToRight() {
+    async function scrollToRight() {
+        // a column added by the same change is not in the DOM yet
+        await tick();
         const scrollContainer = document.querySelector(".levelColumns");
         if (scrollContainer) {
             scrollContainer.scrollTo({
