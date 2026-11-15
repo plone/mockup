@@ -831,7 +831,13 @@ export default Base.extend({
 
         if (self.options.backdropOptions.closeOnClick === true) {
             modal_el.addEventListener("click", (e) => {
-                if (!e.target.closest(`.${self.options.templateOptions.classModal}`)) {
+                // Reactive controls can replace the clicked node before this
+                // handler runs. Use the event path, which is fixed at dispatch
+                // time, instead of the clicked node's current ancestry.
+                const clicked_inside = e.composedPath().some((node) =>
+                    node.classList?.contains(self.options.templateOptions.classModal),
+                );
+                if (!clicked_inside) {
                     self.hide();
                 }
             });
