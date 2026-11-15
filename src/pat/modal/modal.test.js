@@ -133,10 +133,29 @@ describe("Modal", function () {
         // replace the close on click handler, not add a second one.
         instance.activateFocusTrap();
 
-        // Mock hide, so that only the click handler invocations are counted.
-        const spy_hide = jest.spyOn(instance, "hide").mockImplementation(() => {});
+        const spy_hide = jest.spyOn(instance, "hide");
         modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         expect(spy_hide).toHaveBeenCalledTimes(1);
+    });
+
+    it("1.2.1 - hides the modal only once per close", async () => {
+        const $trigger = $("#body1 a.pat-plone-modal");
+        $trigger.trigger("click");
+        await utils.timeout(1);
+        const instance = $trigger.data("pattern-plone-modal");
+        const modal = document.querySelector("#body1 .modal");
+
+        const spy_hide = jest.spyOn(instance, "hide");
+        let hide_count = 0;
+        let hidden_count = 0;
+        $trigger.on("hide.plone-modal.patterns", () => hide_count++);
+        $trigger.on("hidden.plone-modal.patterns", () => hidden_count++);
+
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(false);
+        expect(spy_hide).toHaveBeenCalledTimes(1);
+        expect(hide_count).toBe(1);
+        expect(hidden_count).toBe(1);
     });
 
     it("1.3 - keeps the modal open when a drag starts inside the modal and ends outside", async () => {
