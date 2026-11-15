@@ -989,6 +989,13 @@ export default Base.extend({
                 }
             })
             .on("click", function (e) {
+                // Clicks from within the modal are handled by the modal's own
+                // close on click handler. Do not cancel or handle them here.
+                // With loadLinksWithinModal: false they bubble up to here.
+                const path = e.originalEvent?.composedPath() || [e.target];
+                if (self.$modal && path.includes(self.$modal[0])) {
+                    return;
+                }
                 if (self.options.backdropOptions.closeOnClick) {
                     e.stopPropagation();
                     e.preventDefault();
