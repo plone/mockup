@@ -68,9 +68,9 @@
 
     async function upload() {
         updatePreview({ action: "clear" });
-        scrollToRight();
         showUpload = true;
         await utils.timeout(1);
+        scrollToRight();
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
         let validation_errors = false;
