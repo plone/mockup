@@ -209,6 +209,64 @@ describe("Modal", function () {
         expect(modal.isConnected).toBe(false);
     });
 
+    it("1.5 - keeps the modal open on inside clicks with loadLinksWithinModal: false", async () => {
+        document.body.innerHTML = `
+          <div id="body4">
+            <a class="pat-plone-modal" href="#target4"
+               data-pat-plone-modal="backdrop: #body4; loadLinksWithinModal: false">
+                Open
+            </a>
+            <div id="target4" style="display:none;">Target</div>
+          </div>`;
+        await registry_scan();
+        $("#body4 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const wrapper = document.querySelector("#body4 .modal-wrapper");
+        const modal = document.querySelector("#body4 .modal");
+        const body = modal.querySelector(".modal-body");
+
+        // A click inside the modal neither closes it nor is it canceled.
+        body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        body.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        const not_canceled = body.dispatchEvent(
+            new MouseEvent("click", { bubbles: true, cancelable: true }),
+        );
+        expect(not_canceled).toBe(true);
+        expect(modal.isConnected).toBe(true);
+
+        // A drag from inside the modal to the backdrop area keeps it open.
+        body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(true);
+
+        // A click on the wrapper still closes the modal.
+        wrapper.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        wrapper.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        wrapper.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(false);
+    });
+
+    it("1.6 - closes the modal on a backdrop click with loadLinksWithinModal: false", async () => {
+        document.body.innerHTML = `
+          <div id="body4">
+            <a class="pat-plone-modal" href="#target4"
+               data-pat-plone-modal="backdrop: #body4; loadLinksWithinModal: false">
+                Open
+            </a>
+            <div id="target4" style="display:none;">Target</div>
+          </div>`;
+        await registry_scan();
+        $("#body4 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const modal = document.querySelector("#body4 .modal");
+
+        modal.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(false);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
