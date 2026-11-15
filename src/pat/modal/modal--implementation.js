@@ -829,8 +829,14 @@ export default Base.extend({
         };
         modal_el.addEventListener("keydown", self._focusTrapHandler);
 
+        // Remove previous close on click listener to prevent duplicates
+        // when activateFocusTrap is called multiple times.
+        if (self._closeOnClickHandler) {
+            modal_el.removeEventListener("click", self._closeOnClickHandler);
+            self._closeOnClickHandler = null;
+        }
         if (self.options.backdropOptions.closeOnClick === true) {
-            modal_el.addEventListener("click", (e) => {
+            self._closeOnClickHandler = (e) => {
                 // Reactive controls can replace the clicked node before this
                 // handler runs. Use the event path, which is fixed at dispatch
                 // time, instead of the clicked node's current ancestry.
@@ -840,7 +846,8 @@ export default Base.extend({
                 if (!clicked_inside) {
                     self.hide();
                 }
-            });
+            };
+            modal_el.addEventListener("click", self._closeOnClickHandler);
         }
 
         var inputs = getVisibleInputs();
