@@ -102,6 +102,26 @@ describe("Modal", function () {
         expect($(".modal", $el).length).toEqual(0);
     });
 
+    it("1.1 - keeps the modal open when an internal click removes its target", async () => {
+        $("#body1 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const modal = document.querySelector("#body1 .modal");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.innerHTML = "<svg><path></path></svg>";
+        modal.querySelector(".modal-body").append(button);
+        button.addEventListener("click", () => button.remove());
+        button.querySelector("path").dispatchEvent(
+            new MouseEvent("click", { bubbles: true }),
+        );
+        expect(button.isConnected).toBe(false);
+        expect(modal.isConnected).toBe(true);
+
+        // A genuine backdrop click must still dismiss the modal.
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(false);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
