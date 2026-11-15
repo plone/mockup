@@ -768,14 +768,14 @@ export default Base.extend({
         );
     },
 
-    _consumeMousedownInside: function () {
-        // Return if the last mousedown happened inside the modal and reset
-        // the state. A text selection which starts inside the modal and ends
-        // outside of it results in a click event outside of the modal, which
-        // must not close the modal.
-        const mousedown_inside = this._mousedown_inside === true;
-        this._mousedown_inside = false;
-        return mousedown_inside;
+    _consumePointerInside: function () {
+        // Return if the last mousedown or mouseup happened inside the modal
+        // and reset the state. A drag which starts inside the modal and ends
+        // outside of it - or the other way round - results in a click event
+        // outside of the modal, which must not close the modal.
+        const pointer_inside = this._pointer_inside === true;
+        this._pointer_inside = false;
+        return pointer_inside;
     },
 
     activateFocusTrap: function () {
@@ -851,8 +851,8 @@ export default Base.extend({
         }
         if (self.options.backdropOptions.closeOnClick === true) {
             self._closeOnClickHandler = (e) => {
-                const mousedown_inside = self._consumeMousedownInside();
-                if (!mousedown_inside && !self._isInsideModal(e)) {
+                const pointer_inside = self._consumePointerInside();
+                if (!pointer_inside && !self._isInsideModal(e)) {
                     self.hide();
                 }
             };
@@ -974,14 +974,20 @@ export default Base.extend({
             .insertBefore(backdrop.$backdrop)
             .on("mousedown", function (e) {
                 // jQuery triggered events have no originalEvent.
-                self._mousedown_inside =
+                self._pointer_inside =
                     !!e.originalEvent && self._isInsideModal(e.originalEvent);
+            })
+            .on("mouseup", function (e) {
+                // Keep the state from mousedown and add the mouseup state.
+                if (e.originalEvent && self._isInsideModal(e.originalEvent)) {
+                    self._pointer_inside = true;
+                }
             })
             .on("click", function (e) {
                 if (self.options.backdropOptions.closeOnClick) {
                     e.stopPropagation();
                     e.preventDefault();
-                    if (!self._consumeMousedownInside()) {
+                    if (!self._consumePointerInside()) {
                         backdrop.hide();
                     }
                 }
