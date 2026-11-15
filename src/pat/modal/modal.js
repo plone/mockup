@@ -1048,6 +1048,9 @@ export default Base.extend({
         self.loading.hide();
         self.$el.removeClass(self.options.templateOptions.classActiveName);
         if (self.$modal !== undefined) {
+            // Remove the active class before hiding the backdrop. Otherwise
+            // the backdrop's "hidden" handler would call hide() again.
+            self.$modal.removeClass(self.options.templateOptions.classActiveName);
             self.$modal.remove();
             self.initModal();
         }
