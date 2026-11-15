@@ -139,6 +139,30 @@ describe("Modal", function () {
         expect(spy_hide).toHaveBeenCalledTimes(1);
     });
 
+    it("1.3 - keeps the modal open when a drag starts inside the modal and ends outside", async () => {
+        $("#body1 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const wrapper = document.querySelector("#body1 .modal-wrapper");
+        const modal = document.querySelector("#body1 .modal");
+        const body = modal.querySelector(".modal-body");
+
+        // E.g. selecting text inside the modal and releasing the mouse
+        // button on the backdrop area results in a click on the backdrop.
+        body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(true);
+
+        // Same, but when the click ends up on the wrapper itself.
+        body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        wrapper.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(true);
+
+        // A click which starts and ends outside the modal still closes it.
+        modal.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(false);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 

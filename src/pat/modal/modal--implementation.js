@@ -764,6 +764,25 @@ export default Base.extend({
         return self.$modal !== null && self.$modal !== undefined;
     },
 
+    _isInsideModal: function (e) {
+        // Reactive controls can replace the clicked node before a click
+        // handler runs. Use the event path, which is fixed at dispatch time,
+        // instead of the target's current ancestry.
+        return e.composedPath().some((node) =>
+            node.classList?.contains(this.options.templateOptions.classModal),
+        );
+    },
+
+    _consumeMousedownInside: function () {
+        // Return if the last mousedown happened inside the modal and reset
+        // the state. A text selection which starts inside the modal and ends
+        // outside of it results in a click event outside of the modal, which
+        // must not close the modal.
+        const mousedown_inside = this._mousedown_inside === true;
+        this._mousedown_inside = false;
+        return mousedown_inside;
+    },
+
     activateFocusTrap: function () {
         var self = this;
         const modal_el = self.$modal[0];
@@ -837,13 +856,8 @@ export default Base.extend({
         }
         if (self.options.backdropOptions.closeOnClick === true) {
             self._closeOnClickHandler = (e) => {
-                // Reactive controls can replace the clicked node before this
-                // handler runs. Use the event path, which is fixed at dispatch
-                // time, instead of the clicked node's current ancestry.
-                const clicked_inside = e.composedPath().some((node) =>
-                    node.classList?.contains(self.options.templateOptions.classModal),
-                );
-                if (!clicked_inside) {
+                const mousedown_inside = self._consumeMousedownInside();
+                if (!mousedown_inside && !self._isInsideModal(e)) {
                     self.hide();
                 }
             };
@@ -963,11 +977,18 @@ export default Base.extend({
             })
             .addClass(self.options.templateOptions.classWrapperName)
             .insertBefore(backdrop.$backdrop)
+            .on("mousedown", function (e) {
+                // jQuery triggered events have no originalEvent.
+                self._mousedown_inside =
+                    !!e.originalEvent && self._isInsideModal(e.originalEvent);
+            })
             .on("click", function (e) {
                 if (self.options.backdropOptions.closeOnClick) {
                     e.stopPropagation();
                     e.preventDefault();
-                    backdrop.hide();
+                    if (!self._consumeMousedownInside()) {
+                        backdrop.hide();
+                    }
                 }
             });
         backdrop.on("hidden", function () {
