@@ -929,6 +929,13 @@
     .toolBar :global(svg) {
         vertical-align: -0.125em;
     }
+    /* An icon which is not resolved yet is an empty <svg> of 300x150px. It
+       widens its column for a moment, and the browser scrolls to the end
+       just then: Safari stays there when the column shrinks again. */
+    .content-browser :global(svg:not([viewBox])) {
+        width: 1em;
+        height: 1em;
+    }
     .toolBar input[name="filter"] {
         margin: 0;
     }
