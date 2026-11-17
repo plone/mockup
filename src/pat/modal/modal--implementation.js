@@ -992,9 +992,17 @@ export default Base.extend({
                 // Clicks from within the modal are handled by the modal's own
                 // close on click handler. Do not cancel or handle them here.
                 // With loadLinksWithinModal: false they bubble up to here.
-                const path = e.originalEvent?.composedPath() || [e.target];
-                if (self.$modal && path.includes(self.$modal[0])) {
-                    return;
+                const modal_el = self.$modal?.[0];
+                if (modal_el) {
+                    // jQuery triggered events have no originalEvent and no
+                    // event path. Their target is still connected, though.
+                    const path = e.originalEvent?.composedPath();
+                    const from_modal = path
+                        ? path.includes(modal_el)
+                        : modal_el.contains(e.target);
+                    if (from_modal) {
+                        return;
+                    }
                 }
                 if (self.options.backdropOptions.closeOnClick) {
                     e.stopPropagation();

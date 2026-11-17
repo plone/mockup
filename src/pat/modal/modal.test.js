@@ -267,6 +267,48 @@ describe("Modal", function () {
         expect(modal.isConnected).toBe(false);
     });
 
+    it("1.7 - keeps the modal open on jQuery triggered clicks from within it with loadLinksWithinModal: false", async () => {
+        document.body.innerHTML = `
+          <div id="body4">
+            <a class="pat-plone-modal" href="#target4"
+               data-pat-plone-modal="backdrop: #body4; loadLinksWithinModal: false">
+                Open
+            </a>
+            <div id="target4" style="display:none;">
+              <form>
+                <input name="q" />
+                <button type="submit">Go</button>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body4 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const wrapper = document.querySelector("#body4 .modal-wrapper");
+        const modal = document.querySelector("#body4 .modal");
+        const input = modal.querySelector("input[name=q]");
+        const button = modal.querySelector("button[type=submit]");
+
+        let native_clicks = 0;
+        button.addEventListener("click", (e) => {
+            native_clicks++;
+            // Do not submit the form in the test environment.
+            e.preventDefault();
+        });
+
+        // The modal's Enter key handler triggers a jQuery click on the
+        // first submit button of the form.
+        input.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+        );
+        expect(native_clicks).toBe(1);
+        expect(modal.isConnected).toBe(true);
+
+        // A jQuery triggered click on the wrapper still closes the modal.
+        $(wrapper).trigger("click");
+        expect(modal.isConnected).toBe(false);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
