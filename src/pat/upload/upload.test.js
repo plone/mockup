@@ -74,4 +74,70 @@ describe("Upload", function () {
             //TODO
         });
     });
+
+    describe("Queue", function () {
+        const queueFile = (pattern) => {
+            const file = new File(["content"], "report.txt", { type: "text/plain" });
+            pattern.dropzone.addFile(file);
+            return file;
+        };
+
+        beforeEach(function () {
+            // show and hide at once
+            $.fx.off = true;
+        });
+        afterEach(function () {
+            $.fx.off = false;
+            document.body.innerHTML = "";
+        });
+
+        it("shows the controls only while files are queued", async function () {
+            document.body.innerHTML = `
+                <div class="pat-upload" data-pat-upload="url: /upload"></div>
+            `;
+            const el = document.querySelector(".pat-upload");
+            registry.scan(document.body);
+            await utils.timeout(1);
+            const pattern = el["pattern-upload"];
+            const controls = el.querySelector(".controls");
+
+            // hidden by the template itself, not by the stylesheet
+            expect(controls.style.display).toEqual("none");
+
+            const file = queueFile(pattern);
+            await utils.timeout(100);
+            expect(controls.style.display).not.toEqual("none");
+            expect(controls.querySelector("button.upload-all")).toBeTruthy();
+
+            pattern.dropzone.removeFile(file);
+            await utils.timeout(100);
+            expect(controls.style.display).toEqual("none");
+        });
+
+        it("offers the path selection before a file is queued", async function () {
+            document.body.innerHTML = `
+                <div class="pat-upload"
+                     data-pat-upload='{"baseUrl": "/", "relativePath": "upload"}'></div>
+            `;
+            const el = document.querySelector(".pat-upload");
+            registry.scan(document.body);
+            await utils.timeout(1);
+
+            const path = el.querySelector(".path");
+            expect(path.querySelector("input[name=location]")).toBeTruthy();
+            expect(path.closest(".controls")).toBe(null);
+        });
+
+        it("has no path selection without path based URLs", async function () {
+            document.body.innerHTML = `
+                <div class="pat-upload" data-pat-upload="url: /upload"></div>
+            `;
+            const el = document.querySelector(".pat-upload");
+            registry.scan(document.body);
+            await utils.timeout(1);
+
+            expect(el.querySelector(".path")).toBe(null);
+            expect(el.querySelector("input[name=location]")).toBe(null);
+        });
+    });
 });
