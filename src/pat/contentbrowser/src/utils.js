@@ -4,6 +4,47 @@ import I18n from "../../../core/i18n.js";
 
 const log = logger.getLogger("pat-contentbrowser");
 
+/** Whether `path` is `root` or lies below it. */
+export function isPathBelow(path, root) {
+    return path === root || path.startsWith(`${root.replace(/\/$/, "")}/`);
+}
+
+/** `path` without the leading `root`: "" for the root itself. */
+export function pathBelowRoot(path, root) {
+    if (!root || !isPathBelow(path, root)) {
+        return path;
+    }
+    return path.slice(root.replace(/\/$/, "").length);
+}
+
+/** The physical path of a vocabulary item.
+ *
+ * The browser works on physical paths only. An item's `path` is relative to
+ * the navigation root of the vocabulary, which the pattern does not know, so
+ * every request asks for `getPath` too.
+ */
+export function physicalPath(item, rootPath = "") {
+    if (item.getPath) {
+        return item.getPath;
+    }
+    // A vocabulary which does not deliver `getPath`: guess where `path`
+    // joins the root path. "/site/media" and "/media/folder" overlap in
+    // "media" and give "/site/media/folder".
+    const path = item.path || "";
+    if (!path || isPathBelow(path, rootPath)) {
+        return path || rootPath;
+    }
+    const rootParts = rootPath.replace(/^\/+/, "").split("/");
+    const pathParts = path.replace(/^\/+/, "").split("/");
+    const overlap = rootParts.indexOf(pathParts[0]);
+    return (
+        "/" +
+        [...(overlap === -1 ? rootParts : rootParts.slice(0, overlap)), ...pathParts]
+            .filter((part) => part)
+            .join("/")
+    );
+}
+
 export async function request({
     method = "GET",
     vocabularyUrl = null,
@@ -96,7 +137,12 @@ export async function request({
     };
 
     const url_query = JSON.stringify(vocabQuery);
-    const url_parameters = JSON.stringify(attributes);
+    // without attributes the vocabulary answers with id and text only
+    const url_parameters = JSON.stringify(
+        !attributes.length || attributes.includes("getPath")
+            ? attributes
+            : [...attributes, "getPath"],
+    );
     const url_batch = pageSize ? JSON.stringify({
         page: page,
         size: pageSize,

@@ -13,6 +13,7 @@
         setPreviewUids,
         setShowContentBrowser,
     } from "./stores";
+    import { isPathBelow } from "./utils";
 
     let {
         maxDepth,
@@ -68,15 +69,7 @@
         let initialPath = "";
         if (basePath || rootPath) {
             // if root path is not above base path we start at rootPath
-            initialPath = basePath.indexOf(rootPath) != 0 ? rootPath : basePath;
-            if (
-                rootPath &&
-                initialPath != rootPath &&
-                initialPath.indexOf(rootPath) == 0
-            ) {
-                // remove rootPath from $currentPath
-                initialPath = initialPath.replace(rootPath, "");
-            }
+            initialPath = isPathBelow(basePath, rootPath) ? basePath : rootPath;
         } else {
             // no path available. try to determine path from vocabularyUrl
             const vocabPath = new URL(vocabularyUrl).pathname.split("/");
