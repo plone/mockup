@@ -28,6 +28,12 @@ The wrapper handler returns early for clicks whose event path includes the
 `.modal` element. It neither cancels nor stops these clicks, nor closes the
 modal.
 
+Clicks triggered via jQuery - e.g. by the modal's own Enter key handler,
+which triggers a click on the first submit button of a form - have no
+`originalEvent` and no event path. For those, the wrapper handler checks
+if the `.modal` element contains the target. Their target is the element
+the click was triggered on, which is still connected.
+
 Each click is handled by exactly one close on click handler: clicks on
 `.modal` and its descendants by the modal's handler, clicks on the wrapper
 and the inner wrapper by the wrapper's handler.
