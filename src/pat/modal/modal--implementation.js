@@ -977,17 +977,6 @@ export default Base.extend({
             })
             .addClass(self.options.templateOptions.classWrapperName)
             .insertBefore(backdrop.$backdrop)
-            .on("mousedown", function (e) {
-                // jQuery triggered events have no originalEvent.
-                self._pointer_inside =
-                    !!e.originalEvent && self._isInsideModal(e.originalEvent);
-            })
-            .on("mouseup", function (e) {
-                // Keep the state from mousedown and add the mouseup state.
-                if (e.originalEvent && self._isInsideModal(e.originalEvent)) {
-                    self._pointer_inside = true;
-                }
-            })
             .on("click", function (e) {
                 // Clicks from within the modal are handled by the modal's own
                 // close on click handler. Do not cancel or handle them here.
@@ -1012,6 +1001,28 @@ export default Base.extend({
                     }
                 }
             });
+        // Track the pointer state in the capture phase. Controls within the
+        // modal which stop the propagation of mousedown or mouseup - like
+        // select2 - would otherwise hide the event from the wrapper.
+        // Native listeners do not receive jQuery triggered events.
+        const wrapper_el = self.$wrapper[0];
+        wrapper_el.addEventListener(
+            "mousedown",
+            (e) => {
+                self._pointer_inside = self._isInsideModal(e);
+            },
+            { capture: true },
+        );
+        wrapper_el.addEventListener(
+            "mouseup",
+            (e) => {
+                // Keep the state from mousedown and add the mouseup state.
+                if (self._isInsideModal(e)) {
+                    self._pointer_inside = true;
+                }
+            },
+            { capture: true },
+        );
         backdrop.on("hidden", function () {
             if (
                 self.$modal !== undefined &&
