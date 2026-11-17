@@ -1,4 +1,5 @@
 import "./modal";
+import "../select2/select2";
 import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
@@ -307,6 +308,65 @@ describe("Modal", function () {
         // A jQuery triggered click on the wrapper still closes the modal.
         $(wrapper).trigger("click");
         expect(modal.isConnected).toBe(false);
+    });
+
+    it("1.8 - keeps the modal open on a drag from a control which stops mousedown propagation", async () => {
+        $("#body1 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const modal = document.querySelector("#body1 .modal");
+        const control = document.createElement("div");
+        modal.querySelector(".modal-body").append(control);
+        control.addEventListener("mousedown", (e) => e.stopPropagation());
+        control.addEventListener("mouseup", (e) => e.stopPropagation());
+
+        // A drag from the control to the backdrop area keeps the modal open.
+        control.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(true);
+
+        // A drag from the backdrop area to the control keeps it open, too.
+        modal.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        control.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(true);
+
+        // A click on the backdrop area still closes the modal.
+        modal.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(false);
+    });
+
+    it("1.9 - keeps the modal open on a drag from a pat-select2 tag remove button", async () => {
+        document.body.innerHTML = `
+          <div id="body5">
+            <a class="pat-plone-modal" href="#target5"
+               data-pat-plone-modal="backdrop: #body5">
+                Open
+            </a>
+            <div id="target5" style="display:none;">
+              <input class="pat-select2"
+                     data-pat-select2="tags: Red,Yellow,Blue"
+                     value="Yellow" />
+            </div>
+          </div>`;
+        // Only scan the trigger. The modal initializes the cloned content.
+        registry.scan(document.querySelector("#body5 a.pat-plone-modal"));
+        await utils.timeout(2);
+        $("#body5 a.pat-plone-modal").trigger("click");
+        await utils.timeout(10);
+        const modal = document.querySelector("#body5 .modal");
+        const remove = modal.querySelector(".select2-search-choice-close");
+        expect(remove).not.toBe(null);
+
+        // select2 cancels mousedown on the tag remove button with
+        // stopPropagation. A drag from there to the backdrop area must not
+        // close the modal.
+        remove.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        modal.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        expect(modal.isConnected).toBe(true);
     });
 
     it("2 - customize modal on show event", () => {

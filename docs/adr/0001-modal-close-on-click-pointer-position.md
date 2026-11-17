@@ -26,6 +26,10 @@ The modal wrapper listens to `mousedown` and `mouseup` and stores in
 `_pointer_inside` whether either of them happened inside `.modal-content`.
 `mousedown` resets the state, `mouseup` can only set it.
 
+The listeners are registered natively in the capture phase. Controls inside
+the modal which stop the propagation of `mousedown` or `mouseup` - e.g.
+select2 - would hide these events from bubbling listeners on the wrapper.
+
 Both close on click handlers - the one on `.modal` and the one on the
 wrapper - read and reset this state via `_consumePointerInside()` and do not
 close the modal if it is set.
@@ -35,8 +39,8 @@ Inside detection is done with `_isInsideModal()`, which checks the event's
 at dispatch time and still valid if a reactive control removed the clicked
 node before the handler runs.
 
-Events triggered via jQuery have no `originalEvent` and do not change the
-state.
+Events triggered via jQuery do not reach native listeners and do not
+change the state.
 
 ## Consequences
 
@@ -44,5 +48,8 @@ state.
     released outside of `.modal-content`.
 -   Each `mousedown` resets the state, so a press without a following click
     cannot affect a later click.
+-   Only capture listeners on `window` or `document` which stop the
+    propagation of `mousedown` or `mouseup` can hide these events from the
+    wrapper.
 -   Clicks without a preceding `mousedown`, e.g. from `element.click()`, are
     only checked by their own event path.
