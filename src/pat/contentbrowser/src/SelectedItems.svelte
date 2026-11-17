@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount, mount } from "svelte";
+    import { getContext, onDestroy, onMount, mount } from "svelte";
     import { get_items_from_uids } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
@@ -29,6 +29,9 @@
         initializeSorting();
         initializing = false;
     });
+
+    // Sortable keeps every list it was created on until it is destroyed
+    onDestroy(() => sortable?.destroy());
 
     function getSelectedItemComponent() {
         // get selectedItem component from registry.
