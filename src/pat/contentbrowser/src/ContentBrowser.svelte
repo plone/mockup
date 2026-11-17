@@ -11,6 +11,9 @@
         formatDate,
         get_items_from_uids,
         iconTag,
+        isPathBelow,
+        pathBelowRoot,
+        physicalPath,
         request,
         resolveIcon,
         updateRecentlyUsed,
@@ -76,9 +79,7 @@
         let validation_errors = false;
 
         const patUpload = new Upload(uploadEl, {
-            baseUrl: $config.rootUrl,
-            currentPath: $currentPath,
-            relativePath: "@@fileUpload",
+            url: `${currentFolderUrl()}/@@fileUpload`,
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
             maxFiles:
@@ -86,8 +87,7 @@
             acceptedFiles: $config.uploadAcceptedMimetypes,
             success: (fileupload, obj) => {
                 if ($config.maximumSelectionSize == 1) {
-                    // remove currently selected item and save the uid of the uploaded item
-                    selectedItems.set([]);
+                    // the uploaded item replaces the selection in addSelectedItems
                     $previewUids = [obj.UID];
                 } else {
                     // in multiselect mode we add the uploaded item to the previous selection
@@ -147,12 +147,13 @@
         if ($config.mode == "browse") {
             $previewUids = [item.UID];
 
+            const path = physicalPath(item, $config.rootPath);
             if (isBrowseable(item)) {
                 // show folder
-                currentPath.set(item.path);
+                currentPath.set(path);
             } else {
                 // show non folderish preview
-                const pathParts = item.path.split("/");
+                const pathParts = path.split("/");
                 const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
                 currentPath.set(folderPath || "/");
                 updatePreview({ data: item });
@@ -324,6 +325,16 @@
 
     async function addSelectedItems() {
         const previewItems = await get_items_from_uids($previewUids, $config);
+        if ($config.maximumSelectionSize == 1) {
+            // Replace in one step: clearing first fires a change with no
+            // selection, which a host reads as the item being removed.
+            if (previewItems.length) {
+                selectedItems.set(previewItems.slice(0, 1));
+            }
+            selectedUids.update(() => $selectedItems.map((x) => x.UID));
+            closeBrowser();
+            return;
+        }
         selectedItems.update((n) => {
             for (const it of previewItems) {
                 if ($selectedUids.indexOf(it.UID) != -1) continue;
@@ -355,12 +366,7 @@
             alert(`${path} not found!`);
             return;
         }
-        const item = response.results[0];
-        if (!item.path) {
-            // fix for root
-            item.path = $config.rootPath;
-        }
-        changePath(item);
+        changePath(response.results[0]);
     }
 
     function closeBrowser() {
@@ -393,14 +399,16 @@
     }
 
     function itemInPath(item) {
-        const item_path = item.path.split("/");
-        const curr_path = $currentPath.split("/");
-        let in_path = true;
-        for (const idx in item_path) {
-            // check path parts to be equal
-            in_path = in_path && item_path[idx] === curr_path[idx];
-        }
-        return in_path;
+        return isPathBelow($currentPath, physicalPath(item, $config.rootPath));
+    }
+
+    // The vocabulary tells the URL of the folder shown last. Where it does
+    // not, rootUrl is the URL of rootPath.
+    function currentFolderUrl() {
+        return (
+            $pathCache[$currentPath]?.getURL ||
+            `${$config.rootUrl}${pathBelowRoot($currentPath, $config.rootPath)}`
+        );
     }
 
     const searchItemsKeyup = utils.debounce(async (e) => {
@@ -530,7 +538,9 @@
                             onclick={upload}
                             ><svg use:resolveIcon={{ iconName: "upload" }} />
                             {_t("upload to ${current_path}", {
-                                current_path: $currentPath,
+                                current_path:
+                                    pathBelowRoot($currentPath, $config.rootPath) ||
+                                    "/",
                             })}</button
                         >
                     </div>
@@ -899,11 +909,11 @@
         position: fixed;
         top: 0;
         right: 0;
+        bottom: 0;
         display: flex;
         justify-content: end;
         z-index: 1500;
         width: 100%;
-        height: 100vh;
         background-color: rgba(0, 0, 0, 0.25);
     }
     .btn-xs {
@@ -912,8 +922,8 @@
         --bs-btn-font-size: 0.75rem;
     }
     .content-browser {
-        height: 100vh;
-        min-width: 450px;
+        height: 100%;
+        min-width: min(450px, 100%);
         background-color: var(--bs-light-bg-subtle);
         border-left: var(--bs-border-style) var(--bs-border-width) #fff;
         z-index: 1500;
@@ -931,6 +941,13 @@
     .toolBar :global(svg) {
         vertical-align: -0.125em;
     }
+    /* An icon which is not resolved yet is an empty <svg> of 300x150px. It
+       widens its column for a moment, and the browser scrolls to the end
+       just then: Safari stays there when the column shrinks again. */
+    .content-browser :global(svg:not([viewBox])) {
+        width: 1em;
+        height: 1em;
+    }
     .toolBar input[name="filter"] {
         margin: 0;
     }
@@ -947,6 +964,7 @@
 
     .levelColumn {
         width: 320px;
+        max-width: 100%;
         background: rgba(var(--bs-secondary-bg-rgb), 0.55);
         border-right: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
@@ -1028,6 +1046,7 @@
     }
     .preview {
         width: 320px;
+        max-width: 100%;
         flex-shrink: 0;
         min-height: 300px;
     }
@@ -1052,6 +1071,7 @@
     .upload-wrapper {
         padding: 1rem;
         width: 540px;
+        max-width: 100%;
         overflow-x: auto;
         flex-shrink: 0;
     }
