@@ -19,7 +19,8 @@
             <div class="col-auto">
                 <button
                     type="button"
-                    class="btn btn-primary browse">
+                    class="btn btn-primary browse"
+                    data-sizer="<%- _t("Upload") %>">
                     <%- _t("Browse") %>
                 </button>
             </div>
@@ -27,19 +28,19 @@
         <div class="upload-queue">
             <div class="previews">
             </div>
-            <div class="controls">
-                <% if (allowPathSelection) { %>
-                <div class="path">
-                    <label><%- _t("Upload to...") %></label>
-                    <p class="form-help">
-                        <%- _t("Select another destination folder or leave blank to add files to the current location.") %>
-                    </p>
-                    <input
-                        type="text"
-                        name="location"
-                        />
-                </div>
-                <% } %>
+            <% if (allowPathSelection) { %>
+            <div class="path">
+                <label><%- _t("Upload to...") %></label>
+                <p class="form-help">
+                    <%- _t("Select another destination folder or leave blank to add files to the current location.") %>
+                </p>
+                <input
+                    type="text"
+                    name="location"
+                    />
+            </div>
+            <% } %>
+            <div class="controls" style="display: none">
                 <div class="actions row">
                     <div class="col">
                         <div class="progress active">
@@ -52,10 +53,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-auto align-right">
+                    <div class="col-auto">
                         <button
                             type="button"
-                            class="btn btn-primary upload-all">
+                            class="btn btn-primary upload-all"
+                            data-sizer="<%- _t("Browse") %>">
                             <%- _t("Upload") %>
                         </button>
                     </div>

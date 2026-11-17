@@ -1,12 +1,12 @@
 <div class="row item form-inline">
-    <div class="col-1 action">
+    <div class="col-auto action">
         <button
             type="button"
             class="btn btn-danger btn-sm remove-item"
             data-dz-remove=""
             href="javascript:undefined;">x</button>
     </div>
-    <div class="col-8 title">
+    <div class="col title">
         <div class="dz-preview">
           <div class="dz-details">
             <div class="dz-filename"><span data-dz-name></span></div>
@@ -17,7 +17,7 @@
             <span class="dz-upload" data-dz-uploadprogress></span>
         </div>
     </div>
-    <div class="col-3 info">
+    <div class="col-auto info">
         <div class="dz-size" data-dz-size></div>
         <img data-dz-thumbnail />
     </div>
