@@ -1,65 +1,14 @@
-import "./contentbrowser";
-import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 import Sortable from "sortablejs";
 import { unmount } from "svelte";
-
-const vocabularyUrl = "http://localhost/plone/@@getVocabulary";
-
-const item = (uid, title) => ({
-    UID: uid,
-    Title: title,
-    "@id": `http://localhost/plone/${uid}`,
-    path: `/plone/${uid}`,
-    portal_type: "Document",
-    getIcon: "",
-    is_folderish: false,
-    review_state: "published",
-    getURL: `http://localhost/plone/${uid}`,
-});
-
-// The selected items are looked up with a POST which names their UIDs,
-// everything else lists the whole vocabulary.
-function mockVocabulary(items) {
-    global.fetch = jest.fn(async (url, options = {}) => {
-        const body = decodeURIComponent(String(options.body || ""));
-        const results =
-            options.method === "POST"
-                ? items.filter((it) => body.includes(it.UID))
-                : items;
-        return {
-            ok: true,
-            json: async () => ({ results, total: results.length }),
-        };
-    });
-}
-
-async function mountField(value) {
-    const options = { vocabularyUrl };
-    document.body.innerHTML = `
-        <div id="contentbrowser-field">
-            <input type="text" id="field" value="${value}" class="pat-contentbrowser"
-                   data-pat-contentbrowser='${JSON.stringify(options)}'>
-        </div>
-    `;
-    const input = document.getElementById("field");
-    const changes = [];
-    input.addEventListener("change", () => changes.push(input.value));
-    registry.scan(document.body);
-    await utils.timeout(1);
-    return { input, changes };
-}
-
-async function waitFor(find) {
-    for (let attempt = 0; attempt < 200; attempt += 1) {
-        const found = find();
-        if (found) {
-            return found;
-        }
-        await utils.timeout(10);
-    }
-    throw new Error(`${find} found nothing`);
-}
+import {
+    item,
+    mockVocabulary,
+    mountField,
+    openBrowser,
+    setupBrowserTests,
+    waitFor,
+} from "./test-helpers";
 
 const selectedList = () => document.querySelector(".content-browser-selected-items");
 
@@ -85,14 +34,11 @@ function drag(from, to) {
     });
 }
 
-describe("Content Browser selection", () => {
-    afterEach(() => {
-        document.body.innerHTML = "";
-        delete global.fetch;
-    });
+setupBrowserTests();
 
+describe("Content Browser selection", () => {
     it("does not fire change while rendering the initial selection", async () => {
-        mockVocabulary([item("uid-1", "One"), item("uid-2", "Two")]);
+        mockVocabulary([item("uid-1"), item("uid-2")]);
         const { input, changes } = await mountField("uid-1,uid-2");
         await utils.timeout(1);
 
@@ -102,7 +48,7 @@ describe("Content Browser selection", () => {
     });
 
     it("fires change when an item is unselected", async () => {
-        mockVocabulary([item("uid-1", "One"), item("uid-2", "Two")]);
+        mockVocabulary([item("uid-1"), item("uid-2")]);
         const { input, changes } = await mountField("uid-1,uid-2");
         await utils.timeout(1);
 
@@ -115,21 +61,8 @@ describe("Content Browser selection", () => {
 });
 
 describe("Content Browser selection order", () => {
-    beforeEach(() => {
-        // jsdom has neither, and the browser's transition needs animate()
-        Element.prototype.scrollTo = jest.fn();
-        Element.prototype.animate = jest.fn(() => ({ cancel: () => {} }));
-    });
-
-    afterEach(() => {
-        document.body.innerHTML = "";
-        delete global.fetch;
-        delete Element.prototype.scrollTo;
-        delete Element.prototype.animate;
-    });
-
     it("writes a dragged order to the field", async () => {
-        mockVocabulary([item("uid-1", "One"), item("uid-2", "Two"), item("uid-3", "Three")]);
+        mockVocabulary([item("uid-1"), item("uid-2"), item("uid-3")]);
         const { input, changes } = await mountField("uid-1,uid-2,uid-3");
         await utils.timeout(1);
 
@@ -148,7 +81,7 @@ describe("Content Browser selection order", () => {
     });
 
     it("keeps a dragged order when an item is removed", async () => {
-        mockVocabulary([item("uid-1", "One"), item("uid-2", "Two"), item("uid-3", "Three")]);
+        mockVocabulary([item("uid-1"), item("uid-2"), item("uid-3")]);
         const { input } = await mountField("uid-1,uid-2,uid-3");
         await utils.timeout(1);
 
@@ -164,20 +97,15 @@ describe("Content Browser selection order", () => {
     });
 
     it("keeps a dragged order when an item is added", async () => {
-        mockVocabulary([
-            item("uid-1", "One"),
-            item("uid-2", "Two"),
-            item("uid-3", "Three"),
-            item("uid-4", "Four"),
-        ]);
+        mockVocabulary([item("uid-1"), item("uid-2"), item("uid-3"), item("uid-4")]);
         const { input } = await mountField("uid-1,uid-2,uid-3");
         await utils.timeout(1);
 
         drag(0, 2);
         await utils.timeout(1);
-        document.querySelector(".content-browser-selected-items-wrapper a.btn").click();
-        (await waitFor(() => document.querySelector(".contentItem[data-uuid=uid-4]"))).click();
-        (await waitFor(() => document.querySelector(".selectLevel button"))).click();
+        await openBrowser();
+        (await waitFor(".contentItem[data-uuid=uid-4]")).click();
+        (await waitFor(".selectLevel button")).click();
         await waitFor(() => input.value.includes("uid-4"));
 
         expect(input.value).toEqual("uid-2,uid-3,uid-1,uid-4");
@@ -185,7 +113,7 @@ describe("Content Browser selection order", () => {
     });
 
     it("releases the list when the field is unmounted", async () => {
-        mockVocabulary([item("uid-1", "One"), item("uid-2", "Two")]);
+        mockVocabulary([item("uid-1"), item("uid-2")]);
         const { input } = await mountField("uid-1,uid-2");
         await utils.timeout(1);
         const list = selectedList();

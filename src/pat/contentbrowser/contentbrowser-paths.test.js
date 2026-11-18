@@ -1,8 +1,8 @@
 import "./contentbrowser";
 import registry from "@patternslib/patternslib/src/core/registry";
-import utils from "@patternslib/patternslib/src/core/utils";
 import Upload from "../upload/upload--implementation";
 import { isPathBelow, pathBelowRoot, physicalPath } from "./src/utils";
+import { setupBrowserTests, waitFor } from "./test-helpers";
 
 jest.mock("../upload/upload--implementation", () => jest.fn());
 
@@ -72,17 +72,6 @@ function mockVocabulary() {
     });
 }
 
-async function waitFor(find) {
-    for (let attempt = 0; attempt < 200; attempt += 1) {
-        const found = find();
-        if (found) {
-            return found;
-        }
-        await utils.timeout(10);
-    }
-    throw new Error(`${find} found nothing`);
-}
-
 function levels() {
     return [...document.querySelectorAll(".levelColumn")].map((column) =>
         [...column.querySelectorAll(".contentItem")].map((el) => el.dataset.uuid),
@@ -122,21 +111,16 @@ async function uploadUrl() {
     return (await waitFor(() => Upload.mock.calls[0]?.[1])).url;
 }
 
+setupBrowserTests();
+
 describe("Content Browser paths", () => {
     beforeEach(() => {
         deliverPhysicalPath = true;
         queries = [];
         mockVocabulary();
-        // jsdom has neither, and the sheet's transition needs animate()
-        Element.prototype.scrollTo = jest.fn();
-        Element.prototype.animate = jest.fn(() => ({ cancel: () => {} }));
     });
 
     afterEach(() => {
-        document.body.innerHTML = "";
-        delete global.fetch;
-        delete Element.prototype.scrollTo;
-        delete Element.prototype.animate;
         Upload.mockReset();
     });
 
