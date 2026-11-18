@@ -77,6 +77,7 @@
         scrollToRight();
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
+        focusWhenRendered(uploadEl, "button.browse");
         let validation_errors = false;
 
         const patUpload = new Upload(uploadEl, {
@@ -124,6 +125,26 @@
                 showUpload = false;
             },
         });
+    }
+
+    function focusInBrowser() {
+        const active = document.activeElement;
+        return !active || active === document.body || !!active.closest(".content-browser");
+    }
+
+    // pat-upload renders its form after loading dropzone
+    function focusWhenRendered(wrapper, selector) {
+        const observer = new MutationObserver(() => {
+            const el = wrapper.querySelector(selector);
+            if (!el) {
+                return;
+            }
+            observer.disconnect();
+            if (focusInBrowser()) {
+                el.focus();
+            }
+        });
+        observer.observe(wrapper, { childList: true, subtree: true });
     }
 
     function isBrowseable(item) {
@@ -260,12 +281,16 @@
         }
     }
 
+    const NAVIGATION_KEYS = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Enter", " "];
+
     function keyboardNavigation(item, e) {
+        if (!NAVIGATION_KEYS.includes(e.key)) {
+            // Tab and Escape among them: focus must be able to leave the list
+            return;
+        }
+        e.preventDefault();
         const node = e.currentTarget;
         shiftKey = e.shiftKey;
-        if (e.key == "Escape") {
-            closeBrowser();
-        }
         if (
             e.key == "ArrowDown" &&
             node?.nextElementSibling?.classList.contains("contentItem")
@@ -399,6 +424,12 @@
         }
     }
 
+    // one tab stop per column: its current item, or its first one
+    function isTabStop(level, item, index) {
+        const isCurrent = (it) => itemInPath(it) || $previewUids.indexOf(it.UID) != -1;
+        return isCurrent(item) || (index == 0 && !level.results.some(isCurrent));
+    }
+
     function itemInPath(item) {
         return isPathBelow($currentPath, physicalPath(item, $config.rootPath));
     }
@@ -496,6 +527,7 @@
 
 {#if $showContentBrowser}
     <div class="content-browser-position-wrapper">
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
@@ -505,6 +537,12 @@
             }}
             use:clickOutside
             onclick_outside={closeBrowser}
+            onkeydown={(e) => {
+                if (e.key == "Escape") {
+                    e.preventDefault();
+                    closeBrowser();
+                }
+            }}
         >
             <div class="toolBar navbar">
                 <div class="input-group w-auto">
@@ -534,8 +572,6 @@
                         <button
                             type="button"
                             class="upload btn btn-outline-light btn-sm"
-                            tabindex="0"
-                            onkeydown={upload}
                             onclick={upload}
                             ><svg use:resolveIcon={{ iconName: "upload" }} />
                             {_t("upload to ${current_path}", {
@@ -574,10 +610,7 @@
                                         <button
                                             type="button"
                                             class="btn btn-link btn-xs ps-0"
-                                            tabindex="0"
                                             aria-label={_t("home")}
-                                            onkeydown={() =>
-                                                changePath($config.rootPath)}
                                             onclick={() => changePath($config.rootPath)}
                                             ><svg
                                                 use:resolveIcon={{ iconName: "house" }}
@@ -705,12 +738,9 @@
                                                 ? ' text-body-tertiary'
                                                 : ''}"
                                             role="button"
-                                            tabindex={n}
+                                            tabindex={isTabStop(level, item, n) ? 0 : -1}
                                             data-uuid={item.UID}
-                                            onkeydown={(e) => {
-                                                e.preventDefault();
-                                                keyboardNavigation(item, e);
-                                            }}
+                                            onkeydown={(e) => keyboardNavigation(item, e)}
                                             onclick={(e) => clickItem(item, e)}
                                         >
                                             <div
