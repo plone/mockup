@@ -47,7 +47,7 @@
         "slides": "git+https://github.com/Patternslib/slides.git",
         "sortablejs": "^1.15.7",
         "svelte": "^5.57.1",
-        "tinymce": "8.9.2",
+        "tinymce": "8.9.3",
         "tinymce-i18n": "26.9.21",
         "underscore": "1.13.8"
     },

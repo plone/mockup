@@ -9,10 +9,31 @@
             background: rgba(0, 0, 0, 0.025);
             cursor: pointer;
         }
-        button.browse,
-        .controls button,
+        .browse-select button,
+        .actions button,
         input {
             width: 100%;
+        }
+    }
+    // Field and button share a line as long as the field keeps a usable
+    // width. Below that the button wraps and fills a line of its own.
+    .browse-select,
+    .actions {
+        row-gap: 0.5em;
+        > .col {
+            flex: 999 1 8em;
+        }
+        > .col-auto {
+            flex: 1 0 auto;
+        }
+        // Each button also holds the label of the other one, so that both
+        // are as wide as the wider label and the two rows line up.
+        button::after {
+            content: attr(data-sizer);
+            display: block;
+            height: 0;
+            overflow: hidden;
+            visibility: hidden;
         }
     }
     .upload-queue {
@@ -22,28 +43,40 @@
             height: 24px;
             margin-bottom: 1px;
         }
+        .path {
+            margin-top: 1em;
+        }
         .controls {
-            display: block;
             margin-top: 10px;
             padding-top: 10px;
             width: 100%;
         }
         .previews {
-            margin-top: 4em;
+            margin-top: 1em;
             max-height: 50vh;
             overflow-y: auto;
+            // Button and size keep their width, the name takes the rest and
+            // breaks where it has to. Where the name gets too short next to
+            // them, the size wraps to the end of a line of its own.
             .item {
                 padding: 5px 0;
                 clear: both;
             }
             .title {
+                flex: 1 1 6em;
                 padding-left: 3px;
+                min-width: 0;
+                overflow-wrap: anywhere;
+            }
+            .info {
+                display: flex;
+                gap: 0.5em;
+                margin-left: auto;
+                white-space: nowrap;
             }
             .info img {
                 width: 32px;
                 height: 32px;
-                margin-top: -26px;
-                float: right;
             }
         }
     }
@@ -53,12 +86,6 @@
     .pattern-relateditems-container,
     .pattern-relateditems-container > * {
         width: 100% !important;
-    }
-    .align-right {
-        text-align: right;
-    }
-    .controls {
-        display: none;
     }
     .actions {
         margin-top: 0.5em;

@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount, mount } from "svelte";
+    import { getContext, onDestroy, onMount, mount } from "svelte";
     import { get_items_from_uids } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
@@ -29,6 +29,9 @@
         initializeSorting();
         initializing = false;
     });
+
+    // Sortable keeps every list it was created on until it is destroyed
+    onDestroy(() => sortable?.destroy());
 
     function getSelectedItemComponent() {
         // get selectedItem component from registry.
@@ -70,25 +73,41 @@
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
+    let sortable;
+
     function initializeSorting() {
-        if ($config.maximumSelectionSize !== 1 && $selectedItems.length > 1) {
-            Sortable.create(
-                selectedItemsNode.previousSibling.querySelector(
-                    ".content-browser-selected-items",
-                ),
-                {
-                    draggable: "> div",
-                    animation: 200,
-                    onUpdate: (e) => {
-                        let sortedUuids = [];
-                        e.target.querySelectorAll(".selected-item").forEach((el) => {
-                            sortedUuids.push(el.dataset["uuid"]);
-                        });
-                        setNodeValue(sortedUuids);
-                    },
-                },
-            );
+        if (sortable || $config.maximumSelectionSize === 1 || $selectedItems.length < 2) {
+            return;
         }
+        let nextSibling;
+        sortable = Sortable.create(
+            selectedItemsNode.previousSibling.querySelector(
+                ".content-browser-selected-items",
+            ),
+            {
+                draggable: "> div",
+                animation: 200,
+                onStart: (e) => {
+                    nextSibling = e.item.nextSibling;
+                },
+                onUpdate: (e) => {
+                    // Svelte owns the list: put the dragged node back and
+                    // reorder the store instead. A DOM order the store does
+                    // not know is lost on the next add or remove.
+                    e.from.insertBefore(e.item, nextSibling);
+                    selectedItems.update((items) => {
+                        const sorted = [...items];
+                        sorted.splice(
+                            e.newDraggableIndex,
+                            0,
+                            ...sorted.splice(e.oldDraggableIndex, 1),
+                        );
+                        return sorted;
+                    });
+                    selectedUids.update(() => $selectedItems.map((x) => x.UID));
+                },
+            },
+        );
     }
 
     function selectedUidsFromSelectedItems() {
@@ -125,6 +144,21 @@
             initializeSorting();
         }
     });
+
+    let opener = $state();
+    let wasOpen = false;
+
+    // a closed browser hands the focus back, unless it went elsewhere
+    $effect(() => {
+        const isOpen = $showContentBrowser;
+        if (wasOpen && !isOpen) {
+            const active = document.activeElement;
+            if (!active || active === document.body || active.closest(".content-browser")) {
+                opener?.focus();
+            }
+        }
+        wasOpen = isOpen;
+    });
 </script>
 
 <div
@@ -159,6 +193,7 @@
         aria-disabled={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize}
         title={$config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize ? _t("You can only select ${max} items", { max: $config.maximumSelectionSize }) : undefined}
         style="border-radius:0 var(--bs-border-radius) var(--bs-border-radius) 0"
+        bind:this={opener}
         onclick={(e) => { e.preventDefault(); if ($config.maximumSelectionSize > 1 && $selectedUids.length >= $config.maximumSelectionSize) return; $showContentBrowser = true; }}>{$config.uploadEnabled ? _t("Select or Upload") : _t("Select")}</a
     >
 </div>

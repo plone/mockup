@@ -1,6 +1,6 @@
 import logger from "@patternslib/patternslib/src/core/logging";
 import { writable, get } from "svelte/store";
-import { request } from "./utils.js";
+import { pathBelowRoot, request } from "./utils.js";
 
 const log = logger.getLogger("pat-contentbrowser");
 
@@ -36,31 +36,11 @@ export default function (config, pathCache) {
 
     const browse = async (path, searchTerm, updateCache) => {
 
-        let rootPath = config.rootPath;
-        let rootPathParts = rootPath.replace(/^\/+/, '').split("/");
-        let physicalPath = path;
-        let hideRootPath = rootPath;
-
-        if (!physicalPath.startsWith(rootPath)) {
-            // The path from the returned items from "vocabularyUrl" are starting
-            // relative from the Plone Site. So we need to generate the phyiscalPath here.
-            // NOTE: We also have to merge the rootPath and the clicked path correctly for example:
-            // rootPath: /path/to/plonesite/media, clicked path: /media/subfolder
-            // has to become:
-            // /path/to/plonesite/media/subfolder
-            let pathParts = physicalPath.replace(/^\/+/, '').split("/");
-            let overlapIdx = 0;
-            for (overlapIdx; overlapIdx < rootPathParts.length; overlapIdx++) {
-                if (rootPathParts[overlapIdx] === pathParts[0]) {
-                    break;
-                }
-            }
-            hideRootPath = "/" + (rootPathParts.filter(it => !pathParts.includes(it))).join("/");
-            physicalPath = "/" + (rootPathParts.slice(0, overlapIdx).concat(pathParts)).join("/");
-        }
+        // `path` is a physical path, like the root path and every level
+        const rootPath = config.rootPath;
 
         let paths = [];
-        let parts = physicalPath.split("/") || [];
+        let parts = path.split("/") || [];
         const maxDepth = Math.min(parts.length, config.maxDepth || 999);
 
         let partsToShow = parts.slice(parts.length - maxDepth, parts.length);
@@ -106,7 +86,7 @@ export default function (config, pathCache) {
                 level.page = 1;
                 level.path = p;
                 level.searchTerm = searchTerm;
-                level.displayPath = p.replace(new RegExp(`^(${hideRootPath}|${rootPath})`), "") || "/"
+                level.displayPath = pathBelowRoot(p, rootPath) || "/";
 
                 if(searchTerm === "") {
                     // get level info
@@ -118,14 +98,17 @@ export default function (config, pathCache) {
                         level.Title = levelInfo.results[0].Title;
                         level.portal_type = levelInfo.results[0].portal_type;
                         level.getIcon = levelInfo.results[0].getIcon;
+                        level.getURL = levelInfo.results[0].getURL;
                         // check if level is selectable (config.selectableTypes)
                         level.selectable = (!config.selectableTypes.length || config.selectableTypes.indexOf(levelInfo.results[0].portal_type) != -1);
                     }
                 }
 
-                // persist showFilter value from previously cached path
+                // persist showFilter value from previously cached path, and
+                // the URL, which a filtered level does not ask for again
                 if (p in pC) {
                     level.showFilter = pC[p].showFilter || level.showFilter;
+                    level.getURL = level.getURL || pC[p].getURL;
                 }
 
                 pathCache.update((n) => {

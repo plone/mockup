@@ -1,6 +1,6 @@
 <script>
     import utils from "@patternslib/patternslib/src/core/utils";
-    import { getContext, onMount } from "svelte";
+    import { getContext, onMount, tick } from "svelte";
     import { fly } from "svelte/transition";
     import _t from "../../../core/i18n-wrapper";
     import { ensureIntlSupport } from "../../../core/intl-loader";
@@ -11,6 +11,9 @@
         formatDate,
         get_items_from_uids,
         iconTag,
+        isPathBelow,
+        pathBelowRoot,
+        physicalPath,
         request,
         resolveIcon,
         updateRecentlyUsed,
@@ -68,17 +71,17 @@
 
     async function upload() {
         updatePreview({ action: "clear" });
-        scrollToRight();
         showUpload = true;
-        await utils.timeout(1);
+        // the upload column is in the DOM after this update
+        await tick();
+        scrollToRight();
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
+        focusWhenRendered(uploadEl, "button.browse");
         let validation_errors = false;
 
         const patUpload = new Upload(uploadEl, {
-            baseUrl: $config.rootUrl,
-            currentPath: $currentPath,
-            relativePath: "@@fileUpload",
+            url: `${currentFolderUrl()}/@@fileUpload`,
             allowPathSelection: false,
             hiddenInputContainer: ".upload-wrapper",
             maxFiles:
@@ -86,8 +89,7 @@
             acceptedFiles: $config.uploadAcceptedMimetypes,
             success: (fileupload, obj) => {
                 if ($config.maximumSelectionSize == 1) {
-                    // remove currently selected item and save the uid of the uploaded item
-                    selectedItems.set([]);
+                    // the uploaded item replaces the selection in addSelectedItems
                     $previewUids = [obj.UID];
                 } else {
                     // in multiselect mode we add the uploaded item to the previous selection
@@ -125,6 +127,26 @@
         });
     }
 
+    function focusInBrowser() {
+        const active = document.activeElement;
+        return !active || active === document.body || !!active.closest(".content-browser");
+    }
+
+    // pat-upload renders its form after loading dropzone
+    function focusWhenRendered(wrapper, selector) {
+        const observer = new MutationObserver(() => {
+            const el = wrapper.querySelector(selector);
+            if (!el) {
+                return;
+            }
+            observer.disconnect();
+            if (focusInBrowser()) {
+                el.focus();
+            }
+        });
+        observer.observe(wrapper, { childList: true, subtree: true });
+    }
+
     function isBrowseable(item) {
         return (
             item.is_folderish &&
@@ -147,12 +169,13 @@
         if ($config.mode == "browse") {
             $previewUids = [item.UID];
 
+            const path = physicalPath(item, $config.rootPath);
             if (isBrowseable(item)) {
                 // show folder
-                currentPath.set(item.path);
+                currentPath.set(path);
             } else {
                 // show non folderish preview
-                const pathParts = item.path.split("/");
+                const pathParts = path.split("/");
                 const folderPath = pathParts.slice(0, pathParts.length - 1).join("/");
                 currentPath.set(folderPath || "/");
                 updatePreview({ data: item });
@@ -258,12 +281,16 @@
         }
     }
 
+    const NAVIGATION_KEYS = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Enter", " "];
+
     function keyboardNavigation(item, e) {
+        if (!NAVIGATION_KEYS.includes(e.key)) {
+            // Tab and Escape among them: focus must be able to leave the list
+            return;
+        }
+        e.preventDefault();
         const node = e.currentTarget;
         shiftKey = e.shiftKey;
-        if (e.key == "Escape") {
-            closeBrowser();
-        }
         if (
             e.key == "ArrowDown" &&
             node?.nextElementSibling?.classList.contains("contentItem")
@@ -324,6 +351,16 @@
 
     async function addSelectedItems() {
         const previewItems = await get_items_from_uids($previewUids, $config);
+        if ($config.maximumSelectionSize == 1) {
+            // Replace in one step: clearing first fires a change with no
+            // selection, which a host reads as the item being removed.
+            if (previewItems.length) {
+                selectedItems.set(previewItems.slice(0, 1));
+            }
+            selectedUids.update(() => $selectedItems.map((x) => x.UID));
+            closeBrowser();
+            return;
+        }
         selectedItems.update((n) => {
             for (const it of previewItems) {
                 if ($selectedUids.indexOf(it.UID) != -1) continue;
@@ -355,12 +392,7 @@
             alert(`${path} not found!`);
             return;
         }
-        const item = response.results[0];
-        if (!item.path) {
-            // fix for root
-            item.path = $config.rootPath;
-        }
-        changePath(item);
+        changePath(response.results[0]);
     }
 
     function closeBrowser() {
@@ -380,7 +412,9 @@
         );
     }
 
-    function scrollToRight() {
+    async function scrollToRight() {
+        // a column added by the same change is not in the DOM yet
+        await tick();
         const scrollContainer = document.querySelector(".levelColumns");
         if (scrollContainer) {
             scrollContainer.scrollTo({
@@ -390,15 +424,23 @@
         }
     }
 
+    // one tab stop per column: its current item, or its first one
+    function isTabStop(level, item, index) {
+        const isCurrent = (it) => itemInPath(it) || $previewUids.indexOf(it.UID) != -1;
+        return isCurrent(item) || (index == 0 && !level.results.some(isCurrent));
+    }
+
     function itemInPath(item) {
-        const item_path = item.path.split("/");
-        const curr_path = $currentPath.split("/");
-        let in_path = true;
-        for (const idx in item_path) {
-            // check path parts to be equal
-            in_path = in_path && item_path[idx] === curr_path[idx];
-        }
-        return in_path;
+        return isPathBelow($currentPath, physicalPath(item, $config.rootPath));
+    }
+
+    // The vocabulary tells the URL of the folder shown last. Where it does
+    // not, rootUrl is the URL of rootPath.
+    function currentFolderUrl() {
+        return (
+            $pathCache[$currentPath]?.getURL ||
+            `${$config.rootUrl}${pathBelowRoot($currentPath, $config.rootPath)}`
+        );
     }
 
     const searchItemsKeyup = utils.debounce(async (e) => {
@@ -485,6 +527,7 @@
 
 {#if $showContentBrowser}
     <div class="content-browser-position-wrapper">
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
@@ -494,6 +537,12 @@
             }}
             use:clickOutside
             onclick_outside={closeBrowser}
+            onkeydown={(e) => {
+                if (e.key == "Escape") {
+                    e.preventDefault();
+                    closeBrowser();
+                }
+            }}
         >
             <div class="toolBar navbar">
                 <div class="input-group w-auto">
@@ -523,12 +572,12 @@
                         <button
                             type="button"
                             class="upload btn btn-outline-light btn-sm"
-                            tabindex="0"
-                            onkeydown={upload}
                             onclick={upload}
                             ><svg use:resolveIcon={{ iconName: "upload" }} />
                             {_t("upload to ${current_path}", {
-                                current_path: $currentPath,
+                                current_path:
+                                    pathBelowRoot($currentPath, $config.rootPath) ||
+                                    "/",
                             })}</button
                         >
                     </div>
@@ -561,10 +610,7 @@
                                         <button
                                             type="button"
                                             class="btn btn-link btn-xs ps-0"
-                                            tabindex="0"
                                             aria-label={_t("home")}
-                                            onkeydown={() =>
-                                                changePath($config.rootPath)}
                                             onclick={() => changePath($config.rootPath)}
                                             ><svg
                                                 use:resolveIcon={{ iconName: "house" }}
@@ -692,12 +738,9 @@
                                                 ? ' text-body-tertiary'
                                                 : ''}"
                                             role="button"
-                                            tabindex={n}
+                                            tabindex={isTabStop(level, item, n) ? 0 : -1}
                                             data-uuid={item.UID}
-                                            onkeydown={(e) => {
-                                                e.preventDefault();
-                                                keyboardNavigation(item, e);
-                                            }}
+                                            onkeydown={(e) => keyboardNavigation(item, e)}
                                             onclick={(e) => clickItem(item, e)}
                                         >
                                             <div
@@ -897,11 +940,11 @@
         position: fixed;
         top: 0;
         right: 0;
+        bottom: 0;
         display: flex;
         justify-content: end;
         z-index: 1500;
         width: 100%;
-        height: 100vh;
         background-color: rgba(0, 0, 0, 0.25);
     }
     .btn-xs {
@@ -910,8 +953,8 @@
         --bs-btn-font-size: 0.75rem;
     }
     .content-browser {
-        height: 100vh;
-        min-width: 450px;
+        height: 100%;
+        min-width: min(450px, 100%);
         background-color: var(--bs-light-bg-subtle);
         border-left: var(--bs-border-style) var(--bs-border-width) #fff;
         z-index: 1500;
@@ -929,6 +972,13 @@
     .toolBar :global(svg) {
         vertical-align: -0.125em;
     }
+    /* An icon which is not resolved yet is an empty <svg> of 300x150px. It
+       widens its column for a moment, and the browser scrolls to the end
+       just then: Safari stays there when the column shrinks again. */
+    .content-browser :global(svg:not([viewBox])) {
+        width: 1em;
+        height: 1em;
+    }
     .toolBar input[name="filter"] {
         margin: 0;
     }
@@ -945,6 +995,7 @@
 
     .levelColumn {
         width: 320px;
+        max-width: 100%;
         background: rgba(var(--bs-secondary-bg-rgb), 0.55);
         border-right: var(--bs-border-style) var(--bs-border-width)
             var(--bs-border-color);
@@ -1026,6 +1077,7 @@
     }
     .preview {
         width: 320px;
+        max-width: 100%;
         flex-shrink: 0;
         min-height: 300px;
     }
@@ -1050,6 +1102,7 @@
     .upload-wrapper {
         padding: 1rem;
         width: 540px;
+        max-width: 100%;
         overflow-x: auto;
         flex-shrink: 0;
     }

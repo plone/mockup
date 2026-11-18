@@ -19,8 +19,11 @@
 
         line-height: 13px;
         font-style: italic;
-        outline: 0;
         margin: 8px 4px;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
         cursor: pointer;
 
         // TODO: Add icon "remove"

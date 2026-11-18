@@ -72,7 +72,8 @@ Criteria.prototype = {
         self.patternRelateditemsOptions["maximumSelectionSize"] = 1;
 
         // Remove button
-        self.$remove = $("<div>" + self.options.remove + "</div>")
+        self.$remove = $('<button type="button">' + self.options.remove + "</button>")
+            .attr("aria-label", _t("Remove criterion"))
             .addClass(self.options.classRemoveName)
             .appendTo(self.$wrapper)
             .on("click", function (e) {
@@ -454,13 +455,26 @@ Criteria.prototype = {
     },
     remove: function () {
         var self = this;
+        const hadFocus = self.$wrapper[0].contains(document.activeElement);
+        // Removing the last row adds a new empty one, so look for the
+        // neighbour afterwards.
         self.trigger("remove");
+        const rows = "." + self.options.classWrapperName;
+        let $neighbour = self.$wrapper.next(rows);
+        if (!$neighbour.length) {
+            $neighbour = self.$wrapper.prev(rows);
+        }
         self.$remove.remove();
         self.$index.parent().remove();
         self.removeOperator();
         self.removeValue();
         self.removeClear();
         self.$wrapper.remove();
+        if (hadFocus) {
+            // The focus would be lost with the row. Keep it in the list, on
+            // the remove button of the row which takes this one's place.
+            $neighbour.children("." + self.options.classRemoveName).trigger("focus");
+        }
     },
     removeClear: function () {
         var self = this;
