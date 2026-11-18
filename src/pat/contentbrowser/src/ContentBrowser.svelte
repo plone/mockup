@@ -72,7 +72,8 @@
     async function upload() {
         updatePreview({ action: "clear" });
         showUpload = true;
-        await utils.timeout(1);
+        // the upload column is in the DOM after this update
+        await tick();
         scrollToRight();
         const uploadEl = document.querySelector(".upload-wrapper");
         uploadEl.classList.add("pat-upload");
