@@ -193,6 +193,41 @@ describe("Querystring", function () {
         delete global.fetch;
     });
 
+    it("keeps the focus in the list when a criterion is removed", async function () {
+        const criterias = await import("./test-querystringcriteria.json");
+        global.fetch = jest.fn().mockImplementation(mockFetch(criterias));
+        const removeButtons = () => [
+            ...document.querySelectorAll(".querystring-criteria-remove"),
+        ];
+        const rowOf = (button) => button.closest(".querystring-criteria-wrapper");
+
+        registry.scan(document.body);
+        await utils.timeout(1);
+
+        // the focus moves to the row which takes the place of the removed one
+        const [first, second] = removeButtons();
+        first.focus();
+        first.click();
+        expect(document.activeElement).toBe(second);
+
+        // the last row is the empty one: removing it adds a new empty row
+        const last = removeButtons().at(-1);
+        last.focus();
+        last.click();
+        expect(document.activeElement).toBe(removeButtons().at(-1));
+        expect(document.activeElement).not.toBe(last);
+        expect(rowOf(document.activeElement).querySelector("select").value).toEqual("");
+
+        // a click which did not focus the button leaves the focus alone
+        const elsewhere = document.getElementById("form-widgets-sort_on");
+        elsewhere.focus();
+        removeButtons()[0].click();
+        expect(document.activeElement).toBe(elsewhere);
+
+        global.fetch.mockClear();
+        delete global.fetch;
+    });
+
     it("handles a native change event on the index select", async function () {
         // Regression test: pat-select2 re-dispatches a native `change` event in
         // addition to the Select2 v3 jQuery `change` event. jQuery's `change`
