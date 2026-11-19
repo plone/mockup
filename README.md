@@ -40,6 +40,8 @@ There are several options to integrate Mockup.
 
 - To build the bundle into the `dist/` directory, run `make build`, or `make watch` to rebuild it whenever you change something.
 
+- Run `make` without a target to see the most important targets.
+
 ### Package manager
 
 Mockup uses [pnpm](https://pnpm.io/) as package manager.
