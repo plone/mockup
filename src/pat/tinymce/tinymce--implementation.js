@@ -296,29 +296,43 @@ export default class TinyMCE {
 
     async initLanguage() {
         const i18n = new I18n();
-        let lang = i18n.currentLanguage;
+        const lang_parts = i18n.currentLanguage.split("-");
 
-        // Fix for country specific languages
-        if (lang.split("-").length > 1) {
-            lang = lang.split("-")[0] + "_" + lang.split("-")[1].toUpperCase();
-        }
+        // Country specific languages in TinyMCE 8 in in the form: `lang-COUNTRY_CODE`
+        let lang =
+            lang_parts.length === 1
+                ? lang_parts[0]
+                : `${lang_parts[0]}-${lang_parts[1].toUpperCase()}`;
 
+        debugger;
         if (lang !== "en") {
             // load translations from tinymce-i18n
             try {
-                await import(`tinymce-i18n/langs7/${lang}`);
+                await import(`tinymce-i18n/langs8/${lang}.js`);
             } catch {
-                log.debug("Could not load TinyMCE language: ", lang);
                 try {
-                    // expected lang not available, let's fallback to closest one
-                    if (lang.split("_").length > 1) {
-                        lang = lang.split("_")[0];
-                    } else {
-                        lang = lang + "_" + lang.toUpperCase();
-                    }
-                    log.debug("Trying with: ", lang);
-                    await import(`tinymce-i18n/langs7/${lang}`);
+                    log.debug("Could not load TinyMCE language: ", lang);
+
+                    lang = lang_parts[0];
+                    log.debug("Fall back to: ", lang);
+
+                    await import(`tinymce-i18n/langs8/${lang}.js`);
                 } catch {
+                    try {
+                        log.debug("Could not load TinyMCE language: ", lang);
+
+                        // Some languages have the form of `lang-LANG`, etc. `fr-FR`.
+                        lang = `${lang_parts[0]}-${lang_parts[0].toUpperCase()}`;
+                        log.debug("Fall back to: ", lang);
+
+                        await import(`tinymce-i18n/langs8/${lang}.js`);
+                    } catch {
+                        log.debug(
+                            "Could not load TinyMCE language. Fallback to English",
+                        );
+                        lang = "en";
+                    }
+
                     log.debug("Could not load TinyMCE language. Fallback to English");
                     lang = "en";
                 }
