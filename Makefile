@@ -2,18 +2,7 @@
 ## Please note
 ##############
 
-# Every target installs the dependencies first, so there is no need to call
-# the package manager yourself:
-#
-#   make install        Install the dependencies.
-#   make serve          Run the demo and documentation server.
-#   make serve-webpack  Run only the webpack dev server, e.g. to develop in Plone.
-#   make watch          Rebuild the development bundle in dist/ on changes.
-#   make build          Build the production bundle into dist/.
-#   make watch-plone    Like watch, but write into plone.staticresources.
-#   make build-plone    Like build, but write into plone.staticresources.
-#   make check          Run eslint and the tests.
-#   make docs           Build the documentation.
+# Run `make` or `make help` for the targets you most likely need.
 #
 # install, serve, check, eslint and the release targets come from the Makefile
 # of @patternslib/dev. See there for more targets and for how to release.
@@ -26,16 +15,40 @@ export
 
 PNPM ?= npx pnpm
 
-.DEFAULT_GOAL := install
+.DEFAULT_GOAL := help
+
+
+.PHONY: help
+help:
+	@echo "Usage: make TARGET"
+	@echo ""
+	@echo "  install        Install the dependencies."
+	@echo "  serve          Run the demo and documentation server."
+	@echo "  serve-webpack  Run only the webpack dev server, e.g. to develop in Plone."
+	@echo "  watch          Rebuild the development bundle in dist/ on changes."
+	@echo "  build          Build the production bundle into dist/."
+	@echo "  watch-plone    Like watch, but write into plone.staticresources."
+	@echo "  build-plone    Like build, but write into plone.staticresources."
+	@echo "  check          Run eslint and the tests."
+	@echo "  docs           Build the documentation."
+	@echo ""
+	@echo "Every target installs the dependencies first, so there is no need to"
+	@echo "call the package manager yourself."
+	@echo ""
+	@echo "For more targets, e.g. for a release, see the Makefile and"
+	@echo "node_modules/@patternslib/dev/Makefile."
 
 
 # Include the base Makefile.
 # It is not installed yet on a fresh checkout. Make then creates it with the
-# rule below and starts over, so that every target works right away.
+# rule below and starts over, so that every target works right away. Only
+# asking for the help does not install anything.
 -include node_modules/@patternslib/dev/Makefile
 
+ifneq ($(filter-out help,$(or $(MAKECMDGOALS),help)),)
 node_modules/@patternslib/dev/Makefile:
 	$(PNPM) install
+endif
 
 
 .PHONY: build
