@@ -31,12 +31,28 @@ There are several options to integrate Mockup.
 
     This starts up the webpack build process in watch mode.
     Any JavaScript changes are immediately compiled.
-    For some changes - like for adding new packages via `pnpm add` and then using it you might need to restart.
+    For some changes - like for adding new packages via `npx pnpm add` and then using it you might need to restart.
     The command also spins up a development server for our `11ty` based documentation and demo pages.
-    If you don't need the docs running, you can run `pnpm start:webpack` or `npm run start:webpack` instead, so that only the webpack devserver is running.
+    If you don't need the docs running, you can run `make serve-webpack` instead, so that only the webpack devserver is running.
 
 - Go to `http://localhost:8000`:
   On this port our demo and documentation pages are served.
+
+- To build the bundle into the `dist/` directory, run `make build`, or `make watch` to rebuild it whenever you change something.
+
+- Run `make` without a target to see the most important targets.
+
+### Package manager
+
+Mockup uses [pnpm](https://pnpm.io/) as package manager.
+All make targets install the dependencies first and run pnpm via `npx pnpm`, so you don't need pnpm installed.
+`npx` uses an installed pnpm or downloads one, and pnpm then switches to the version which is pinned in the `packageManager` field of the `package.json`.
+
+If you call pnpm yourself, use `npx pnpm` too, for example `npx pnpm add PACKAGE-NAME`.
+
+Earlier versions of `make install` enabled [corepack](https://github.com/nodejs/corepack), which puts its own `pnpm` and `yarn` commands next to your Node.js installation.
+Mockup doesn't need corepack anymore.
+If you don't use it for other projects, you can remove these commands again with `corepack disable`.
 
 ## Mockup overview
 
@@ -123,8 +139,9 @@ If you want to develop in Plone, you have two options:
 
 1. Run `make watch-plone`. You need buildout to have plone.staticresources checked out next to Mockup.
    Mockup will compile it's bundle directly into the `++plone++static` directory of plone.staticresources and update it when you change something in Mockup.
+   `make build-plone` builds the production bundle there once.
 
-2. Run `npx pnpm start:webpack`, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL `http://localhost:8000/bundle.min.js` to the JavaScript input field of the plone bundle instead of the other URL `++plone++static/bundle-plone/bundle.min.js`.
+2. Run `make serve-webpack`, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL `http://localhost:8000/bundle.min.js` to the JavaScript input field of the plone bundle instead of the other URL `++plone++static/bundle-plone/bundle.min.js`.
 
 For more commands inspect Makefile and the script part of the package.json.
 
@@ -166,17 +183,17 @@ You can put some `debugger;` statements to the code to break the execution and i
 
 ### Developing external Packages
 
-If you want to work on ony external package like Patternslib or any external Mockup pattern you can do so by linking those packages into the node_modules folder via `pnpm link`.
+If you want to work on ony external package like Patternslib or any external Mockup pattern you can do so by linking those packages into the node_modules folder via `npx pnpm link`.
 
 1. Check out the external package you want to develop on.
 
-2. Make sure you have installed the dependencies in the development package (e.g. by running `pnpm install`). (TODO: verify that!)
+2. Make sure you have installed the dependencies in the development package (e.g. by running `npx pnpm install`). (TODO: verify that!)
 
-3. Run `pnpm link` in the external development package to register it with pnpm.
+3. Run `npx pnpm link` in the external development package to register it with pnpm.
 
-4. Run `pnpm link "PACKAGE-NAME"` in mockup to create the node_modules symlink.
+4. Run `npx pnpm link "PACKAGE-NAME"` in mockup to create the node_modules symlink.
 
-After developing you might want to run `pnpm unlink "PACKAGE-NAME"` to unlink the development package.
+After developing you might want to run `npx pnpm unlink "PACKAGE-NAME"` to unlink the development package.
 
 For more information see:
 
@@ -323,6 +340,6 @@ Please keep commits on the `pnpm-lock.yaml` file or any other auto-generated cod
 Just commit them seperately with `git commit pnpm-lock.yaml -m "pnpm install" -n`.
 
 Keeping them seperate reduces the effort when merging or rebasing branches where a merge conflict can easily happen.
-In such cases you can just withdraw your changes on the `pnpm-lock.yaml` file, or remove those commits and reinstall with `pnpm install` at the end of a successful merge or rebase.
+In such cases you can just withdraw your changes on the `pnpm-lock.yaml` file, or remove those commits and reinstall with `make install` at the end of a successful merge or rebase.
 
 ---
