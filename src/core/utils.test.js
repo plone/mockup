@@ -269,12 +269,26 @@ describe("utils", function () {
         const cdn_url = `https://cdn.jsdelivr.net/npm/bootstrap-icons@${bootstrap_icons.version}/icons/house.svg`;
 
         const found = { ok: true, status: 200, text: async () => house_svg };
-        const not_found = { ok: false, status: 404, text: async () => "" };
+        const error_page = (status) => ({
+            ok: false,
+            status: status,
+            text: async () => "<html><body>Error</body></html>",
+        });
 
         // Answer each URL with its entry in ``responses``, anything else
-        // with a 404.
+        // with a 404 error page. A list answers one request per entry and
+        // repeats the last one.
         const serve = (responses) => {
-            global.fetch = jest.fn(async (url) => responses[url] ?? not_found);
+            global.fetch = jest.fn(async (url) => {
+                let response = responses[url] ?? error_page(404);
+                if (Array.isArray(response)) {
+                    response = response.length > 1 ? response.shift() : response[0];
+                }
+                if (response instanceof Error) {
+                    throw response;
+                }
+                return response;
+            });
         };
         const fetched_urls = () => global.fetch.mock.calls.map((call) => call[0]);
 
@@ -303,6 +317,90 @@ describe("utils", function () {
             const icon = await utils.resolveIcon("house");
 
             expect(icon).toBe(house_svg);
+            expect(fetched_urls()).toEqual([cdn_url]);
+        });
+
+        it("does not request an icon which is not in the iconmap", async function () {
+            serve({});
+
+            expect(await utils.resolveIcon("no-such-icon")).toBe("");
+            expect(fetched_urls()).toEqual([]);
+        });
+
+        it("prefers the icon of the iconresolver", async function () {
+            const custom_svg = '<svg class="custom"></svg>';
+            document.body.setAttribute("data-portal-url", "http://nohost/plone");
+            serve({
+                [resolver_url]: { ok: true, status: 200, text: async () => custom_svg },
+                [plone_url]: found,
+            });
+
+            expect(await utils.resolveIcon("house")).toBe(custom_svg);
+            expect(fetched_urls()).toEqual([resolver_url]);
+        });
+
+        it("does not use a page which is not an icon", async function () {
+            // E.g. a login form, which is answered with status 200.
+            const login_page = {
+                ok: true,
+                status: 200,
+                text: async () => "<html><body>Please log in</body></html>",
+            };
+            document.body.setAttribute("data-portal-url", "http://nohost/plone");
+            serve({ [resolver_url]: login_page, [plone_url]: login_page });
+
+            expect(await utils.resolveIcon("house")).toBe("");
+        });
+
+        it("shares one request between concurrent calls", async function () {
+            serve({ [cdn_url]: found });
+
+            const icons = await Promise.all([
+                utils.resolveIcon("house"),
+                utils.resolveIcon("house"),
+            ]);
+
+            expect(icons).toEqual([house_svg, house_svg]);
+            expect(fetched_urls()).toEqual([cdn_url]);
+        });
+
+        it("loads an icon only once", async function () {
+            serve({ [cdn_url]: found });
+
+            await utils.resolveIcon("house");
+            await utils.resolveIcon("house");
+
+            expect(fetched_urls()).toEqual([cdn_url]);
+        });
+
+        it("retries an icon after a network error", async function () {
+            serve({ [cdn_url]: [new TypeError("Failed to fetch"), found] });
+            jest.spyOn(console, "warn").mockImplementation(() => {});
+
+            expect(await utils.resolveIcon("house")).toBe("");
+            expect(await utils.resolveIcon("house")).toBe(house_svg);
+            expect(fetched_urls()).toEqual([cdn_url, cdn_url]);
+
+            console.warn.mockRestore();
+        });
+
+        it("retries an icon after a server error", async function () {
+            document.body.setAttribute("data-portal-url", "http://nohost/plone");
+            serve({
+                [resolver_url]: [error_page(503), found],
+                [plone_url]: error_page(503),
+            });
+
+            expect(await utils.resolveIcon("house")).toBe("");
+            expect(await utils.resolveIcon("house")).toBe(house_svg);
+            expect(fetched_urls()).toEqual([resolver_url, plone_url, resolver_url]);
+        });
+
+        it("does not retry an icon which does not exist", async function () {
+            serve({});
+
+            expect(await utils.resolveIcon("house")).toBe("");
+            expect(await utils.resolveIcon("house")).toBe("");
             expect(fetched_urls()).toEqual([cdn_url]);
         });
     });
