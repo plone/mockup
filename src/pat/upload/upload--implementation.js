@@ -261,18 +261,24 @@ export default Base.extend({
         var $controls = $(".controls", self.$el);
         var $browse = $(".browse-select", self.$el);
         var $input = $(".dz-hidden-input");
+        var moveFocus = false;
 
         if (self.options.maxFiles) {
             if (self.dropzone.files.length < self.options.maxFiles) {
                 $browse.show();
                 $input.prop("disabled", false);
             } else {
+                // hiding the focused Browse button would drop the focus
+                moveFocus = !!$browse[0]?.contains(document.activeElement);
                 $browse.hide();
                 $input.prop("disabled", true);
             }
         }
         if (self.dropzone.files.length > 0) {
             $controls.fadeIn("slow");
+            if (moveFocus) {
+                $(".upload-all", self.$el).trigger("focus");
+            }
             var file = self.dropzone.files[0];
             $(".dz-error-message span", file.previewElement).html("");
         } else {
