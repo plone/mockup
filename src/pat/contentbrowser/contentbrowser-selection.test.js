@@ -58,6 +58,33 @@ describe("Content Browser selection", () => {
         expect(input.value).toEqual("uid-2");
         expect(changes).toEqual(["uid-2"]);
     });
+
+    it("drops a selection which arrives after the field was destroyed", async () => {
+        // The lookup of the selected items stays pending until `answer` is
+        // called, as a slow server would keep it.
+        let answer;
+        const items = [item("uid-1"), item("uid-2")];
+        global.fetch = jest.fn(
+            () =>
+                new Promise((resolve) => {
+                    answer = () =>
+                        resolve({
+                            ok: true,
+                            json: async () => ({ results: items, total: items.length }),
+                        });
+                }),
+        );
+        const { input, changes } = await mountField("uid-1,uid-2");
+        await waitFor(() => answer);
+
+        input["pattern-contentbrowser"].destroy();
+        answer();
+        await utils.timeout(1);
+
+        expect(document.querySelectorAll(".selected-item").length).toEqual(0);
+        expect(input.value).toEqual("uid-1,uid-2");
+        expect(changes).toEqual([]);
+    });
 });
 
 describe("Content Browser selection order", () => {

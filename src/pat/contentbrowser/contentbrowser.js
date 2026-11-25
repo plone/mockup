@@ -2,8 +2,6 @@ import { BasePattern } from "@patternslib/patternslib/src/core/basepattern";
 import Parser from "@patternslib/patternslib/src/core/parser";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
-import plone_registry from "@plone/registry";
-import { mount } from "svelte";
 
 // Contentbrowser pattern
 
@@ -57,6 +55,10 @@ class Pattern extends BasePattern {
     static parser = parser;
 
     static async register_default_components() {
+        // @plone/registry is imported here, not at module level — a static
+        // import would put it in the eager patterns chunk on every page.
+        const { default: plone_registry } = await import("@plone/registry");
+
         // Register the default components in @plone/registry — but only if
         // nothing is registered under that key yet. This lets add-ons
         // replace a component site-wide by registering their own under the
@@ -72,6 +74,14 @@ class Pattern extends BasePattern {
     }
 
     async init() {
+        if (this.destroyed) {
+            // BasePattern runs init() on a timer, even after destroy(), and
+            // registers the instance on the element right before.
+            super.destroy();
+            return;
+        }
+
+        this.previous_display = this.el.style.display;
         this.el.style.display = "none";
 
         await Pattern.register_default_components();
@@ -83,7 +93,25 @@ class Pattern extends BasePattern {
             this.el.setAttribute("id", nodeId);
         }
 
-        const ContentBrowserApp = (await import("./src/App.svelte")).default;
+        // svelte is imported here, not at module level — a static import would
+        // pull the whole svelte runtime into the eager patterns chunk on every
+        // page.
+        const [{ mount, unmount }, { default: ContentBrowserApp }] = await Promise.all([
+            import("svelte"),
+            import("./src/App.svelte"),
+        ]);
+        // destroy() needs unmount, but svelte is only imported lazily here.
+        this._svelte_unmount = unmount;
+        // A JS framework host can destroy or remove the widget while the
+        // imports above are pending: there is nothing left to mount into.
+        if (this.destroyed) {
+            return;
+        }
+        if (!this.el.isConnected) {
+            // Release the input, so that it works again when it is reinserted.
+            this.destroy();
+            return;
+        }
 
         // create browser node
         const contentBrowserEl = document.createElement("div");
@@ -97,6 +125,24 @@ class Pattern extends BasePattern {
                 ...this.options,
             }
         });
+        this.content_browser_el = contentBrowserEl;
+    }
+
+    destroy() {
+        this.destroyed = true;
+        // Unmount the Svelte app so its reactive effects stop; otherwise it
+        // keeps writing selection state into the (possibly removed) input,
+        // e.g. when a JS framework host unmounts the widget after selection.
+        if (this.component_content_browser) {
+            this._svelte_unmount?.(this.component_content_browser);
+            this.component_content_browser = null;
+        }
+        this.content_browser_el?.remove();
+        this.content_browser_el = null;
+        if (this.previous_display !== undefined) {
+            this.el.style.display = this.previous_display;
+        }
+        super.destroy();
     }
 }
 

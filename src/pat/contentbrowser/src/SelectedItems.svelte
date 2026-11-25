@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onDestroy, onMount, mount } from "svelte";
+    import { getContext, onDestroy, onMount, mount, unmount } from "svelte";
     import { get_items_from_uids } from "./utils.js";
     import Sortable from "sortablejs";
     import _t from "../../../core/i18n-wrapper";
@@ -10,6 +10,8 @@
     let ref = $state();
     let initializing = $state(true);
     let RegisteredSelectedItem = $state();
+    // The host can unmount the widget while the selection is still loading.
+    let destroyed = false;
 
     // get reactive context config
     const config = getContext("config");
@@ -26,12 +28,18 @@
     onMount(async () => {
         getSelectedItemComponent();
         await initializeSelectedItemsStore();
+        if (destroyed) {
+            return;
+        }
         initializeSorting();
         initializing = false;
     });
 
-    // Sortable keeps every list it was created on until it is destroyed
-    onDestroy(() => sortable?.destroy());
+    onDestroy(() => {
+        destroyed = true;
+        // Sortable keeps every list it was created on until it is destroyed
+        sortable?.destroy();
+    });
 
     function getSelectedItemComponent() {
         // get selectedItem component from registry.
@@ -69,7 +77,11 @@
             return;
         }
 
-        $selectedItems = await get_items_from_uids(initialValue, $config);
+        const items = await get_items_from_uids(initialValue, $config);
+        if (destroyed) {
+            return;
+        }
+        $selectedItems = items;
         selectedUids.update(() => $selectedItems.map((x) => x.UID));
     }
 
@@ -119,6 +131,11 @@
     }
 
     function setNodeValue(selectedUids) {
+        if (!selectedItemsNode) {
+            // The target input is gone (e.g. a JS framework host removed
+            // the widget after selection); there is nowhere to write to.
+            return;
+        }
         const node_val = selectedUids.join($config.separator);
         if (selectedItemsNode.value === node_val) {
             // Nothing changed — the initial selection being written back
@@ -131,11 +148,12 @@
     }
 
     function LoadSelectedItemComponent(node, props) {
-        mount(RegisteredSelectedItem.component, {
+        const component = mount(RegisteredSelectedItem.component, {
             target: node,
             props: props,
         });
         registry.scan(node);
+        return { destroy: () => unmount(component) };
     }
 
     $effect(() => {
