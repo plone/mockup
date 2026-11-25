@@ -1,4 +1,5 @@
 import $ from "jquery";
+import bootstrap_icons from "bootstrap-icons/package.json";
 import logging from "@patternslib/patternslib/src/core/logging";
 
 const logger = logging.getLogger("core utils");
@@ -369,6 +370,40 @@ var storage = {
 
 export const ICON_CACHE = new Map();
 
+// Source of the bootstrap-icons outside of Plone, see ``resolveIcon``.
+const BOOTSTRAP_ICONS_CDN = `https://cdn.jsdelivr.net/npm/bootstrap-icons@${bootstrap_icons.version}/icons`;
+
+// Give up on an icon request after this many milliseconds.
+const ICON_TIMEOUT = 5000;
+
+/**
+ * Fetch the SVG markup of an icon.
+ *
+ * @param {String} url - The URL of the icon.
+ * @returns {String} - The SVG markup, or "" if there is no icon at this URL.
+ * @throws If the request failed in a way which may succeed later: on a
+ *     network error, a timeout or a server error.
+ */
+const fetch_icon = async function (url) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ICON_TIMEOUT);
+    try {
+        const resp = await fetch(url, { signal: controller.signal });
+        if (resp.status >= 500 || resp.status === 408 || resp.status === 429) {
+            throw new Error(`HTTP ${resp.status}`);
+        }
+        if (!resp.ok) {
+            return "";
+        }
+        const markup = await resp.text();
+        // Not every page is an icon: a login form or an error page of a
+        // proxy can be answered with status 200.
+        return markup.includes("<svg") ? markup : "";
+    } finally {
+        clearTimeout(timer);
+    }
+};
+
 /**
  * Return a <svg> element from a icon name.
  *
@@ -397,42 +432,55 @@ const resolveIcon = async function (name) {
         // Do the actual loading.
 
         let icon = "";
+        // Whether a request failed in a way which may succeed later.
+        let retry = false;
         const base_url = document.body.getAttribute("data-portal-url");
         if (base_url) {
-            const url = base_url + "/@@iconresolver";
-            if (url) {
-                try {
-                    // Fetch timeout
-                    const controller = new AbortController();
-                    // 5 second timeout:
-                    setTimeout(() => controller.abort(), 5000);
-
-                    const resp = await fetch(`${url}/${name}`, {
-                        signal: controller.signal,
-                    });
-                    icon = await resp.text();
-                } catch (e) {
-                    logger.warn(`Loading icon "${name}" from URL ${url} failed.`);
-                    console.warn(e);
-                }
+            const url = `${base_url}/@@iconresolver/${name}`;
+            try {
+                icon = await fetch_icon(url);
+            } catch (e) {
+                retry = true;
+                logger.warn(`Loading icon "${name}" from URL ${url} failed.`);
+                console.warn(e);
             }
         }
         if (!icon) {
-            // fallback
-            name = icon_lookup_name;
+            // Fallback: fetch the icon resource directly. Deliberately not a
+            // bundled import — a templated import("bootstrap-icons/icons/...")
+            // creates a webpack context over all 2000+ icons (~125KB of eager
+            // filename/chunk-hash maps plus one dist chunk per icon).
             try {
                 import("../styles/icons.scss");
-                const iconmap = await import("../iconmap.json");
-                const parts = iconmap[name]?.split?.("/");
-                if (parts[0].includes("bootstrap-icons")) {
-                    icon = await import(`bootstrap-icons/icons/${parts[1]}`);
-                    icon = icon?.default;
+                const iconmap_module = await import("../iconmap.json");
+                const iconmap = iconmap_module.default ?? iconmap_module;
+                const icon_path = iconmap[icon_lookup_name];
+                if (icon_path?.includes("bootstrap-icons")) {
+                    // A Plone site serves the icons itself. Only without
+                    // Plone, e.g. in the demo, load them from a CDN, pinned
+                    // to the bootstrap-icons version of the iconmap. Example:
+                    // "++plone++bootstrap-icons/house.svg" becomes
+                    // ".../npm/bootstrap-icons@1.13.1/icons/house.svg".
+                    const icon_url = base_url
+                        ? `${base_url}/${icon_path}`
+                        : `${BOOTSTRAP_ICONS_CDN}/${icon_path.split("/").pop()}`;
+                    icon = await fetch_icon(icon_url);
+                    if (!icon) {
+                        logger.warn(
+                            `Icon "${icon_lookup_name}" not found at ${icon_url}.`
+                        );
+                    }
                 }
             } catch (e) {
-                // import error
+                retry = true;
                 logger.warn(`Loading icon "${icon_lookup_name}" failed from fallback.`);
                 console.warn(e);
             }
+        }
+        if (!icon && retry) {
+            // Found and missing icons stay cached for the page. An icon
+            // whose request failed is loaded again by the next call.
+            ICON_CACHE.delete(cache_key);
         }
         return icon;
     }
