@@ -108,7 +108,9 @@ module.exports = () => {
                 compilerOptions: {
                     dev: process.env.NODE_ENV === "development",
                 },
-                emitCss: process.env.NODE_ENV !== "development",
+                // `emitCss` makes the chunk ids depend on the build path and
+                // the compile order, so the bundle would not be reproducible.
+                emitCss: false,
                 hotReload: process.env.NODE_ENV === "development",
                 onwarn: svelte_onwarn,
             },
