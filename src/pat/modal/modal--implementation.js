@@ -234,6 +234,11 @@ export default Base.extend({
             $form.trigger("submit");
 
             self.loading.show(false);
+            self.hideSubmitError();
+            // The modal this form is in. If it was closed before the
+            // request failed, a warning must not show up in a modal that
+            // was opened since.
+            var $modal = self.$modal;
             // Load the jquery-form plugin ($.fn.ajaxSubmit) on demand — this is
             // its only use in mockup, so it need not weigh on every page.
             await import("jquery-form");
@@ -244,7 +249,7 @@ export default Base.extend({
                 error: function (xhr, textStatus, errorStatus) {
                     self.loading.hide();
                     if (textStatus === "timeout" && options.onTimeout) {
-                        options.onTimeout.apply(self, xhr, errorStatus);
+                        options.onTimeout.apply(self, [self.$modal, xhr, errorStatus]);
                         // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
                         if (typeof options.onError === "string") {
@@ -252,9 +257,23 @@ export default Base.extend({
                         } else {
                             options.onError(xhr, textStatus, errorStatus);
                         }
+                    } else if (
+                        $modal !== self.$modal ||
+                        !document.body.contains($modal[0])
+                    ) {
+                        // The modal was closed in the meantime.
+                    } else if (textStatus === "timeout") {
+                        self.showSubmitError(
+                            _t(
+                                "The server did not respond in time, please try again later.",
+                            ),
+                        );
                     } else {
-                        // window.alert(_t('There was an error submitting the form.'));
-                        console.log("error happened", textStatus, " do something");
+                        self.showSubmitError(
+                            _t(
+                                "The server could not process the request, please try again later.",
+                            ),
+                        );
                     }
                     self.emit("formActionError", [xhr, textStatus, errorStatus]);
                 },
@@ -539,6 +558,31 @@ export default Base.extend({
     },
     reloadWindow: function () {
         window.parent.location.reload();
+    },
+    showSubmitError: function (message) {
+        // Show a failed form submit (error response or timeout) above the
+        // form, so the user is not left waiting without any feedback.
+        var self = this;
+        if (!self.modalInitialized()) {
+            return;
+        }
+        self.hideSubmitError();
+        var el = document.createElement("div");
+        el.className =
+            "portalMessage statusmessage statusmessage-warning alert alert-warning modal-submit-error";
+        el.setAttribute("role", "alert");
+        var label = document.createElement("strong");
+        label.textContent = _t("Warning");
+        el.append(label, " ", message);
+        $("." + self.options.templateOptions.classBodyName, self.$modal)
+            .first()
+            .prepend(el);
+    },
+    hideSubmitError: function () {
+        var self = this;
+        if (self.modalInitialized()) {
+            $(".modal-submit-error", self.$modal).remove();
+        }
     },
     init: function () {
         import("./modal.scss");
