@@ -1,4 +1,4 @@
-# 0001 pat-modal: Close on click only if pressed and released outside the modal
+# 0001 pat-plone-modal: Close on click only if pressed and released outside the modal
 
 Status: Accepted (2026-11-15)
 
@@ -53,3 +53,9 @@ change the state.
     wrapper.
 -   Clicks without a preceding `mousedown`, e.g. from `element.click()`, are
     only checked by their own event path.
+-   A click inside the modal which is stopped by another handler before it
+    reaches `.modal` - e.g. on the buttons in `.formControls` - does not
+    reset the state. A following click without a preceding `mousedown` on
+    the backdrop area, e.g. from `element.click()`, then does not close the
+    modal. This cannot be reached with the mouse, because each `mousedown`
+    resets the state.

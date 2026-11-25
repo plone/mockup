@@ -1,10 +1,10 @@
-# 0002 pat-modal: The wrapper's close on click handler ignores clicks from within the modal
+# 0002 pat-plone-modal: The wrapper's close on click handler ignores clicks from within the modal
 
 Status: Accepted (2026-11-15)
 
 ## Context
 
-pat-modal has two close on click handlers:
+pat-plone-modal has two close on click handlers:
 
 -   A native handler on the `.modal` element, registered in
     `activateFocusTrap`, which calls `hide()`.
