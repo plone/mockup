@@ -764,6 +764,25 @@ export default Base.extend({
         return self.$modal !== null && self.$modal !== undefined;
     },
 
+    _isInsideModal: function (e) {
+        // Reactive controls can replace the clicked node before a click
+        // handler runs. Use the event path, which is fixed at dispatch time,
+        // instead of the target's current ancestry.
+        return e.composedPath().some((node) =>
+            node.classList?.contains(this.options.templateOptions.classModal),
+        );
+    },
+
+    _consumePointerInside: function () {
+        // Return if the last mousedown or mouseup happened inside the modal
+        // and reset the state. A drag which starts inside the modal and ends
+        // outside of it - or the other way round - results in a click event
+        // outside of the modal, which must not close the modal.
+        const pointer_inside = this._pointer_inside === true;
+        this._pointer_inside = false;
+        return pointer_inside;
+    },
+
     activateFocusTrap: function () {
         var self = this;
         const modal_el = self.$modal[0];
@@ -829,12 +848,20 @@ export default Base.extend({
         };
         modal_el.addEventListener("keydown", self._focusTrapHandler);
 
+        // Remove previous close on click listener to prevent duplicates
+        // when activateFocusTrap is called multiple times.
+        if (self._closeOnClickHandler) {
+            modal_el.removeEventListener("click", self._closeOnClickHandler);
+            self._closeOnClickHandler = null;
+        }
         if (self.options.backdropOptions.closeOnClick === true) {
-            modal_el.addEventListener("click", (e) => {
-                if (!e.target.closest(`.${self.options.templateOptions.classModal}`)) {
+            self._closeOnClickHandler = (e) => {
+                const pointer_inside = self._consumePointerInside();
+                if (!pointer_inside && !self._isInsideModal(e)) {
                     self.hide();
                 }
-            });
+            };
+            modal_el.addEventListener("click", self._closeOnClickHandler);
         }
 
         var inputs = getVisibleInputs();
@@ -951,12 +978,51 @@ export default Base.extend({
             .addClass(self.options.templateOptions.classWrapperName)
             .insertBefore(backdrop.$backdrop)
             .on("click", function (e) {
+                // Clicks from within the modal are handled by the modal's own
+                // close on click handler. Do not cancel or handle them here.
+                // With loadLinksWithinModal: false they bubble up to here.
+                const modal_el = self.$modal?.[0];
+                if (modal_el) {
+                    // jQuery triggered events have no originalEvent and no
+                    // event path. Their target is still connected, though.
+                    const path = e.originalEvent?.composedPath();
+                    const from_modal = path
+                        ? path.includes(modal_el)
+                        : modal_el.contains(e.target);
+                    if (from_modal) {
+                        return;
+                    }
+                }
                 if (self.options.backdropOptions.closeOnClick) {
                     e.stopPropagation();
                     e.preventDefault();
-                    backdrop.hide();
+                    if (!self._consumePointerInside()) {
+                        backdrop.hide();
+                    }
                 }
             });
+        // Track the pointer state in the capture phase. Controls within the
+        // modal which stop the propagation of mousedown or mouseup - like
+        // select2 - would otherwise hide the event from the wrapper.
+        // Native listeners do not receive jQuery triggered events.
+        const wrapper_el = self.$wrapper[0];
+        wrapper_el.addEventListener(
+            "mousedown",
+            (e) => {
+                self._pointer_inside = self._isInsideModal(e);
+            },
+            { capture: true },
+        );
+        wrapper_el.addEventListener(
+            "mouseup",
+            (e) => {
+                // Keep the state from mousedown and add the mouseup state.
+                if (self._isInsideModal(e)) {
+                    self._pointer_inside = true;
+                }
+            },
+            { capture: true },
+        );
         backdrop.on("hidden", function () {
             if (
                 self.$modal !== undefined &&
@@ -1013,6 +1079,9 @@ export default Base.extend({
         self.loading.hide();
         self.$el.removeClass(self.options.templateOptions.classActiveName);
         if (self.$modal !== undefined) {
+            // Remove the active class before hiding the backdrop. Otherwise
+            // the backdrop's "hidden" handler would call hide() again.
+            self.$modal.removeClass(self.options.templateOptions.classActiveName);
             self.$modal.remove();
             self.initModal();
         }
