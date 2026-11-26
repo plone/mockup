@@ -38,6 +38,23 @@ Show a widget to select items in an offcanvas miller-column browser.
 | recentlyUsedMaxItems       | integer | 20                                      | Maximum items to keep in recently used list. 0: no restriction.                                                                                  |
 | componentRegistryKeys      | dict    | {}                                      | Use custom components registered in the `@plone/registry` component registry. Currently only "selectedItem" is implemented.                      |
 | searchIndex                | string  | "SearchableText"                        | Catalog search index for filtering and search mode. (Note: only ZCTextIndex allowed)                                                             |
+| unmarkedReviewStates       | array   | ["published", "external"]               | Workflow states which get no state indicator. See "Workflow state".                                                                               |
+
+
+## Workflow state
+
+Items which are not published are marked with a dot in the color of their workflow state.
+The dot is shown in the item list, in the preview and on the selected items.
+In the item list it is at the end of the row, before the arrow of a folder.
+Its tooltip and accessible name contain the translated id of the state.
+
+The color is taken from the CSS variable `--plone-state-<review_state>` of the theme, with underscores replaced by hyphens, e.g. `--plone-state-internally-published`.
+States without such a variable get a neutral ring.
+Items without a workflow get no dot.
+The states `published` and `external` get no dot either.
+Change this with the option `unmarkedReviewStates`, e.g. `[]` to mark all states, or `["internally_published"]` for an intranet.
+
+The items also get the CSS class `state-<review_state>`, like the rows of the structure pattern.
 
 
 ## Default

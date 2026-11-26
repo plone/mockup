@@ -13,7 +13,7 @@
         setPreviewUids,
         setShowContentBrowser,
     } from "./stores";
-    import { isPathBelow } from "./utils";
+    import { isPathBelow, UNMARKED_REVIEW_STATES } from "./utils";
 
     let {
         maxDepth,
@@ -45,6 +45,7 @@
         sortOn = "sortable_title",
         sortOrder = "ascending",
         componentRegistryKeys = {},
+        unmarkedReviewStates = UNMARKED_REVIEW_STATES,
     } = $props();
 
     // Local mutable copies of the two props that may be reassigned locally
@@ -112,6 +113,7 @@
         sortOn: sortOn,
         sortOrder: sortOrder,
         componentRegistryKeys: componentRegistryKeys,
+        unmarkedReviewStates: unmarkedReviewStates,
     });
 
     log.debug(`Initialized App<${fieldId}> with config`, config);

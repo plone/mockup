@@ -1,11 +1,12 @@
 <script>
-    import { resolveIcon } from "./utils";
+    import { resolveIcon, reviewStateClass } from "./utils";
+    import StateIndicator from "./StateIndicator.svelte";
 
     // item data
     let { item, unselectItem } = $props();
 </script>
 
-<div class="selected-item border border-secondary-subtle rounded mb-1 bg-body-tertiary" data-uuid={item.UID}>
+<div class="selected-item border border-secondary-subtle rounded mb-1 bg-body-tertiary {reviewStateClass(item.review_state)}" data-uuid={item.UID}>
     <div class="item-info p-2">
         <!-- svelte-ignore a11y_missing_attribute -->
         <button
@@ -16,7 +17,7 @@
             ><svg use:resolveIcon={{ iconName: "x-circle" }} /></button
         >
         <div>
-            <span class="item-title">{item.Title}</span><br />
+            <span class="item-title"><StateIndicator reviewState={item.review_state} />{item.Title}</span><br />
             <span class="small">{item.path}</span>
         </div>
     </div>
