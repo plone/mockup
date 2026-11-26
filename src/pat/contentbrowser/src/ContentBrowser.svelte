@@ -396,8 +396,11 @@
     }
 
     function closeBrowser() {
-        // hide levelfilter and clear all filters
-        filterLevel("");
+        // hide levelfilter and clear all filters. There are none while
+        // searching, and asking would load the search results again.
+        if ($config.mode !== "search") {
+            filterLevel("");
+        }
         // clear search
         searchTerm = null;
         $config.mode = defaultConfigMode;
@@ -448,6 +451,10 @@
     }, 300);
 
     async function searchItems(val) {
+        if (val === searchTerm) {
+            // nothing changed, e.g. typed and deleted within the debounce
+            return;
+        }
         searchTerm = val;
         if (defaultConfigMode === "browse") {
             // switching to search mode in global search if configured as "browse" mode
