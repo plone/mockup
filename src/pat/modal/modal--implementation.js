@@ -1209,7 +1209,8 @@ export default Base.extend({
             self.initModal();
         }
         self.$wrapper.remove();
-        if ($(".modal", $("body")).length < 1) {
+        const active_class = self.options.templateOptions.classActiveName;
+        if ($(`.modal.${active_class}`, $("body")).length < 1) {
             self._suppressHide = undefined;
             self.backdrop.hide();
             $("body").removeClass("modal-open");

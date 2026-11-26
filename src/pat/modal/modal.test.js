@@ -482,6 +482,28 @@ describe("Modal", function () {
         );
     });
 
+    it("1.13 - hides the backdrop when a non-visible modal is in the page", async () => {
+        document.body.innerHTML = `
+          <div id="body13">
+            <a class="pat-plone-modal" href="#target13"
+               data-pat-plone-modal="backdrop: #body13">Open</a>
+            <div id="target13" style="display:none;">Target</div>
+          </div>
+          <div class="modal fade" id="other-modal"></div>`;
+        await registry_scan();
+
+        const backdrop_host = document.querySelector("#body13");
+        document.querySelector("#body13 a.pat-plone-modal").click();
+        await utils.timeout(1);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+        expect(document.body.classList.contains("modal-open")).toEqual(true);
+
+        document.querySelector("#body13 .modal-header > .modal-close").click();
+        await utils.timeout(1);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(false);
+        expect(document.body.classList.contains("modal-open")).toEqual(false);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
