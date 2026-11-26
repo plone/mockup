@@ -4,6 +4,7 @@ import _ from "underscore";
 import Backdrop from "../backdrop/backdrop";
 import registry from "@patternslib/patternslib/src/core/registry";
 import dom from "@patternslib/patternslib/src/core/dom";
+import events from "@patternslib/patternslib/src/core/events";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
 
@@ -11,7 +12,8 @@ import _t from "../../core/i18n-wrapper";
 // handleFormAction — most modals never AJAX-submit a form, so it stays out of
 // this module's static import graph.
 
-// Open modals in the order they were shown. The last one is the topmost.
+// Open modals in the order they were shown, including modals which are
+// still loading. The last one is the topmost.
 const open_modals = [];
 let instance_counter = 0;
 
@@ -659,10 +661,10 @@ export default Base.extend({
             self.options.loadLinksWithinModal
         );
 
-        // Per-instance event namespace for listeners which are bound on show
+        // Per-instance id prefix for listeners which are registered on show
         // and removed on hide.
         instance_counter += 1;
-        self._event_ns = `.plone-modal-${instance_counter}`;
+        self._event_ns = `plone-modal-${instance_counter}`;
 
         $(window.parent).resize(function () {
             self.positionModal();
@@ -1068,6 +1070,11 @@ export default Base.extend({
     show: function () {
         var self = this;
         self.backdrop = self.createBackdrop();
+        // Count the modal as open while it is loading. ESC must not close the
+        // modal below it, and that modal must not hide the shared backdrop.
+        if (!open_modals.includes(self)) {
+            open_modals.push(self);
+        }
         self.createModal();
     },
 
@@ -1174,19 +1181,28 @@ export default Base.extend({
         self.$modal.addClass(self.options.templateOptions.classActiveName);
         registry.scan(self.$modal);
         self.positionModal();
-        $(window.parent).on(`resize${self._event_ns}`, function () {
-            self.positionModal();
-        });
-        $(document).on(`keydown${self._event_ns}`, function (e) {
-            if (
-                e.key === "Escape" &&
-                self.options.backdropOptions.closeOnEsc &&
-                self._isTopmost()
-            ) {
-                self.hide();
-            }
-        });
-        open_modals.push(self);
+        // Registering under the same id replaces the old listener, also if the
+        // modal is shown again without being hidden.
+        events.add_event_listener(
+            window.parent,
+            "resize",
+            `${self._event_ns}--resize`,
+            () => self.positionModal(),
+        );
+        events.add_event_listener(
+            document,
+            "keydown",
+            `${self._event_ns}--keydown`,
+            (e) => {
+                if (
+                    e.key === "Escape" &&
+                    self.options.backdropOptions.closeOnEsc &&
+                    self._isTopmost()
+                ) {
+                    self.hide();
+                }
+            },
+        );
         $("body").addClass("modal-open");
         self.emit("shown");
         self.activateFocusTrap();
@@ -1232,16 +1248,21 @@ export default Base.extend({
         if (index !== -1) {
             open_modals.splice(index, 1);
         }
-        $(window.parent).off(self._event_ns);
-        $(document).off(self._event_ns);
+        events.remove_event_listener(window.parent, `${self._event_ns}--*`);
+        events.remove_event_listener(document, `${self._event_ns}--*`);
         const template_options = self.options.templateOptions;
         const open_modal = `.modal.${template_options.classActiveName}`;
         // Keep the backdrop while another modal on the same backdrop element
-        // is open. Their wrappers are direct children of that element.
+        // is open or loading. Their wrappers are direct children of that
+        // element.
+        const backdrop_el = self.backdrop.$el[0];
         const other_wrappers = self.backdrop.$el.children(
             `.${template_options.classWrapperName}`,
         );
-        if (other_wrappers.find(open_modal).length < 1) {
+        const backdrop_in_use =
+            other_wrappers.find(open_modal).length > 0 ||
+            open_modals.some((modal) => modal.backdrop?.$el[0] === backdrop_el);
+        if (!backdrop_in_use) {
             self.backdrop.hide();
         }
         self.backdrop.destroy();
