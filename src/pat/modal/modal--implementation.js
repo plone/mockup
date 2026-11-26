@@ -1198,6 +1198,8 @@ export default Base.extend({
             if (!window.confirm(self._suppressHide)) {
                 return;
             }
+            // Confirmed. Do not ask again on the next close.
+            self._suppressHide = undefined;
         }
         self.loading.hide();
         self.$el.removeClass(self.options.templateOptions.classActiveName);
@@ -1211,7 +1213,6 @@ export default Base.extend({
         self.$wrapper.remove();
         const active_class = self.options.templateOptions.classActiveName;
         if ($(`.modal.${active_class}`, $("body")).length < 1) {
-            self._suppressHide = undefined;
             self.backdrop.hide();
             $("body").removeClass("modal-open");
             $(window.parent).off("resize.plone-modal.patterns");

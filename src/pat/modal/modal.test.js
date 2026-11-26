@@ -504,6 +504,36 @@ describe("Modal", function () {
         expect(document.body.classList.contains("modal-open")).toEqual(false);
     });
 
+    it("1.14 - resets the hide confirmation also when another modal is open", async () => {
+        document.body.innerHTML = `
+          <div id="body14">
+            <a class="pat-plone-modal" href="#target14"
+               data-pat-plone-modal="backdrop: #body14">Open</a>
+            <div id="target14" style="display:none;">Target</div>
+          </div>
+          <div class="modal show" id="other-modal"></div>`;
+        await registry_scan();
+
+        const trigger_el = document.querySelector("#body14 a.pat-plone-modal");
+        const instance = $(trigger_el).data("patternPloneModal");
+        const confirm_spy = jest.spyOn(window, "confirm").mockReturnValue(true);
+
+        trigger_el.click();
+        await utils.timeout(1);
+        instance._suppressHide = "There are unsaved changes.";
+        instance.hide();
+        expect(confirm_spy).toHaveBeenCalledTimes(1);
+        expect(instance._suppressHide).toBeUndefined();
+
+        // The confirmation does not carry over to the next close.
+        trigger_el.click();
+        await utils.timeout(1);
+        instance.hide();
+        expect(confirm_spy).toHaveBeenCalledTimes(1);
+
+        confirm_spy.mockRestore();
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
