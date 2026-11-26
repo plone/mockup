@@ -1,18 +1,22 @@
 name: build mockup docs with webpack and 11ty
 
 on:
-  push:
-    branches:
-    - master
-  pull_request:
+  pull_request_target:
+    types:
+    - closed
     branches:
     - master
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.merge_commit_sha }}
     - uses: pnpm/action-setup@v4
     - uses: actions/setup-node@v4
       with:
@@ -22,9 +26,9 @@ jobs:
       run: |
         make docs
     - name: Deploy docs
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
         publish_dir: ./_site
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh_docs_deploy
+        full_commit_message: 'deploy: ${{ github.event.pull_request.merge_commit_sha }}'
