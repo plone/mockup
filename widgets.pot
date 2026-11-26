@@ -845,6 +845,26 @@ msgstr ""
 msgid "There was an error loading modal."
 msgstr ""
 
+#: ./src/pat/modal/modal--implementation.js
+msgid "The server did not respond in time. The request may still have been processed. Please check this before you submit the form again."
+msgstr ""
+
+#: ./src/pat/modal/modal--implementation.js
+msgid "The server could not process the request, please try again later."
+msgstr ""
+
+#: ./src/pat/modal/modal--implementation.js
+msgid "The response of the server could not be read. Please try again later."
+msgstr ""
+
+#: ./src/pat/modal/modal--implementation.js
+msgid "The server could not be reached. Please check your connection and try again."
+msgstr ""
+
+#: ./src/pat/modal/modal--implementation.js
+msgid "Warning"
+msgstr ""
+
 #: ./src/pat/preventdoublesubmit/preventdoublesubmit.js
 msgid "You already clicked the submit button. Do you really want to submit this form again?"
 msgstr ""

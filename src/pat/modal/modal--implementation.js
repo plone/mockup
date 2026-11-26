@@ -234,6 +234,11 @@ export default Base.extend({
             $form.trigger("submit");
 
             self.loading.show(false);
+            self.hideSubmitError();
+            // The modal this form is in. If it was closed before the
+            // request failed, the message must not show up in a modal that
+            // was opened since.
+            var $modal = self.$modal;
             // Load the jquery-form plugin ($.fn.ajaxSubmit) on demand — this is
             // its only use in mockup, so it need not weigh on every page.
             await import("jquery-form");
@@ -244,17 +249,62 @@ export default Base.extend({
                 error: function (xhr, textStatus, errorStatus) {
                     self.loading.hide();
                     if (textStatus === "timeout" && options.onTimeout) {
-                        options.onTimeout.apply(self, xhr, errorStatus);
+                        self.callHandler(options.onTimeout, self, [
+                            self.$modal,
+                            xhr,
+                            errorStatus,
+                        ]);
                         // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
-                        if (typeof options.onError === "string") {
-                            window[options.onError](xhr, textStatus, errorStatus);
-                        } else {
-                            options.onError(xhr, textStatus, errorStatus);
-                        }
+                        self.callHandler(options.onError, null, [
+                            xhr,
+                            textStatus,
+                            errorStatus,
+                        ]);
+                    } else if (
+                        $modal !== self.$modal ||
+                        !document.body.contains($modal[0])
+                    ) {
+                        // The modal was closed in the meantime.
+                    } else if (textStatus === "abort") {
+                        // Aborted on purpose, nothing went wrong.
+                    } else if (textStatus === "timeout") {
+                        // Only a warning: the request may have succeeded.
+                        self.showSubmitWarning(
+                            _t(
+                                "The server did not respond in time. The request may still have been processed. Please check this before you submit the form again.",
+                            ),
+                        );
+                    } else if (textStatus === "parsererror") {
+                        // The server answered, but the response is broken.
+                        self.showSubmitError(
+                            _t(
+                                "The response of the server could not be read. Please try again later.",
+                            ),
+                        );
+                    } else if (!xhr.status) {
+                        // No response at all, e.g. the network is down.
+                        self.showSubmitError(
+                            _t(
+                                "The server could not be reached. Please check your connection and try again.",
+                            ),
+                        );
                     } else {
-                        // window.alert(_t('There was an error submitting the form.'));
-                        console.log("error happened", textStatus, " do something");
+                        // An error response. Show its HTTP status, so the
+                        // user can tell e.g. a missing permission from a
+                        // server error. HTTP/2 has no status text, then
+                        // only the code is shown.
+                        var status = [xhr.status, errorStatus]
+                            .filter(Boolean)
+                            .join(" ");
+                        self.showSubmitError(
+                            _t(
+                                "The server could not process the request, please try again later.",
+                            ) +
+                                " (" +
+                                status +
+                                ")",
+                        );
                     }
                     self.emit("formActionError", [xhr, textStatus, errorStatus]);
                 },
@@ -353,11 +403,19 @@ export default Base.extend({
             })
                 .fail(function (xhr, textStatus, errorStatus) {
                     if (textStatus === "timeout" && options.onTimeout) {
-                        options.onTimeout(self.$modal, xhr, errorStatus);
+                        self.callHandler(options.onTimeout, null, [
+                            self.$modal,
+                            xhr,
+                            errorStatus,
+                        ]);
 
                         // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
-                        options.onError(xhr, textStatus, errorStatus);
+                        self.callHandler(options.onError, null, [
+                            xhr,
+                            textStatus,
+                            errorStatus,
+                        ]);
                     } else {
                         window.alert(_t("There was an error loading modal."));
                     }
@@ -540,6 +598,55 @@ export default Base.extend({
     reloadWindow: function () {
         window.parent.location.reload();
     },
+    callHandler: function (handler, context, args) {
+        // Call an onError or onTimeout option. It is a function, or the name
+        // of a function at window level, as it is in a JSON configuration.
+        if (typeof handler === "string") {
+            handler = window[handler];
+        }
+        return handler.apply(context, args);
+    },
+    showSubmitError: function (message) {
+        // Show a failed form submit above the form, so the user is not left
+        // waiting without any feedback.
+        this.showSubmitMessage(message, "error");
+    },
+    showSubmitWarning: function (message) {
+        // Like showSubmitError, if the request may still have succeeded.
+        this.showSubmitMessage(message, "warning");
+    },
+    showSubmitMessage: function (message, type) {
+        var self = this;
+        if (!self.modalInitialized()) {
+            return;
+        }
+        self.hideSubmitError();
+        var is_warning = type === "warning";
+        var el = document.createElement("div");
+        el.className = is_warning
+            ? "portalMessage statusmessage statusmessage-warning alert alert-warning modal-submit-error"
+            : "portalMessage statusmessage statusmessage-error alert alert-danger modal-submit-error";
+        el.setAttribute("role", "alert");
+        var label = document.createElement("strong");
+        label.textContent = is_warning ? _t("Warning") : _t("Error");
+        el.append(label, " ", message);
+        // Put it in the prepend area, with the other portal messages. It has
+        // no class by default (templateOptions.classPrependName), so it is
+        // found as the first div of the body; a custom template may not have
+        // it, then the message goes at the top of the body.
+        var $body = $(
+            "." + self.options.templateOptions.classBodyName,
+            self.$modal,
+        ).first();
+        var $prepend = $body.children("div:first-child");
+        ($prepend.length ? $prepend : $body).prepend(el);
+    },
+    hideSubmitError: function () {
+        var self = this;
+        if (self.modalInitialized()) {
+            $(".modal-submit-error", self.$modal).remove();
+        }
+    },
     init: function () {
         import("./modal.scss");
 
@@ -627,9 +734,17 @@ export default Base.extend({
             .fail(function (xhr, textStatus, errorStatus) {
                 var options = self.options.actionOptions;
                 if (textStatus === "timeout" && options.onTimeout) {
-                    options.onTimeout(self.$modal, xhr, errorStatus);
+                    self.callHandler(options.onTimeout, null, [
+                        self.$modal,
+                        xhr,
+                        errorStatus,
+                    ]);
                 } else if (options.onError) {
-                    options.onError(xhr, textStatus, errorStatus);
+                    self.callHandler(options.onError, null, [
+                        xhr,
+                        textStatus,
+                        errorStatus,
+                    ]);
                 } else {
                     window.alert(_t("There was an error loading modal."));
                     self.hide();

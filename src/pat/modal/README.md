@@ -192,6 +192,52 @@ Modal with TinyMCE</a>
 </div>
 ```
 
+## Modal with a form submit that fails
+
+When the server returns an error, the modal shows an error above the form,
+with the HTTP status of the response. When the server does not respond within
+`timeout`, the modal shows a warning instead, as the request may still have
+been processed.
+
+<a href="#modal6"
+   class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal">Error response</a>
+<a href="#modal6"
+   class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+   data-pat-plone-modal='{"actionOptions": {"timeout": 1}}'>No response in time</a>
+
+<div id="modal6" style="display: none">
+    <h1>Log in</h1>
+    <form method="post" action="does-not-exist">
+        <label for="modal6-login">Login name</label>
+        <input id="modal6-login" type="text" name="login" />
+        <div class="formControls">
+            <button type="submit" class="btn btn-primary" name="submit">Log in</button>
+        </div>
+    </form>
+</div>
+
+```html
+<a href="#modal6" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+    >Error response</a
+>
+<a
+    href="#modal6"
+    class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+    data-pat-plone-modal='{"actionOptions": {"timeout": 1}}'
+    >No response in time</a
+>
+<div id="modal6" style="display: none">
+    <h1>Log in</h1>
+    <form method="post" action="does-not-exist">
+        <label for="modal6-login">Login name</label>
+        <input id="modal6-login" type="text" name="login" />
+        <div class="formControls">
+            <button type="submit" class="btn btn-primary" name="submit">Log in</button>
+        </div>
+    </form>
+</div>
+```
+
 ## Configuration
 
 | Option | Type | Default | Description |
@@ -214,4 +260,6 @@ Modal with TinyMCE</a>
 | actionOptions | object | {} | A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. |
 | onSuccess | Function | string | | function which is called with parameters (modal, response, state, xhr, form) when form has been successfully submitted. if value is a string, this is the name of a function at window level |
 | onFormError | Function | string | | function which is called with parameters (modal, response, state, xhr, form) when backend has sent an error after form submission. if value is a string, this is the name of a function at window level |
-| onError | Function | string | | function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level |
+| onError | Function | string | | function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level. Without onError, the modal shows an error above the form. |
+| onTimeout | Function | string | | function which is called with parameters ($modal, xhr, errorStatus) when the server did not respond within `timeout`, to a form submission or to loading a link into the modal. if value is a string, this is the name of a function at window level. Without onTimeout and onError, a timed-out form submission shows a warning above the form. |
+| timeout | integer | 5000 | Milliseconds to wait for the server to respond to a form submission. Set it in actionOptions. |
