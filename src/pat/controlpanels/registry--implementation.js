@@ -7,9 +7,22 @@ export default class ConfigRegistry {
         this.el = el;
     }
     loadModals() {
+        // The buttons of a multi widget (add, remove) are form controls,
+        // too. They change the form and do not save the record: leave them
+        // in the form and show the answer in the modal.
+        const multi_widget_buttons = ".multi-widget-buttons";
+        const form_controls = `.formControls:not(${multi_widget_buttons})`;
         $(".recordsEditLink").each(function () {
             var $el = $(this);
             var options = {
+                buttons: `${form_controls} > input[type="submit"], ${form_controls} > button:not([type="button"], [type="reset"])`,
+                actions: {
+                    [`${multi_widget_buttons} > input[type="submit"], ${multi_widget_buttons} > button`]:
+                        {
+                            displayInModal: true,
+                            onSuccess: null,
+                        },
+                },
                 actionOptions: {
                     displayInModal: false,
                     reloadWindowOnClose: false,
@@ -19,7 +32,6 @@ export default class ConfigRegistry {
                     },
                 },
             };
-            $el.addClass("pat-modal");
             new Modal($el, options);
         });
     }

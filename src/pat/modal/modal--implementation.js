@@ -36,7 +36,8 @@ export default Base.extend({
         },
         title: null,
         titleSelector: "h1:first",
-        buttons: '.formControls > input[type="submit"], .formControls > button',
+        buttons:
+            '.formControls > input[type="submit"], .formControls > button:not([type="button"], [type="reset"])',
         content: "#content",
         automaticallyAddButtonActions: true,
         loadLinksWithinModal: true,
@@ -446,7 +447,14 @@ export default Base.extend({
                     return;
                 }
                 event.preventDefault();
-                $("input[type=submit], button[type=submit], button:not(type)", this)
+                const $submit_buttons = $(
+                    "input[type=submit], button[type=submit], button:not([type])",
+                    this,
+                );
+                // The buttons of a multi widget (add, remove) change the form
+                // and do not save it. Prefer the other submit buttons.
+                const $form_buttons = $submit_buttons.not(".multi-widget-buttons *");
+                ($form_buttons.length ? $form_buttons : $submit_buttons)
                     .eq(0)
                     .trigger("click");
             });

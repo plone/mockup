@@ -369,6 +369,119 @@ describe("Modal", function () {
         expect(modal.isConnected).toBe(true);
     });
 
+    it("1.10 - submits with the first submit button on enter", async () => {
+        document.body.innerHTML = `
+          <div id="body10">
+            <a class="pat-plone-modal" href="#target10"
+               data-pat-plone-modal="backdrop: #body10">Open</a>
+            <div id="target10" style="display:none;">
+              <form>
+                <input name="q" />
+                <button type="button" name="other">Other</button>
+                <button type="reset" name="reset">Reset</button>
+                <button name="go">Go</button>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body10 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const form = document.querySelector("#body10 .modal form");
+
+        const clicked = [];
+        form.addEventListener("click", (e) => {
+            clicked.push(e.target.name);
+            // Do not submit the form in the test environment.
+            e.preventDefault();
+        });
+
+        form.querySelector("input[name=q]").dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+        );
+        // A button without a type is a submit button. Buttons of the type
+        // button or reset are not.
+        expect(clicked).toEqual(["go"]);
+    });
+
+    it("1.11 - submits with a button outside of a multi widget on enter", async () => {
+        document.body.innerHTML = `
+          <div id="body11">
+            <a class="pat-plone-modal" href="#target11"
+               data-pat-plone-modal="backdrop: #body11">Open</a>
+            <div id="target11" style="display:none;">
+              <form>
+                <input name="q" />
+                <div class="multi-widget-buttons">
+                  <button type="submit" name="add">Add</button>
+                </div>
+                <button type="submit" name="save">Save</button>
+              </form>
+              <form>
+                <input name="q" />
+                <div class="multi-widget-buttons">
+                  <button type="submit" name="add">Add</button>
+                </div>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body11 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const [form1, form2] = document.querySelectorAll("#body11 .modal form");
+
+        const clicked = [];
+        for (const form of [form1, form2]) {
+            form.addEventListener("click", (e) => {
+                clicked.push(e.target.name);
+                // Do not submit the form in the test environment.
+                e.preventDefault();
+            });
+        }
+        const enter = () =>
+            new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
+
+        form1.querySelector("input[name=q]").dispatchEvent(enter());
+        expect(clicked).toEqual(["save"]);
+
+        // Without other submit buttons, the multi widget button is used.
+        form2.querySelector("input[name=q]").dispatchEvent(enter());
+        expect(clicked).toEqual(["save", "add"]);
+    });
+
+    it("1.12 - places only the submit buttons of the form controls in the footer", async () => {
+        document.body.innerHTML = `
+          <div id="body12">
+            <a class="pat-plone-modal" href="#target12"
+               data-pat-plone-modal="backdrop: #body12">Open</a>
+            <div id="target12" style="display:none;">
+              <form>
+                <div class="formControls">
+                  <input type="submit" name="input_submit" value="Save" />
+                  <button type="submit" name="submit">Submit</button>
+                  <button name="no_type">No type</button>
+                  <button type="button" name="button">Button</button>
+                  <button type="reset" name="reset">Reset</button>
+                </div>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body12 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+
+        const names = (selector) =>
+            [...document.querySelectorAll(selector)].map((el) => el.name);
+        expect(names("#body12 .modal-footer .pattern-modal-buttons > *")).toEqual([
+            "input_submit",
+            "submit",
+            "no_type",
+        ]);
+        // Buttons which do not submit the form stay in the form.
+        expect(names("#body12 .modal-body .formControls > :not([style*=none])")).toEqual(
+            ["button", "reset"],
+        );
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
