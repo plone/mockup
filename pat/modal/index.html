@@ -484,6 +484,42 @@ Modal with TinyMCE</a></p>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Basic screen modal!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Indeed. Whoa whoa whoa whoa. Wait.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<h2>Modal with a form submit that fails</h2>
+<p>When the server returns an error, the modal shows an error above the form,
+with the HTTP status of the response. When the server does not respond within
+<code>timeout</code>, the modal shows a warning instead, as the request may still have
+been processed.</p>
+<p><a href="#modal6" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal">Error response</a>
+<a href="#modal6" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal" data-pat-plone-modal='{"actionOptions": {"timeout": 1}}'>No response in time</a></p>
+<div id="modal6" style="display: none">
+    <h1>Log in</h1>
+    <form method="post" action="does-not-exist">
+        <label for="modal6-login">Login name</label>
+        <input id="modal6-login" type="text" name="login">
+        <div class="formControls">
+            <button type="submit" class="btn btn-primary" name="submit">Log in</button>
+        </div>
+    </form>
+</div>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal6<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-large plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span>
+    <span class="token punctuation">></span></span>Error response<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span>
+<span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span>
+    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#modal6<span class="token punctuation">"</span></span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>plone-btn plone-btn-large plone-btn-primary pat-plone-modal<span class="token punctuation">"</span></span>
+    <span class="token attr-name">data-pat-plone-modal</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>{"actionOptions": {"timeout": 1}}<span class="token punctuation">'</span></span>
+    <span class="token punctuation">></span></span>No response in time<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span>
+<span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal6<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">display</span><span class="token punctuation">:</span> none</span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Log in<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>does-not-exist<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal6-login<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Login name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal6-login<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>login<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>formControls<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>btn btn-primary<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Log in<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
 <h2>Configuration</h2>
 <table>
 <thead>
@@ -608,6 +644,18 @@ Modal with TinyMCE</a></p>
 <td style="text-align:center">Function</td>
 <td style="text-align:center">string</td>
 <td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">onTimeout</td>
+<td style="text-align:center">Function</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">timeout</td>
+<td style="text-align:center">integer</td>
+<td style="text-align:center">5000</td>
+<td style="text-align:center">Milliseconds to wait for the server to respond to a form submission. Set it in actionOptions.</td>
 </tr>
 </tbody>
 </table>
