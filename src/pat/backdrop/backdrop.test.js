@@ -1,5 +1,9 @@
 import $ from "jquery";
+import { event_listener_map } from "@patternslib/patternslib/src/core/events";
 import Pattern from "./backdrop";
+
+const press_key = (key) =>
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: key, bubbles: true }));
 
 describe("Backdrop", function () {
     it("default behaviour", function () {
@@ -17,37 +21,44 @@ describe("Backdrop", function () {
         expect($el.hasClass("plone-backdrop-active")).toEqual(false);
         backdrop.show();
         expect($el.hasClass("plone-backdrop-active")).toEqual(true);
-        var keydown = $.Event("keydown");
-        keydown.keyCode = 50;
-        $(document).trigger(keydown);
+        press_key("2");
         expect($el.hasClass("plone-backdrop-active")).toEqual(true);
-        keydown.keyCode = 27;
-        $(document).trigger(keydown);
+        press_key("Escape");
         expect($el.hasClass("plone-backdrop-active")).toEqual(false);
     });
 
-    const n_handlers = (el, type) => ($._data(el, "events")?.[type] || []).length;
+    // Ids of this backdrop's listeners registered with add_event_listener.
+    const registered_ids = (backdrop, el) =>
+        [...(event_listener_map.get(el)?.keys() || [])].filter((id) =>
+            id.startsWith(`${backdrop._event_ns}--`),
+        );
 
     it("does not add listeners when init is called again", function () {
-        const backdrop = new Pattern($("<div></div>"));
-        const n_keydown = n_handlers(document, "keydown");
-        const n_click = n_handlers(backdrop.$backdrop[0], "click");
+        const backdrop = new Pattern(document.createElement("div"));
+        const hide_spy = jest.spyOn(backdrop, "hide");
         backdrop.init();
         backdrop.init();
-        expect(n_handlers(document, "keydown")).toEqual(n_keydown);
-        expect(n_handlers(backdrop.$backdrop[0], "click")).toEqual(n_click);
+        expect(registered_ids(backdrop, document).length).toEqual(1);
+
+        backdrop.show();
+        press_key("Escape");
+        expect(hide_spy).toHaveBeenCalledTimes(1);
+
+        backdrop.show();
+        backdrop.$backdrop[0].click();
+        expect(hide_spy).toHaveBeenCalledTimes(2);
     });
 
     it("removes its listeners on destroy", function () {
-        const backdrop = new Pattern($("<div></div>"));
-        const n_keydown = n_handlers(document, "keydown");
+        const backdrop = new Pattern(document.createElement("div"));
+        expect(registered_ids(backdrop, document).length).toEqual(1);
         backdrop.destroy();
-        expect(n_handlers(document, "keydown")).toEqual(n_keydown - 1);
-        expect(n_handlers(backdrop.$backdrop[0], "click")).toEqual(0);
+        expect(registered_ids(backdrop, document).length).toEqual(0);
+
         backdrop.show();
-        const keydown = $.Event("keydown");
-        keydown.keyCode = 27;
-        $(document).trigger(keydown);
+        press_key("Escape");
+        expect(backdrop.$el.hasClass(backdrop.options.classActiveName)).toEqual(true);
+        backdrop.$backdrop[0].click();
         expect(backdrop.$el.hasClass(backdrop.options.classActiveName)).toEqual(true);
     });
 });

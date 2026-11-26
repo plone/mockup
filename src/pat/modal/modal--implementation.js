@@ -11,6 +11,10 @@ import _t from "../../core/i18n-wrapper";
 // handleFormAction — most modals never AJAX-submit a form, so it stays out of
 // this module's static import graph.
 
+// Open modals in the order they were shown. The last one is the topmost.
+const open_modals = [];
+let instance_counter = 0;
+
 export default Base.extend({
     name: "plone-modal",
     trigger: ".pat-plone-modal",
@@ -655,16 +659,10 @@ export default Base.extend({
             self.options.loadLinksWithinModal
         );
 
-        if (self.options.backdropOptions.closeOnEsc === true) {
-            $(document).on("keydown", function (e) {
-                if (self.$el.is("." + self.options.templateOptions.classActiveName)) {
-                    if (e.key === "Esc") {
-                        // ESC key pressed
-                        self.hide();
-                    }
-                }
-            });
-        }
+        // Per-instance event namespace for listeners which are bound on show
+        // and removed on hide.
+        instance_counter += 1;
+        self._event_ns = `.plone-modal-${instance_counter}`;
 
         $(window.parent).resize(function () {
             self.positionModal();
@@ -1075,10 +1073,13 @@ export default Base.extend({
 
     createBackdrop: function () {
         var self = this,
-            backdrop = new Backdrop(
-                self.$el.parents(self.options.backdrop),
-                self.options.backdropOptions
-            ),
+            // The modal handles ESC and backdrop clicks itself, so that only
+            // the topmost of stacked modals is closed. See ADR 0006.
+            backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
+                ...self.options.backdropOptions,
+                closeOnEsc: false,
+                closeOnClick: false,
+            }),
             zIndex = self.options.backdropOptions.zIndex || 1041;
 
         $(self.options.zIndexSelector).each(function () {
@@ -1120,7 +1121,7 @@ export default Base.extend({
                     e.stopPropagation();
                     e.preventDefault();
                     if (!self._consumePointerInside()) {
-                        backdrop.hide();
+                        self.hide();
                     }
                 }
             });
@@ -1146,14 +1147,6 @@ export default Base.extend({
             },
             { capture: true },
         );
-        backdrop.on("hidden", function () {
-            if (
-                self.$modal !== undefined &&
-                self.$modal.hasClass(self.options.templateOptions.classActiveName)
-            ) {
-                self.hide();
-            }
-        });
         self.loading = new utils.Loading({
             backdrop: backdrop,
         });
@@ -1181,12 +1174,25 @@ export default Base.extend({
         self.$modal.addClass(self.options.templateOptions.classActiveName);
         registry.scan(self.$modal);
         self.positionModal();
-        $(window.parent).on("resize.plone-modal.patterns", function () {
+        $(window.parent).on(`resize${self._event_ns}`, function () {
             self.positionModal();
         });
+        $(document).on(`keydown${self._event_ns}`, function (e) {
+            if (
+                e.key === "Escape" &&
+                self.options.backdropOptions.closeOnEsc &&
+                self._isTopmost()
+            ) {
+                self.hide();
+            }
+        });
+        open_modals.push(self);
         $("body").addClass("modal-open");
         self.emit("shown");
         self.activateFocusTrap();
+    },
+    _isTopmost: function () {
+        return open_modals.at(-1) === this;
     },
     hide: function () {
         var self = this;
@@ -1204,13 +1210,17 @@ export default Base.extend({
         self.loading.hide();
         self.$el.removeClass(self.options.templateOptions.classActiveName);
         if (self.$modal !== undefined) {
-            // Remove the active class before hiding the backdrop. Otherwise
-            // the backdrop's "hidden" handler would call hide() again.
             self.$modal.removeClass(self.options.templateOptions.classActiveName);
             self.$modal.remove();
             self.initModal();
         }
         self.$wrapper.remove();
+        const index = open_modals.indexOf(self);
+        if (index !== -1) {
+            open_modals.splice(index, 1);
+        }
+        $(window.parent).off(self._event_ns);
+        $(document).off(self._event_ns);
         const template_options = self.options.templateOptions;
         const open_modal = `.modal.${template_options.classActiveName}`;
         // Keep the backdrop while another modal on the same backdrop element
@@ -1221,9 +1231,9 @@ export default Base.extend({
         if (other_wrappers.find(open_modal).length < 1) {
             self.backdrop.hide();
         }
+        self.backdrop.destroy();
         if ($(open_modal, $("body")).length < 1) {
             $("body").removeClass("modal-open");
-            $(window.parent).off("resize.plone-modal.patterns");
         }
         self.emit("hidden");
         self.$el.focus();

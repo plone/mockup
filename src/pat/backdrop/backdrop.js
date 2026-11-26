@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
+import events from "@patternslib/patternslib/src/core/events";
 
 let instance_counter = 0;
 
@@ -27,35 +28,48 @@ export default Base.extend({
                 self.$backdrop.css("z-index", self.options.zIndex);
             }
         }
-        // Per-instance event namespace. Calling init again must not add
-        // another set of listeners.
+        // Per-instance id prefix for listeners. Calling init again must not
+        // add another set of listeners.
         if (self._event_ns === undefined) {
             instance_counter += 1;
-            self._event_ns = `.backdrop-${instance_counter}`;
+            self._event_ns = `backdrop-${instance_counter}`;
         }
         self.destroy();
+        const is_active = () => self.el.classList.contains(self.options.classActiveName);
         if (self.options.closeOnEsc === true) {
-            $(document).on(`keydown${self._event_ns}`, function (e) {
-                if (self.$el.is("." + self.options.classActiveName)) {
-                    if (e.keyCode === 27) {
-                        // ESC key pressed
+            // The document outlives the backdrop, so the listener is
+            // registered for removal in destroy().
+            events.add_event_listener(
+                document,
+                "keydown",
+                `${self._event_ns}--keydown`,
+                (e) => {
+                    if (e.key === "Escape" && is_active()) {
                         self.hide();
                     }
-                }
-            });
+                },
+            );
         }
         if (self.options.closeOnClick === true) {
-            self.$backdrop.on(`click${self._event_ns}`, function () {
-                if (self.$el.is("." + self.options.classActiveName)) {
-                    self.hide();
-                }
-            });
+            // A plain listener: it must not keep the backdrop element alive
+            // when the element is removed without destroy().
+            self._abort_controller = new AbortController();
+            self.$backdrop[0].addEventListener(
+                "click",
+                () => {
+                    if (is_active()) {
+                        self.hide();
+                    }
+                },
+                { signal: self._abort_controller.signal },
+            );
         }
     },
     destroy: function () {
         // Remove the listeners of this instance. Does not hide the backdrop.
-        $(document).off(this._event_ns);
-        this.$backdrop.off(this._event_ns);
+        events.remove_event_listener(document, `${this._event_ns}--*`);
+        this._abort_controller?.abort();
+        this._abort_controller = undefined;
     },
     show: function () {
         var self = this;
