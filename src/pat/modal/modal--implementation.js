@@ -1211,9 +1211,17 @@ export default Base.extend({
             self.initModal();
         }
         self.$wrapper.remove();
-        const active_class = self.options.templateOptions.classActiveName;
-        if ($(`.modal.${active_class}`, $("body")).length < 1) {
+        const template_options = self.options.templateOptions;
+        const open_modal = `.modal.${template_options.classActiveName}`;
+        // Keep the backdrop while another modal on the same backdrop element
+        // is open. Their wrappers are direct children of that element.
+        const other_wrappers = self.backdrop.$el.children(
+            `.${template_options.classWrapperName}`,
+        );
+        if (other_wrappers.find(open_modal).length < 1) {
             self.backdrop.hide();
+        }
+        if ($(open_modal, $("body")).length < 1) {
             $("body").removeClass("modal-open");
             $(window.parent).off("resize.plone-modal.patterns");
         }
