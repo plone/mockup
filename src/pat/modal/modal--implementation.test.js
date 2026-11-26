@@ -215,4 +215,36 @@ describe("modal form submit errors", function () {
 
         expect(message(modal).length).toBe(0);
     });
+
+    it("calls onError and onTimeout given as names of window functions", async function () {
+        window.modal_test_on_error = jest.fn();
+        window.modal_test_on_timeout = jest.fn();
+        const modal = new Modal($el, {
+            html: html,
+            actionOptions: {
+                onError: "modal_test_on_error",
+                onTimeout: "modal_test_on_timeout",
+            },
+        });
+        modal.show();
+
+        fail_with("timeout");
+        await submit(modal);
+        expect(window.modal_test_on_timeout).toHaveBeenCalledWith(
+            modal.$modal,
+            { status: 0 },
+            "",
+        );
+
+        fail_with("error");
+        await submit(modal);
+        expect(window.modal_test_on_error).toHaveBeenCalledWith(
+            { status: 500 },
+            "error",
+            "",
+        );
+
+        delete window.modal_test_on_error;
+        delete window.modal_test_on_timeout;
+    });
 });

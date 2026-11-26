@@ -249,14 +249,18 @@ export default Base.extend({
                 error: function (xhr, textStatus, errorStatus) {
                     self.loading.hide();
                     if (textStatus === "timeout" && options.onTimeout) {
-                        options.onTimeout.apply(self, [self.$modal, xhr, errorStatus]);
+                        self.callHandler(options.onTimeout, self, [
+                            self.$modal,
+                            xhr,
+                            errorStatus,
+                        ]);
                         // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
-                        if (typeof options.onError === "string") {
-                            window[options.onError](xhr, textStatus, errorStatus);
-                        } else {
-                            options.onError(xhr, textStatus, errorStatus);
-                        }
+                        self.callHandler(options.onError, null, [
+                            xhr,
+                            textStatus,
+                            errorStatus,
+                        ]);
                     } else if (
                         $modal !== self.$modal ||
                         !document.body.contains($modal[0])
@@ -399,11 +403,19 @@ export default Base.extend({
             })
                 .fail(function (xhr, textStatus, errorStatus) {
                     if (textStatus === "timeout" && options.onTimeout) {
-                        options.onTimeout(self.$modal, xhr, errorStatus);
+                        self.callHandler(options.onTimeout, null, [
+                            self.$modal,
+                            xhr,
+                            errorStatus,
+                        ]);
 
                         // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
-                        options.onError(xhr, textStatus, errorStatus);
+                        self.callHandler(options.onError, null, [
+                            xhr,
+                            textStatus,
+                            errorStatus,
+                        ]);
                     } else {
                         window.alert(_t("There was an error loading modal."));
                     }
@@ -586,6 +598,14 @@ export default Base.extend({
     reloadWindow: function () {
         window.parent.location.reload();
     },
+    callHandler: function (handler, context, args) {
+        // Call an onError or onTimeout option. It is a function, or the name
+        // of a function at window level, as it is in a JSON configuration.
+        if (typeof handler === "string") {
+            handler = window[handler];
+        }
+        return handler.apply(context, args);
+    },
     showSubmitError: function (message) {
         // Show a failed form submit above the form, so the user is not left
         // waiting without any feedback.
@@ -714,9 +734,17 @@ export default Base.extend({
             .fail(function (xhr, textStatus, errorStatus) {
                 var options = self.options.actionOptions;
                 if (textStatus === "timeout" && options.onTimeout) {
-                    options.onTimeout(self.$modal, xhr, errorStatus);
+                    self.callHandler(options.onTimeout, null, [
+                        self.$modal,
+                        xhr,
+                        errorStatus,
+                    ]);
                 } else if (options.onError) {
-                    options.onError(xhr, textStatus, errorStatus);
+                    self.callHandler(options.onError, null, [
+                        xhr,
+                        textStatus,
+                        errorStatus,
+                    ]);
                 } else {
                     window.alert(_t("There was an error loading modal."));
                     self.hide();
