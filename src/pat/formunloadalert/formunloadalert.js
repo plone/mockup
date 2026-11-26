@@ -55,6 +55,10 @@ export default Base.extend({
         self.$el.on("submit", () => {
             self._suppressed = true;
         });
+        // A failed submit in a pat-plone-modal saved nothing.
+        self.el.addEventListener("plone-modal-submit-failed", () => {
+            self._suppressed = false;
+        });
     },
     _unsaved_message() {
         // The message to warn with, or undefined. A submit suppresses the

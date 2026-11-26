@@ -254,6 +254,11 @@ export default Base.extend({
                 url: url,
                 error: function (xhr, textStatus, errorStatus) {
                     self.loading.hide();
+                    // Nothing was saved. Let e.g. pat-formunloadalert guard the
+                    // form again. See ADR 0007.
+                    $form[0]?.dispatchEvent(
+                        new Event("plone-modal-submit-failed", { bubbles: true }),
+                    );
                     if (textStatus === "timeout" && options.onTimeout) {
                         self.callHandler(options.onTimeout, self, [
                             self.$modal,

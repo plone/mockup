@@ -282,5 +282,8 @@ modal_el.addEventListener("plone-modal-before-hide", (e) => {
 });
 ```
 
-pat-formunloadalert uses this event to ask before a modal with unsaved
-changes is closed.
+When a form submit in the modal fails, a native `plone-modal-submit-failed`
+event is dispatched on the form. It bubbles.
+
+pat-formunloadalert uses these events to ask before a modal with unsaved
+changes is closed, also after a failed submit.

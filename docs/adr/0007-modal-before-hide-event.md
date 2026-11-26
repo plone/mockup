@@ -26,6 +26,10 @@ closed it still asked when the user left the page.
   listens to that event. It does not need the modal instance.
 - pat-formunloadalert does that: for a changed form it asks with
   `window.confirm()` and cancels the event if the user does not confirm.
+- When a form submit in the modal fails, the modal dispatches a native,
+  bubbling `plone-modal-submit-failed` event on the form. pat-formunloadalert
+  ignores changes after a submit; on this event it guards the form again,
+  because nothing was saved.
 - pat-formunloadalert always registers its `beforeunload` handler. The handler
   removes itself and does not ask when the form is not in the document
   anymore.
@@ -45,6 +49,7 @@ closed it still asked when the user left the page.
   `hide()`.
 - Once the modal is closed, the form no longer asks when the user leaves the
   page.
+- After a failed submit, closing the modal asks again.
 - Other patterns can guard a modal the same way, without access to the modal
   instance.
 - The dead `.plone-modal` lookup in pat-manageportlets is not changed here.
