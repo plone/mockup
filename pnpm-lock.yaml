@@ -164,6 +164,7 @@ settings:
 
 overrides:
   '@babel/core': ^8.0.5
+  jquery: ^4.0.0
   slick-carousel: '-'
   slides: '-'
 
@@ -4100,9 +4101,6 @@ packages:
     resolution: {integrity: sha512-425X88jEoWojYPS5YhZciEW83z4J/TLPh9gvRfftroUBDr70Er58kerD1kY+cT/z8Ys5/VEkUZ9AA4tFwqgY+w==}
     deprecated: No further updates will be released for this pacakge after v0.9.15. Original creator has not released any new versions in 2+ years, as of Aug 1, 2020 (See https://github.com/tapmodo/Jcrop). Updating this package is not easy due to original creator's package structure. If futher assistnace is needed, reach out to original creator or https://www.npmjs.com/~jengland
 
-  jquery@3.8.0:
-    resolution: {integrity: sha512-AOYt0viqPysMUTq45O8gF9DuOnBT3Il/8WtM/TT8z/2QeGsZ70ImwSJtNFxznn2R71v8yIgaEunOGo82OY/f0g==}
-
   jquery@4.1.0:
     resolution: {integrity: sha512-tnN2N83S+xD3yhmdBP4nnJ1XOO0Fl586rG23FA5h/JAe8XN3W9a1zGwDMltBptn+UpcqEKicnO61+jQ0EiF2fw==}
 
@@ -7907,7 +7905,7 @@ snapshots:
       dompurify: 3.4.18
       highlight.js: 10.7.3
       imagesloaded: 4.1.4
-      jquery: 3.8.0
+      jquery: 4.1.0
       jquery-jcrop: 0.9.15
       luxon: 3.7.2
       marked: 15.0.12
@@ -10374,8 +10372,6 @@ snapshots:
       jquery: 4.1.0
 
   jquery-jcrop@0.9.15: {}
-
-  jquery@3.8.0: {}
 
   jquery@4.1.0: {}
 
