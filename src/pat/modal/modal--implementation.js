@@ -446,7 +446,14 @@ export default Base.extend({
                     return;
                 }
                 event.preventDefault();
-                $("input[type=submit], button[type=submit], button:not([type])", this)
+                const $submit_buttons = $(
+                    "input[type=submit], button[type=submit], button:not([type])",
+                    this,
+                );
+                // The buttons of a multi widget (add, remove) change the form
+                // and do not save it. Prefer the other submit buttons.
+                const $form_buttons = $submit_buttons.not(".multi-widget-buttons *");
+                ($form_buttons.length ? $form_buttons : $submit_buttons)
                     .eq(0)
                     .trigger("click");
             });

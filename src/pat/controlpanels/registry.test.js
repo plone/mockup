@@ -30,13 +30,16 @@ const edit_form = (rows = 1) => `
 describe("Registry control panel", () => {
     let submits;
 
-    // Click an element and wait for an event of the modal. The modal emits
-    // its events with jQuery on the edit link. They do not reach native
-    // event listeners, like those of events.await_event.
-    const click_and_await = (el, event_name) => {
-        const done = new Promise((resolve) =>
+    // Wait for an event of the modal. The modal emits its events with
+    // jQuery on the edit link. They do not reach native event listeners,
+    // like those of events.await_event.
+    const modal_event = (event_name) =>
+        new Promise((resolve) =>
             $(".recordsEditLink").one(`${event_name}.plone-modal.patterns`, resolve),
         );
+    // Click an element and wait for an event of the modal.
+    const click_and_await = (el, event_name) => {
+        const done = modal_event(event_name);
         el.click();
         return done;
     };
@@ -127,6 +130,25 @@ describe("Registry control panel", () => {
         await open();
         await click_and_await(in_footer("form.buttons.save"), "hidden");
 
+        expect(submits).toEqual(["form.buttons.save"]);
+        expect(modal()).toBeNull();
+        expect(filter).toHaveBeenCalledTimes(1);
+    });
+
+    it("saves the record on enter in a field", async () => {
+        const filter = jest.fn((e) => e.preventDefault());
+        $("#registry-filter").on("submit", filter);
+
+        await open();
+        const hidden = modal_event("hidden");
+        document
+            .querySelector(".modal-body .multi-widget-row input")
+            .dispatchEvent(
+                new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+            );
+        await hidden;
+
+        // not the add button of the multi widget, which comes first
         expect(submits).toEqual(["form.buttons.save"]);
         expect(modal()).toBeNull();
         expect(filter).toHaveBeenCalledTimes(1);

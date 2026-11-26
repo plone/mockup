@@ -403,6 +403,51 @@ describe("Modal", function () {
         expect(clicked).toEqual(["go"]);
     });
 
+    it("1.11 - submits with a button outside of a multi widget on enter", async () => {
+        document.body.innerHTML = `
+          <div id="body11">
+            <a class="pat-plone-modal" href="#target11"
+               data-pat-plone-modal="backdrop: #body11">Open</a>
+            <div id="target11" style="display:none;">
+              <form>
+                <input name="q" />
+                <div class="multi-widget-buttons">
+                  <button type="submit" name="add">Add</button>
+                </div>
+                <button type="submit" name="save">Save</button>
+              </form>
+              <form>
+                <input name="q" />
+                <div class="multi-widget-buttons">
+                  <button type="submit" name="add">Add</button>
+                </div>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body11 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const [form1, form2] = document.querySelectorAll("#body11 .modal form");
+
+        const clicked = [];
+        for (const form of [form1, form2]) {
+            form.addEventListener("click", (e) => {
+                clicked.push(e.target.name);
+                // Do not submit the form in the test environment.
+                e.preventDefault();
+            });
+        }
+        const enter = () =>
+            new KeyboardEvent("keydown", { key: "Enter", bubbles: true });
+
+        form1.querySelector("input[name=q]").dispatchEvent(enter());
+        expect(clicked).toEqual(["save"]);
+
+        // Without other submit buttons, the multi widget button is used.
+        form2.querySelector("input[name=q]").dispatchEvent(enter());
+        expect(clicked).toEqual(["save", "add"]);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
