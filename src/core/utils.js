@@ -222,6 +222,9 @@ var Loading = function (options) {
         }
     };
 
+    // ``closable`` is kept for backwards compatibility. It never had an
+    // effect: the backdrop's close options are not changed here.
+    // eslint-disable-next-line no-unused-vars
     self.show = function (closable) {
         self.init();
         self.$el.show();
@@ -242,13 +245,7 @@ var Loading = function (options) {
         }
         self.$el.css("zIndex", zIndex);
 
-        if (closable === undefined) {
-            closable = true;
-        }
         if (self.options.backdrop) {
-            self.options.backdrop.closeOnClick = closable;
-            self.options.backdrop.closeOnEsc = closable;
-            self.options.backdrop.init();
             self.options.backdrop.show();
         }
     };

@@ -197,6 +197,13 @@ describe("utils", function () {
     });
 
     describe("Loading", function () {
+        it("does not re-initialize the backdrop on show", function () {
+            const backdrop = { init: jest.fn(), show: jest.fn() };
+            const loading = new utils.Loading({ backdrop: backdrop });
+            loading.show();
+            expect(backdrop.init).not.toHaveBeenCalled();
+            expect(backdrop.show).toHaveBeenCalledTimes(1);
+        });
         it("creates element", function () {
             var loading = new utils.Loading();
             loading.show();
@@ -227,26 +234,6 @@ describe("utils", function () {
             });
             loading.show();
             expect(loading.$el[0].style.zIndex + "").toEqual("99999");
-        });
-        it("works with backdrop", function () {
-            var initCalled = false;
-            var showCalled = false;
-            var fakeBackdrop = {
-                init: function () {
-                    initCalled = true;
-                },
-                show: function () {
-                    showCalled = true;
-                },
-            };
-            var loading = new utils.Loading({
-                backdrop: fakeBackdrop,
-            });
-            loading.show();
-            expect(initCalled).toEqual(true);
-            expect(showCalled).toEqual(true);
-            expect(fakeBackdrop.closeOnClick).toEqual(true);
-            expect(fakeBackdrop.closeOnEsc).toEqual(true);
         });
     });
 
