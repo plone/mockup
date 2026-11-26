@@ -570,8 +570,8 @@ Modal with TinyMCE</a></p>
 <tr>
 <td style="text-align:center">buttons</td>
 <td style="text-align:center">string</td>
-<td style="text-align:center">'.formControls &gt; input[type=&quot;submit&quot;]'</td>
-<td style="text-align:center">Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.</td>
+<td style="text-align:center">'.formControls &gt; input[type=&quot;submit&quot;], .formControls &gt; button:not([type=&quot;button&quot;], [type=&quot;reset&quot;])'</td>
+<td style="text-align:center">Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden. By default, these are the submit buttons of <code>.formControls</code>.</td>
 </tr>
 <tr>
 <td style="text-align:center">automaticallyAddButtonActions</td>
