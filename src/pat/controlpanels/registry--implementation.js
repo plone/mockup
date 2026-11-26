@@ -15,7 +15,7 @@ export default class ConfigRegistry {
         $(".recordsEditLink").each(function () {
             var $el = $(this);
             var options = {
-                buttons: `${form_controls} > input[type="submit"], ${form_controls} > button`,
+                buttons: `${form_controls} > input[type="submit"], ${form_controls} > button:not([type="button"], [type="reset"])`,
                 actions: {
                     [`${multi_widget_buttons} > input[type="submit"], ${multi_widget_buttons} > button`]:
                         {

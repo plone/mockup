@@ -448,6 +448,40 @@ describe("Modal", function () {
         expect(clicked).toEqual(["save", "add"]);
     });
 
+    it("1.12 - places only the submit buttons of the form controls in the footer", async () => {
+        document.body.innerHTML = `
+          <div id="body12">
+            <a class="pat-plone-modal" href="#target12"
+               data-pat-plone-modal="backdrop: #body12">Open</a>
+            <div id="target12" style="display:none;">
+              <form>
+                <div class="formControls">
+                  <input type="submit" name="input_submit" value="Save" />
+                  <button type="submit" name="submit">Submit</button>
+                  <button name="no_type">No type</button>
+                  <button type="button" name="button">Button</button>
+                  <button type="reset" name="reset">Reset</button>
+                </div>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body12 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+
+        const names = (selector) =>
+            [...document.querySelectorAll(selector)].map((el) => el.name);
+        expect(names("#body12 .modal-footer .pattern-modal-buttons > *")).toEqual([
+            "input_submit",
+            "submit",
+            "no_type",
+        ]);
+        // Buttons which do not submit the form stay in the form.
+        expect(names("#body12 .modal-body .formControls > :not([style*=none])")).toEqual(
+            ["button", "reset"],
+        );
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 

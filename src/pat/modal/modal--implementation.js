@@ -36,7 +36,8 @@ export default Base.extend({
         },
         title: null,
         titleSelector: "h1:first",
-        buttons: '.formControls > input[type="submit"], .formControls > button',
+        buttons:
+            '.formControls > input[type="submit"], .formControls > button:not([type="button"], [type="reset"])',
         content: "#content",
         automaticallyAddButtonActions: true,
         loadLinksWithinModal: true,
