@@ -124,6 +124,20 @@ export default function (config, pathCache) {
     }
 
     const search = async (searchTerm, page) => {
+        // Only the batch which follows the loaded ones is appended. The
+        // first page always starts over, also for the same search term:
+        // the browser asks for it each time it is opened.
+        const isNextBatch = (levels) =>
+            page > 1 &&
+            levels.length > 0 &&
+            levels[0].searchTerm == searchTerm &&
+            page == +levels[0].page + 1;
+
+        if (page > 1 && !isNextBatch(get(store))) {
+            // already loaded, or not the next one
+            return;
+        }
+
         let query = {
             searchPath: config.rootPath,
             page: page,
@@ -138,12 +152,17 @@ export default function (config, pathCache) {
 
         store.update((levels) => {
 
-            // first time or new search
-            if (levels.length == 0 || levels[0].searchTerm != searchTerm) {
+            // first page: a new search, or the same one loaded again
+            if (page <= 1) {
                 level.load_more = has_more;
                 level.selectable = false;
                 level.page = page
                 return [level,];
+            }
+
+            // the same batch was asked for twice and the other one came first
+            if (!isNextBatch(levels)) {
+                return levels;
             }
 
             // append new batch with new references for Svelte 5 reactivity
