@@ -7,6 +7,10 @@ title: Formunloadalert
 
 Show a warning if the user leaves an unsaved form.
 
+Inside a pat-plone-modal, the warning is also shown when the modal with the
+unsaved form is closed. Once the modal is closed, leaving the page does not
+show the warning for that form anymore.
+
 
 ## Configuration
 

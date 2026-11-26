@@ -1,5 +1,6 @@
 import "./modal";
 import "../select2/select2";
+import "../formunloadalert/formunloadalert";
 import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
@@ -727,6 +728,110 @@ describe("Modal", function () {
         press_escape();
         expect(is_open(instance)).toEqual(false);
         expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+    });
+
+    describe("1.23 - with pat-formunloadalert", () => {
+        const default_message =
+            "Discard changes? If you click OK, any changes you have made will be lost.";
+        let confirm_spy;
+        let instance;
+
+        const open_modal = async () => {
+            document.body.innerHTML = `
+              <div id="body30">
+                <a class="pat-plone-modal" id="open30" href="#target30"
+                   data-pat-plone-modal="backdrop: #body30">Open</a>
+                <div id="target30" style="display:none;">
+                  <form class="pat-formunloadalert">
+                    <input name="title" />
+                    <button type="submit">Save</button>
+                  </form>
+                </div>
+              </div>`;
+            await registry_scan();
+            instance = modal_of("#open30");
+            document.querySelector("#open30").click();
+            await utils.timeout(1);
+        };
+        const change_form = () =>
+            instance.$modal[0]
+                .querySelector("input[name=title]")
+                .dispatchEvent(new Event("change", { bubbles: true }));
+
+        beforeEach(() => {
+            confirm_spy = jest.spyOn(window, "confirm");
+        });
+        afterEach(() => {
+            confirm_spy.mockRestore();
+        });
+
+        it("1.23.1 - asks before closing a modal with a changed form", async () => {
+            confirm_spy.mockReturnValue(false);
+            await open_modal();
+            change_form();
+
+            instance.hide();
+            expect(confirm_spy).toHaveBeenCalledTimes(1);
+            expect(confirm_spy).toHaveBeenCalledWith(default_message);
+            expect(is_open(instance)).toEqual(true);
+        });
+
+        it("1.23.2 - does not guard the page after the modal closed", async () => {
+            confirm_spy.mockReturnValue(true);
+            await open_modal();
+            change_form();
+
+            instance.hide();
+            expect(is_open(instance)).toEqual(false);
+            const ev = new Event("beforeunload", { cancelable: true });
+            window.dispatchEvent(ev);
+            expect(ev.defaultPrevented).toEqual(false);
+        });
+
+        it("1.23.2.1 - guards the page while the modal with a changed form is open", async () => {
+            await open_modal();
+            change_form();
+
+            const ev = new Event("beforeunload", { cancelable: true });
+            window.dispatchEvent(ev);
+            expect(ev.defaultPrevented).toEqual(true);
+            expect(confirm_spy).not.toHaveBeenCalled();
+            expect(is_open(instance)).toEqual(true);
+        });
+
+        it("1.23.3 - keeps the backdrop when closing by backdrop click is cancelled", async () => {
+            confirm_spy.mockReturnValue(false);
+            await open_modal();
+            change_form();
+
+            instance.$wrapper[0].click();
+            expect(confirm_spy).toHaveBeenCalledTimes(1);
+            expect(is_open(instance)).toEqual(true);
+            expect(
+                document.querySelector("#body30").classList.contains("backdrop-active"),
+            ).toEqual(true);
+        });
+
+        it("1.23.4 - does not ask after the form was submitted", async () => {
+            await open_modal();
+            change_form();
+            const form = instance.$modal[0].querySelector("form");
+            // Do not let jsdom try to navigate.
+            form.addEventListener("submit", (e) => e.preventDefault());
+            form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+            instance.hide();
+            expect(confirm_spy).not.toHaveBeenCalled();
+            expect(is_open(instance)).toEqual(false);
+        });
+
+        it("1.23.5 - does not ask for an unchanged form", async () => {
+            await open_modal();
+
+            instance.hide();
+            expect(confirm_spy).not.toHaveBeenCalled();
+            expect(is_open(instance)).toEqual(false);
+        });
     });
 
     it("2 - customize modal on show event", () => {

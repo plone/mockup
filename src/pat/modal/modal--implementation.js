@@ -1196,6 +1196,19 @@ export default Base.extend({
     },
     hide: function () {
         var self = this;
+        // Let the content of the modal cancel the hide, e.g. a form with
+        // unsaved changes. See ADR 0007.
+        const modal_el = self.$modal?.[0];
+        if (modal_el?.isConnected) {
+            const before_hide = new Event("plone-modal-before-hide", {
+                bubbles: true,
+                cancelable: true,
+            });
+            modal_el.dispatchEvent(before_hide);
+            if (before_hide.defaultPrevented) {
+                return;
+            }
+        }
         if (self.ajaxXHR) {
             self.ajaxXHR.abort();
         }
