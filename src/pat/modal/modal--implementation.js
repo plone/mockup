@@ -236,7 +236,7 @@ export default Base.extend({
             self.loading.show(false);
             self.hideSubmitError();
             // The modal this form is in. If it was closed before the
-            // request failed, a warning must not show up in a modal that
+            // request failed, the message must not show up in a modal that
             // was opened since.
             var $modal = self.$modal;
             // Load the jquery-form plugin ($.fn.ajaxSubmit) on demand — this is
@@ -262,17 +262,44 @@ export default Base.extend({
                         !document.body.contains($modal[0])
                     ) {
                         // The modal was closed in the meantime.
+                    } else if (textStatus === "abort") {
+                        // Aborted on purpose, nothing went wrong.
                     } else if (textStatus === "timeout") {
+                        // Only a warning: the request may have succeeded.
+                        self.showSubmitWarning(
+                            _t(
+                                "The server did not respond in time. The request may still have been processed. Please check this before you submit the form again.",
+                            ),
+                        );
+                    } else if (textStatus === "parsererror") {
+                        // The server answered, but the response is broken.
                         self.showSubmitError(
                             _t(
-                                "The server did not respond in time, please try again later.",
+                                "The response of the server could not be read. Please try again later.",
+                            ),
+                        );
+                    } else if (!xhr.status) {
+                        // No response at all, e.g. the network is down.
+                        self.showSubmitError(
+                            _t(
+                                "The server could not be reached. Please check your connection and try again.",
                             ),
                         );
                     } else {
+                        // An error response. Show its HTTP status, so the
+                        // user can tell e.g. a missing permission from a
+                        // server error. HTTP/2 has no status text, then
+                        // only the code is shown.
+                        var status = [xhr.status, errorStatus]
+                            .filter(Boolean)
+                            .join(" ");
                         self.showSubmitError(
                             _t(
                                 "The server could not process the request, please try again later.",
-                            ),
+                            ) +
+                                " (" +
+                                status +
+                                ")",
                         );
                     }
                     self.emit("formActionError", [xhr, textStatus, errorStatus]);
@@ -560,23 +587,39 @@ export default Base.extend({
         window.parent.location.reload();
     },
     showSubmitError: function (message) {
-        // Show a failed form submit (error response or timeout) above the
-        // form, so the user is not left waiting without any feedback.
+        // Show a failed form submit above the form, so the user is not left
+        // waiting without any feedback.
+        this.showSubmitMessage(message, "error");
+    },
+    showSubmitWarning: function (message) {
+        // Like showSubmitError, if the request may still have succeeded.
+        this.showSubmitMessage(message, "warning");
+    },
+    showSubmitMessage: function (message, type) {
         var self = this;
         if (!self.modalInitialized()) {
             return;
         }
         self.hideSubmitError();
+        var is_warning = type === "warning";
         var el = document.createElement("div");
-        el.className =
-            "portalMessage statusmessage statusmessage-warning alert alert-warning modal-submit-error";
+        el.className = is_warning
+            ? "portalMessage statusmessage statusmessage-warning alert alert-warning modal-submit-error"
+            : "portalMessage statusmessage statusmessage-error alert alert-danger modal-submit-error";
         el.setAttribute("role", "alert");
         var label = document.createElement("strong");
-        label.textContent = _t("Warning");
+        label.textContent = is_warning ? _t("Warning") : _t("Error");
         el.append(label, " ", message);
-        $("." + self.options.templateOptions.classBodyName, self.$modal)
-            .first()
-            .prepend(el);
+        // Put it in the prepend area, with the other portal messages. It has
+        // no class by default (templateOptions.classPrependName), so it is
+        // found as the first div of the body; a custom template may not have
+        // it, then the message goes at the top of the body.
+        var $body = $(
+            "." + self.options.templateOptions.classBodyName,
+            self.$modal,
+        ).first();
+        var $prepend = $body.children("div:first-child");
+        ($prepend.length ? $prepend : $body).prepend(el);
     },
     hideSubmitError: function () {
         var self = this;

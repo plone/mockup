@@ -28,7 +28,7 @@ describe("modal implementation", function () {
 
 describe("modal form submit errors", function () {
     let $el;
-    let ajaxSubmit;
+    let ajax_submit;
 
     const html = `
         <div>
@@ -43,33 +43,33 @@ describe("modal form submit errors", function () {
           </div>
         </div>`;
 
-    // Let ajaxSubmit fail the way jquery-form reports it.
-    const failWith = (textStatus) => {
-        ajaxSubmit.mockImplementation(function (options) {
-            options.error(
-                { status: textStatus === "timeout" ? 0 : 500 },
-                textStatus,
-                "",
-            );
+    // Let $.fn.ajaxSubmit fail the way jquery-form reports it.
+    const fail_with = (
+        text_status,
+        status = text_status === "timeout" ? 0 : 500,
+        status_text = "",
+    ) => {
+        ajax_submit.mockImplementation(function (options) {
+            options.error({ status: status }, text_status, status_text);
         });
     };
 
     const submit = async (modal) => {
-        const calls = ajaxSubmit.mock.calls.length;
+        const calls = ajax_submit.mock.calls.length;
         $(".pattern-modal-buttons button", modal.$modal).trigger("click");
         // handleFormAction awaits the dynamic import of jquery-form, so
-        // wait until it has called ajaxSubmit.
-        for (let i = 0; i < 100 && ajaxSubmit.mock.calls.length === calls; i++) {
+        // wait until it has called $.fn.ajaxSubmit.
+        for (let i = 0; i < 100 && ajax_submit.mock.calls.length === calls; i++) {
             await new Promise((resolve) => setTimeout(resolve, 0));
         }
-        expect(ajaxSubmit.mock.calls.length).toBe(calls + 1);
+        expect(ajax_submit.mock.calls.length).toBe(calls + 1);
     };
 
     const message = (modal) => $(".modal-body .modal-submit-error", modal.$modal);
 
     beforeEach(async function () {
         $el = $("<div/>").appendTo("body");
-        ajaxSubmit = $.fn.ajaxSubmit = jest.fn();
+        ajax_submit = $.fn.ajaxSubmit = jest.fn();
     });
 
     afterEach(function () {
@@ -82,58 +82,108 @@ describe("modal form submit errors", function () {
         const modal = new Modal($el, { html: html });
         modal.show();
         await submit(modal);
-        expect(ajaxSubmit).toHaveBeenCalledTimes(1);
-        expect(ajaxSubmit.mock.calls[0][0].timeout).toBe(5000);
+        expect(ajax_submit).toHaveBeenCalledTimes(1);
+        expect(ajax_submit.mock.calls[0][0].timeout).toBe(5000);
     });
 
     it("shows a warning when the server does not respond in time", async function () {
-        failWith("timeout");
+        fail_with("timeout");
         const modal = new Modal($el, { html: html });
         modal.show();
         await submit(modal);
         expect(message(modal).length).toBe(1);
+        expect(message(modal).hasClass("statusmessage-warning")).toBe(true);
         expect(message(modal).hasClass("alert-warning")).toBe(true);
         expect(message(modal).attr("role")).toBe("alert");
         expect(message(modal).text()).toBe(
-            "Warning The server did not respond in time, please try again later.",
+            "Warning The server did not respond in time. The request may still have been processed. Please check this before you submit the form again.",
         );
+        // In the prepend area, with the other portal messages.
+        expect(message(modal).parent().is(".modal-body > div:first-child")).toBe(true);
         // The form stays, so the user can try again.
         expect($(".modal-body form", modal.$modal).length).toBe(1);
     });
 
-    it("shows a warning when the server returns an error", async function () {
-        failWith("error");
+    it("shows an error with the HTTP status when the server returns an error", async function () {
+        fail_with("error", 500, "Internal Server Error");
+        const modal = new Modal($el, { html: html });
+        modal.show();
+        await submit(modal);
+        expect(message(modal).length).toBe(1);
+        expect(message(modal).hasClass("statusmessage-error")).toBe(true);
+        expect(message(modal).hasClass("alert-danger")).toBe(true);
+        expect(message(modal).hasClass("alert-warning")).toBe(false);
+        expect(message(modal).attr("role")).toBe("alert");
+        expect(message(modal).text()).toBe(
+            "Error The server could not process the request, please try again later. (500 Internal Server Error)",
+        );
+        expect(message(modal).parent().is(".modal-body > div:first-child")).toBe(true);
+    });
+
+    it("shows only the status code when there is no status text", async function () {
+        // HTTP/2 has no status text.
+        fail_with("error", 403, "");
         const modal = new Modal($el, { html: html });
         modal.show();
         await submit(modal);
         expect(message(modal).text()).toBe(
-            "Warning The server could not process the request, please try again later.",
+            "Error The server could not process the request, please try again later. (403)",
         );
     });
 
-    it("shows only one warning after repeated submits", async function () {
-        failWith("error");
+    it("shows an error when the server cannot be reached", async function () {
+        fail_with("error", 0, "");
         const modal = new Modal($el, { html: html });
         modal.show();
         await submit(modal);
-        await submit(modal);
-        expect(message(modal).length).toBe(1);
+        expect(message(modal).hasClass("alert-danger")).toBe(true);
+        expect(message(modal).text()).toBe(
+            "Error The server could not be reached. Please check your connection and try again.",
+        );
     });
 
-    it("removes the warning when the form is submitted again", async function () {
-        failWith("error");
+    it("shows an error when the response cannot be read", async function () {
+        fail_with("parsererror", 200, "OK");
         const modal = new Modal($el, { html: html });
         modal.show();
         await submit(modal);
-        expect(message(modal).length).toBe(1);
-        ajaxSubmit.mockImplementation(() => {});
+        expect(message(modal).hasClass("alert-danger")).toBe(true);
+        expect(message(modal).text()).toBe(
+            "Error The response of the server could not be read. Please try again later.",
+        );
+    });
+
+    it("does not show a message when the request is aborted", async function () {
+        fail_with("abort");
+        const modal = new Modal($el, { html: html });
+        modal.show();
         await submit(modal);
         expect(message(modal).length).toBe(0);
     });
 
-    it("does not show a warning in a modal opened after the submit", async function () {
+    it("shows only one message after repeated submits", async function () {
+        fail_with("error");
+        const modal = new Modal($el, { html: html });
+        modal.show();
+        await submit(modal);
+        await submit(modal);
+        expect(message(modal).length).toBe(1);
+    });
+
+    it("removes the message when the form is submitted again", async function () {
+        fail_with("error");
+        const modal = new Modal($el, { html: html });
+        modal.show();
+        await submit(modal);
+        expect(message(modal).length).toBe(1);
+        ajax_submit.mockImplementation(() => {});
+        await submit(modal);
+        expect(message(modal).length).toBe(0);
+    });
+
+    it("does not show a message in a modal opened after the submit", async function () {
         let fail;
-        ajaxSubmit.mockImplementation(function (options) {
+        ajax_submit.mockImplementation(function (options) {
             fail = () => options.error({ status: 0 }, "timeout", "");
         });
         const modal = new Modal($el, { html: html });
@@ -147,21 +197,21 @@ describe("modal form submit errors", function () {
     });
 
     it("leaves failures to onError and onTimeout when they are given", async function () {
-        const onError = jest.fn();
-        const onTimeout = jest.fn();
+        const on_error = jest.fn();
+        const on_timeout = jest.fn();
         const modal = new Modal($el, {
             html: html,
-            actionOptions: { onError: onError, onTimeout: onTimeout },
+            actionOptions: { onError: on_error, onTimeout: on_timeout },
         });
         modal.show();
 
-        failWith("timeout");
+        fail_with("timeout");
         await submit(modal);
-        expect(onTimeout).toHaveBeenCalledWith(modal.$modal, { status: 0 }, "");
+        expect(on_timeout).toHaveBeenCalledWith(modal.$modal, { status: 0 }, "");
 
-        failWith("error");
+        fail_with("error");
         await submit(modal);
-        expect(onError).toHaveBeenCalledWith({ status: 500 }, "error", "");
+        expect(on_error).toHaveBeenCalledWith({ status: 500 }, "error", "");
 
         expect(message(modal).length).toBe(0);
     });

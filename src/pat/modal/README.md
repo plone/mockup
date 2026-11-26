@@ -194,8 +194,10 @@ Modal with TinyMCE</a>
 
 ## Modal with a form submit that fails
 
-When the server returns an error or does not respond within `timeout`, the
-modal shows a warning above the form.
+When the server returns an error, the modal shows an error above the form,
+with the HTTP status of the response. When the server does not respond within
+`timeout`, the modal shows a warning instead, as the request may still have
+been processed.
 
 <a href="#modal6"
    class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal">Error response</a>

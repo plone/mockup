@@ -846,11 +846,19 @@ msgid "There was an error loading modal."
 msgstr ""
 
 #: ./src/pat/modal/modal--implementation.js
-msgid "The server did not respond in time, please try again later."
+msgid "The server did not respond in time. The request may still have been processed. Please check this before you submit the form again."
 msgstr ""
 
 #: ./src/pat/modal/modal--implementation.js
 msgid "The server could not process the request, please try again later."
+msgstr ""
+
+#: ./src/pat/modal/modal--implementation.js
+msgid "The response of the server could not be read. Please try again later."
+msgstr ""
+
+#: ./src/pat/modal/modal--implementation.js
+msgid "The server could not be reached. Please check your connection and try again."
 msgstr ""
 
 #: ./src/pat/modal/modal--implementation.js
