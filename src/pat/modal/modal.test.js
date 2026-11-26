@@ -369,6 +369,40 @@ describe("Modal", function () {
         expect(modal.isConnected).toBe(true);
     });
 
+    it("1.10 - submits with the first submit button on enter", async () => {
+        document.body.innerHTML = `
+          <div id="body10">
+            <a class="pat-plone-modal" href="#target10"
+               data-pat-plone-modal="backdrop: #body10">Open</a>
+            <div id="target10" style="display:none;">
+              <form>
+                <input name="q" />
+                <button type="button" name="other">Other</button>
+                <button type="reset" name="reset">Reset</button>
+                <button name="go">Go</button>
+              </form>
+            </div>
+          </div>`;
+        await registry_scan();
+        $("#body10 a.pat-plone-modal").trigger("click");
+        await utils.timeout(1);
+        const form = document.querySelector("#body10 .modal form");
+
+        const clicked = [];
+        form.addEventListener("click", (e) => {
+            clicked.push(e.target.name);
+            // Do not submit the form in the test environment.
+            e.preventDefault();
+        });
+
+        form.querySelector("input[name=q]").dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+        );
+        // A button without a type is a submit button. Buttons of the type
+        // button or reset are not.
+        expect(clicked).toEqual(["go"]);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 

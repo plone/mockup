@@ -446,7 +446,7 @@ export default Base.extend({
                     return;
                 }
                 event.preventDefault();
-                $("input[type=submit], button[type=submit], button:not(type)", this)
+                $("input[type=submit], button[type=submit], button:not([type])", this)
                     .eq(0)
                     .trigger("click");
             });
