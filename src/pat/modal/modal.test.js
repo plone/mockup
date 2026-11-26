@@ -482,6 +482,123 @@ describe("Modal", function () {
         );
     });
 
+    it("1.13 - hides the backdrop when a non-visible modal is in the page", async () => {
+        document.body.innerHTML = `
+          <div id="body13">
+            <a class="pat-plone-modal" href="#target13"
+               data-pat-plone-modal="backdrop: #body13">Open</a>
+            <div id="target13" style="display:none;">Target</div>
+          </div>
+          <div class="modal fade" id="other-modal"></div>`;
+        await registry_scan();
+
+        const backdrop_host = document.querySelector("#body13");
+        document.querySelector("#body13 a.pat-plone-modal").click();
+        await utils.timeout(1);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+        expect(document.body.classList.contains("modal-open")).toEqual(true);
+
+        document.querySelector("#body13 .modal-header > .modal-close").click();
+        await utils.timeout(1);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(false);
+        expect(document.body.classList.contains("modal-open")).toEqual(false);
+    });
+
+    it("1.14 - resets the hide confirmation also when another modal is open", async () => {
+        document.body.innerHTML = `
+          <div id="body14">
+            <a class="pat-plone-modal" href="#target14"
+               data-pat-plone-modal="backdrop: #body14">Open</a>
+            <div id="target14" style="display:none;">Target</div>
+          </div>
+          <div class="modal show" id="other-modal"></div>`;
+        await registry_scan();
+
+        const trigger_el = document.querySelector("#body14 a.pat-plone-modal");
+        const instance = $(trigger_el).data("patternPloneModal");
+        const confirm_spy = jest.spyOn(window, "confirm").mockReturnValue(true);
+
+        trigger_el.click();
+        await utils.timeout(1);
+        instance._suppressHide = "There are unsaved changes.";
+        instance.hide();
+        expect(confirm_spy).toHaveBeenCalledTimes(1);
+        expect(instance._suppressHide).toBeUndefined();
+
+        // The confirmation does not carry over to the next close.
+        trigger_el.click();
+        await utils.timeout(1);
+        instance.hide();
+        expect(confirm_spy).toHaveBeenCalledTimes(1);
+
+        confirm_spy.mockRestore();
+    });
+
+    it("1.15 - hides each backdrop with stacked modals on different backdrop elements", async () => {
+        document.body.innerHTML = `
+          <div id="body15">
+            <a class="pat-plone-modal" id="open-inner" href="#target15-inner"
+               data-pat-plone-modal="backdrop: #body15">Inner</a>
+            <div id="target15-inner" style="display:none;">Inner</div>
+          </div>
+          <a class="pat-plone-modal" id="open-outer" href="#target15-outer"
+             data-pat-plone-modal="backdrop: body">Outer</a>
+          <div id="target15-outer" style="display:none;">Outer</div>`;
+        await registry_scan();
+
+        const inner_host = document.querySelector("#body15");
+        const outer_host = document.body;
+        const inner = $("#open-inner").data("patternPloneModal");
+        const outer = $("#open-outer").data("patternPloneModal");
+
+        document.querySelector("#open-inner").click();
+        await utils.timeout(1);
+        document.querySelector("#open-outer").click();
+        await utils.timeout(1);
+        expect(inner_host.classList.contains("backdrop-active")).toEqual(true);
+        expect(outer_host.classList.contains("backdrop-active")).toEqual(true);
+
+        // The inner modal is still open and keeps its own backdrop.
+        outer.hide();
+        expect(outer_host.classList.contains("backdrop-active")).toEqual(false);
+        expect(inner_host.classList.contains("backdrop-active")).toEqual(true);
+        expect(document.body.classList.contains("modal-open")).toEqual(true);
+
+        inner.hide();
+        expect(inner_host.classList.contains("backdrop-active")).toEqual(false);
+        expect(document.body.classList.contains("modal-open")).toEqual(false);
+    });
+
+    it("1.16 - keeps a shared backdrop while another modal on it is open", async () => {
+        document.body.innerHTML = `
+          <div id="body16">
+            <a class="pat-plone-modal" id="open-first" href="#target16-first"
+               data-pat-plone-modal="backdrop: #body16">First</a>
+            <div id="target16-first" style="display:none;">First</div>
+            <a class="pat-plone-modal" id="open-second" href="#target16-second"
+               data-pat-plone-modal="backdrop: #body16">Second</a>
+            <div id="target16-second" style="display:none;">Second</div>
+          </div>`;
+        await registry_scan();
+
+        const backdrop_host = document.querySelector("#body16");
+        const first = $("#open-first").data("patternPloneModal");
+        const second = $("#open-second").data("patternPloneModal");
+
+        document.querySelector("#open-first").click();
+        await utils.timeout(1);
+        document.querySelector("#open-second").click();
+        await utils.timeout(1);
+
+        second.hide();
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+        expect(document.body.classList.contains("modal-open")).toEqual(true);
+
+        first.hide();
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(false);
+        expect(document.body.classList.contains("modal-open")).toEqual(false);
+    });
+
     it("2 - customize modal on show event", () => {
         const $el = $("#body1");
 
