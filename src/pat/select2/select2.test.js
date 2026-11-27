@@ -382,11 +382,13 @@ describe("Select2", function () {
         expect(native_change_events).toEqual(1);
     });
 
-    it("re-emits a native blur event when nothing is selected", async function () {
+    it("re-emits native blur and focusout events when the widget loses focus", async function () {
         // Select2 v3 signals loss of focus via a jQuery `select2-blur` event,
         // which native event listeners (e.g. in pat-validation) don't receive.
-        // When the widget is left empty, pat-select2 bridges this by
-        // re-dispatching a native `blur` event, so validation can kick in.
+        // pat-select2 bridges this by re-dispatching a native `blur` event
+        // (for pat-validation up to Patternslib 9.11) and a bubbling native
+        // `focusout` event (for pat-validation with event delegation on the
+        // document), so validation can kick in.
         document.body.innerHTML = `
           <input class="pat-select2"
                  data-pat-select2="tags: Red,Yellow,Blue" />
@@ -399,10 +401,20 @@ describe("Select2", function () {
         let native_blur_events = 0;
         el.addEventListener("blur", () => native_blur_events++);
 
+        // The focusout event must bubble up to the document, where
+        // pat-validation listens for it.
+        const focusout_targets = [];
+        const focusout_listener = (e) => focusout_targets.push(e.target);
+        document.addEventListener("focusout", focusout_listener);
+
         // A native listener does not receive jQuery-triggered events ...
         $(el).trigger("select2-blur");
-        // ... but pat-select2 re-dispatches it as a native blur event.
+        document.removeEventListener("focusout", focusout_listener);
+
+        // ... but pat-select2 re-dispatches it as native blur and focusout
+        // events.
         expect(native_blur_events).toEqual(1);
+        expect(focusout_targets).toEqual([el]);
     });
 
     it("HTML multiple select widget converted to hidden inuput, before applying select2", async function () {

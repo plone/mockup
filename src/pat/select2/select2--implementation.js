@@ -173,9 +173,21 @@ export default {
 
         // Select2 v3 signals loss of focus via a jQuery `select2-blur` event,
         // which isn't caught by native JavaScript event listeners.
-        // Let's re-trigger as a native `blur` event so that native listeners can
-        // pick it up.
-        this.$el.on("select2-blur", () => this.el.dispatchEvent(events.blur_event()));
+        // Let's re-trigger as native events so that native listeners can pick
+        // it up:
+        // - `blur` for pat-validation up to Patternslib 9.11, which listens
+        //   on each input.
+        // - A bubbling `focusout` for pat-validation with event delegation on
+        //   the document.
+        // TODO: Use `events.focusout_event()` and drop the `blur` event once
+        // Mockup depends on a Patternslib version with event delegation in
+        // pat-validation.
+        this.$el.on("select2-blur", () => {
+            this.el.dispatchEvent(events.blur_event());
+            this.el.dispatchEvent(
+                new Event("focusout", { bubbles: true, cancelable: false })
+            );
+        });
 
         this.$el.on("select2-selected", (e) => callback(this.options.onSelected, e));
         this.$el.on("select2-selecting", (e) => callback(this.options.onSelecting, e));
