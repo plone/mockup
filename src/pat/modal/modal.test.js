@@ -814,6 +814,95 @@ describe("Modal", function () {
         expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
     });
 
+    describe("1.22.3 - a failed ajax load", () => {
+        const fail_loading = async (options = "") => {
+            const request = $.Deferred();
+            request.abort = jest.fn();
+            $.ajax = jest.fn(() => request);
+            document.body.innerHTML = `
+              <a class="pat-plone-modal" id="open22" href="modal22.html"
+                 data-pat-plone-modal='${options}'>Open</a>`;
+            await registry_scan();
+            const trigger_el = document.querySelector("#open22");
+            const hidden_spy = jest.fn();
+            // The modal emits its events with jQuery.
+            $(trigger_el).on("hidden.plone-modal.patterns", hidden_spy);
+            trigger_el.click();
+            request.reject({ status: 500 }, "error", "Internal Server Error");
+            await utils.timeout(1);
+            return hidden_spy;
+        };
+        let alert_spy;
+        beforeEach(() => {
+            alert_spy = jest.spyOn(window, "alert").mockImplementation(() => {});
+        });
+        afterEach(() => {
+            alert_spy.mockRestore();
+            delete window.modal_load_error;
+        });
+
+        it("1.22.3.1 - alerts once and closes the modal once", async () => {
+            const hidden_spy = await fail_loading();
+            expect(alert_spy).toHaveBeenCalledTimes(1);
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+            expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+            expect(document.querySelectorAll(".modal-wrapper").length).toEqual(0);
+        });
+
+        it("1.22.3.2 - closes the modal also when onError handles the error", async () => {
+            window.modal_load_error = jest.fn();
+            const hidden_spy = await fail_loading(
+                '{"actionOptions": {"onError": "modal_load_error"}}',
+            );
+            expect(window.modal_load_error).toHaveBeenCalledTimes(1);
+            expect(alert_spy).not.toHaveBeenCalled();
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+            expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+        });
+
+        // Hide the modal while it is loading. Like jQuery, the request
+        // fails with "abort" right away when it is aborted.
+        const hide_while_loading = async (options = "") => {
+            const request = $.Deferred();
+            request.abort = jest.fn(() =>
+                request.reject({ status: 0 }, "abort", "abort"),
+            );
+            $.ajax = jest.fn(() => request);
+            document.body.innerHTML = `
+              <a class="pat-plone-modal" id="open22" href="modal22.html"
+                 data-pat-plone-modal='${options}'>Open</a>`;
+            await registry_scan();
+            const trigger_el = document.querySelector("#open22");
+            const instance = trigger_el["pattern-plone-modal"];
+            const hidden_spy = jest.fn();
+            const error_spy = jest.fn();
+            $(trigger_el).on("hidden.plone-modal.patterns", hidden_spy);
+            $(trigger_el).on("linkActionError.plone-modal.patterns", error_spy);
+            trigger_el.click();
+            instance.hide();
+            await utils.timeout(1);
+            expect(request.abort).toHaveBeenCalledTimes(1);
+            return { hidden_spy, error_spy };
+        };
+
+        it("1.22.3.3 - hiding while loading does not alert", async () => {
+            const { hidden_spy, error_spy } = await hide_while_loading();
+            expect(alert_spy).not.toHaveBeenCalled();
+            expect(error_spy).not.toHaveBeenCalled();
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+            expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+        });
+
+        it("1.22.3.4 - hiding while loading does not call onError", async () => {
+            window.modal_load_error = jest.fn();
+            const { hidden_spy } = await hide_while_loading(
+                '{"actionOptions": {"onError": "modal_load_error"}}',
+            );
+            expect(window.modal_load_error).not.toHaveBeenCalled();
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe("1.23 - with pat-formunloadalert", () => {
         const default_message =
             "Discard changes? If you click OK, any changes you have made will be lost.";

@@ -737,6 +737,12 @@ export default Base.extend({
                 self._show();
             })
             .fail(function (xhr, textStatus, errorStatus) {
+                self.ajaxXHR = undefined;
+                if (textStatus === "abort") {
+                    // Aborted on purpose by hide(), which closes the modal.
+                    // Nothing went wrong.
+                    return;
+                }
                 var options = self.options.actionOptions;
                 if (textStatus === "timeout" && options.onTimeout) {
                     self.callHandler(options.onTimeout, null, [
@@ -752,8 +758,10 @@ export default Base.extend({
                     ]);
                 } else {
                     window.alert(_t("There was an error loading modal."));
-                    self.hide();
                 }
+                // The modal was never shown. Take it from the open modals and
+                // hide the backdrop, also when a handler took the error.
+                self.hide();
                 self.emit("linkActionError", [xhr, textStatus, errorStatus]);
             })
             .always(function () {
