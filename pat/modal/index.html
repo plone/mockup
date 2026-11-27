@@ -659,6 +659,22 @@ been processed.</p>
 </tr>
 </tbody>
 </table>
+<h2>Closing</h2>
+<p>ESC and a click on the backdrop close the topmost open modal only, if
+<code>closeOnEsc</code> and <code>closeOnClick</code> in <code>backdropOptions</code> are enabled.</p>
+<p>Before the modal is hidden, a native <code>plone-modal-before-hide</code> event is
+dispatched on the modal element (<code>.modal</code>). It bubbles and is cancelable.
+Content of the modal can keep the modal open by calling <code>preventDefault()</code>:</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> modal_el <span class="token operator">=</span> form<span class="token punctuation">.</span><span class="token function">closest</span><span class="token punctuation">(</span><span class="token string">".modal"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+modal_el<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"plone-modal-before-hide"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>has_unsaved_changes <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>window<span class="token punctuation">.</span><span class="token function">confirm</span><span class="token punctuation">(</span><span class="token string">"Discard changes?"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        e<span class="token punctuation">.</span><span class="token function">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>When a form submit in the modal fails, a native <code>plone-modal-submit-failed</code>
+event is dispatched on the form. It bubbles.</p>
+<p>pat-formunloadalert uses these events to ask before a modal with unsaved
+changes is closed, also after a failed submit.</p>
 
       </main>
     </div>
