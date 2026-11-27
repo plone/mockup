@@ -280,3 +280,38 @@ export function formatDate(dateval) {
     const i18n = new I18n();
     return new Date(d).toLocaleString(i18n.currentLanguage.replace("_", "-"));
 }
+
+function cssToken(value) {
+    return String(value || "")
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]+/g, "-");
+}
+
+/**
+ * CSS class for the workflow state of an item.
+ *
+ * Same class name as the structure pattern and the former related items
+ * pattern set, so themes can hook into it.
+ */
+export function reviewStateClass(reviewState) {
+    const state = cssToken(reviewState);
+    return state ? `state-${state}` : "";
+}
+
+/**
+ * Color of the workflow state marker of an item.
+ *
+ * Returns a reference to the theme variable `--plone-state-<state>`, or null
+ * if the state gets no marker. The variable names use hyphens
+ * (`--plone-state-internally-published`), the state ids underscores.
+ *
+ * unmarkedStates: the states without a marker, from the pattern option
+ * `unmarkedReviewStates`.
+ */
+export function reviewStateColor(reviewState, unmarkedStates = []) {
+    const state = cssToken(reviewState);
+    if (!state || unmarkedStates.includes(reviewState)) {
+        return null;
+    }
+    return `var(--plone-state-${state.replace(/_/g, "-")})`;
+}

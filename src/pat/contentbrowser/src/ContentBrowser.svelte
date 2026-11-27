@@ -16,10 +16,12 @@
         physicalPath,
         request,
         resolveIcon,
+        reviewStateClass,
         updateRecentlyUsed,
     } from "./utils";
     import Favorites from "./Favorites.svelte";
     import RecentlyUsed from "./RecentlyUsed.svelte";
+    import StateIndicator from "./StateIndicator.svelte";
 
     // get context stores
     const currentPath = getContext("currentPath");
@@ -743,7 +745,9 @@
                                                 ) === -1)) &&
                                             !isBrowseable(item)
                                                 ? ' text-body-tertiary'
-                                                : ''}"
+                                                : ''} {reviewStateClass(
+                                                item.review_state,
+                                            )}"
                                             role="button"
                                             tabindex={isTabStop(level, item, n) ? 0 : -1}
                                             data-uuid={item.UID}
@@ -783,8 +787,20 @@
                                                     >
                                                 {/if}
                                             </div>
-                                            {#if isBrowseable(item) && $config.mode == "browse"}
-                                                <div class="browseSub">
+                                            <div class="itemState">
+                                                <StateIndicator
+                                                    reviewState={item.review_state}
+                                                />
+                                            </div>
+                                            {#if $config.mode == "browse"}
+                                                <!-- keep the slot for items which are not
+                                                     browseable, so that the state
+                                                     indicators stay in one column -->
+                                                <div
+                                                    class="browseSub"
+                                                    class:invisible={!isBrowseable(item)}
+                                                    aria-hidden={!isBrowseable(item)}
+                                                >
                                                     <svg
                                                         use:resolveIcon={{
                                                             iconName:
@@ -894,7 +910,11 @@
                                     {/if}
                                     {#if previewItem.review_state}
                                         <dt>{_t("review_state")}</dt>
-                                        <dd>{previewItem.review_state}</dd>
+                                        <dd>
+                                            <StateIndicator
+                                                reviewState={previewItem.review_state}
+                                            />{previewItem.review_state}
+                                        </dd>
                                     {/if}
                                 </dl>
                             </div>
@@ -1068,6 +1088,13 @@
     }
     .contentItem > .browseSub {
         flex-shrink: 0;
+    }
+    .contentItem > .itemState {
+        flex-shrink: 0;
+        margin-inline-start: auto;
+        padding-inline: 0;
+        overflow: visible;
+        --state-indicator-gap: 0;
     }
     .contentItem .plone-icon {
         display: inline-block;

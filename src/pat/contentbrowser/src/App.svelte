@@ -45,6 +45,7 @@
         sortOn = "sortable_title",
         sortOrder = "ascending",
         componentRegistryKeys = {},
+        unmarkedReviewStates = ["published", "external"],
     } = $props();
 
     // Local mutable copies of the two props that may be reassigned locally
@@ -112,6 +113,13 @@
         sortOn: sortOn,
         sortOrder: sortOrder,
         componentRegistryKeys: componentRegistryKeys,
+        // a list, also when given as "published, external"
+        unmarkedReviewStates: Array.isArray(unmarkedReviewStates)
+            ? unmarkedReviewStates
+            : String(unmarkedReviewStates ?? "")
+                  .split(",")
+                  .map((state) => state.trim())
+                  .filter(Boolean),
     });
 
     log.debug(`Initialized App<${fieldId}> with config`, config);

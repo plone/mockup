@@ -48,6 +48,7 @@ parser.addArgument("upload-add-immediately");
 parser.addArgument("upload-accepted-mimetypes");
 parser.addArgument("sort-on");
 parser.addArgument("sort-order");
+parser.addArgument("unmarked-review-states");
 
 class Pattern extends BasePattern {
     static name = "contentbrowser";
