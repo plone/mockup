@@ -511,8 +511,25 @@
 <td style="text-align:center">&quot;SearchableText&quot;</td>
 <td style="text-align:center">Catalog search index for filtering and search mode. (Note: only ZCTextIndex allowed)</td>
 </tr>
+<tr>
+<td style="text-align:center">unmarkedReviewStates</td>
+<td style="text-align:center">array</td>
+<td style="text-align:center">[&quot;published&quot;, &quot;external&quot;]</td>
+<td style="text-align:center">Workflow states which get no state indicator. See &quot;Workflow state&quot;.</td>
+</tr>
 </tbody>
 </table>
+<h2>Workflow state</h2>
+<p>Items which are not published are marked with a dot in the color of their workflow state.
+The dot is shown in the item list, in the preview and on the selected items.
+In the item list it is at the end of the row, before the arrow of a folder.
+Its tooltip and accessible name contain the translated id of the state.</p>
+<p>The color is taken from the CSS variable <code>--plone-state-&lt;review_state&gt;</code> of the theme, with underscores replaced by hyphens, e.g. <code>--plone-state-internally-published</code>.
+States without such a variable get a neutral ring.
+Items without a workflow get no dot.
+The states <code>published</code> and <code>external</code> get no dot either.
+Change this with the option <code>unmarkedReviewStates</code>, e.g. <code>[]</code> to mark all states, or <code>[&quot;internally_published&quot;]</code> for an intranet.</p>
+<p>The items also get the CSS class <code>state-&lt;review_state&gt;</code>, like the rows of the structure pattern.</p>
 <h2>Default</h2>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
