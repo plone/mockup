@@ -9,7 +9,7 @@
     // pattern option "unmarkedReviewStates"
     const config = getContext("config");
 
-    const color = $derived(reviewStateColor(reviewState, $config?.unmarkedReviewStates));
+    const color = $derived(reviewStateColor(reviewState, $config?.unmarkedReviewStates || []));
     const label = $derived(color ? `${_t("review_state")}: ${_tp(reviewState)}` : "");
 </script>
 

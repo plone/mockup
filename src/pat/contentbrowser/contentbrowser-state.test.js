@@ -55,14 +55,12 @@ describe("Content Browser review state helpers", () => {
         );
     });
 
-    it("gives no color to published items and items without workflow", () => {
-        expect(reviewStateColor("published")).toBeNull();
-        expect(reviewStateColor("external")).toBeNull();
+    it("gives no color to items without workflow", () => {
         expect(reviewStateColor("")).toBeNull();
         expect(reviewStateColor(null)).toBeNull();
     });
 
-    it("takes the states without a color as argument", () => {
+    it("gives no color to the states of the second argument", () => {
         const unmarked = ["internally_published"];
         expect(reviewStateColor("internally_published", unmarked)).toBeNull();
         expect(reviewStateColor("published", unmarked)).toEqual(
@@ -120,6 +118,16 @@ describe("Content Browser review state indicator", () => {
         await mountField(
             [item("uid-published", "published"), item("uid-internal", "internal")],
             { unmarkedReviewStates: ["internal"] },
+        );
+
+        expect(selected("uid-published").querySelector(".state-indicator")).toBeTruthy();
+        expect(selected("uid-internal").querySelector(".state-indicator")).toBeNull();
+    });
+
+    it("takes the option unmarkedReviewStates also as a comma separated string", async () => {
+        await mountField(
+            [item("uid-published", "published"), item("uid-internal", "internal")],
+            { unmarkedReviewStates: "internal, private" },
         );
 
         expect(selected("uid-published").querySelector(".state-indicator")).toBeTruthy();

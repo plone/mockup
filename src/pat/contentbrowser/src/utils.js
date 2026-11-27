@@ -281,9 +281,6 @@ export function formatDate(dateval) {
     return new Date(d).toLocaleString(i18n.currentLanguage.replace("_", "-"));
 }
 
-/** Workflow states which are shown without a marker by default. */
-export const UNMARKED_REVIEW_STATES = ["published", "external"];
-
 function cssToken(value) {
     return String(value || "")
         .trim()
@@ -308,12 +305,12 @@ export function reviewStateClass(reviewState) {
  * if the state gets no marker. The variable names use hyphens
  * (`--plone-state-internally-published`), the state ids underscores.
  *
- * unmarkedStates: the states without a marker (pattern option
- * `unmarkedReviewStates`).
+ * unmarkedStates: the states without a marker, from the pattern option
+ * `unmarkedReviewStates`.
  */
-export function reviewStateColor(reviewState, unmarkedStates = UNMARKED_REVIEW_STATES) {
+export function reviewStateColor(reviewState, unmarkedStates = []) {
     const state = cssToken(reviewState);
-    if (!state || (unmarkedStates || []).includes(reviewState)) {
+    if (!state || unmarkedStates.includes(reviewState)) {
         return null;
     }
     return `var(--plone-state-${state.replace(/_/g, "-")})`;
