@@ -1,9 +1,6 @@
 import $ from "jquery";
 import ConfigRegistry from "./registry--implementation";
-
-// The modal imports jquery-form for $.fn.ajaxSubmit; the tests below set
-// their own $.fn.ajaxSubmit instead.
-jest.mock("jquery-form", () => ({}));
+import Modal from "../modal/modal--implementation";
 
 // The edit form of a record with a dict value, as plone.app.registry and the
 // multi widget of plone.app.z3cform render it.
@@ -71,16 +68,17 @@ describe("Registry control panel", () => {
         });
         // Each submit is answered with a form with one more row.
         submits = [];
-        $.fn.ajaxSubmit = jest.fn(function (options) {
-            submits.push(Object.keys(options.data)[0]);
-            options.success(edit_form(submits.length + 1), "success", {}, this);
-        });
+        jest.spyOn(Modal.prototype, "submitForm").mockImplementation(
+            function ($form, options) {
+                submits.push(Object.keys(options.data)[0]);
+                options.success(edit_form(submits.length + 1), "success", {}, $form[0]);
+            },
+        );
         new ConfigRegistry(document.querySelector(".pat-registry")).loadModals();
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
-        delete $.fn.ajaxSubmit;
         document.body.innerHTML = "";
     });
 

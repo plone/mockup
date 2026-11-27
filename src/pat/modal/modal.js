@@ -2,7 +2,7 @@ import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 
 // Thin registration module: the ~1000-line modal implementation (incl. the
-// Backdrop wiring, templating and the lazy jquery-form dependency) is loaded
+// Backdrop wiring and templating) is loaded
 // on first match, so it stays out of the eager patterns chunk on pages
 // without a modal. Imperative callers that need the class directly import
 // ./modal--implementation instead.

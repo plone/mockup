@@ -2,10 +2,6 @@ import $ from "jquery";
 import Modal from "./modal--implementation";
 import "../formunloadalert/formunloadalert";
 
-// handleFormAction imports jquery-form for $.fn.ajaxSubmit; the tests below
-// set their own $.fn.ajaxSubmit instead.
-jest.mock("jquery-form", () => ({}));
-
 // The tinymce link modal (pat-tinymce js/links.js) constructs the modal
 // imperatively (`new Modal(...)`) and calls show() synchronously right after.
 // The implementation must therefore be a constructable pattern that exposes
@@ -44,13 +40,13 @@ describe("modal form submit errors", function () {
           </div>
         </div>`;
 
-    // Let $.fn.ajaxSubmit fail the way jquery-form reports it.
+    // Let submitForm fail the way it reports it.
     const fail_with = (
         text_status,
         status = text_status === "timeout" ? 0 : 500,
         status_text = "",
     ) => {
-        ajax_submit.mockImplementation(function (options) {
+        ajax_submit.mockImplementation(function ($form, options) {
             options.error({ status: status }, text_status, status_text);
         });
     };
@@ -58,8 +54,7 @@ describe("modal form submit errors", function () {
     const submit = async (modal) => {
         const calls = ajax_submit.mock.calls.length;
         $(".pattern-modal-buttons button", modal.$modal).trigger("click");
-        // handleFormAction awaits the dynamic import of jquery-form, so
-        // wait until it has called $.fn.ajaxSubmit.
+        // handleFormAction is async, so wait until it has called submitForm.
         for (let i = 0; i < 100 && ajax_submit.mock.calls.length === calls; i++) {
             await new Promise((resolve) => setTimeout(resolve, 0));
         }
@@ -70,11 +65,13 @@ describe("modal form submit errors", function () {
 
     beforeEach(async function () {
         $el = $("<div/>").appendTo("body");
-        ajax_submit = $.fn.ajaxSubmit = jest.fn();
+        ajax_submit = jest
+            .spyOn(Modal.prototype, "submitForm")
+            .mockImplementation(() => {});
     });
 
     afterEach(function () {
-        delete $.fn.ajaxSubmit;
+        ajax_submit.mockRestore();
         $(".modal-wrapper, .modal-backdrop").remove();
         $el.remove();
     });
@@ -84,7 +81,7 @@ describe("modal form submit errors", function () {
         modal.show();
         await submit(modal);
         expect(ajax_submit).toHaveBeenCalledTimes(1);
-        expect(ajax_submit.mock.calls[0][0].timeout).toBe(5000);
+        expect(ajax_submit.mock.calls[0][1].timeout).toBe(5000);
     });
 
     it("shows a warning when the server does not respond in time", async function () {
@@ -205,7 +202,7 @@ describe("modal form submit errors", function () {
 
     it("does not show a message in a modal opened after the submit", async function () {
         let fail;
-        ajax_submit.mockImplementation(function (options) {
+        ajax_submit.mockImplementation(function ($form, options) {
             fail = () => options.error({ status: 0 }, "timeout", "");
         });
         const modal = new Modal($el, { html: html });

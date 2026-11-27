@@ -7,10 +7,8 @@ import dom from "@patternslib/patternslib/src/core/dom";
 import events from "@patternslib/patternslib/src/core/events";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
+import submitForm from "../../core/form-submit";
 
-// jquery-form ($.fn.ajaxSubmit) is loaded lazily at its single call site in
-// handleFormAction — most modals never AJAX-submit a form, so it stays out of
-// this module's static import graph.
 
 // Open modals in the order they were shown, including modals which are
 // still loading. The last one is the topmost.
@@ -167,8 +165,8 @@ export default Base.extend({
                                 self[actionOptions.modalFunction]();
                                 // handle event on input/button using jquery.form library
                             } else if (
-                                $.nodeName($action[0], "input") ||
-                                $.nodeName($action[0], "button") ||
+                                $action[0].nodeName.toLowerCase() === "input" ||
+                                $action[0].nodeName.toLowerCase() === "button" ||
                                 options.isForm === true
                             ) {
                                 self.options.handleFormAction.apply(self, [
@@ -179,7 +177,7 @@ export default Base.extend({
                                 // handle event on link with jQuery.ajax
                             } else if (
                                 options.ajaxUrl !== null ||
-                                $.nodeName($action[0], "a")
+                                $action[0].nodeName.toLowerCase() === "a"
                             ) {
                                 self.options.handleLinkAction.apply(self, [
                                     $action,
@@ -201,7 +199,7 @@ export default Base.extend({
 
             var $form;
 
-            if ($.nodeName($action[0], "form")) {
+            if ($action[0].nodeName.toLowerCase() === "form") {
                 $form = $action;
             } else {
                 $form = $action.parents("form:not(.disableAutoSubmit)");
@@ -245,10 +243,7 @@ export default Base.extend({
             // request failed, the message must not show up in a modal that
             // was opened since.
             var $modal = self.$modal;
-            // Load the jquery-form plugin ($.fn.ajaxSubmit) on demand — this is
-            // its only use in mockup, so it need not weigh on every page.
-            await import("jquery-form");
-            $form.ajaxSubmit({
+            self.submitForm($form, {
                 timeout: options.timeout,
                 data: extraData,
                 url: url,
@@ -587,7 +582,7 @@ export default Base.extend({
             if (self.options.loadLinksWithinModal) {
                 self.$modal.on("click", function (e) {
                     e.stopPropagation();
-                    if ($.nodeName(e.target, "a")) {
+                    if (e.target.nodeName.toLowerCase() === "a") {
                         e.preventDefault();
                         // TODO: open links inside modal
                         // and slide modal body
@@ -658,11 +653,15 @@ export default Base.extend({
             $(".modal-submit-error", self.$modal).remove();
         }
     },
+    submitForm: function ($form, settings) {
+        // Submit the form in the background. See core/form-submit.
+        return submitForm($form[0], settings);
+    },
     init: function () {
         import("./modal.scss");
 
         var self = this;
-        self.options.loadLinksWithinModal = $.parseJSON(
+        self.options.loadLinksWithinModal = JSON.parse(
             self.options.loadLinksWithinModal
         );
 
@@ -793,7 +792,7 @@ export default Base.extend({
         self.$wrapper.addClass("image-modal");
         var src = self.$el.attr("href");
         var srcset = self.$el.attr("data-modal-srcset") || "";
-        var title = $.trim(self.$el.text()) || "Image";
+        var title = self.$el.text().trim() || "Image";
         // XXX aria?
         self.$raw = $(
             "<div><h1>" +

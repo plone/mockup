@@ -16,6 +16,11 @@ overrides:
   # the Babel 8 presets (@patternslib/dev >= 4.2.0) do not strip TypeScript
   # under that core.
   "@babel/core": "^8.0.5"
+  # EXPERIMENTAL, remove before the jQuery 4 upgrade is merged:
+  # @patternslib/patternslib still depends on jQuery 3. Without this override
+  # a second jQuery instance is installed, with its own events and data.
+  # Patternslib has to move to jQuery 4 itself.
+  "jquery": "$jquery"
   "slick-carousel": "-"
   "slides": "-"
 
