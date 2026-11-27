@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import utils from "@patternslib/patternslib/src/core/utils";
+import Tab from "bootstrap/js/dist/tab";
 
 export default Base.extend({
     name: "autotoc",
@@ -10,8 +11,9 @@ export default Base.extend({
         section: "section",
         levels: "h1,h2,h3",
         IDPrefix: "autotoc-item-",
-        classTOCName: "autotoc-nav",
-        classSectionName: "autotoc-section",
+        classTOCName: "autotoc-nav nav",
+        classContentAreaName: "autotoc-content tab-content",
+        classSectionName: "autotoc-section tab-pane fade",
         classLevelPrefixName: "autotoc-level-",
         classActiveName: "active",
         scrollDuration: "slow",
@@ -26,67 +28,108 @@ export default Base.extend({
 
         var self = this;
 
-        self.$toc = $("<nav/>").addClass(self.options.classTOCName);
+        const $nav = $("<nav/>")
+            .attr("aria-label", "Tab Navigation");
+
+        const $toc = $("<ul/>")
+            .addClass(self.options.classTOCName)
+            .appendTo($nav);
 
         if (self.options.prependTo) {
-            self.$toc.prependTo(self.options.prependTo);
+            $nav.prependTo(self.options.prependTo);
         } else if (self.options.appendTo) {
-            self.$toc.appendTo(self.options.appendTo);
+            $nav.appendTo(self.options.appendTo);
         } else {
-            self.$toc.prependTo(self.$el);
+            $nav.prependTo(self.$el);
         }
 
         if (self.options.className) {
             self.$el.addClass(self.options.className);
         }
 
-        $(self.options.section, self.$el).addClass(self.options.classSectionName);
+        $(self.options.section, self.$el)
+            .addClass(self.options.classSectionName)
+            .attr("role", "tabpanel")
+            .attr("tabindex", "0");
 
         var asTabs = self.$el.hasClass("autotabs");
+
+        if (asTabs) {
+            $toc.addClass("nav-tabs");
+            self.$contentArea = $("<div/>").addClass(self.options.classContentAreaName);
+            self.$contentArea.insertAfter($nav);
+            $(self.options.section, self.$el).appendTo(self.$contentArea);
+            $(self.options.section, self.$el).find("legend").hide();
+        } else {
+            $toc.addClass([
+                "flex-column",
+                "float-end",
+                "border",
+                "mt-0",
+                "me-0",
+                "mb-3",
+                "ms-3",
+                "py-2",
+                "px-0"
+            ]);
+        }
 
         var activeId = null;
 
         $(self.options.levels, self.$el).each(function (i) {
-            const section = this.closest(self.options.section);
             const $level = $(this);
-            let id = $level.prop("id") ? $level.prop("id") : $(section).prop("id");
+            const $section = $level.closest(self.options.section);
+            let sectionId = $section.prop("id");
+            let sectionHash = `#${sectionId}`;
+            const tabId = `${self.options.IDPrefix}${self.name}-${i}`;
+            const tabHash = `#${tabId}`;
+            const levelId = `${tabId}-pane`;
+            const levelHash = `#${levelId}`;
 
-            if (!id || $("#" + id).length > 0) {
-                id = self.options.IDPrefix + self.name + "-" + i;
+            if (!asTabs) {
+                $level.attr("id", levelId).attr("aria-labelledby", tabId);
+            } else {
+                $section.attr("aria-labelledby", tabId);
+                if (!sectionId) {
+                    // sections without ID get auto generated "<tabId>-pane"
+                    sectionId = levelId;
+                    sectionHash = `#${levelId}`;
+                    $section.attr("id", levelId);
+                }
             }
-            if (window.location.hash === "#" + id) {
-                activeId = id;
+
+            // NOTE: if you have nested autotocs then you have to add the
+            // parent autotoc tabId to `options.IDPrefix` of the sub autotoc
+            // in order to mark parent and sub tab as active.
+            if (activeId === null && (window.location.hash.indexOf(tabHash) == 0 || $level.hasClass(self.options.classActiveName))) {
+                activeId = tabId;
             }
-            if (activeId === null && $level.hasClass(self.options.classActiveName)) {
-                activeId = id;
-            }
-            $level.data("navref", id);
+
+            const $navItem = $("<li/>");
+            $navItem
+                .addClass("nav-item")
+                .attr("role", "presentation")
+                .appendTo($toc);
+
             const $nav = $("<a/>");
-            $nav.appendTo(self.$toc)
-                .text($level.text())
-                .attr("id", id)
-                .attr("href", "#" + id)
-                .addClass(self.options.classLevelPrefixName + self.getLevel($level))
+            $nav.appendTo($navItem)
+                .html($level.html())
+                .attr("id", tabId)
+                .attr("href", asTabs ? sectionHash : levelHash)
+                .attr("aria-controls", asTabs ? sectionId : levelId)
+                .attr("data-bs-toggle", "tab")
+                .attr("data-bs-target", asTabs ? sectionHash : levelHash)
+                .addClass([
+                    "nav-link",
+                    self.options.classLevelPrefixName + self.getLevel($level),
+                ])
                 .on("click", function (e, options) {
-                    e.stopPropagation();
-                    e.preventDefault();
                     if (!options) {
                         options = {
                             doScroll: true,
                             skipHash: false,
                         };
                     }
-                    var $el = $(this);
-                    self.$toc
-                        .children("." + self.options.classActiveName)
-                        .removeClass(self.options.classActiveName);
-                    self.$el
-                        .children("." + self.options.classActiveName)
-                        .removeClass(self.options.classActiveName);
-                    $(e.target).addClass(self.options.classActiveName);
-                    $level
-                        .parents(self.options.section)
-                        .addClass(self.options.classActiveName);
                     if (
                         options.doScroll !== false &&
                         self.options.scrollDuration &&
@@ -107,37 +150,36 @@ export default Base.extend({
                     $(this).trigger("clicked");
                     if (!options.skipHash) {
                         if (window.history && window.history.pushState) {
-                            window.history.pushState({}, "", "#" + $el.attr("id"));
+                            window.history.pushState({}, "", tabHash);
                         }
                     }
                 });
-            $level.data("autotoc-trigger-id", id);
+
+            if (!asTabs) {
+                $nav.addClass([
+                    "text-decoration-underline",
+                    "p-0",
+                    "mx-3",
+                ]);
+            }
 
             self.tabs.push({
-                section: section,
-                id: id,
+                section: $section[0],
+                id: levelId,
                 nav: $nav[0],
             });
         });
 
-        if (activeId) {
-            $("a#" + activeId).trigger("click", {
-                doScroll: true,
-                skipHash: true,
-            });
-        } else {
-            self.$toc.find("a").first().trigger("click", {
-                doScroll: false,
-                skipHash: true,
-            });
-        }
+        const activeTabButton = activeId ? $toc.find("a#" + activeId)[0] : $toc.find("a").first()[0];
+        const tab = Tab.getOrCreateInstance(activeTabButton);
+        tab.show();
 
         // After DOM tree is built, initialize eventual validation
-        this.initialize_validation(self.$el);
+        this.initialize_validation();
     },
 
-    initialize_validation: function ($el) {
-        const el = $el[0];
+    initialize_validation: function () {
+        const el = this.el
 
         // Initialize only on forms
         const form = el.closest("form");
