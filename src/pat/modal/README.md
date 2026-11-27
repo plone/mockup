@@ -263,3 +263,27 @@ been processed.
 | onError | Function | string | | function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level. Without onError, the modal shows an error above the form. |
 | onTimeout | Function | string | | function which is called with parameters ($modal, xhr, errorStatus) when the server did not respond within `timeout`, to a form submission or to loading a link into the modal. if value is a string, this is the name of a function at window level. Without onTimeout and onError, a timed-out form submission shows a warning above the form. |
 | timeout | integer | 5000 | Milliseconds to wait for the server to respond to a form submission. Set it in actionOptions. |
+
+## Closing
+
+ESC and a click on the backdrop close the topmost open modal only, if
+`closeOnEsc` and `closeOnClick` in `backdropOptions` are enabled.
+
+Before the modal is hidden, a native `plone-modal-before-hide` event is
+dispatched on the modal element (`.modal`). It bubbles and is cancelable.
+Content of the modal can keep the modal open by calling `preventDefault()`:
+
+```javascript
+const modal_el = form.closest(".modal");
+modal_el.addEventListener("plone-modal-before-hide", (e) => {
+    if (has_unsaved_changes && !window.confirm("Discard changes?")) {
+        e.preventDefault();
+    }
+});
+```
+
+When a form submit in the modal fails, a native `plone-modal-submit-failed`
+event is dispatched on the form. It bubbles.
+
+pat-formunloadalert uses these events to ask before a modal with unsaved
+changes is closed, also after a failed submit.

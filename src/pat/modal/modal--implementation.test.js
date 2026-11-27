@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Modal from "./modal--implementation";
+import "../formunloadalert/formunloadalert";
 
 // handleFormAction imports jquery-form for $.fn.ajaxSubmit; the tests below
 // set their own $.fn.ajaxSubmit instead.
@@ -140,6 +141,27 @@ describe("modal form submit errors", function () {
         expect(message(modal).text()).toBe(
             "Error The server could not be reached. Please check your connection and try again.",
         );
+    });
+
+    it("asks before closing with unsaved changes after a failed submit", async function () {
+        fail_with("error", 0, "");
+        const modal = new Modal($el, {
+            html: html.replace("<form ", '<form class="pat-formunloadalert" '),
+        });
+        modal.show();
+        // pat-formunloadalert is initialized by the registry scan in _show.
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        modal.$modal[0]
+            .querySelector("input[name=login]")
+            .dispatchEvent(new Event("change", { bubbles: true }));
+        await submit(modal);
+        expect(message(modal).length).toBe(1);
+
+        const confirm_spy = jest.spyOn(window, "confirm").mockReturnValue(false);
+        modal.hide();
+        expect(confirm_spy).toHaveBeenCalledTimes(1);
+        expect(document.body.contains(modal.$modal[0])).toBe(true);
+        confirm_spy.mockRestore();
     });
 
     it("shows an error when the response cannot be read", async function () {

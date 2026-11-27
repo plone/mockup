@@ -1,13 +1,47 @@
 import "./modal";
 import "../select2/select2";
+import "../formunloadalert/formunloadalert";
 import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
+import { event_listener_map } from "@patternslib/patternslib/src/core/events";
 import utils from "@patternslib/patternslib/src/core/utils";
 
 describe("Modal", function () {
     const registry_scan = async () => {
         registry.scan(document.body);
         await utils.timeout(2);
+    };
+
+    const press_escape = () =>
+        document.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+        );
+    const is_open = (instance) =>
+        document.contains(instance.$modal[0]) && instance.$modal.hasClass("show");
+    const n_handlers = (el, type) => ($._data(el, "events")?.[type] || []).length;
+    // Ids of listeners registered with add_event_listener.
+    const registered_ids = (el, prefix = "") =>
+        [...(event_listener_map.get(el)?.keys() || [])].filter((id) =>
+            id.startsWith(prefix),
+        );
+    const stacked_fixture = (second_options = "backdrop: #body20") => `
+          <div id="body20">
+            <a class="pat-plone-modal" id="open-first" href="#target-first"
+               data-pat-plone-modal="backdrop: #body20">First</a>
+            <div id="target-first" style="display:none;">First</div>
+            <a class="pat-plone-modal" id="open-second" href="#target-second"
+               data-pat-plone-modal='${second_options}'>Second</a>
+            <div id="target-second" style="display:none;">Second</div>
+          </div>`;
+    const modal_of = (selector) => document.querySelector(selector)["pattern-plone-modal"];
+    const open_stacked = async () => {
+        const first = modal_of("#open-first");
+        const second = modal_of("#open-second");
+        document.querySelector("#open-first").click();
+        await utils.timeout(1);
+        document.querySelector("#open-second").click();
+        await utils.timeout(1);
+        return { first, second };
     };
 
     const mockJQueryAjax = () => {
@@ -96,9 +130,7 @@ describe("Modal", function () {
         expect($(".modal .modal-body", $el).length).toEqual(1);
         expect($(".modal .modal-footer", $el).length).toEqual(1);
 
-        var keydown = $.Event("keydown");
-        keydown.keyCode = 27;
-        $(document).trigger(keydown);
+        press_escape();
         expect($el.hasClass("backdrop-active")).toEqual(false);
         expect($(".modal", $el).length).toEqual(0);
     });
@@ -597,6 +629,382 @@ describe("Modal", function () {
         first.hide();
         expect(backdrop_host.classList.contains("backdrop-active")).toEqual(false);
         expect(document.body.classList.contains("modal-open")).toEqual(false);
+    });
+
+    it("1.17 - ESC closes only the topmost modal", async () => {
+        document.body.innerHTML = stacked_fixture();
+        await registry_scan();
+        const { first, second } = await open_stacked();
+        const backdrop_host = document.querySelector("#body20");
+
+        press_escape();
+        expect(is_open(second)).toEqual(false);
+        expect(is_open(first)).toEqual(true);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+
+        press_escape();
+        expect(is_open(first)).toEqual(false);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(false);
+        expect(document.body.classList.contains("modal-open")).toEqual(false);
+    });
+
+    it("1.18 - a backdrop click closes only the topmost modal", async () => {
+        document.body.innerHTML = stacked_fixture();
+        await registry_scan();
+        const { first, second } = await open_stacked();
+
+        second.$wrapper[0].click();
+        expect(is_open(second)).toEqual(false);
+        expect(is_open(first)).toEqual(true);
+    });
+
+    it("1.19 - does not leak listeners when opening and closing", async () => {
+        document.body.innerHTML = stacked_fixture();
+        await registry_scan();
+        const backdrop_host = document.querySelector("#body20");
+        const count = () => [
+            n_handlers(document, "keydown"),
+            n_handlers(window.parent, "resize"),
+            n_handlers(backdrop_host, "hidden"),
+            registered_ids(document).length,
+            registered_ids(window.parent).length,
+        ];
+
+        // The first cycle may set up listeners that are kept for the
+        // lifetime of the pattern.
+        document.querySelector("#open-first").click();
+        await utils.timeout(1);
+        press_escape();
+        const before = count();
+
+        for (let i = 0; i < 5; i++) {
+            document.querySelector("#open-first").click();
+            await utils.timeout(1);
+            press_escape();
+        }
+        expect(count()).toEqual(before);
+    });
+
+    it("1.19.1 - registers its ESC and resize listeners only while open", async () => {
+        document.body.innerHTML = stacked_fixture();
+        await registry_scan();
+        const first = modal_of("#open-first");
+        const prefix = `${first._event_ns}--`;
+
+        document.querySelector("#open-first").click();
+        await utils.timeout(1);
+        expect(registered_ids(document, prefix)).toEqual([`${prefix}keydown`]);
+        expect(registered_ids(window.parent, prefix)).toContain(`${prefix}resize`);
+
+        press_escape();
+        expect(registered_ids(document, prefix)).toEqual([]);
+        expect(registered_ids(window.parent, prefix)).toEqual([]);
+    });
+
+    it("1.20 - a programmatically hidden lower modal does not affect the topmost", async () => {
+        document.body.innerHTML = stacked_fixture();
+        await registry_scan();
+        const { first, second } = await open_stacked();
+        const backdrop_host = document.querySelector("#body20");
+
+        first.hide();
+        expect(is_open(second)).toEqual(true);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+
+        press_escape();
+        expect(is_open(second)).toEqual(false);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(false);
+    });
+
+    it("1.21 - ESC does nothing when the topmost modal has closeOnEsc: false", async () => {
+        document.body.innerHTML = stacked_fixture(
+            '{"backdrop": "#body20", "backdropOptions": {"closeOnEsc": false}}',
+        );
+        await registry_scan();
+        const { first, second } = await open_stacked();
+
+        press_escape();
+        expect(is_open(second)).toEqual(true);
+        expect(is_open(first)).toEqual(true);
+    });
+
+    it("1.22 - ESC while an ajax modal loads", async () => {
+        // Resolve the request only after ESC was pressed.
+        const request = $.Deferred();
+        $.ajax = jest.fn(() => request);
+        document.body.innerHTML = `
+          <a class="pat-plone-modal" id="open22" href="modal22.html">Open</a>`;
+        await registry_scan();
+        const trigger_el = document.querySelector("#open22");
+        const instance = trigger_el["pattern-plone-modal"];
+
+        trigger_el.click();
+        expect(() => press_escape()).not.toThrow();
+        request.resolve(
+            "<html><body><div id='content'><h1>Loaded</h1></div></body></html>",
+            "success",
+            {},
+        );
+        await utils.timeout(1);
+        expect(is_open(instance)).toEqual(true);
+        expect(document.body.classList.contains("backdrop-active")).toEqual(true);
+
+        press_escape();
+        expect(is_open(instance)).toEqual(false);
+        expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+    });
+
+    it("1.22.1 - ESC while a stacked ajax modal loads keeps the modal below", async () => {
+        const request = $.Deferred();
+        $.ajax = jest.fn(() => request);
+        document.body.innerHTML = `
+          <div id="body22">
+            <a class="pat-plone-modal" id="open-first" href="#target-first"
+               data-pat-plone-modal="backdrop: #body22">First</a>
+            <div id="target-first" style="display:none;">First</div>
+            <a class="pat-plone-modal" id="open-second" href="modal22.html"
+               data-pat-plone-modal="backdrop: #body22">Second</a>
+          </div>`;
+        await registry_scan();
+        const first = modal_of("#open-first");
+        const second = modal_of("#open-second");
+        const backdrop_host = document.querySelector("#body22");
+        document.querySelector("#open-first").click();
+        await utils.timeout(1);
+
+        // The second modal is loading.
+        document.querySelector("#open-second").click();
+        press_escape();
+        expect(is_open(first)).toEqual(true);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+
+        request.resolve(
+            "<html><body><div id='content'><h1>Loaded</h1></div></body></html>",
+            "success",
+            {},
+        );
+        await utils.timeout(1);
+        expect(is_open(second)).toEqual(true);
+
+        press_escape();
+        expect(is_open(second)).toEqual(false);
+        expect(is_open(first)).toEqual(true);
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+    });
+
+    it("1.22.2 - hiding the modal below a loading ajax modal keeps the backdrop", async () => {
+        const request = $.Deferred();
+        $.ajax = jest.fn(() => request);
+        document.body.innerHTML = `
+          <div id="body22">
+            <a class="pat-plone-modal" id="open-first" href="#target-first"
+               data-pat-plone-modal="backdrop: #body22">First</a>
+            <div id="target-first" style="display:none;">First</div>
+            <a class="pat-plone-modal" id="open-second" href="modal22.html"
+               data-pat-plone-modal="backdrop: #body22">Second</a>
+          </div>`;
+        await registry_scan();
+        const first = modal_of("#open-first");
+        const backdrop_host = document.querySelector("#body22");
+        document.querySelector("#open-first").click();
+        await utils.timeout(1);
+
+        document.querySelector("#open-second").click();
+        first.hide();
+        expect(backdrop_host.classList.contains("backdrop-active")).toEqual(true);
+    });
+
+    describe("1.22.3 - a failed ajax load", () => {
+        const fail_loading = async (options = "") => {
+            const request = $.Deferred();
+            request.abort = jest.fn();
+            $.ajax = jest.fn(() => request);
+            document.body.innerHTML = `
+              <a class="pat-plone-modal" id="open22" href="modal22.html"
+                 data-pat-plone-modal='${options}'>Open</a>`;
+            await registry_scan();
+            const trigger_el = document.querySelector("#open22");
+            const hidden_spy = jest.fn();
+            // The modal emits its events with jQuery.
+            $(trigger_el).on("hidden.plone-modal.patterns", hidden_spy);
+            trigger_el.click();
+            request.reject({ status: 500 }, "error", "Internal Server Error");
+            await utils.timeout(1);
+            return hidden_spy;
+        };
+        let alert_spy;
+        beforeEach(() => {
+            alert_spy = jest.spyOn(window, "alert").mockImplementation(() => {});
+        });
+        afterEach(() => {
+            alert_spy.mockRestore();
+            delete window.modal_load_error;
+        });
+
+        it("1.22.3.1 - alerts once and closes the modal once", async () => {
+            const hidden_spy = await fail_loading();
+            expect(alert_spy).toHaveBeenCalledTimes(1);
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+            expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+            expect(document.querySelectorAll(".modal-wrapper").length).toEqual(0);
+        });
+
+        it("1.22.3.2 - closes the modal also when onError handles the error", async () => {
+            window.modal_load_error = jest.fn();
+            const hidden_spy = await fail_loading(
+                '{"actionOptions": {"onError": "modal_load_error"}}',
+            );
+            expect(window.modal_load_error).toHaveBeenCalledTimes(1);
+            expect(alert_spy).not.toHaveBeenCalled();
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+            expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+        });
+
+        // Hide the modal while it is loading. Like jQuery, the request
+        // fails with "abort" right away when it is aborted.
+        const hide_while_loading = async (options = "") => {
+            const request = $.Deferred();
+            request.abort = jest.fn(() =>
+                request.reject({ status: 0 }, "abort", "abort"),
+            );
+            $.ajax = jest.fn(() => request);
+            document.body.innerHTML = `
+              <a class="pat-plone-modal" id="open22" href="modal22.html"
+                 data-pat-plone-modal='${options}'>Open</a>`;
+            await registry_scan();
+            const trigger_el = document.querySelector("#open22");
+            const instance = trigger_el["pattern-plone-modal"];
+            const hidden_spy = jest.fn();
+            const error_spy = jest.fn();
+            $(trigger_el).on("hidden.plone-modal.patterns", hidden_spy);
+            $(trigger_el).on("linkActionError.plone-modal.patterns", error_spy);
+            trigger_el.click();
+            instance.hide();
+            await utils.timeout(1);
+            expect(request.abort).toHaveBeenCalledTimes(1);
+            return { hidden_spy, error_spy };
+        };
+
+        it("1.22.3.3 - hiding while loading does not alert", async () => {
+            const { hidden_spy, error_spy } = await hide_while_loading();
+            expect(alert_spy).not.toHaveBeenCalled();
+            expect(error_spy).not.toHaveBeenCalled();
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+            expect(document.body.classList.contains("backdrop-active")).toEqual(false);
+        });
+
+        it("1.22.3.4 - hiding while loading does not call onError", async () => {
+            window.modal_load_error = jest.fn();
+            const { hidden_spy } = await hide_while_loading(
+                '{"actionOptions": {"onError": "modal_load_error"}}',
+            );
+            expect(window.modal_load_error).not.toHaveBeenCalled();
+            expect(hidden_spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("1.23 - with pat-formunloadalert", () => {
+        const default_message =
+            "Discard changes? If you click OK, any changes you have made will be lost.";
+        let confirm_spy;
+        let instance;
+
+        const open_modal = async () => {
+            document.body.innerHTML = `
+              <div id="body30">
+                <a class="pat-plone-modal" id="open30" href="#target30"
+                   data-pat-plone-modal="backdrop: #body30">Open</a>
+                <div id="target30" style="display:none;">
+                  <form class="pat-formunloadalert">
+                    <input name="title" />
+                    <button type="submit">Save</button>
+                  </form>
+                </div>
+              </div>`;
+            await registry_scan();
+            instance = modal_of("#open30");
+            document.querySelector("#open30").click();
+            await utils.timeout(1);
+        };
+        const change_form = () =>
+            instance.$modal[0]
+                .querySelector("input[name=title]")
+                .dispatchEvent(new Event("change", { bubbles: true }));
+
+        beforeEach(() => {
+            confirm_spy = jest.spyOn(window, "confirm");
+        });
+        afterEach(() => {
+            confirm_spy.mockRestore();
+        });
+
+        it("1.23.1 - asks before closing a modal with a changed form", async () => {
+            confirm_spy.mockReturnValue(false);
+            await open_modal();
+            change_form();
+
+            instance.hide();
+            expect(confirm_spy).toHaveBeenCalledTimes(1);
+            expect(confirm_spy).toHaveBeenCalledWith(default_message);
+            expect(is_open(instance)).toEqual(true);
+        });
+
+        it("1.23.2 - does not guard the page after the modal closed", async () => {
+            confirm_spy.mockReturnValue(true);
+            await open_modal();
+            change_form();
+
+            instance.hide();
+            expect(is_open(instance)).toEqual(false);
+            const ev = new Event("beforeunload", { cancelable: true });
+            window.dispatchEvent(ev);
+            expect(ev.defaultPrevented).toEqual(false);
+        });
+
+        it("1.23.2.1 - guards the page while the modal with a changed form is open", async () => {
+            await open_modal();
+            change_form();
+
+            const ev = new Event("beforeunload", { cancelable: true });
+            window.dispatchEvent(ev);
+            expect(ev.defaultPrevented).toEqual(true);
+            expect(confirm_spy).not.toHaveBeenCalled();
+            expect(is_open(instance)).toEqual(true);
+        });
+
+        it("1.23.3 - keeps the backdrop when closing by backdrop click is cancelled", async () => {
+            confirm_spy.mockReturnValue(false);
+            await open_modal();
+            change_form();
+
+            instance.$wrapper[0].click();
+            expect(confirm_spy).toHaveBeenCalledTimes(1);
+            expect(is_open(instance)).toEqual(true);
+            expect(
+                document.querySelector("#body30").classList.contains("backdrop-active"),
+            ).toEqual(true);
+        });
+
+        it("1.23.4 - does not ask after the form was submitted", async () => {
+            await open_modal();
+            change_form();
+            const form = instance.$modal[0].querySelector("form");
+            // Do not let jsdom try to navigate.
+            form.addEventListener("submit", (e) => e.preventDefault());
+            form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+            instance.hide();
+            expect(confirm_spy).not.toHaveBeenCalled();
+            expect(is_open(instance)).toEqual(false);
+        });
+
+        it("1.23.5 - does not ask for an unchanged form", async () => {
+            await open_modal();
+
+            instance.hide();
+            expect(confirm_spy).not.toHaveBeenCalled();
+            expect(is_open(instance)).toEqual(false);
+        });
     });
 
     it("2 - customize modal on show event", () => {
